@@ -1,0 +1,4 @@
+<resources>
+    <!-- Account -->
+    <dimen name="account_margin">16dp</dimen>
+</resources>

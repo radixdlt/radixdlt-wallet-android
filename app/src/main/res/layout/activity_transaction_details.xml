@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+  <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/appbar"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/detail_backdrop_height"
+      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      android:transitionGroup="true"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:id="@+id/collapsing_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:contentScrim="?attr/colorPrimary"
+        app:expandedTitleMarginEnd="64dp"
+        app:expandedTitleMarginStart="48dp"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+      <ImageView
+          android:id="@+id/backdrop"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:contentDescription="@string/transaction_details_activity_xml_image_background_description"
+          android:fitsSystemWindows="true"
+          android:scaleType="centerCrop"
+          app:layout_collapseMode="parallax"/>
+
+      <androidx.appcompat.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          app:layout_collapseMode="pin"
+          app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+  </com.google.android.material.appbar.AppBarLayout>
+
+  <androidx.core.widget.NestedScrollView
+      android:id="@+id/nested_scroll_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:transitionGroup="true"
+      android:background="@color/mainBackground"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      tools:scrollY="0px">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="24dp">
+
+      <androidx.cardview.widget.CardView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/card_margin">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.CardContent">
+
+          <TextView
+              android:id="@+id/mainTitleTextView"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="16dp"
+              android:layout_marginStart="16dp"
+              android:text="@string/transaction_details_activity_xml_details_title"
+              android:textAppearance="@style/TextAppearance.AppCompat.Title"
+              android:textColor="@android:color/black"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"/>
+
+          <de.hdodenhof.circleimageview.CircleImageView
+              android:id="@+id/circleImageView"
+              android:layout_width="55dp"
+              android:layout_height="55dp"
+              android:layout_marginStart="16dp"
+              android:layout_marginTop="16dp"
+              android:src="@drawable/send_image_item_wallet"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/mainTitleTextView"/>
+
+          <TextView
+              android:id="@+id/addressTextView"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="8dp"
+              android:layout_marginStart="8dp"
+              android:ellipsize="middle"
+              android:singleLine="true"
+              android:textColor="@android:color/black"
+              android:textSize="15sp"
+              app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+              app:layout_constraintEnd_toStartOf="@+id/transactionAmount"
+              app:layout_constraintHorizontal_bias="0.0"
+              app:layout_constraintStart_toEndOf="@+id/circleImageView"
+              app:layout_constraintTop_toTopOf="@+id/circleImageView"
+              tools:text="You sent"/>
+
+          <TextView
+              android:id="@+id/transactionAmount"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="16dp"
+              android:layout_marginTop="8dp"
+              android:maxLines="1"
+              android:maxWidth="100dp"
+              android:textAlignment="textEnd"
+              android:textSize="20sp"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toTopOf="@+id/circleImageView"
+              tools:text="+5.00000"/>
+
+          <TextView
+              android:id="@+id/testTokensTextView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="8dp"
+              android:layout_marginEnd="16dp"
+              android:drawableEnd="@drawable/ic_warning_line_small"
+              android:drawablePadding="4dp"
+              android:maxWidth="100dp"
+              android:text="@string/transaction_details_activity_xml_test_tokens"
+              android:textAlignment="textEnd"
+              android:textSize="9sp"
+              android:textStyle="bold"
+              app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/transactionAmount"
+              tools:ignore="SmallSp"/>
+
+          <TextView
+              android:id="@+id/titleTransactionTextView"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="16dp"
+              android:layout_marginStart="16dp"
+              android:layout_marginTop="16dp"
+              android:textColor="@android:color/black"
+              android:textSize="17sp"
+              android:textStyle="bold"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/circleImageView"
+              tools:text="To"/>
+
+          <TextView
+              android:id="@+id/transactionAddress"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="16dp"
+              android:layout_marginStart="16dp"
+              android:layout_marginTop="8dp"
+              android:background="@drawable/address_bg"
+              android:paddingBottom="8dp"
+              android:paddingEnd="16dp"
+              android:paddingStart="16dp"
+              android:paddingTop="8dp"
+              android:textAlignment="center"
+              android:textColor="@color/white"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.496"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/titleTransactionTextView"
+              tools:text="JGSf1gnBJ7SXcRvhVCy8512ZuqDi4SKfKA3Yt45JdkU6X44XGMh"/>
+
+          <View
+              android:id="@+id/transaction_details_separator_view3"
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:layout_marginEnd="8dp"
+              android:layout_marginStart="8dp"
+              android:background="#ff9b9b9b"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/transactionDate"/>
+
+          <ImageView
+              android:id="@+id/messageImageView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginTop="18dp"
+              android:background="@drawable/calendar_clock_white_with_background_2"
+              android:contentDescription="@string/transaction_details_activity_xml_message_icon_description"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/transactionAddress"/>
+
+          <View
+              android:id="@+id/transaction_details_separator_view4"
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:layout_marginEnd="8dp"
+              android:layout_marginStart="8dp"
+              android:layout_marginTop="16dp"
+              android:background="#ff9b9b9b"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/transactionMessage"/>
+
+          <TextView
+              android:id="@+id/transactionMessage"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="16dp"
+              android:layout_marginStart="8dp"
+              android:layout_marginTop="18dp"
+              android:gravity="center_vertical"
+              android:minHeight="27dp"
+              android:textSize="15sp"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.0"
+              app:layout_constraintStart_toEndOf="@+id/messageImageView"
+              app:layout_constraintTop_toBottomOf="@+id/transactionAddress"
+              tools:text="This is the attached messageEntity."/>
+
+          <TextView
+              android:id="@+id/transactionDate"
+              android:layout_width="match_parent"
+              android:layout_height="57dp"
+              android:drawablePadding="8dp"
+              android:drawableStart="@drawable/calendar_clock_white_with_background"
+              android:gravity="center_vertical"
+              android:paddingEnd="16dp"
+              android:paddingStart="16dp"
+              android:textSize="15sp"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.0"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/transaction_details_separator_view4"
+              tools:text="Saturday, 5th May, 21:54"/>
+
+          <TextView
+              android:id="@+id/transactionSendTokens"
+              android:layout_width="match_parent"
+              android:layout_height="56dp"
+              android:clickable="true"
+              android:drawablePadding="8dp"
+              android:drawableStart="@drawable/calendar_clock_white_with_background_3"
+              android:focusable="true"
+              android:foreground="?selectableItemBackground"
+              android:gravity="center_vertical"
+              android:paddingEnd="16dp"
+              android:paddingStart="16dp"
+              android:text="@string/transaction_details_activity_xml_send_tokens"
+              android:textSize="15sp"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.0"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/transactionDate"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+      </androidx.cardview.widget.CardView>
+
+      <androidx.cardview.widget.CardView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/card_margin"
+          android:layout_marginLeft="@dimen/card_margin"
+          android:layout_marginRight="@dimen/card_margin">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.CardContent">
+
+          <TextView
+              android:id="@+id/titleTextView"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="16dp"
+              android:layout_marginStart="16dp"
+              android:text="@string/transaction_details_activity_xml_history_title"
+              android:textAppearance="@style/TextAppearance.AppCompat.Title"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"/>
+
+          <TextView
+              android:id="@+id/numberOfTransactions"
+              android:layout_width="wrap_content"
+              android:layout_height="0dp"
+              android:layout_marginStart="16dp"
+              android:layout_marginTop="24dp"
+              android:text="@string/transaction_details_activity_xml_number_of_transactions"
+              android:textSize="15sp"
+              app:layout_constraintEnd_toStartOf="@+id/totalTransactions"
+              app:layout_constraintHorizontal_bias="0.0"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/titleTextView"/>
+
+          <View
+              android:id="@+id/transaction_details_separator_view"
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:layout_marginEnd="8dp"
+              android:layout_marginStart="8dp"
+              android:layout_marginTop="16dp"
+              android:background="#ff9b9b9b"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/numberOfTransactions"/>
+
+          <TextView
+              android:id="@+id/totalTransactions"
+              android:layout_width="wrap_content"
+              android:layout_height="0dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginTop="24dp"
+              android:textSize="15sp"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+              tools:text="3"/>
+
+          <TextView
+              android:id="@+id/totalTransactionsSentLabel"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginTop="8dp"
+              android:gravity="center_vertical"
+              android:text="@string/transaction_details_activity_xml_total_sent"
+              android:textSize="15sp"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/transaction_details_separator_view"/>
+
+          <TextView
+              android:id="@+id/totalTransactionsSent"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:gravity="center_vertical"
+              android:textColor="@color/materialLightGrey"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/totalTransactionsSentLabel"
+              tools:text="4 transactionEntities"/>
+
+          <TextView
+              android:id="@+id/totalTransactionsSentAmount"
+              android:layout_width="wrap_content"
+              android:layout_height="0dp"
+              android:layout_marginEnd="16dp"
+              android:gravity="center_vertical"
+              android:textSize="15sp"
+              app:layout_constraintBottom_toBottomOf="@+id/totalTransactionsSent"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toTopOf="@+id/totalTransactionsSentLabel"
+              tools:text="12.00000"/>
+
+          <View
+              android:id="@+id/transaction_details_separator_view2"
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:layout_marginEnd="8dp"
+              android:layout_marginStart="8dp"
+              android:layout_marginTop="8dp"
+              android:background="#ff9b9b9b"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/totalTransactionsSent"/>
+
+          <TextView
+              android:id="@+id/totalTransactionsReceivedLabel"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginTop="8dp"
+              android:text="@string/transaction_details_activity_xml_total_received"
+              android:textSize="15sp"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/transaction_details_separator_view2"
+              app:layout_constraintTop_toTopOf="@+id/transaction_details_separator_view2"
+              />
+
+          <TextView
+              android:id="@+id/totalTransactionsReceived"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="8dp"
+              android:layout_marginStart="16dp"
+              android:textColor="@color/materialLightGrey"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/totalTransactionsReceivedLabel"
+              tools:text="2 transactionEntities"/>
+
+          <TextView
+              android:id="@+id/totalTransactionsReceivedAmount"
+              android:layout_width="wrap_content"
+              android:layout_height="0dp"
+              android:layout_marginEnd="16dp"
+              android:gravity="center_vertical"
+              android:textSize="15sp"
+              app:layout_constraintBottom_toBottomOf="@+id/totalTransactionsReceived"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toTopOf="@+id/totalTransactionsReceivedLabel"
+              tools:text="16.00000"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+      </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+  </androidx.core.widget.NestedScrollView>
+
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/openConversationFAB"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/fab_margin"
+      android:clickable="true"
+      android:focusable="true"
+      android:src="@drawable/ic_chat"
+      android:transitionGroup="true"
+      app:layout_anchor="@id/appbar"
+      app:layout_anchorGravity="bottom|right|end"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

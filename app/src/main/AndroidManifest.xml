@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.radixdlt.android">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:name=".RadixWalletApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher_alpha_round"
+        android:roundIcon="@mipmap/ic_launcher_alpha_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name="com.radixdlt.android.ui.activity.NewWalletActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:scheme="https"
+                    android:host="www.radixdlt.com"
+                    android:pathPrefix="/dapp/" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:scheme="http"
+                    android:host="www.radixdlt.com"
+                    android:pathPrefix="/dapp/" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.radixdlt.android.ui.activity.EnterPasswordActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.radixdlt.android.ui.activity.MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"
+            android:theme="@style/SplashTheme">
+        </activity>
+        <activity
+            android:name="com.radixdlt.android.ui.activity.SendRadixActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/SplashTheme"/>
+        <activity
+            android:name="com.radixdlt.android.ui.activity.ConversationActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme" />
+
+        <activity android:name="com.radixdlt.android.ui.activity.BarcodeCaptureActivity"
+            android:label="QR Code Scanner"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:parentActivityName="com.radixdlt.android.ui.activity.SendRadixActivity"/>
+        <activity
+            android:name="com.radixdlt.android.ui.activity.TransactionDetailsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName="com.radixdlt.android.ui.activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/SplashTheme"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+              <meta-data
+                  android:name="android.support.FILE_PROVIDER_PATHS"
+                  android:resource="@xml/provider_paths"/>
+        </provider>
+    </application>
+
+</manifest>

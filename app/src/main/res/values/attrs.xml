@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="ForegroundRelativeLayout">
+    <attr name="android:foreground"/>
+    <attr name="android:foregroundGravity"/>
+
+    <!--  Atribute throws error as being private in new Android Studio 3.0 though we can
+    ignore it since we never use it. -->
+    <!--<attr name="android:foregroundInsidePadding" />-->
+  </declare-styleable>
+
+  <declare-styleable name="CenterIconButton">
+    <attr name="drawableTint" format="color"/>
+    <attr name="android:drawablePadding"/>
+  </declare-styleable>
+</resources>

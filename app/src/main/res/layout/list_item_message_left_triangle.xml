@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="left"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="5dp"
+    tools:ignore="RtlHardcoded">
+
+  <TextView
+      android:id="@+id/lblMsgDate"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginEnd="10dp"
+      android:layout_marginStart="10dp"
+      android:background="@drawable/conversation_date_backgroung"
+      android:gravity="center"
+      android:paddingBottom="5dp"
+      android:paddingLeft="8dp"
+      android:paddingRight="8dp"
+      android:paddingTop="5dp"
+      android:textColor="@color/materialDarkGrey"
+      android:textSize="14sp"
+      android:textStyle="bold"
+      android:visibility="visible"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="Sat, June 1st, 2018"/>
+
+  <TextView
+      android:id="@+id/lblMsgFrom"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:padding="5dp"
+      android:textColor="@color/materialDarkGrey"
+      android:textIsSelectable="true"
+      android:textSize="12sp"
+      android:visibility="visible"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/lblMsgDate"
+      tools:text="Name"/>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/constraintLayout_speech_bubble"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/speech_bubble_recipient"
+      android:backgroundTint="#e0e4e6"
+      app:layout_constrainedWidth="true"
+      app:layout_constraintEnd_toStartOf="@+id/guideline2"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/lblMsgFrom">
+
+    <TextView
+        android:id="@+id/txtMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="0dp"
+        android:textColor="@color/materialDarkGrey"
+        android:textIsSelectable="true"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="This is a simple test and dkjf kjkjkjkjkjkjkjjkjkjkjkjjjdfjd jkjkjjjdfjd jkjkjjjjjjdfjd....... .kfjd kjfdkfjdkjfd kfjdkjfdkfjdkjfd.....kfjdkjfdkjf....... messageEntity to se how it displaysvv display  displays displads fysad...disp..........ladsfys......&#160;&#160;&#160;&#160;&#160;&#160;&#160;"/>
+
+    <TextView
+        android:id="@+id/txtTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:textColor="@color/materialLightGrey"
+        android:textSize="11sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="SmallSp"
+        tools:text="12:00"/>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.75"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

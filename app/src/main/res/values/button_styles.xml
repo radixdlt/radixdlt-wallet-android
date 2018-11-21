@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="AccentButton" parent="ThemeOverlay.AppCompat.Dark">
+    <item name="colorAccent">@color/colorAccent</item>
+    <!-- customize colorControlHighlight for the enabled/pressed color -->
+    <item name="colorButtonNormal">@color/colorAccentDisabled</item>
+    <item name="android:buttonStyle">@style/Widget.AppCompat.Button.Colored</item>
+  </style>
+
+  <style name="DangerButton" parent="ThemeOverlay.AppCompat.Dark">
+    <item name="colorAccent">@color/lightRed</item>
+    <!-- customize colorControlHighlight for the enabled/pressed color -->
+    <item name="android:buttonStyle">@style/Widget.AppCompat.Button.Colored</item>
+  </style>
+</resources>

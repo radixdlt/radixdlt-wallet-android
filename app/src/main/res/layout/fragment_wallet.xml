@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.WalletFragment">
+
+  <TextView
+      android:id="@+id/balanceTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:text="@string/wallet_fragment_xml_default_zero"
+      android:textColor="@android:color/black"
+      android:textSize="38sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+  <TextView
+      android:id="@+id/balanceTitleTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:layout_marginStart="16dp"
+      android:text="@string/wallet_fragment_xml_account_balance_title"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/balanceTextView"/>
+
+  <com.radixdlt.android.ui.layout.CenterIconButton
+      android:id="@+id/sendButton"
+      android:layout_width="0dp"
+      android:layout_height="56dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="12dp"
+      android:layout_marginTop="8dp"
+      android:drawablePadding="6dp"
+      android:drawableStart="@drawable/ic_send"
+      android:text="@string/wallet_fragment_xml_send_button"
+      android:textAllCaps="false"
+      android:textColor="@android:color/white"
+      android:theme="@style/AccentButton"
+      app:layout_constraintEnd_toStartOf="@+id/guideline"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/balanceTitleTextView"
+      tools:backgroundTint="@color/colorAccent"/>
+
+  <com.radixdlt.android.ui.layout.CenterIconButton
+      android:id="@+id/receiveButton"
+      android:layout_width="0dp"
+      android:layout_height="56dp"
+      android:layout_marginEnd="12dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      android:drawablePadding="6dp"
+      android:drawableStart="@drawable/ic_receive_qr"
+      android:text="@string/wallet_fragment_xml_receive_button"
+      android:textAllCaps="false"
+      android:textColor="@android:color/white"
+      android:theme="@style/AccentButton"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="@+id/guideline"
+      app:layout_constraintTop_toBottomOf="@+id/balanceTitleTextView"
+      tools:backgroundTint="@color/colorAccent"/>
+
+  <androidx.appcompat.widget.AppCompatButton
+      android:id="@+id/receiveFromFaucetButton"
+      android:layout_width="100dp"
+      android:layout_height="66dp"
+      android:layout_marginEnd="14dp"
+      android:layout_marginStart="8dp"
+      android:text="@string/wallet_fragment_xml_get_test_tokens_button"
+      android:textColor="@android:color/white"
+      android:theme="@style/AccentButton"
+      android:visibility="visible"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintStart_toStartOf="@+id/guideline"
+      app:layout_constraintTop_toTopOf="@+id/balanceTextView"
+      tools:backgroundTint="@color/colorAccent"/>
+
+  <TextView
+      android:id="@+id/recentTransactionsTextView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:background="#ECF2F5"
+      android:paddingBottom="8dp"
+      android:paddingEnd="16dp"
+      android:paddingStart="16dp"
+      android:paddingTop="8dp"
+      android:textSize="16sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/sendButton"
+      tools:text="Recent transactionEntities"/>
+
+
+  <FrameLayout
+      android:id="@+id/walletBackGroundFrameLayout"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:background="@color/mainBackground"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/recentTransactionsTextView">
+
+    <ImageView
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/wallet_fragment_xml_empty_transactions_background_description"
+        android:src="@drawable/ic_new_wallet"
+        android:tint="@color/veryLightGray"/>
+
+  </FrameLayout>
+
+
+  <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:id="@+id/swipe_refresh_layout"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginTop="0dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/recentTransactionsTextView">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        tools:listitem="@layout/item_wallet"/>
+  </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.5"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

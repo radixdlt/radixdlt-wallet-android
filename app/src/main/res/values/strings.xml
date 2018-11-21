@@ -1,0 +1,158 @@
+<resources>
+  <string name="app_name">Radix</string>
+
+  <!-- QR camera reader -->
+  <string name="permission_camera_rationale">Access to the camera is needed to scan QR code</string>
+  <string name="no_camera_permission">The QR code scanner cannot run because it does not have the camera permission.</string>
+  <string name="low_storage_error">Dependencies cannot be downloaded due to low device storage</string>
+
+  <string name="barcode_success">Barcode read successfully</string>
+  <string name="barcode_failure">No barcode captured</string>
+  <string name="barcode_error">"Error reading barcode: %1$s"</string>
+
+  <!-- ACTIVITIES -->
+  <!-- New Wallet Activity -->
+  <string name="new_wallet_activity_xml_welcome_title">Welcome to Radix</string>
+  <string name="new_wallet_activity_xml_create_import">Create a new password protected wallet or import an existing one</string>
+  <string name="new_wallet_activity_xml_create_new_wallet_button">Create new wallet</string>
+  <string name="new_wallet_activity_xml_import_wallet_button">Import existing wallet</string>
+
+  <!-- Enter Password Activity -->
+  <string name="enter_password_activity_xml_welcome_title">Welcome to Radix</string>
+  <string name="enter_password_activity_xml_choose_password">Choose a password for your wallet</string>
+  <string name="enter_password_activity_xml_password_hint">Password</string>
+  <string name="enter_password_activity_xml_repeat_password_hint">Repeat Password</string>
+  <string name="enter_password_activity_xml_create_wallet_button">Create wallet</string>
+  <string name="enter_password_activity_xml_delete_wallet_button">Delete existing wallet</string>
+  <string name="enter_password_activity_sub_welcome_msg">Enter password to unlock wallet</string>
+  <string name="enter_password_activity_unlock_button">Unlock Wallet</string>
+  <string name="enter_password_activity_creating_wallet_progress_dialog">Creating Wallet…</string>
+  <string name="enter_password_activity_unlocking_wallet_progress_dialog">Unlocking Wallet…</string>
+  <!-- toasts -->
+  <string name="toast_no_internet">No internet connection.</string>
+  <string name="toast_passwords_dont_match_error">Passwords don\'t match</string>
+  <string name="toast_creating_wallet_error">Something went wrong when creating your wallet!</string>
+  <string name="toast_decrypting_wallet_error">Unable to decrypt file, please try again!</string>
+  <string name="toast_password_length_error">Password needs to be at least 6 characters</string>
+
+  <!-- Main Activity -->
+  <string name="main_activity_address_copied">Address copied to clipboard</string>
+  <!-- Bottom Navigator -->
+  <string name="bottom_nav_title_chat">Chat</string>
+  <string name="bottom_nav_title_contacts">Contacts</string>
+  <string name="bottom_nav_title_account">Account</string>
+  <string name="bottom_nav_title_network">Network</string>
+  <!-- toasts -->
+  <string name="invalid_address_toast">Address is not valid</string>
+
+  <!-- Send Radix Activity -->
+  <string name="send_radix_activity_title">Send Radix</string>
+  <string name="send_radix_activity_sendgin_progress_dialog">Sending…</string>
+  <string name="send_activity_enter_address_hint">Enter address</string>
+  <string name="send_activity_xml_amount">AMOUNT</string>
+  <string name="send_activity_xml_radix_r">R</string>
+  <string name="send_activity_xml_amount_hint">0</string>
+  <string name="send_activity_xml_message_hint">Message</string>
+  <string name="send_activity_xml_send_button">Send</string>
+  <!-- toasts -->
+  <string name="toast_enter_valid_amount_error">Please enter a valid amount!</string>
+  <string name="toast_amount_too_small_error">For now, cannot send less than 0.00001 XRD</string>
+  <string name="toast_entered_own_address_error">You have entered your own address.</string>
+  <string name="toast_wrong_address_format_error">Wrong address format, check again!</string>
+  <string name="toast_not_enough_tokens_error">You don\'t have enough tokens!</string>
+  <string name="toast_too_many_decimal_places_error">Test tokens only allow up to 5 decimal places</string>
+  <string name="toast_error_reading_qr_code">Error reading QR code</string>
+
+  <!-- TransactionEntity Details Activity -->
+  <string name="transaction_details_activity_title">Transaction</string>
+  <string name="transaction_details_activity_received">You received</string>
+  <string name="transaction_details_activity_from">From</string>
+  <string name="transaction_details_activity_sent">You sent</string>
+  <string name="transaction_details_activity_to">To</string>
+  <string name="transaction_details_activity_xml_image_background_description">Image background</string>
+  <string name="transaction_details_activity_xml_details_title">Details</string>
+  <string name="transaction_details_activity_xml_test_tokens">TEST TOKENS</string>
+  <string name="transaction_details_activity_xml_message_icon_description">Message icon</string>
+  <string name="transaction_details_activity_xml_send_tokens">Send tokens</string>
+  <string name="transaction_details_activity_xml_history_title">History</string>
+  <string name="transaction_details_activity_xml_number_of_transactions">Number of transactions</string>
+  <string name="transaction_details_activity_xml_total_sent">Total sent</string>
+  <string name="transaction_details_activity_xml_total_received">Total received</string>
+  <plurals name="transaction_details_activity_total_transactions">
+    <item quantity="one">%1$s transaction</item>
+    <item quantity="other">%1$s transactions</item>
+  </plurals>
+
+  <!-- Conversation Activity -->
+  <string name="conversation_activity_title">Conversation</string>
+  <string name="conversation_activity_me_label">Me</string>
+  <string name="conversation_activity_today_label">Today</string>
+  <string name="conversation_activity_yesterday_label">Yesterday</string>
+  <string name="conversation_activity_message_bubble" translatable="false">%1$s&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
+  <string name="conversation_activity_send_message_error">Unable to send message, please try again!</string>
+  <string name="conversation_activity_xml_write_message">Write message</string>
+  <string name="conversation_activity_xml_attachment_button_description">Attachment button</string>
+  <string name="conversation_activity_xml_send_button_description">Send button</string>
+
+
+  <!-- FRAGMENTS -->
+  <!-- Wallet Fragment -->
+  <string name="wallet_fragment_retrieving_transactions">Retrieving Transactions…</string>
+  <string name="wallet_fragment_all_transactions">All Transactions</string>
+  <string name="wallet_fragment_no_transactions">No Transactions</string>
+  <string name="wallet_fragment_xml_default_zero">0</string>
+  <string name="wallet_fragment_xml_account_balance_title">ACCOUNT BALANCE</string>
+  <string name="wallet_fragment_xml_send_button">Send</string>
+  <string name="wallet_fragment_xml_receive_button">Receive</string>
+  <string name="wallet_fragment_xml_get_test_tokens_button">Get Test Tokens</string>
+  <string name="wallet_fragment_xml_empty_transactions_background_description">Empty transactionEntities background</string>
+  <string name="wallet_fragment_item_xml_test_tokens">TEST TOKENS</string>
+  <!-- toast -->
+  <string name="toast_request_tokens_faucet">Requested tokens from Faucet!</string>
+
+  <!-- Contacts Fragment -->
+  <string name="contacts_fragment_user_faucet">Faucet</string>
+  <string name="contacts_fragment_now">Now</string>
+  <string name="contacts_fragment_xml_empty_contacts_image_background_description">Image background when there are no messageEntities</string>
+  <string name="toast_copied_clipboard">copied to clipboard</string>
+
+  <!-- Account Fragment -->
+  <string name="account_fragment_sharing_intent_chooser_title">Share address</string>
+  <string name="account_fragment_xml_scan_qr">Scan QR code to share address</string>
+  <string name="account_fragment_xml_radix_address">RADIX ADDRESS</string>
+  <string name="account_fragment_xml_tap_qr_instructions">Tap QR code to copy address or hold to share</string>
+  <string name="account_fragment_xml_generated_qr_code_description">Generated QR code</string>
+  <!-- toast -->
+  <string name="toast_address_copied_clipboard">Address copied to clipboard</string>
+
+  <!-- More Options Fragment -->
+  <string name="more_options_fragment_export_intent_chooser_title">Export address</string>
+  <string name="more_options_fragment_xml_wallet_options_title">Wallet Options</string>
+  <string name="more_options_fragment_xml_export_backup_wallet">Export/Backup wallet</string>
+  <string name="more_options_fragment_xml_delete_wallet">Delete wallet</string>
+  <string name="more_options_fragment_xml_security_title">Security</string>
+  <string name="more_options_fragment_xml_toggle_password">Enable wallet password</string>
+  <string name="more_options_fragment_xml_autolock_timeout">Autolock timeout</string>
+
+  <!-- FRAGMENT DIALOGS -->
+  <!-- Delete Wallet Dialog -->
+  <string name="delete_wallet_dialog_title">Delete Existing Wallet?</string>
+  <string name="delete_wallet_dialog_message">"Are you sure you want to delete the existing wallet?\n\nPlease make sure you have backed up the wallet first as this operation cannot be undone."</string>
+  <string name="delete_wallet_dialog_delete">Delete</string>
+
+  <!-- New Conversation Dialog -->
+  <string name="new_conversation_dialog_new">New</string>
+  <string name="new_conversation_dialog_scan">Scan</string>
+  <string name="new_conversations_dialog_enter_address_title">Enter address:</string>
+  <string name="new_conversation_dialog_address_hint">Address</string>
+  <!-- toast -->
+  <string name="toast_entered_own_address">You have entered your own address.</string>
+
+  <!-- Receive Radix Dialog -->
+  <string name="receive_radix_dialog_title">Radix Address</string>
+  <string name="receive_radix_dialog_copy">Copy</string>
+  <string name="receive_radix_dialog_share">Share</string>
+  <string name="receive_radix_dialog_intent_chooser_title">Share address</string>
+  <string name="receive_radix_dialog_xml_qr_code_description">QR code</string>
+
+</resources>

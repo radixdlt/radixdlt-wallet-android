@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+    android:transitionOrdering="together"
+    android:duration="500">
+    <slide android:slideEdge="top">
+        <targets>
+            <target android:targetId="@id/appbar" />
+        </targets>
+    </slide>
+    <slide android:slideEdge="bottom">
+        <targets>
+            <target android:targetId="@id/nested_scroll_view" />
+        </targets>
+    </slide>
+</transitionSet>

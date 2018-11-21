@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0D1D2A</color>
+    <color name="colorPrimaryDark">#00101C</color>
+    <color name="colorAccent">#6C42FB</color>
+    <color name="colorAccentDisabled">#815dfd</color>
+    <color name="colorAccentSecondary">#14E1DB</color>
+    <color name="colorAccentSecondaryDark">#12ccc7</color>
+    <color name="radixBlue">#35B0E5</color>
+    <color name="green">#34af39</color>
+    <color name="materialLightGrey">#9e9e9e</color>
+    <color name="white">#FFFFFF</color>
+    <color name="notQuiteWhite">#FEFEFE</color>
+    <color name="notQuiteWhiteAlpha">#a0fefefe</color>
+    <color name="notVeryLightGray">#bfbfbf</color>
+    <color name="veryLightGray">#dfdfdf</color>
+    <color name="greyAlpha">#78bfbfbf</color>
+    <color name="materialDarkGrey">#3B3B3B</color>
+    <color name="materialGrey700">#616161</color>
+    <color name="materialGrey900">#212121</color>
+    <color name="turquoise">#4489A3</color>
+    <color name="lightRed">#ff6861</color>
+
+    <color name="mainBackground">#ECF2F5</color>
+
+    <!-- Testing -->
+    <color name="immersive_background">#88000000</color>
+    <color name="dialog_background">#fafafa</color>
+</resources>
