@@ -3,10 +3,10 @@
 Radix DLT Android Wallet
 ========================
 
-The Radix DLT Android Wallet is currently working with the live ALPHANET and interacts with it
+The Radix DLT Android Wallet currently works with the live _ALPHANET_ universe and interacts with it
 by making full use of the latest release of the [radixdlt-kotlin library](https://github.com/radixdlt/radixdlt-kotlin).
 
-The App is a work in progress and will soon be migrated to using the new version of our network.
+The App is a work in progress and will soon be migrated to use the new version of our network.
 
 <img src="art/unlock_wallet.jpg" width="250">&nbsp;
 <img src="art/transactions_screen.jpg" width="250">&nbsp;
@@ -14,7 +14,7 @@ The App is a work in progress and will soon be migrated to using the new version
 
 ## Android development
 
- * Mostly written in [Kotlin](https://kotlinlang.org/) (A few classes classes are in Java but will be converted to keep it 100% Kotlin)
+ * Mostly written in [Kotlin](https://kotlinlang.org/) (A few classes are in Java but will be converted to keep it 100% Kotlin)
  * Uses [Architecture Components](https://developer.android.com/topic/libraries/architecture/): Room, LiveData and Lifecycle-components
  * Uses [dagger-android](https://google.github.io/dagger/android.html) for dependency injection
  * Uses [RxJava](https://github.com/ReactiveX/RxJava) 2 (Included by default by the radixdlt libs)
@@ -23,9 +23,9 @@ The App is a work in progress and will soon be migrated to using the new version
 
 Use Android Studio 3.2.1 (or newer) to be able to build the app.
 
-The app is currently using the latest release of the [radixdlt-kotlin library](https://github.com/radixdlt/radixdlt-kotlin) it is
-possible to interchange this with the [radixdlt-java library](https://github.com/radixdlt/radixdlt-java) but you will need to target newer
-android devices >= API 24. Also, a few simple changes in the code are necessary and the dependency
+The app is currently using the latest release of the [radixdlt-kotlin](https://github.com/radixdlt/radixdlt-kotlin) library. It is 
+possible to replace it with the [radixdlt-java](https://github.com/radixdlt/radixdlt-java) library but you will need to target newer
+android devices >= API 24. Also, a few simple changes in the code are required and the dependency
 to [rxkotlin](https://github.com/ReactiveX/RxKotlin) must be included in your gradle file.
 
 ```
@@ -62,4 +62,4 @@ If you need any information, please visit our [GitHub Issues](https://github.com
 
 ## License
 
-Radix DLT Android Wallet is released under the [MIT License](https://github.com/radixdlt/radixdlt-wallet-android/blob/master/LICENSE)
+Radix DLT Android Wallet is released under the [MIT License](https://github.com/radixdlt/radixdlt-wallet-android/blob/master/LICENSE).
