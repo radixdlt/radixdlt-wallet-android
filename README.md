@@ -54,6 +54,7 @@ Contributions are welcome, we simply ask to:
 | :----- | :------ |
 [radixdlt.com](https://radixdlt.com/) | Radix DLT Homepage
 [documentation](https://docs.radixdlt.com/) | Radix Knowledge Base
+[forum](https://forum.radixdlt.com/) | Radix Technical Forum
 [@radixdlt](https://twitter.com/radixdlt) | Follow Radix DLT on Twitter
 
 ## Have a question?
