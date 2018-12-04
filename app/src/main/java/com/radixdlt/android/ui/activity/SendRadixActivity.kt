@@ -18,10 +18,9 @@ import com.radixdlt.android.util.hideKeyboard
 import com.radixdlt.android.util.setDialogMessage
 import com.radixdlt.android.util.setProgressDialogVisible
 import com.radixdlt.client.application.RadixApplicationAPI
-import com.radixdlt.client.application.translate.InsufficientFundsException
-import com.radixdlt.client.core.address.RadixAddress
+import com.radixdlt.client.application.translate.tokens.InsufficientFundsException
+import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.network.AtomSubmissionUpdate
-import com.radixdlt.client.dapps.wallet.RadixWallet
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -36,7 +35,6 @@ class SendRadixActivity : BaseActivity() {
     private lateinit var progressDialog: ProgressDialog
 
     private lateinit var api: RadixApplicationAPI
-    private lateinit var radixWallet: RadixWallet
 
     companion object {
         private const val RC_BARCODE_CAPTURE = 9001
@@ -96,8 +94,6 @@ class SendRadixActivity : BaseActivity() {
             return
         }
 
-        radixWallet = RadixWallet(api)
-
         sendButton.setOnClickListener { _ ->
             val amount = if (amountEditText.text.isNullOrEmpty()) {
                 toast(getString(R.string.toast_enter_valid_amount_error))
@@ -122,26 +118,20 @@ class SendRadixActivity : BaseActivity() {
             }
 
             try {
-                val r: Observable<AtomSubmissionUpdate>
-                r = if (payLoad != null) {
-                    radixWallet.send(
+                val r: Observable<AtomSubmissionUpdate> = if (payLoad != null) {
+                    api.sendTokens(
+                        RadixAddress.from(inputAddressTIET.text.toString().trim()),
                         amount,
-                        payLoad,
-                        RadixAddress.fromString(inputAddressTIET.text.toString().trim())
-                    )
+                        api.nativeTokenRef,
+                        payLoad)
                         .toObservable()
-                        .doOnError { throwable ->
-                            checkErrorAndShowToast(throwable)
-                        }
+                        .doOnError(::checkErrorAndShowToast)
                 } else {
-                    radixWallet.send(
-                        amount,
-                        RadixAddress.fromString(inputAddressTIET.text.toString().trim())
-                    )
+                    api.sendTokens(
+                        RadixAddress.from(inputAddressTIET.text.toString().trim()),
+                        amount, api.nativeTokenRef)
                         .toObservable()
-                        .doOnError { throwable ->
-                            checkErrorAndShowToast(throwable)
-                        }
+                        .doOnError(::checkErrorAndShowToast)
                 }
 
                 prepareForNextStep(

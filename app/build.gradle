@@ -78,7 +78,8 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
 
     // Radix DLT client library
-    implementation 'com.radixdlt:radixdlt-kotlin:0.11.6'
+//    implementation 'com.radixdlt:radixdlt-java:ace3fc9'
+    implementation project(':radixdlt-java')
 
     def androidx_version = "1.0.0"
     implementation "androidx.legacy:legacy-support-v4:$androidx_version"
@@ -123,7 +124,11 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$rootProject.glide"
 
     // Rx
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation(group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: '2.2.0') {
+      exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+      exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
+    }
 
     // Jake Wharton
     implementation 'com.jakewharton.timber:timber:4.7.0'

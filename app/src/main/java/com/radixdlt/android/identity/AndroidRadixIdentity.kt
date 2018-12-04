@@ -1,8 +1,8 @@
 package com.radixdlt.android.identity
 
+import com.radixdlt.client.application.identity.Data
 import com.radixdlt.client.application.identity.RadixIdentity
-import com.radixdlt.client.application.objects.Data
-import com.radixdlt.client.application.objects.UnencryptedData
+import com.radixdlt.client.application.identity.UnencryptedData
 import com.radixdlt.client.core.atoms.Atom
 import com.radixdlt.client.core.atoms.UnsignedAtom
 import com.radixdlt.client.core.crypto.CryptoException
@@ -24,7 +24,7 @@ class AndroidRadixIdentity(private val myKey: ECKeyPair) : RadixIdentity {
     override fun decrypt(data: Data): Single<UnencryptedData> {
         val encrypted = data.getMetaData()["encrypted"] as Boolean
         if (encrypted) {
-            for (protector in data.protectors) {
+            for (protector in data.encryptor.protectors) {
                 // TODO: remove exception catching
                 try {
                     val bytes = myKey.decrypt(data.bytes!!, protector)

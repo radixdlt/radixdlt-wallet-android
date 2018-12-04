@@ -3,7 +3,7 @@ package com.radixdlt.android.data.model.message
 import androidx.lifecycle.LiveData
 import com.radixdlt.android.data.mapper.RadixMessageDataMapper
 import com.radixdlt.android.identity.Identity
-import com.radixdlt.client.dapps.messaging.RadixMessage
+import com.radixdlt.client.application.translate.data.DecryptedMessage
 import com.radixdlt.client.dapps.messaging.RadixMessaging
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -41,8 +41,8 @@ abstract class MessagesLiveData(
     }
 
     private fun listenToNewMessages(
-        oldMessageList: Single<ArrayList<RadixMessage>>,
-        allMessages: Observable<RadixMessage>
+        oldMessageList: Single<ArrayList<DecryptedMessage>>,
+        allMessages: Observable<DecryptedMessage>
     ) {
         Observables.combineLatest(
             oldMessageList.toObservable(),
@@ -63,11 +63,11 @@ abstract class MessagesLiveData(
     }
 
     private fun retrieveListOfOldMessages(
-        allMessages: Observable<RadixMessage>
-    ): Single<ArrayList<RadixMessage>> {
+        allMessages: Observable<DecryptedMessage>
+    ): Single<ArrayList<DecryptedMessage>> {
 
-        val oldMessageList: Single<ArrayList<RadixMessage>> = allMessages
-            .scan(ArrayList<RadixMessage>()) { list, radixMessage ->
+        val oldMessageList: Single<ArrayList<DecryptedMessage>> = allMessages
+            .scan(ArrayList<DecryptedMessage>()) { list, radixMessage ->
                 list.add(radixMessage)
                 return@scan list
             }

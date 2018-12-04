@@ -6,10 +6,9 @@ import com.radixdlt.android.data.mapper.TokenTransferDataMapper
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.android.util.FAUCET_ADDRESS
 import com.radixdlt.android.util.QueryPreferences
-import com.radixdlt.client.application.objects.TokenTransfer
-import com.radixdlt.client.core.address.RadixAddress
+import com.radixdlt.client.application.translate.tokens.TokenTransfer
+import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.dapps.messaging.RadixMessaging
-import com.radixdlt.client.dapps.wallet.RadixWallet
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -34,8 +33,10 @@ class TransactionsRepository(
     }
 
     private fun retrieveAllTransactions() {
-        val radixWalletTransactionsObservable = RadixWallet(Identity.api!!)
-            .getTransactions(RadixAddress.fromString(myAddress))
+//        val radixWalletTransactionsObservable = RadixWallet(Identity.api!!)
+//            .getTransactions(RadixAddress.fromString(myAddress))
+
+        val radixWalletTransactionsObservable =  Identity.api!!.myTokenTransfers
 
         val allTransactions: Observable<TokenTransfer> = radixWalletTransactionsObservable
             .publish()
@@ -117,7 +118,7 @@ class TransactionsRepository(
         // Send a message!
         RadixMessaging(Identity.api!!).sendMessage(
             "Give me some radix!!",
-            RadixAddress.fromString(FAUCET_ADDRESS)
+            RadixAddress.from(FAUCET_ADDRESS)
         )
             .toCompletable()
             .subscribeOn(Schedulers.io())

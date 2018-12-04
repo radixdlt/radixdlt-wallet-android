@@ -2,7 +2,7 @@ package com.radixdlt.android.data.model.message
 
 import androidx.lifecycle.LiveData
 import com.radixdlt.android.identity.Identity
-import com.radixdlt.client.core.address.RadixAddress
+import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.dapps.messaging.RadixMessaging
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -24,7 +24,7 @@ class SendMessageLiveData @Inject constructor(
         Timber.d(otherAddress)
         try {
             RadixMessaging(Identity.api!!)
-                .sendMessage(message, RadixAddress.fromString(otherAddress))
+                .sendMessage(message, RadixAddress.from(otherAddress))
                 .toObservable()
                 .subscribeOn(Schedulers.io())
                 .subscribe {

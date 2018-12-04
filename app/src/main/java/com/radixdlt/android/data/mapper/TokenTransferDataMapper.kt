@@ -1,10 +1,7 @@
 package com.radixdlt.android.data.mapper
 
 import com.radixdlt.android.data.model.transaction.TransactionEntity
-import com.radixdlt.client.application.objects.TokenTransfer
-import com.radixdlt.client.assets.Asset
-import java.math.BigDecimal
-import java.math.RoundingMode
+import com.radixdlt.client.application.translate.tokens.TokenTransfer
 
 object TokenTransferDataMapper {
 
@@ -18,13 +15,14 @@ object TokenTransferDataMapper {
     fun transform(tokenTransfer: TokenTransfer, myAddress: String): TransactionEntity {
 
         val address: String = getAddress(tokenTransfer, myAddress)
-        val subUnitAmount: Long = tokenTransfer.subUnitAmount
+        val subUnitAmount: Long = tokenTransfer.amount.toLong()
         val formattedAmount: String = getAmount(tokenTransfer, myAddress)
-        val message: String? = tokenTransfer.attachmentAsString
+        val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
         val dateUnix: Long = tokenTransfer.timestamp
-        val tokenClassISO: String = tokenTransfer.tokenClass.iso
-        val tokenClassSubUnits: Int = tokenTransfer.tokenClass.subUnits
+        val tokenClassISO: String = tokenTransfer.tokenClass.symbol
+        // TODO: This should be fixed one lib branches are merged currently using fixed nativeToken scale
+        val tokenClassSubUnits = 10000 // TokenClassReference.SUB_UNITS
 
         return TransactionEntity(
                 address,
@@ -62,10 +60,12 @@ object TokenTransferDataMapper {
      * @return Formatted formattedAmount to display
      * */
     private fun getAmount(transaction: TokenTransfer, myAddress: String): String {
-        val amount: Double = transaction.subUnitAmount.toDouble() / Asset.TEST.subUnits
-        val amountFormatted = BigDecimal(amount.toString()).setScale(
-                5, RoundingMode.HALF_UP
-        ).toPlainString()
+//        val amount: Double = transaction.subUnitAmount.toDouble() / Asset.TEST.subUnits
+//        val amountFormatted = BigDecimal(amount.toString()).setScale(
+//                5, RoundingMode.HALF_UP
+//        ).toPlainString()
+
+        val amountFormatted = transaction.amount.toPlainString()
 
         return if (transaction.from.toString() == myAddress) {
             amountFormatted
