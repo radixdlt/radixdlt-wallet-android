@@ -1,10 +1,9 @@
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/radixdlt/radixdlt-wallet-android/blob/master/LICENSE)
 
-Radix DLT Android Wallet
-========================
+# Radix DLT Android Wallet
 
 The Radix DLT Android Wallet currently works with the live _ALPHANET_ universe and interacts with it
-by making full use of the latest release of the [radixdlt-kotlin library](https://github.com/radixdlt/radixdlt-kotlin).
+by making full use of the latest release of the [radixdlt-kotlin](https://github.com/radixdlt/radixdlt-kotlin) library.
 
 The App is a work in progress and will soon be migrated to use the new version of our network.
 
@@ -48,6 +47,11 @@ Contributions are welcome, we simply ask to:
 * Make changes
 * Submit a pull request for review
 
+When contributing to this repository, we recommend to discuss the change you wish to make via issue,
+email, or any other method with the owners of this repository before making a change. 
+
+Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) in all your interactions with the project.
+
 ## Links
 
 | Link | Description |
@@ -63,4 +67,4 @@ If you need any information, please visit our [GitHub Issues](https://github.com
 
 ## License
 
-Radix DLT Android Wallet is released under the [MIT License](https://github.com/radixdlt/radixdlt-wallet-android/blob/master/LICENSE).
+Radix DLT Android Wallet is released under the [MIT License](LICENSE).
