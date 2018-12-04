@@ -39,7 +39,7 @@ implementation(group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: '2.2.0'
 This project uses [ktlint](https://github.com/shyiko/ktlint) via [Gradle](https://gradle.org/) dependency.
 To check code style - `gradle ktlint` (it's also bound to `gradle check`).
 
-## Contributing
+## Contribute
 
 Contributions are welcome, we simply ask to:
 
