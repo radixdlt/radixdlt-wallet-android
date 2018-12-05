@@ -79,36 +79,32 @@
           app:layout_constraintRight_toRightOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/inputAddressTIL"/>
 
-      <TextView
-          android:id="@+id/rTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="0dp"
-          android:layout_marginStart="19dp"
-          android:layout_marginTop="8dp"
-          android:text="@string/send_activity_xml_radix_r"
-          android:textStyle="bold"
-          app:layout_constraintHorizontal_bias="0.0"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/transactionAmount"/>
-
       <EditText
           android:id="@+id/amountEditText"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:layout_marginStart="2dp"
+          android:layout_marginEnd="8dp"
+          android:layout_marginStart="19dp"
           android:background="@android:color/transparent"
           android:hint="@string/send_activity_xml_amount_hint"
           android:inputType="numberDecimal"
           android:maxLines="1"
           android:textSize="38sp"
-          app:layout_constraintHorizontal_bias="0.0"
-          app:layout_constraintLeft_toRightOf="@+id/rTextView"
-          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintEnd_toStartOf="@+id/tokenTypeSpinner"
+          app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/transactionAmount"
           tools:ignore="Autofill"/>
+
+      <androidx.appcompat.widget.AppCompatSpinner
+          android:id="@+id/tokenTypeSpinner"
+          android:layout_width="wrap_content"
+          android:layout_height="52dp"
+          android:layout_marginRight="16dp"
+          android:layout_weight="0.5"
+          android:popupBackground="@color/white"
+          app:layout_constraintBottom_toBottomOf="@+id/amountEditText"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintTop_toTopOf="@+id/amountEditText"/>
 
       <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/inputMessageTIL"

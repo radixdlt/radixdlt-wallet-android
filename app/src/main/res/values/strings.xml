@@ -49,6 +49,7 @@
   <string name="send_radix_activity_title">Send Radix</string>
   <string name="send_radix_activity_sendgin_progress_dialog">Sending…</string>
   <string name="send_activity_enter_address_hint">Enter address</string>
+  <string name="send_activity_token_type_spinner">XRD</string>
   <string name="send_activity_xml_amount">AMOUNT</string>
   <string name="send_activity_xml_radix_r">R</string>
   <string name="send_activity_xml_amount_hint">0</string>

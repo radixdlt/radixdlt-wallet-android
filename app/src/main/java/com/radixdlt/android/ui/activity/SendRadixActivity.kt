@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.barcode.Barcode
@@ -35,6 +36,8 @@ class SendRadixActivity : BaseActivity() {
     private lateinit var progressDialog: ProgressDialog
 
     private lateinit var api: RadixApplicationAPI
+
+    private val tokenTypesList = arrayListOf<String>()
 
     companion object {
         private const val RC_BARCODE_CAPTURE = 9001
@@ -94,6 +97,11 @@ class SendRadixActivity : BaseActivity() {
             return
         }
 
+        setListeners(uri)
+        setTokenTypeSpinner()
+    }
+
+    private fun setListeners(uri: Uri?) {
         sendButton.setOnClickListener { _ ->
             val amount = if (amountEditText.text.isNullOrEmpty()) {
                 toast(getString(R.string.toast_enter_valid_amount_error))
@@ -183,6 +191,14 @@ class SendRadixActivity : BaseActivity() {
                 sendRadixScrollView.smoothScrollTo(0, sendRadixScrollView.bottom)
             }
         }
+    }
+
+    private fun setTokenTypeSpinner() {
+        tokenTypesList.add(getString(R.string.send_activity_token_type_spinner))
+        val tokenTypesSpinner = ArrayAdapter(
+            this, android.R.layout.simple_spinner_dropdown_item, tokenTypesList
+        )
+        tokenTypeSpinner.adapter = tokenTypesSpinner
     }
 
     private fun checkErrorAndShowToast(it: Throwable) {
