@@ -49,7 +49,8 @@
   <string name="send_radix_activity_title">Send Radix</string>
   <string name="send_radix_activity_sendgin_progress_dialog">Sending…</string>
   <string name="send_activity_enter_address_hint">Enter address</string>
-  <string name="send_activity_token_type_spinner">XRD</string>
+  <string name="send_activity_no_tokens_spinner">NO TOKENS AVAILABLE</string>
+  <string name="send_activity_token_type_spinner">TOKEN</string>
   <string name="send_activity_xml_amount">AMOUNT</string>
   <string name="send_activity_xml_radix_r">R</string>
   <string name="send_activity_xml_amount_hint">0</string>
@@ -127,7 +128,7 @@
   <string name="toast_address_copied_clipboard">Address copied to clipboard</string>
 
   <!-- More Options Fragment -->
-  <string name="more_options_fragment_export_intent_chooser_title">Export address</string>
+  <string name="more_options_fragment_export_intent_chooser_title">Export or backup wallet</string>
   <string name="more_options_fragment_xml_wallet_options_title">Wallet Options</string>
   <string name="more_options_fragment_xml_export_backup_wallet">Export/Backup wallet</string>
   <string name="more_options_fragment_xml_delete_wallet">Delete wallet</string>

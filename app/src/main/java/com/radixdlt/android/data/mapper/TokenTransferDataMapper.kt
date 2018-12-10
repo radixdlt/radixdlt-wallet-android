@@ -2,6 +2,7 @@ package com.radixdlt.android.data.mapper
 
 import com.radixdlt.android.data.model.transaction.TransactionEntity
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
+import java.math.RoundingMode
 
 object TokenTransferDataMapper {
 
@@ -21,8 +22,8 @@ object TokenTransferDataMapper {
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
         val dateUnix: Long = tokenTransfer.timestamp
         val tokenClassISO: String = tokenTransfer.tokenClass.symbol
-        // TODO: This should be fixed one lib branches are merged currently using fixed nativeToken scale
-        val tokenClassSubUnits = 10000 // TokenClassReference.SUB_UNITS
+        // TODO: Currently it is fixed and the plan is for all tokens to have the same subunits
+        val tokenClassSubUnits = 10000
 
         return TransactionEntity(
                 address,
@@ -65,7 +66,9 @@ object TokenTransferDataMapper {
 //                5, RoundingMode.HALF_UP
 //        ).toPlainString()
 
-        val amountFormatted = transaction.amount.toPlainString()
+        val amountFormatted = transaction.amount.setScale(
+                5, RoundingMode.HALF_UP
+        ).toPlainString()
 
         return if (transaction.from.toString() == myAddress) {
             amountFormatted

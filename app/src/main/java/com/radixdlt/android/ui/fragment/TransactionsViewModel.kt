@@ -15,19 +15,19 @@ class TransactionsViewModel @Inject constructor(
     private val transactionsDao: TransactionsDao
 ) : ViewModel() {
 
-    private var transactionListLiveData = TransactionsRepository(context, transactionsDao)
+    private var transactionsRepository = TransactionsRepository(context, transactionsDao)
     val transactionList = MediatorLiveData<MutableList<TransactionEntity>>()
 
     init {
-        this.transactionList.addSource(transactionListLiveData) {
+        this.transactionList.addSource(transactionsRepository) {
             transactionList.value = it
         }
     }
 
     fun refresh() {
-        transactionList.removeSource(transactionListLiveData)
-        transactionListLiveData = TransactionsRepository(context, transactionsDao)
-        transactionList.addSource(transactionListLiveData, transactionList::setValue)
+        transactionList.removeSource(transactionsRepository)
+        transactionsRepository = TransactionsRepository(context, transactionsDao)
+        transactionList.addSource(transactionsRepository, transactionList::setValue)
     }
 
     /**
@@ -35,6 +35,6 @@ class TransactionsViewModel @Inject constructor(
      * which disposes of disposable according to lifecycle.
      * */
     fun requestTokensFromFaucet() {
-        transactionListLiveData.requestTestTokenFromFaucet()
+        transactionsRepository.requestTestTokenFromFaucet()
     }
 }

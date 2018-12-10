@@ -2,6 +2,7 @@ package com.radixdlt.android.di.module
 
 import com.radixdlt.android.ui.activity.ConversationActivity
 import com.radixdlt.android.ui.activity.EnterPasswordActivity
+import com.radixdlt.android.ui.activity.SendRadixActivity
 import com.radixdlt.android.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.ui.fragment.ContactsFragment
 import com.radixdlt.android.ui.fragment.MoreOptionsFragment
@@ -29,4 +30,7 @@ abstract class AndroidBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun bindEnterPasswordActivity(): EnterPasswordActivity
+
+    @ContributesAndroidInjector
+    abstract fun bindSendRadixActivity(): SendRadixActivity
 }

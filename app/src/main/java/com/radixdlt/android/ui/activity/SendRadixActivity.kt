@@ -9,6 +9,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.barcode.Barcode
 import com.radixdlt.android.R
@@ -20,24 +23,29 @@ import com.radixdlt.android.util.setDialogMessage
 import com.radixdlt.android.util.setProgressDialogVisible
 import com.radixdlt.client.application.RadixApplicationAPI
 import com.radixdlt.client.application.translate.tokens.InsufficientFundsException
-import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.network.AtomSubmissionUpdate
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_send_radix.*
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import timber.log.Timber
+import javax.inject.Inject
 
 class SendRadixActivity : BaseActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var sendTokensViewModel: SendTokensViewModel
 
     private lateinit var progressDialog: ProgressDialog
 
     private lateinit var api: RadixApplicationAPI
 
     private val tokenTypesList = arrayListOf<String>()
+
+    private var uri: Uri? = null
 
     companion object {
         private const val RC_BARCODE_CAPTURE = 9001
@@ -59,11 +67,12 @@ class SendRadixActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_radix)
 
         val addressExtra = intent.getStringExtra(EXTRA_TRANSACTION_ADDRESS)
-        val uri: Uri? = intent.getParcelableExtra(EXTRA_URI)
+        uri = intent.getParcelableExtra(EXTRA_URI)
 
         uri?.let {
             inputAddressTIET.setText(it.getQueryParameter("to"))
@@ -97,12 +106,44 @@ class SendRadixActivity : BaseActivity() {
             return
         }
 
-        setListeners(uri)
-        setTokenTypeSpinner()
+        setListeners()
+        initialiseViewModels()
     }
 
-    private fun setListeners(uri: Uri?) {
-        sendButton.setOnClickListener { _ ->
+    private fun initialiseViewModels() {
+        sendTokensViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(SendTokensViewModel::class.java)
+
+
+        sendTokensViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
+            tokenTypes?.apply {
+                setTokenTypeSpinner(tokenTypes)
+            }
+        })
+
+        sendTokensViewModel.sendTokensLiveData.observe(this, Observer { status ->
+            status?.apply {
+                setProgressDialogVisible(progressDialog, false)
+                if (status == AtomSubmissionUpdate.AtomSubmissionState.STORED.name) {
+                    if (uri != null) {
+                        intent.removeExtra(SendRadixActivity.EXTRA_URI)
+                        finishAffinity()
+                    } else {
+                        finish()
+                    }
+                } else if(status == InsufficientFundsException::class.java.simpleName) {
+                    toast(getString(R.string.toast_not_enough_tokens_error))
+                } else if(status == IllegalArgumentException::class.java.simpleName) {
+                    longToast(R.string.toast_too_many_decimal_places_error)
+                } else {
+                    toast(getString(R.string.toast_wrong_address_format_error))
+                }
+            }
+        })
+    }
+
+    private fun setListeners() {
+        sendButton.setOnClickListener {
             val amount = if (amountEditText.text.isNullOrEmpty()) {
                 toast(getString(R.string.toast_enter_valid_amount_error))
                 return@setOnClickListener
@@ -125,59 +166,16 @@ class SendRadixActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            try {
-                val r: Observable<AtomSubmissionUpdate> = if (payLoad != null) {
-                    api.sendTokens(
-                        RadixAddress.from(inputAddressTIET.text.toString().trim()),
-                        amount,
-                        api.nativeTokenRef,
-                        payLoad)
-                        .toObservable()
-                        .doOnError(::checkErrorAndShowToast)
-                } else {
-                    api.sendTokens(
-                        RadixAddress.from(inputAddressTIET.text.toString().trim()),
-                        amount, api.nativeTokenRef)
-                        .toObservable()
-                        .doOnError(::checkErrorAndShowToast)
-                }
+            prepareForNextStep(sendButton, getString(R.string.send_radix_activity_sendgin_progress_dialog))
 
-                prepareForNextStep(
-                    sendButton,
-                    getString(R.string.send_radix_activity_sendgin_progress_dialog)
-                )
-                r.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        Timber.d("Network status is... $it")
+            val selectedToken = tokenTypesList.get(tokenTypeSpinner.selectedItemPosition)
 
-                        if (it.isComplete) {
-                            setProgressDialogVisible(progressDialog, false)
-                            if (uri != null) {
-                                intent.removeExtra(EXTRA_URI)
-                                finishAffinity()
-                            } else {
-                                finish()
-                            }
-                        }
-                    }, {
-                        if (it is InsufficientFundsException) {
-                            setProgressDialogVisible(progressDialog, false)
-                            toast(getString(R.string.toast_not_enough_tokens_error))
-                        }
-                        Timber.e(it, "There is an error!!!")
-                    })
-            } catch (e: Exception) {
-                Timber.e(e, "Error sending...")
-                when (e) {
-                    is InsufficientFundsException -> {
-                        Timber.d("You don't have enough tokens! Exception")
-                        toast(getString(R.string.toast_not_enough_tokens_error))
-                    }
-                    is IllegalArgumentException -> longToast(R.string.toast_too_many_decimal_places_error)
-                    else -> toast(getString(R.string.toast_wrong_address_format_error))
-                }
-            }
+            sendTokensViewModel.sendToken(
+                inputAddressTIET.text.toString().trim(),
+                amount,
+                selectedToken,
+                payLoad
+            )
         }
 
         qrScanButton.setOnClickListener {
@@ -193,22 +191,19 @@ class SendRadixActivity : BaseActivity() {
         }
     }
 
-    private fun setTokenTypeSpinner() {
-        tokenTypesList.add(getString(R.string.send_activity_token_type_spinner))
+    private fun setTokenTypeSpinner(tokenTypes: List<String>) {
+        when {
+            tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.send_activity_no_tokens_spinner))
+            tokenTypes.size == 1 -> tokenTypesList.addAll(tokenTypes)
+            else -> {
+                tokenTypesList.add(getString(R.string.send_activity_token_type_spinner))
+                tokenTypesList.addAll(tokenTypes)
+            }
+        }
         val tokenTypesSpinner = ArrayAdapter(
             this, android.R.layout.simple_spinner_dropdown_item, tokenTypesList
         )
         tokenTypeSpinner.adapter = tokenTypesSpinner
-    }
-
-    private fun checkErrorAndShowToast(it: Throwable) {
-        if (it is RuntimeException) {
-            if (it.cause is InsufficientFundsException) {
-                runOnUiThread {
-                    toast(getString(R.string.toast_not_enough_tokens_error))
-                }
-            }
-        }
     }
 
     private fun prepareForNextStep(it: View, message: String) {

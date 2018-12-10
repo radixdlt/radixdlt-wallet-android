@@ -25,6 +25,7 @@ import com.radixdlt.android.util.multiClickingPrevention
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import org.jetbrains.anko.toast
+import timber.log.Timber
 import javax.inject.Inject
 
 class WalletFragment : Fragment() {
@@ -90,6 +91,8 @@ class WalletFragment : Fragment() {
 
     private fun sendButtonClickListener() {
         sendButton.setOnClickListener {
+//            getListOfTokens()
+//            SendRadixActivity.newIntent(activity!!, getListOfTokens())
             SendRadixActivity.newIntent(activity!!)
         }
     }
@@ -232,6 +235,20 @@ class WalletFragment : Fragment() {
             ContextCompat.getColor(activity!!, R.color.mainBackground)
         )
         swipe_refresh_layout.isRefreshing = false
+    }
+
+    /**
+     * Simple method which retrieves a list of distinct tokens
+     * */
+    // TODO: This does the job for now but should be refactored so the list comes from the dao
+    private fun getListOfTokens() : List<String> {
+        val tokens = this.transactions
+            .map { it.tokenClassISO }
+            .distinct()
+
+        Timber.tag("TokenTypes").d(tokens.toString())
+
+        return tokens
     }
 
     private val click = fun(transactionEntity: TransactionEntity, longClick: Boolean) {

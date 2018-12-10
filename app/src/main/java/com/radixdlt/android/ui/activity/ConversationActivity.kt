@@ -149,7 +149,7 @@ class ConversationActivity : BaseActivity() {
 
         conversationViewModel.sendMessageLiveData.observe(this, Observer { status ->
             status?.apply {
-                if (this == AtomSubmissionUpdate.AtomSubmissionState.STORED.name) {
+                if (status == AtomSubmissionUpdate.AtomSubmissionState.STORED.name) {
                     inputMsg.text.clear()
                 } else {
                     toast(getString(R.string.conversation_activity_send_message_error))

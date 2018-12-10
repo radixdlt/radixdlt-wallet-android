@@ -11,8 +11,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class SendMessageLiveData @Inject constructor(
-    // TODO: Use in future where message will be inserted immediately and
-    // TODO: will have a pending state until confirmed by the network.
+    // TODO: Use in future where message will be inserted immediately and have a pending state until
+    // confirmed by the network.
     private val messagesDao: MessagesDao
 ) : LiveData<String>() {
 
