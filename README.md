@@ -1,4 +1,4 @@
-[![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/radixdlt/radixdlt-wallet-android/blob/master/LICENSE)
+[![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 # Radix DLT Android Wallet
 
