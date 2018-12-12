@@ -74,6 +74,12 @@ class WalletFragment : Fragment() {
             }
         })
 
+        transactionsViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
+            tokenTypes?.apply {
+                Timber.d(tokenTypes.toString())
+            }
+        })
+
         transactionsViewModel.transactionList.observe(this,
             Observer { transactions ->
                 transactions?.apply {

@@ -14,6 +14,8 @@ class TokenTypesLiveData @Inject constructor(
 
     private val compositeDisposable = CompositeDisposable()
 
+    var sendingTokens: Boolean = false
+
     override fun onActive() {
         super.onActive()
         retrieveTokenTypes()
@@ -30,15 +32,17 @@ class TokenTypesLiveData @Inject constructor(
     }
 
     private fun getAllTransactionsFromEachToken(tokenTypes: MutableList<String>) {
-        tokenTypes.forEach {
-            transactionsDao.getTransactionsByTokenType(it)
-                .subscribeOn(Schedulers.io())
-                .subscribe { transactionEntity ->
-                    if (!checkTokenIsPositiveBalance(transactionEntity)) {
-                        tokenTypes.remove(it)
+        if (sendingTokens) {
+            tokenTypes.forEach {
+                transactionsDao.getTransactionsByTokenType(it)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe { transactionEntity ->
+                        if (!checkTokenIsPositiveBalance(transactionEntity)) {
+                            tokenTypes.remove(it)
+                        }
                     }
-                }
-                .addTo(compositeDisposable)
+                    .addTo(compositeDisposable)
+            }
         }
 
         postValue(tokenTypes)

@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import com.radixdlt.android.data.model.transaction.TokenTypesLiveData
 import com.radixdlt.android.data.model.transaction.TransactionEntity
 import com.radixdlt.android.data.model.transaction.TransactionsDao
 import com.radixdlt.android.data.model.transaction.TransactionsRepository
 import javax.inject.Inject
+import javax.inject.Named
 
 class TransactionsViewModel @Inject constructor(
     private val context: Context,
     val balance: LiveData<String>,
+    @Named("tokenTypes") val tokenTypesLiveData: TokenTypesLiveData,
     private val transactionsDao: TransactionsDao
 ) : ViewModel() {
 

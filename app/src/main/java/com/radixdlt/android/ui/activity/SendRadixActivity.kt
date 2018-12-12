@@ -46,6 +46,7 @@ class SendRadixActivity : BaseActivity() {
     private val tokenTypesList = arrayListOf<String>()
 
     private var uri: Uri? = null
+    private lateinit var token: String
 
     companion object {
         private const val RC_BARCODE_CAPTURE = 9001
@@ -78,6 +79,7 @@ class SendRadixActivity : BaseActivity() {
             inputAddressTIET.setText(it.getQueryParameter("to"))
             amountEditText.setText(it.getQueryParameter("amount"))
             val attachment = it.getQueryParameter("attachment")
+            token = it.getQueryParameter("token") ?: "XRD"
             if (attachment != null && attachment.isNotBlank()) {
                 inputMessageTIET.setText(attachment)
             }
@@ -168,7 +170,7 @@ class SendRadixActivity : BaseActivity() {
 
             prepareForNextStep(sendButton, getString(R.string.send_radix_activity_sendgin_progress_dialog))
 
-            val selectedToken = tokenTypesList.get(tokenTypeSpinner.selectedItemPosition)
+            val selectedToken = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
 
             sendTokensViewModel.sendToken(
                 inputAddressTIET.text.toString().trim(),
@@ -204,6 +206,21 @@ class SendRadixActivity : BaseActivity() {
             this, android.R.layout.simple_spinner_dropdown_item, tokenTypesList
         )
         tokenTypeSpinner.adapter = tokenTypesSpinner
+
+        // set spinner selection if populating from a URI
+        uri?.let {
+            val tokenTypeIndex = tokenTypes.indexOf(token)
+            if (tokenTypeIndex == -1) {
+                toast(getString(R.string.toast_token_not_owned))
+                return@let
+            }
+
+            if (tokenTypes.size > 1) {
+                tokenTypeSpinner.setSelection(tokenTypes.indexOf(token) + 1)
+            } else {
+                tokenTypeSpinner.setSelection(tokenTypes.indexOf(token))
+            }
+        }
     }
 
     private fun prepareForNextStep(it: View, message: String) {
