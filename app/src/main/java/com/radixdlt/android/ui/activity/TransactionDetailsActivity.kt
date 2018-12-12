@@ -63,7 +63,9 @@ class TransactionDetailsActivity : BaseActivity() {
 
     private fun initialiseClickListeners(transactionDetailsExtra: TransactionEntity) {
         transactionSendTokens.setOnClickListener {
-            SendRadixActivity.newIntent(this, transactionDetailsExtra.address)
+            SendRadixActivity.newIntent(
+                this, transactionDetailsExtra.address, transactionDetailsExtra.tokenClassISO
+            )
         }
 
         openConversationFAB.setOnClickListener {
@@ -79,6 +81,7 @@ class TransactionDetailsActivity : BaseActivity() {
         )
 
         setResources()
+        setTokenType(transactionDetailsExtra)
 
         transactionDetailsExtra.message?.let {
             transactionMessage.text = it
@@ -93,14 +96,20 @@ class TransactionDetailsActivity : BaseActivity() {
         transactionDate.text = formatDateTime(transactionDetailsExtra.dateUnix)
     }
 
+    private fun setTokenType(transactionEntity: TransactionEntity) {
+        if (transactionEntity.tokenClassISO != "XRD") {
+            testTokensTextView.text = transactionEntity.tokenClassISO
+            testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+        }
+    }
+
     private fun initialiseViewModel(transactionDetailsExtra: TransactionEntity) {
         transactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(TransactionDetailsViewModel::class.java)
 
         transactionsViewModel.transactionDetailsAddress(transactionDetailsExtra.address)
 
-        transactionsViewModel.transactions.observe(this,
-            Observer {
+        transactionsViewModel.transactions.observe(this, Observer {
                 bindTransactionDetails(it)
             }
         )

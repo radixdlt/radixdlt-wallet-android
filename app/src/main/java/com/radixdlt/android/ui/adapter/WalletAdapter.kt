@@ -49,6 +49,7 @@ class WalletAdapter(
             setAddress(transactionEntity)
             setResources(transactionEntity)
             setTransactionAmount(transactionEntity)
+            setTokenType(transactionEntity)
             setMessage(transactionEntity)
 
             // Item click listeners
@@ -84,6 +85,13 @@ class WalletAdapter(
                     transactionEntity.formattedAmount.split(".")[0],
                     transactionEntity.formattedAmount.split(".")[1]
                 )
+            }
+        }
+
+        private fun setTokenType(transactionEntity: TransactionEntity) {
+            if (transactionEntity.tokenClassISO != "XRD") {
+                itemView.testTokensTextView.text = transactionEntity.tokenClassISO
+                itemView.testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }
 

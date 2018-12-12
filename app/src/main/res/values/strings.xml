@@ -64,7 +64,7 @@
   <string name="toast_not_enough_tokens_error">You don\'t have enough tokens!</string>
   <string name="toast_too_many_decimal_places_error">Test tokens only allow up to 5 decimal places</string>
   <string name="toast_error_reading_qr_code">Error reading QR code</string>
-  <string name="toast_token_not_owned">"Type of token from website not owned!"</string>
+  <string name="toast_token_not_owned">"Token not owned!"</string>
 
   <!-- TransactionEntity Details Activity -->
   <string name="transaction_details_activity_title">Transaction</string>

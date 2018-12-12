@@ -23,7 +23,8 @@ object TokenTransferDataMapper {
         val dateUnix: Long = tokenTransfer.timestamp
         val tokenClassISO: String = tokenTransfer.tokenClass.symbol
         // TODO: Currently it is fixed and the plan is for all tokens to have the same subunits
-        val tokenClassSubUnits = 10000
+        // TODO: Recent update has changed this to 10^18
+        val tokenClassSubUnits = 100000
 
         return TransactionEntity(
                 address,
@@ -61,11 +62,6 @@ object TokenTransferDataMapper {
      * @return Formatted formattedAmount to display
      * */
     private fun getAmount(transaction: TokenTransfer, myAddress: String): String {
-//        val amount: Double = transaction.subUnitAmount.toDouble() / Asset.TEST.subUnits
-//        val amountFormatted = BigDecimal(amount.toString()).setScale(
-//                5, RoundingMode.HALF_UP
-//        ).toPlainString()
-
         val amountFormatted = transaction.amount.setScale(
                 5, RoundingMode.HALF_UP
         ).toPlainString()

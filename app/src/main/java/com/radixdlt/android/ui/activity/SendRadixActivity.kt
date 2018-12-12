@@ -46,20 +46,25 @@ class SendRadixActivity : BaseActivity() {
     private val tokenTypesList = arrayListOf<String>()
 
     private var uri: Uri? = null
+    private var tokenTypeExtra: String? = null
     private lateinit var token: String
 
     companion object {
         private const val RC_BARCODE_CAPTURE = 9001
 
         private const val EXTRA_TRANSACTION_ADDRESS = "com.radixdlt.android.address"
+        private const val EXTRA_TRANSACTION_TOKEN_TYPE = "com.radixdlt.android.token_type"
         private const val EXTRA_URI = "com.radixdlt.android.address"
 
         fun newIntent(ctx: Context) {
             ctx.startActivity<SendRadixActivity>()
         }
 
-        fun newIntent(ctx: Context, address: String) {
-            ctx.startActivity<SendRadixActivity>(EXTRA_TRANSACTION_ADDRESS to address)
+        fun newIntent(ctx: Context, address: String, tokenType: String) {
+            ctx.startActivity<SendRadixActivity>(
+                EXTRA_TRANSACTION_ADDRESS to address,
+                EXTRA_TRANSACTION_TOKEN_TYPE to tokenType
+            )
         }
 
         fun newIntent(ctx: Context, uri: Uri) {
@@ -73,6 +78,7 @@ class SendRadixActivity : BaseActivity() {
         setContentView(R.layout.activity_send_radix)
 
         val addressExtra = intent.getStringExtra(EXTRA_TRANSACTION_ADDRESS)
+        tokenTypeExtra = intent.getStringExtra(EXTRA_TRANSACTION_TOKEN_TYPE)
         uri = intent.getParcelableExtra(EXTRA_URI)
 
         uri?.let {
@@ -202,24 +208,35 @@ class SendRadixActivity : BaseActivity() {
                 tokenTypesList.addAll(tokenTypes)
             }
         }
+
         val tokenTypesSpinner = ArrayAdapter(
             this, android.R.layout.simple_spinner_dropdown_item, tokenTypesList
         )
+
         tokenTypeSpinner.adapter = tokenTypesSpinner
+
+        // set spinner selection if token passed from transaction details
+        tokenTypeExtra?.let {
+            setTokenInSpinner(tokenTypes, it)
+        }
 
         // set spinner selection if populating from a URI
         uri?.let {
-            val tokenTypeIndex = tokenTypes.indexOf(token)
-            if (tokenTypeIndex == -1) {
-                toast(getString(R.string.toast_token_not_owned))
-                return@let
-            }
+            setTokenInSpinner(tokenTypes, token)
+        }
+    }
 
-            if (tokenTypes.size > 1) {
-                tokenTypeSpinner.setSelection(tokenTypes.indexOf(token) + 1)
-            } else {
-                tokenTypeSpinner.setSelection(tokenTypes.indexOf(token))
-            }
+    private fun setTokenInSpinner(tokenTypes: List<String>, token: String) {
+        val tokenTypeIndex = tokenTypes.indexOf(token)
+        if (tokenTypeIndex == -1) {
+            toast(getString(R.string.toast_token_not_owned))
+            return
+        }
+
+        if (tokenTypes.size > 1) {
+            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token) + 1)
+        } else {
+            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token))
         }
     }
 

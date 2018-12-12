@@ -7,12 +7,12 @@ import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.atommodel.tokens.TokenClassReference
 import com.radixdlt.client.core.network.AtomSubmissionUpdate
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.math.BigDecimal
+import java.math.RoundingMode
 import javax.inject.Inject
 
 class SendTokensLiveData @Inject constructor(
@@ -72,9 +72,17 @@ class SendTokensLiveData @Inject constructor(
             }
 
             r.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     if (it.getState().isComplete) {
+                        // TODO: Will likely need the atom hid to do this
+//                        if (it.state.name == AtomSubmissionUpdate.AtomSubmissionState.STORED.name) {
+//
+//                            val transactionEntity = createTransactionEntity(
+//                                amount, to, payLoad, it, tokenClassReference
+//                            )
+//
+//                            transactionsDao.insertTransaction(transactionEntity)
+//                        }
                         postValue(it.getState().name)
                     }
                     Timber.d("Network status is... $it")
@@ -88,6 +96,29 @@ class SendTokensLiveData @Inject constructor(
             Timber.e(e, "Error sending...")
             postValue(e.javaClass.simpleName)
         }
+    }
+
+    private fun createTransactionEntity(
+        amount: BigDecimal,
+        to: String,
+        payLoad: String?,
+        it: AtomSubmissionUpdate,
+        tokenClassReference: TokenClassReference
+    ): TransactionEntity {
+        val amountFormatted = amount.setScale(
+            5, RoundingMode.HALF_UP
+        ).toPlainString()
+
+        return TransactionEntity(
+            to,
+            amount.toLong(),
+            amountFormatted,
+            payLoad,
+            true,
+            it.timestamp,
+            tokenClassReference.symbol,
+            10000
+        )
     }
 
     private fun checkErrorAndShowToast(it: Throwable) {
