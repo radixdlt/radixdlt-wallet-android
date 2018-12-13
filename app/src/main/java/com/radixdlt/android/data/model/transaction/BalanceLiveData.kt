@@ -56,7 +56,6 @@ class BalanceLiveData @Inject constructor(
         lastTransaction = if (transactionEntities.isNotEmpty()) {
             transactionEntities.last()
         } else return
-        Timber.tag("TOTAL").d("$total ${total.fixedStripTrailingZeros().toPlainString()}")
         postValue(total.fixedStripTrailingZeros().toPlainString())
     }
 
@@ -84,8 +83,6 @@ class BalanceLiveData @Inject constructor(
     }
 
     private fun sumStoredTransactions(it: MutableList<TransactionEntity>) {
-        Timber.tag("TOTAL").d(it.toString())
-
         val sumSent = it.asSequence().filter { transactions ->
             transactions.sent
         }.map { transactionEntity ->
@@ -99,8 +96,6 @@ class BalanceLiveData @Inject constructor(
         }.fold(BigDecimal.ZERO, BigDecimal::add)
 
         total = sumReceived - sumSent
-
-        Timber.tag("TOTAL").d(total.toString())
     }
 
     private fun calculateNewBalance(transactionEntity: TransactionEntity) {

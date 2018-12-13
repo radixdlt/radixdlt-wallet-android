@@ -27,7 +27,6 @@ import com.radixdlt.android.util.multiClickingPrevention
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import org.jetbrains.anko.toast
-import timber.log.Timber
 import javax.inject.Inject
 
 class WalletFragment : Fragment() {
@@ -44,6 +43,8 @@ class WalletFragment : Fragment() {
     private var loadedFromNetwork = false
 
     private val tokenTypesList = arrayListOf<String>()
+
+    private var tokenTypeSelectedPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -80,7 +81,6 @@ class WalletFragment : Fragment() {
 
         transactionsViewModel.balance.observe(this, Observer { balance ->
             balance?.apply {
-                Timber.tag("TOTAL").d(balance)
                 bindBalance(balance)
             }
         })
@@ -111,20 +111,8 @@ class WalletFragment : Fragment() {
         )
 
         tokenTypeSpinner.adapter = tokenTypesSpinner
-    }
 
-    private fun setTokenInSpinner(tokenTypes: List<String>, token: String) {
-        val tokenTypeIndex = tokenTypes.indexOf(token)
-//        if (tokenTypeIndex == -1) {
-//            activity?.toast(getString(R.string.toast_token_not_owned))
-//            return
-//        }
-
-        if (tokenTypes.size > 1) {
-            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token) + 1)
-        } else {
-            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token))
-        }
+        tokenTypeSpinner.setSelection(tokenTypeSelectedPosition)
     }
 
     private fun setListeners() {
@@ -161,7 +149,7 @@ class WalletFragment : Fragment() {
     private fun tokenSpinnerListener() {
         tokenTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-
+                // Not implemented
             }
 
             override fun onItemSelected(
@@ -170,6 +158,7 @@ class WalletFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
+                tokenTypeSelectedPosition = position
                 transactionsViewModel.balance.retrieveWalletBalance(tokenTypesList[position])
             }
         }
@@ -214,8 +203,8 @@ class WalletFragment : Fragment() {
     private fun bindTransactions(transactionEntities: MutableList<TransactionEntity>) {
         when {
             transactionEntities.isEmpty() -> {
-                // Added a loadedFromNetwork since we query the DB first and then instantly query the
-                // network for any old transactions which may have not been stored such as
+                // Added a loadedFromNetwork since we query the DB first and then instantly query
+                // the network for any old transactions which may have not been stored such as
                 // when loading an empty wallet
                 if (loadedFromNetwork) {
                     swipe_refresh_layout.isRefreshing = false

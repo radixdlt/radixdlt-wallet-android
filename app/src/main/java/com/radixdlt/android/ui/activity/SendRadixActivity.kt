@@ -124,7 +124,6 @@ class SendRadixActivity : BaseActivity() {
 
         sendTokensViewModel.tokenTypesLiveData.sendingTokens = true
 
-
         sendTokensViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
             tokenTypes?.apply {
                 setTokenTypeSpinner(tokenTypes)
@@ -141,9 +140,9 @@ class SendRadixActivity : BaseActivity() {
                     } else {
                         finish()
                     }
-                } else if(status == InsufficientFundsException::class.java.simpleName) {
+                } else if (status == InsufficientFundsException::class.java.simpleName) {
                     toast(getString(R.string.toast_not_enough_tokens_error))
-                } else if(status == IllegalArgumentException::class.java.simpleName) {
+                } else if (status == IllegalArgumentException::class.java.simpleName) {
                     longToast(R.string.toast_too_many_decimal_places_error)
                 } else {
                     toast(getString(R.string.toast_wrong_address_format_error))
@@ -176,7 +175,10 @@ class SendRadixActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            prepareForNextStep(sendButton, getString(R.string.send_radix_activity_sendgin_progress_dialog))
+            prepareForNextStep(
+                sendButton,
+                getString(R.string.send_radix_activity_sendgin_progress_dialog)
+            )
 
             val selectedToken = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
 

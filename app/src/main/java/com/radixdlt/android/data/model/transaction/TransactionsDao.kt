@@ -34,7 +34,6 @@ interface TransactionsDao {
     @Query("SELECT DISTINCT tokenClassISO FROM TransactionEntity ORDER BY tokenClassISO")
     fun getAllTokenTypes(): Flowable<MutableList<String>>
 
-
     @Query("DELETE FROM TransactionEntity")
     fun deleteTable()
 }

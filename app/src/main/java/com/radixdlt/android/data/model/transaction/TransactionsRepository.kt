@@ -33,7 +33,7 @@ class TransactionsRepository(
     }
 
     private fun retrieveAllTransactions() {
-        val radixWalletTransactionsObservable =  Identity.api!!.myTokenTransfers
+        val radixWalletTransactionsObservable = Identity.api!!.myTokenTransfers
 
         val allTransactions: Observable<TokenTransfer> = radixWalletTransactionsObservable
             .publish()
