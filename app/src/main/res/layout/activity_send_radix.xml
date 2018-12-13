@@ -99,7 +99,7 @@
           android:id="@+id/tokenTypeSpinner"
           android:layout_width="wrap_content"
           android:layout_height="52dp"
-          android:layout_marginRight="16dp"
+          android:layout_marginEnd="16dp"
           android:layout_weight="0.5"
           android:popupBackground="@color/white"
           app:layout_constraintBottom_toBottomOf="@+id/amountEditText"

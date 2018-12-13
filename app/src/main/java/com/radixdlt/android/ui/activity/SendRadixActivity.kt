@@ -122,6 +122,8 @@ class SendRadixActivity : BaseActivity() {
         sendTokensViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(SendTokensViewModel::class.java)
 
+        sendTokensViewModel.tokenTypesLiveData.sendingTokens = true
+
 
         sendTokensViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
             tokenTypes?.apply {

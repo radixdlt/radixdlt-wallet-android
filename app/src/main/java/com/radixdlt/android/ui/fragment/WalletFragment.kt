@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -41,6 +43,8 @@ class WalletFragment : Fragment() {
 
     private var loadedFromNetwork = false
 
+    private val tokenTypesList = arrayListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -61,22 +65,23 @@ class WalletFragment : Fragment() {
         initialiseLoadingState()
         initialiseSwipeRefreshLayout()
         initialiseViewModels()
-        setClickListeners()
+        setListeners()
     }
 
     private fun initialiseViewModels() {
         transactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(TransactionsViewModel::class.java)
 
-        transactionsViewModel.balance.observe(this, Observer { balance ->
-            balance?.apply {
-                bindBalance(balance)
+        transactionsViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
+            tokenTypes?.apply {
+                setTokenTypeSpinner(tokenTypes)
             }
         })
 
-        transactionsViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
-            tokenTypes?.apply {
-                Timber.d(tokenTypes.toString())
+        transactionsViewModel.balance.observe(this, Observer { balance ->
+            balance?.apply {
+                Timber.tag("TOTAL").d(balance)
+                bindBalance(balance)
             }
         })
 
@@ -89,16 +94,48 @@ class WalletFragment : Fragment() {
         )
     }
 
-    private fun setClickListeners() {
+    private fun setTokenTypeSpinner(tokenTypes: List<String>) {
+        tokenTypesList.clear()
+
+        when {
+            tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.wallet_fragment_total_tokens))
+            tokenTypes.size == 1 -> tokenTypesList.addAll(tokenTypes)
+            else -> {
+                tokenTypesList.add(getString(R.string.wallet_fragment_total_tokens))
+                tokenTypesList.addAll(tokenTypes)
+            }
+        }
+
+        val tokenTypesSpinner = ArrayAdapter(
+            activity!!, android.R.layout.simple_spinner_dropdown_item, tokenTypesList
+        )
+
+        tokenTypeSpinner.adapter = tokenTypesSpinner
+    }
+
+    private fun setTokenInSpinner(tokenTypes: List<String>, token: String) {
+        val tokenTypeIndex = tokenTypes.indexOf(token)
+//        if (tokenTypeIndex == -1) {
+//            activity?.toast(getString(R.string.toast_token_not_owned))
+//            return
+//        }
+
+        if (tokenTypes.size > 1) {
+            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token) + 1)
+        } else {
+            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token))
+        }
+    }
+
+    private fun setListeners() {
         sendButtonClickListener()
         receiveFromFaucetButtonClickListener()
         receiveButtonClickListener()
+        tokenSpinnerListener()
     }
 
     private fun sendButtonClickListener() {
         sendButton.setOnClickListener {
-//            getListOfTokens()
-//            SendRadixActivity.newIntent(activity!!, getListOfTokens())
             SendRadixActivity.newIntent(activity!!)
         }
     }
@@ -118,6 +155,23 @@ class WalletFragment : Fragment() {
             if (multiClickingPrevention(2000)) return@setOnClickListener
             activity!!.toast(activity!!.getString(R.string.toast_request_tokens_faucet))
             transactionsViewModel.requestTokensFromFaucet()
+        }
+    }
+
+    private fun tokenSpinnerListener() {
+        tokenTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                transactionsViewModel.balance.retrieveWalletBalance(tokenTypesList[position])
+            }
         }
     }
 
@@ -241,20 +295,6 @@ class WalletFragment : Fragment() {
             ContextCompat.getColor(activity!!, R.color.mainBackground)
         )
         swipe_refresh_layout.isRefreshing = false
-    }
-
-    /**
-     * Simple method which retrieves a list of distinct tokens
-     * */
-    // TODO: This does the job for now but should be refactored so the list comes from the dao
-    private fun getListOfTokens() : List<String> {
-        val tokens = this.transactions
-            .map { it.tokenClassISO }
-            .distinct()
-
-        Timber.tag("TokenTypes").d(tokens.toString())
-
-        return tokens
     }
 
     private val click = fun(transactionEntity: TransactionEntity, longClick: Boolean) {

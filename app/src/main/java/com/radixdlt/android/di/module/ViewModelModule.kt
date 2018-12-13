@@ -42,7 +42,8 @@ abstract class ViewModelModule {
     abstract fun bindTransactionViewModel(viewModel: TransactionsViewModel): ViewModel
 
     @Binds
-    abstract fun bindBalanceLiveData(balanceLiveData: BalanceLiveData): LiveData<String>
+    @Named("balance")
+    abstract fun bindBalanceLiveData(balanceLiveData: BalanceLiveData): BalanceLiveData
 
     @Binds
     @Named("contacts")

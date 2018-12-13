@@ -23,6 +23,20 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
 
+  <androidx.appcompat.widget.AppCompatSpinner
+      android:id="@+id/tokenTypeSpinner"
+      android:layout_width="wrap_content"
+      android:layout_height="52dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="16dp"
+      android:layout_weight="0.5"
+      android:popupBackground="@color/white"
+      app:layout_constraintEnd_toStartOf="@+id/receiveFromFaucetButton"
+      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintStart_toEndOf="@+id/balanceTextView"
+      app:layout_constraintTop_toTopOf="parent"/>
+
   <TextView
       android:id="@+id/balanceTitleTextView"
       android:layout_width="wrap_content"

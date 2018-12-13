@@ -34,7 +34,7 @@ class TokenTypesLiveData @Inject constructor(
     private fun getAllTransactionsFromEachToken(tokenTypes: MutableList<String>) {
         if (sendingTokens) {
             tokenTypes.forEach {
-                transactionsDao.getTransactionsByTokenType(it)
+                transactionsDao.getAllTransactionsByTokenType(it)
                     .subscribeOn(Schedulers.io())
                     .subscribe { transactionEntity ->
                         if (!checkTokenIsPositiveBalance(transactionEntity)) {

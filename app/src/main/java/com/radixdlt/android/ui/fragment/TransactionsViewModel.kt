@@ -1,9 +1,9 @@
 package com.radixdlt.android.ui.fragment
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import com.radixdlt.android.data.model.transaction.BalanceLiveData
 import com.radixdlt.android.data.model.transaction.TokenTypesLiveData
 import com.radixdlt.android.data.model.transaction.TransactionEntity
 import com.radixdlt.android.data.model.transaction.TransactionsDao
@@ -13,7 +13,7 @@ import javax.inject.Named
 
 class TransactionsViewModel @Inject constructor(
     private val context: Context,
-    val balance: LiveData<String>,
+    @Named("balance") val balance: BalanceLiveData,
     @Named("tokenTypes") val tokenTypesLiveData: TokenTypesLiveData,
     private val transactionsDao: TransactionsDao
 ) : ViewModel() {

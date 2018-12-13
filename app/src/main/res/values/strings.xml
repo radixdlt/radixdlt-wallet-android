@@ -103,6 +103,7 @@
   <string name="wallet_fragment_retrieving_transactions">Retrieving Transactions…</string>
   <string name="wallet_fragment_all_transactions">All Transactions</string>
   <string name="wallet_fragment_no_transactions">No Transactions</string>
+  <string name="wallet_fragment_total_tokens">TOTAL</string>
   <string name="wallet_fragment_xml_default_zero">0</string>
   <string name="wallet_fragment_xml_account_balance_title">ACCOUNT BALANCE</string>
   <string name="wallet_fragment_xml_send_button">Send</string>
