@@ -13,6 +13,7 @@ class TransactionDetailsLiveData @Inject constructor(
 ) : LiveData<TransactionDetails>() {
 
     lateinit var address: String
+    lateinit var tokenType: String
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -22,7 +23,7 @@ class TransactionDetailsLiveData @Inject constructor(
     }
 
     private fun retrieveStoredTransactionsByAddress() {
-        transactionsDao.getAllTransactionsByAddress(address)
+        transactionsDao.getAllTransactionsByAddressAndToken(address, tokenType)
             .subscribeOn(Schedulers.io())
             .subscribe {
                 val sent = calculateTotalSent(it)

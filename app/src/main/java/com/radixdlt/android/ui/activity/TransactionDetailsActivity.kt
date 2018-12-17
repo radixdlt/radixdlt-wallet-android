@@ -107,7 +107,10 @@ class TransactionDetailsActivity : BaseActivity() {
         transactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(TransactionDetailsViewModel::class.java)
 
-        transactionsViewModel.transactionDetailsAddress(transactionDetailsExtra.address)
+        transactionsViewModel.transactionDetailsAddress(
+            transactionDetailsExtra.address,
+            transactionDetailsExtra.tokenClassISO
+        )
 
         transactionsViewModel.transactions.observe(this, Observer {
                 bindTransactionDetails(it)

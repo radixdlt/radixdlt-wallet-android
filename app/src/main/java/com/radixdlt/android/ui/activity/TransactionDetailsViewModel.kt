@@ -8,7 +8,8 @@ class TransactionDetailsViewModel @Inject constructor(
     val transactions: TransactionDetailsLiveData
 ) : ViewModel() {
 
-    fun transactionDetailsAddress(address: String) {
+    fun transactionDetailsAddress(address: String, tokenType: String) {
         transactions.address = address
+        transactions.tokenType = tokenType
     }
 }
