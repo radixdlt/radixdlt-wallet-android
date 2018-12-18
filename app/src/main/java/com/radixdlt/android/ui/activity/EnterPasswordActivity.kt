@@ -193,7 +193,7 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
 
         QueryPreferences.setPrefAddress(this@EnterPasswordActivity, address)
 
-        loadKey()?.apply {
+        loadKey() ?: run {
             val privateKey = PrivateKeyEncrypter.decryptPrivateKey(
                 inputPasswordTIET.text.toString(), FileReader(myKeyFile)
             )
