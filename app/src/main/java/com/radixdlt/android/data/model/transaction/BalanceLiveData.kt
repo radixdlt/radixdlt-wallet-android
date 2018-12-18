@@ -51,7 +51,7 @@ class BalanceLiveData @Inject constructor(
         }
     }
 
-    private fun calculateBalanceAndPostValue(transactionEntities: MutableList<TransactionEntity>) {
+    private fun calculateBalanceAndPostValue(transactionEntities: List<TransactionEntity>) {
         sumStoredTransactions(transactionEntities)
         lastTransaction = if (transactionEntities.isNotEmpty()) {
             transactionEntities.last()
@@ -82,7 +82,7 @@ class BalanceLiveData @Inject constructor(
         postValue(total.fixedStripTrailingZeros().toPlainString())
     }
 
-    private fun sumStoredTransactions(it: MutableList<TransactionEntity>) {
+    private fun sumStoredTransactions(it: List<TransactionEntity>) {
         val sumSent = it.asSequence().filter { transactions ->
             transactions.sent
         }.map { transactionEntity ->

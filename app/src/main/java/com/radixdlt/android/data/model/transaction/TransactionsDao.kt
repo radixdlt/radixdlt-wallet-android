@@ -20,7 +20,7 @@ interface TransactionsDao {
     fun getAllTransactions(): Maybe<MutableList<TransactionEntity>>
 
     @Query("SELECT * FROM TransactionEntity WHERE tokenClassISO = :tokenType")
-    fun getAllTransactionsByTokenType(tokenType: String): Maybe<MutableList<TransactionEntity>>
+    fun getAllTransactionsByTokenType(tokenType: String): Maybe<List<TransactionEntity>>
 
     @Query("SELECT * FROM TransactionEntity ORDER BY dateUnix DESC LIMIT 1")
     fun getLatestTransaction(): Flowable<TransactionEntity>

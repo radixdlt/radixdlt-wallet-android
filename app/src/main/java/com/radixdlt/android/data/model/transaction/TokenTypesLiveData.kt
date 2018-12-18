@@ -14,20 +14,23 @@ class TokenTypesLiveData @Inject constructor(
 
     private val compositeDisposable = CompositeDisposable()
 
+    private val availableTokens = mutableListOf<String>()
     var sendingTokens: Boolean = false
 
     override fun onActive() {
         super.onActive()
+        Timber.d("TokenTypesLiveData onActive $sendingTokens list ---> $availableTokens")
         retrieveTokenTypes()
     }
 
     private fun retrieveTokenTypes() {
         transactionsDao.getAllTokenTypes()
             .subscribeOn(Schedulers.io())
-            .subscribe {
+            .subscribe ({
+                availableTokens.addAll(it)
                 getAllTransactionsFromEachToken(it)
                 Timber.tag("TokenTypes").d(it.toString())
-            }
+            }, { Timber.e(it) })
             .addTo(compositeDisposable)
     }
 
@@ -38,18 +41,18 @@ class TokenTypesLiveData @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .subscribe { transactionEntity ->
                         if (!checkTokenIsPositiveBalance(transactionEntity)) {
-                            tokenTypes.remove(it)
+                            availableTokens.remove(it)
                         }
                     }
                     .addTo(compositeDisposable)
             }
         }
 
-        postValue(tokenTypes)
+        postValue(availableTokens)
     }
 
     private fun checkTokenIsPositiveBalance(
-        transactionEntity: MutableList<TransactionEntity>
+        transactionEntity: List<TransactionEntity>
     ): Boolean {
         val sumSent = transactionEntity.asSequence().filter {
             it.sent
@@ -68,6 +71,8 @@ class TokenTypesLiveData @Inject constructor(
 
     override fun onInactive() {
         super.onInactive()
+        Timber.d("TokenTypesLiveData onInactive $sendingTokens")
+        availableTokens.clear()
         compositeDisposable.clear()
     }
 }
