@@ -7,10 +7,13 @@ import com.radixdlt.android.data.model.message.ContactsRepository
 import com.radixdlt.android.data.model.message.ConversationRepository
 import com.radixdlt.android.data.model.message.SendMessageLiveData
 import com.radixdlt.android.data.model.transaction.BalanceLiveData
+import com.radixdlt.android.data.model.transaction.SendTokensLiveData
+import com.radixdlt.android.data.model.transaction.TokenTypesLiveData
 import com.radixdlt.android.data.model.transaction.TransactionDetails
 import com.radixdlt.android.data.model.transaction.TransactionDetailsLiveData
 import com.radixdlt.android.di.ViewModelFactory
 import com.radixdlt.android.ui.activity.ConversationViewModel
+import com.radixdlt.android.ui.activity.SendTokensViewModel
 import com.radixdlt.android.ui.activity.TransactionDetailsViewModel
 import com.radixdlt.android.ui.fragment.ContactsViewModel
 import com.radixdlt.android.ui.fragment.TransactionsViewModel
@@ -39,7 +42,8 @@ abstract class ViewModelModule {
     abstract fun bindTransactionViewModel(viewModel: TransactionsViewModel): ViewModel
 
     @Binds
-    abstract fun bindBalanceLiveData(balanceLiveData: BalanceLiveData): LiveData<String>
+    @Named("balance")
+    abstract fun bindBalanceLiveData(balanceLiveData: BalanceLiveData): BalanceLiveData
 
     @Binds
     @Named("contacts")
@@ -78,6 +82,23 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(TransactionDetailsViewModel::class)
     abstract fun bindTransactionDetailsViewModel(viewModel: TransactionDetailsViewModel): ViewModel
+
+    @Binds
+    @Named("tokenTypes")
+    abstract fun bindTokenTypesLiveData(
+        tokenTypesLiveData: TokenTypesLiveData
+    ): TokenTypesLiveData
+
+    @Binds
+    @Named("sendToken")
+    abstract fun bindSendTokensLiveData(
+        sendTokensLiveData: SendTokensLiveData
+    ): SendTokensLiveData
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SendTokensViewModel::class)
+    abstract fun bindSendTokensViewModel(viewModel: SendTokensViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

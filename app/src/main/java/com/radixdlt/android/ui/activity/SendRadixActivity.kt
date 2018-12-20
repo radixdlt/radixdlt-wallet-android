@@ -7,7 +7,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.barcode.Barcode
 import com.radixdlt.android.R
@@ -19,35 +23,48 @@ import com.radixdlt.android.util.setDialogMessage
 import com.radixdlt.android.util.setProgressDialogVisible
 import com.radixdlt.client.application.RadixApplicationAPI
 import com.radixdlt.client.application.translate.tokens.InsufficientFundsException
-import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.network.AtomSubmissionUpdate
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_send_radix.*
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import timber.log.Timber
+import javax.inject.Inject
 
 class SendRadixActivity : BaseActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var sendTokensViewModel: SendTokensViewModel
 
     private lateinit var progressDialog: ProgressDialog
 
     private lateinit var api: RadixApplicationAPI
 
+    private val tokenTypesList = arrayListOf<String>()
+
+    private var uri: Uri? = null
+    private var tokenTypeExtra: String? = null
+    private lateinit var token: String
+
     companion object {
         private const val RC_BARCODE_CAPTURE = 9001
 
         private const val EXTRA_TRANSACTION_ADDRESS = "com.radixdlt.android.address"
+        private const val EXTRA_TRANSACTION_TOKEN_TYPE = "com.radixdlt.android.token_type"
         private const val EXTRA_URI = "com.radixdlt.android.address"
 
         fun newIntent(ctx: Context) {
             ctx.startActivity<SendRadixActivity>()
         }
 
-        fun newIntent(ctx: Context, address: String) {
-            ctx.startActivity<SendRadixActivity>(EXTRA_TRANSACTION_ADDRESS to address)
+        fun newIntent(ctx: Context, address: String, tokenType: String) {
+            ctx.startActivity<SendRadixActivity>(
+                EXTRA_TRANSACTION_ADDRESS to address,
+                EXTRA_TRANSACTION_TOKEN_TYPE to tokenType
+            )
         }
 
         fun newIntent(ctx: Context, uri: Uri) {
@@ -56,16 +73,19 @@ class SendRadixActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_radix)
 
         val addressExtra = intent.getStringExtra(EXTRA_TRANSACTION_ADDRESS)
-        val uri: Uri? = intent.getParcelableExtra(EXTRA_URI)
+        tokenTypeExtra = intent.getStringExtra(EXTRA_TRANSACTION_TOKEN_TYPE)
+        uri = intent.getParcelableExtra(EXTRA_URI)
 
         uri?.let {
             inputAddressTIET.setText(it.getQueryParameter("to"))
             amountEditText.setText(it.getQueryParameter("amount"))
             val attachment = it.getQueryParameter("attachment")
+            token = it.getQueryParameter("token") ?: "XRD"
             if (attachment != null && attachment.isNotBlank()) {
                 inputMessageTIET.setText(attachment)
             }
@@ -94,7 +114,45 @@ class SendRadixActivity : BaseActivity() {
             return
         }
 
-        sendButton.setOnClickListener { _ ->
+        setListeners()
+        initialiseViewModels()
+    }
+
+    private fun initialiseViewModels() {
+        sendTokensViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(SendTokensViewModel::class.java)
+
+        sendTokensViewModel.tokenTypesLiveData.sendingTokens = true
+
+        sendTokensViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
+            tokenTypes?.apply {
+                setTokenTypeSpinner(tokenTypes)
+            }
+        })
+
+        sendTokensViewModel.sendTokensLiveData.observe(this, Observer { status ->
+            status?.apply {
+                setProgressDialogVisible(progressDialog, false)
+                if (status == AtomSubmissionUpdate.AtomSubmissionState.STORED.name) {
+                    if (uri != null) {
+                        intent.removeExtra(SendRadixActivity.EXTRA_URI)
+                        finishAffinity()
+                    } else {
+                        finish()
+                    }
+                } else if (status == InsufficientFundsException::class.java.simpleName) {
+                    toast(getString(R.string.toast_not_enough_tokens_error))
+                } else if (status == IllegalArgumentException::class.java.simpleName) {
+                    longToast(R.string.toast_too_many_decimal_places_error)
+                } else {
+                    toast(getString(R.string.toast_wrong_address_format_error))
+                }
+            }
+        })
+    }
+
+    private fun setListeners() {
+        sendButton.setOnClickListener {
             val amount = if (amountEditText.text.isNullOrEmpty()) {
                 toast(getString(R.string.toast_enter_valid_amount_error))
                 return@setOnClickListener
@@ -117,59 +175,19 @@ class SendRadixActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            try {
-                val r: Observable<AtomSubmissionUpdate> = if (payLoad != null) {
-                    api.sendTokens(
-                        RadixAddress.from(inputAddressTIET.text.toString().trim()),
-                        amount,
-                        api.nativeTokenRef,
-                        payLoad)
-                        .toObservable()
-                        .doOnError(::checkErrorAndShowToast)
-                } else {
-                    api.sendTokens(
-                        RadixAddress.from(inputAddressTIET.text.toString().trim()),
-                        amount, api.nativeTokenRef)
-                        .toObservable()
-                        .doOnError(::checkErrorAndShowToast)
-                }
+            prepareForNextStep(
+                sendButton,
+                getString(R.string.send_radix_activity_sendgin_progress_dialog)
+            )
 
-                prepareForNextStep(
-                    sendButton,
-                    getString(R.string.send_radix_activity_sendgin_progress_dialog)
-                )
-                r.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        Timber.d("Network status is... $it")
+            val selectedToken = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
 
-                        if (it.isComplete) {
-                            setProgressDialogVisible(progressDialog, false)
-                            if (uri != null) {
-                                intent.removeExtra(EXTRA_URI)
-                                finishAffinity()
-                            } else {
-                                finish()
-                            }
-                        }
-                    }, {
-                        if (it is InsufficientFundsException) {
-                            setProgressDialogVisible(progressDialog, false)
-                            toast(getString(R.string.toast_not_enough_tokens_error))
-                        }
-                        Timber.e(it, "There is an error!!!")
-                    })
-            } catch (e: Exception) {
-                Timber.e(e, "Error sending...")
-                when (e) {
-                    is InsufficientFundsException -> {
-                        Timber.d("You don't have enough tokens! Exception")
-                        toast(getString(R.string.toast_not_enough_tokens_error))
-                    }
-                    is IllegalArgumentException -> longToast(R.string.toast_too_many_decimal_places_error)
-                    else -> toast(getString(R.string.toast_wrong_address_format_error))
-                }
-            }
+            sendTokensViewModel.sendToken(
+                inputAddressTIET.text.toString().trim(),
+                amount,
+                selectedToken,
+                payLoad
+            )
         }
 
         qrScanButton.setOnClickListener {
@@ -185,13 +203,56 @@ class SendRadixActivity : BaseActivity() {
         }
     }
 
-    private fun checkErrorAndShowToast(it: Throwable) {
-        if (it is RuntimeException) {
-            if (it.cause is InsufficientFundsException) {
-                runOnUiThread {
-                    toast(getString(R.string.toast_not_enough_tokens_error))
-                }
+    private fun setTokenTypeSpinner(tokenTypes: List<String>) {
+        when {
+            tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.send_activity_no_tokens_spinner))
+            tokenTypes.size == 1 -> tokenTypesList.add(tokenTypes.first())
+            else -> {
+                tokenTypesList.add(getString(R.string.send_activity_token_type_spinner))
+                tokenTypesList.addAll(tokenTypes)
             }
+        }
+
+        val tokenTypesListSpinner = tokenTypesList.map {
+            removeTokenCreatorAddress(it)
+        }
+
+        val tokenTypesSpinner = ArrayAdapter(
+            this, android.R.layout.simple_spinner_dropdown_item, tokenTypesListSpinner
+        )
+
+        tokenTypeSpinner.adapter = tokenTypesSpinner
+
+        // set spinner selection if token passed from transaction details
+        tokenTypeExtra?.let {
+            setTokenInSpinner(tokenTypes, it)
+        }
+
+        // set spinner selection if populating from a URI
+        uri?.let {
+            setTokenInSpinner(tokenTypes, token)
+        }
+    }
+
+    private fun removeTokenCreatorAddress(tokenType: String): String {
+        return if (tokenType.contains("/@")) {
+            tokenType.split("/@")[1]
+        } else {
+            tokenType
+        }
+    }
+
+    private fun setTokenInSpinner(tokenTypes: List<String>, token: String) {
+        val tokenTypeIndex = tokenTypes.indexOf(token)
+        if (tokenTypeIndex == -1) {
+            toast(getString(R.string.toast_token_not_owned))
+            return
+        }
+
+        if (tokenTypes.size > 1) {
+            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token) + 1)
+        } else {
+            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token))
         }
     }
 

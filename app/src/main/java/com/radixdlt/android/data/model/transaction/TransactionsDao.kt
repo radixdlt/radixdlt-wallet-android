@@ -19,11 +19,20 @@ interface TransactionsDao {
     @Query("SELECT * FROM TransactionEntity")
     fun getAllTransactions(): Maybe<MutableList<TransactionEntity>>
 
+    @Query("SELECT * FROM TransactionEntity WHERE tokenClassISO = :tokenType")
+    fun getAllTransactionsByTokenType(tokenType: String): Maybe<List<TransactionEntity>>
+
     @Query("SELECT * FROM TransactionEntity ORDER BY dateUnix DESC LIMIT 1")
     fun getLatestTransaction(): Flowable<TransactionEntity>
 
-    @Query("SELECT * FROM TransactionEntity WHERE address = :address ORDER BY dateUnix DESC")
-    fun getAllTransactionsByAddress(address: String): Maybe<MutableList<TransactionEntity>>
+    @Query("SELECT * FROM TransactionEntity WHERE tokenClassISO = :tokenType ORDER BY dateUnix DESC LIMIT 1")
+    fun getLatestTransactionByTokenType(tokenType: String): Flowable<TransactionEntity>
+
+    @Query("SELECT * FROM TransactionEntity WHERE address = :address AND tokenClassISO = :token ORDER BY dateUnix DESC")
+    fun getAllTransactionsByAddressAndToken(address: String, token: String): Maybe<MutableList<TransactionEntity>>
+
+    @Query("SELECT DISTINCT tokenClassISO FROM TransactionEntity ORDER BY tokenClassISO")
+    fun getAllTokenTypes(): Flowable<MutableList<String>>
 
     @Query("DELETE FROM TransactionEntity")
     fun deleteTable()

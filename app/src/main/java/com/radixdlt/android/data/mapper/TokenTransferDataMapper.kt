@@ -2,6 +2,8 @@ package com.radixdlt.android.data.mapper
 
 import com.radixdlt.android.data.model.transaction.TransactionEntity
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
+import com.radixdlt.client.atommodel.tokens.TokenClassReference
+import java.math.RoundingMode
 
 object TokenTransferDataMapper {
 
@@ -20,9 +22,11 @@ object TokenTransferDataMapper {
         val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
         val dateUnix: Long = tokenTransfer.timestamp
-        val tokenClassISO: String = tokenTransfer.tokenClass.symbol
-        // TODO: This should be fixed one lib branches are merged currently using fixed nativeToken scale
-        val tokenClassSubUnits = 10000 // TokenClassReference.SUB_UNITS
+//        val tokenClassISO: String = tokenTransfer.tokenClass.symbol
+        val tokenClassISO: String = tokenTransfer.tokenClass.toString()
+        // TODO: Currently it is fixed and the plan is for all tokens to have the same subunits
+        // TODO: Recent update has changed this to 10^18
+        val tokenClassSubUnits = TokenClassReference.getSubunits()
 
         return TransactionEntity(
                 address,
@@ -60,12 +64,9 @@ object TokenTransferDataMapper {
      * @return Formatted formattedAmount to display
      * */
     private fun getAmount(transaction: TokenTransfer, myAddress: String): String {
-//        val amount: Double = transaction.subUnitAmount.toDouble() / Asset.TEST.subUnits
-//        val amountFormatted = BigDecimal(amount.toString()).setScale(
-//                5, RoundingMode.HALF_UP
-//        ).toPlainString()
-
-        val amountFormatted = transaction.amount.toPlainString()
+        val amountFormatted = transaction.amount.setScale(
+                5, RoundingMode.HALF_UP
+        ).toPlainString()
 
         return if (transaction.from.toString() == myAddress) {
             amountFormatted

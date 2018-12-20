@@ -5,6 +5,7 @@ import com.radixdlt.android.util.fixedStripTrailingZeros
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -18,40 +19,70 @@ class BalanceLiveData @Inject constructor(
 
     private var lastTransaction: TransactionEntity? = null
 
+    var tokenType = "TOTAL"
+
     override fun onActive() {
         super.onActive()
-        retrieveWalletBalance()
+        retrieveWalletBalance(tokenType)
     }
 
-    private fun retrieveWalletBalance() {
-        retrieveSumOfAllStoredTransactions()
+    fun retrieveWalletBalance(tokenType: String) {
+        this.tokenType = tokenType
+
+        total = BigDecimal(0)
+        lastTransaction = null
+
+        retrieveSumOfStoredTransactions()
         listenToNewTransaction()
     }
 
-    private fun retrieveSumOfAllStoredTransactions() {
-        transactionsDao.getAllTransactions()
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                sumStoredTransactions(it)
-                lastTransaction = if (it.isNotEmpty()) it.last() else return@subscribe
-                postValue(total.fixedStripTrailingZeros().toPlainString())
-            }.addTo(compositeDisposable)
+    private fun retrieveSumOfStoredTransactions() {
+        Timber.tag("TOTAL").d("retrieveSumOfStoredTransactions")
+        if (tokenType == "TOTAL") {
+            transactionsDao.getAllTransactions()
+                .subscribeOn(Schedulers.io())
+                .subscribe(::calculateBalanceAndPostValue)
+                .addTo(compositeDisposable)
+        } else {
+            transactionsDao.getAllTransactionsByTokenType(tokenType)
+                .subscribeOn(Schedulers.io())
+                .subscribe(::calculateBalanceAndPostValue)
+                .addTo(compositeDisposable)
+        }
+    }
+
+    private fun calculateBalanceAndPostValue(transactionEntities: List<TransactionEntity>) {
+        sumStoredTransactions(transactionEntities)
+        lastTransaction = if (transactionEntities.isNotEmpty()) {
+            transactionEntities.last()
+        } else return
+        postValue(total.fixedStripTrailingZeros().toPlainString())
     }
 
     private fun listenToNewTransaction() {
-        transactionsDao.getLatestTransaction()
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                when {
-                    it == lastTransaction -> return@subscribe
-                    lastTransaction == null -> retrieveSumOfAllStoredTransactions()
-                    else -> calculateNewBalance(it)
-                }
-                postValue(total.fixedStripTrailingZeros().toPlainString())
-            }.addTo(compositeDisposable)
+        if (tokenType == "TOTAL") {
+            transactionsDao.getLatestTransaction()
+                .subscribeOn(Schedulers.io())
+                .subscribe(::calculateNewBalanceAndPostValue)
+                .addTo(compositeDisposable)
+        } else {
+            transactionsDao.getLatestTransactionByTokenType(tokenType)
+                .subscribeOn(Schedulers.io())
+                .subscribe(::calculateNewBalanceAndPostValue)
+                .addTo(compositeDisposable)
+        }
     }
 
-    private fun sumStoredTransactions(it: MutableList<TransactionEntity>) {
+    private fun calculateNewBalanceAndPostValue(transactionEntity: TransactionEntity) {
+        when {
+            transactionEntity == lastTransaction -> return
+            lastTransaction == null -> retrieveSumOfStoredTransactions()
+            else -> calculateNewBalance(transactionEntity)
+        }
+        postValue(total.fixedStripTrailingZeros().toPlainString())
+    }
+
+    private fun sumStoredTransactions(it: List<TransactionEntity>) {
         val sumSent = it.asSequence().filter { transactions ->
             transactions.sent
         }.map { transactionEntity ->
@@ -67,11 +98,11 @@ class BalanceLiveData @Inject constructor(
         total = sumReceived - sumSent
     }
 
-    private fun calculateNewBalance(it: TransactionEntity) {
-        if (it.sent) {
-            total -= BigDecimal(it.formattedAmount)
+    private fun calculateNewBalance(transactionEntity: TransactionEntity) {
+        if (transactionEntity.sent) {
+            total -= BigDecimal(transactionEntity.formattedAmount)
         } else {
-            total += BigDecimal(it.formattedAmount)
+            total += BigDecimal(transactionEntity.formattedAmount)
         }
     }
 

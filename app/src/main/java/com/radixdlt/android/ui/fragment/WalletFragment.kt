@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -40,6 +42,10 @@ class WalletFragment : Fragment() {
 
     private var loadedFromNetwork = false
 
+    private val tokenTypesList = arrayListOf<String>()
+
+    private var tokenTypeSelectedPosition: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -60,12 +66,18 @@ class WalletFragment : Fragment() {
         initialiseLoadingState()
         initialiseSwipeRefreshLayout()
         initialiseViewModels()
-        setClickListeners()
+        setListeners()
     }
 
     private fun initialiseViewModels() {
         transactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(TransactionsViewModel::class.java)
+
+        transactionsViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
+            tokenTypes?.apply {
+                setTokenTypeSpinner(tokenTypes)
+            }
+        })
 
         transactionsViewModel.balance.observe(this, Observer { balance ->
             balance?.apply {
@@ -82,10 +94,40 @@ class WalletFragment : Fragment() {
         )
     }
 
-    private fun setClickListeners() {
+    private fun setTokenTypeSpinner(tokenTypes: List<String>) {
+        tokenTypesList.clear()
+
+        when {
+            tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.wallet_fragment_total_tokens))
+            tokenTypes.size == 1 -> tokenTypesList.add(tokenTypes.first())
+            else -> {
+                tokenTypesList.add(getString(R.string.wallet_fragment_total_tokens))
+                tokenTypesList.addAll(tokenTypes)
+            }
+        }
+
+        val tokenTypesListSpinner = tokenTypesList.map {
+            if (it.contains("/@")) {
+                it.split("/@")[1]
+            } else {
+                it
+            }
+        }
+
+        val tokenTypesSpinner = ArrayAdapter(
+            activity!!, android.R.layout.simple_spinner_dropdown_item, tokenTypesListSpinner
+        )
+
+        tokenTypeSpinner.adapter = tokenTypesSpinner
+
+        tokenTypeSpinner.setSelection(tokenTypeSelectedPosition)
+    }
+
+    private fun setListeners() {
         sendButtonClickListener()
         receiveFromFaucetButtonClickListener()
         receiveButtonClickListener()
+        tokenSpinnerListener()
     }
 
     private fun sendButtonClickListener() {
@@ -109,6 +151,24 @@ class WalletFragment : Fragment() {
             if (multiClickingPrevention(2000)) return@setOnClickListener
             activity!!.toast(activity!!.getString(R.string.toast_request_tokens_faucet))
             transactionsViewModel.requestTokensFromFaucet()
+        }
+    }
+
+    private fun tokenSpinnerListener() {
+        tokenTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Not implemented
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                tokenTypeSelectedPosition = position
+                transactionsViewModel.balance.retrieveWalletBalance(tokenTypesList[position])
+            }
         }
     }
 
@@ -151,8 +211,8 @@ class WalletFragment : Fragment() {
     private fun bindTransactions(transactionEntities: MutableList<TransactionEntity>) {
         when {
             transactionEntities.isEmpty() -> {
-                // Added a loadedFromNetwork since we query the DB first and then instantly query the
-                // network for any old transactions which may have not been stored such as
+                // Added a loadedFromNetwork since we query the DB first and then instantly query
+                // the network for any old transactions which may have not been stored such as
                 // when loading an empty wallet
                 if (loadedFromNetwork) {
                     swipe_refresh_layout.isRefreshing = false
