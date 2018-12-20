@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import kotlinx.android.parcel.Parcelize
+import java.math.BigDecimal
 
 @Parcelize
 @Entity(
@@ -18,5 +19,5 @@ data class TransactionEntity(
     val sent: Boolean,
     val dateUnix: Long,
     val tokenClassISO: String,
-    val tokenClassSubUnits: Int
+    val tokenClassSubUnits: BigDecimal
 ) : Parcelable

@@ -206,15 +206,21 @@ class SendRadixActivity : BaseActivity() {
     private fun setTokenTypeSpinner(tokenTypes: List<String>) {
         when {
             tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.send_activity_no_tokens_spinner))
-            tokenTypes.size == 1 -> tokenTypesList.addAll(tokenTypes)
+            tokenTypes.size == 1 -> tokenTypesList.add(tokenTypes.first())
             else -> {
                 tokenTypesList.add(getString(R.string.send_activity_token_type_spinner))
                 tokenTypesList.addAll(tokenTypes)
             }
         }
 
+        Timber.tag("TokenTypesList").d(tokenTypesList.toString())
+
+        val tokenTypesListSpinner = tokenTypesList.map {
+            removeTokenCreatorAddress(it)
+        }
+
         val tokenTypesSpinner = ArrayAdapter(
-            this, android.R.layout.simple_spinner_dropdown_item, tokenTypesList
+            this, android.R.layout.simple_spinner_dropdown_item, tokenTypesListSpinner
         )
 
         tokenTypeSpinner.adapter = tokenTypesSpinner
@@ -227,6 +233,14 @@ class SendRadixActivity : BaseActivity() {
         // set spinner selection if populating from a URI
         uri?.let {
             setTokenInSpinner(tokenTypes, token)
+        }
+    }
+
+    private fun removeTokenCreatorAddress(tokenType: String): String {
+        return if (tokenType.contains("/@")) {
+            tokenType.split("/@")[1]
+        } else {
+            tokenType
         }
     }
 

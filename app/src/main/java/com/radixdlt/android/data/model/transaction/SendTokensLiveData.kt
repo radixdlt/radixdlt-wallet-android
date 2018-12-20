@@ -26,7 +26,6 @@ class SendTokensLiveData @Inject constructor(
     fun sendToken(to: String, amount: BigDecimal, token: String, payLoad: String?) {
         Identity.api!!.getBalance(Identity.api!!.getMyAddress())
             .subscribe { it ->
-                Timber.tag("Empty").d("$it ${it.isEmpty()}")
 
                 var balance: BigDecimal = BigDecimal.ZERO
 
@@ -34,8 +33,7 @@ class SendTokensLiveData @Inject constructor(
                     balance = map.value
                     map.key
                 }.find {
-                    // FIXME: For now only the symbol is checked, for nativeToken we should check the address too
-                    it.symbol == token
+                    it.toString() == token
                 } ?: return@subscribe
 
                 if (it.isNotEmpty() && balance > BigDecimal.ZERO) {
@@ -117,7 +115,7 @@ class SendTokensLiveData @Inject constructor(
             true,
             it.timestamp,
             tokenClassReference.symbol,
-            10000
+            TokenClassReference.getSubunits()
         )
     }
 

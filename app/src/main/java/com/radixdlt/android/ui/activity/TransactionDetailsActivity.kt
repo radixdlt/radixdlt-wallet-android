@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.radixdlt.android.R
 import com.radixdlt.android.data.model.transaction.TransactionDetails
 import com.radixdlt.android.data.model.transaction.TransactionEntity
+import com.radixdlt.android.util.GENESIS_XRD
 import com.radixdlt.android.util.doOnLayout
 import com.radixdlt.android.util.formatCharactersForAmount
 import com.radixdlt.android.util.formatDateTime
@@ -97,8 +98,8 @@ class TransactionDetailsActivity : BaseActivity() {
     }
 
     private fun setTokenType(transactionEntity: TransactionEntity) {
-        if (transactionEntity.tokenClassISO != "XRD") {
-            testTokensTextView.text = transactionEntity.tokenClassISO
+        if (transactionEntity.tokenClassISO != GENESIS_XRD) {
+            testTokensTextView.text = transactionEntity.tokenClassISO.split("/@")[1]
             testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
         }
     }

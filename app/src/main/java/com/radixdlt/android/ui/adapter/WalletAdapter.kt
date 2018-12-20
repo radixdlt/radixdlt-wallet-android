@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.radixdlt.android.R
 import com.radixdlt.android.data.model.transaction.TransactionEntity
+import com.radixdlt.android.util.GENESIS_XRD
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.formatCharactersForAmount
 import com.radixdlt.android.util.setAddressWithColors
@@ -89,8 +90,8 @@ class WalletAdapter(
         }
 
         private fun setTokenType(transactionEntity: TransactionEntity) {
-            if (transactionEntity.tokenClassISO != "XRD") {
-                itemView.testTokensTextView.text = transactionEntity.tokenClassISO
+            if (transactionEntity.tokenClassISO != GENESIS_XRD) {
+                itemView.testTokensTextView.text = transactionEntity.tokenClassISO.split("/@")[1]
                 itemView.testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }

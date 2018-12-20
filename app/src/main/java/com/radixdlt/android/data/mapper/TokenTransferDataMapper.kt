@@ -2,6 +2,7 @@ package com.radixdlt.android.data.mapper
 
 import com.radixdlt.android.data.model.transaction.TransactionEntity
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
+import com.radixdlt.client.atommodel.tokens.TokenClassReference
 import java.math.RoundingMode
 
 object TokenTransferDataMapper {
@@ -21,10 +22,11 @@ object TokenTransferDataMapper {
         val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
         val dateUnix: Long = tokenTransfer.timestamp
-        val tokenClassISO: String = tokenTransfer.tokenClass.symbol
+//        val tokenClassISO: String = tokenTransfer.tokenClass.symbol
+        val tokenClassISO: String = tokenTransfer.tokenClass.toString()
         // TODO: Currently it is fixed and the plan is for all tokens to have the same subunits
         // TODO: Recent update has changed this to 10^18
-        val tokenClassSubUnits = 100000
+        val tokenClassSubUnits = TokenClassReference.getSubunits()
 
         return TransactionEntity(
                 address,

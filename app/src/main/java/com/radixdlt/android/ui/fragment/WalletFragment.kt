@@ -99,15 +99,23 @@ class WalletFragment : Fragment() {
 
         when {
             tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.wallet_fragment_total_tokens))
-            tokenTypes.size == 1 -> tokenTypesList.addAll(tokenTypes)
+            tokenTypes.size == 1 -> tokenTypesList.add(tokenTypes.first())
             else -> {
                 tokenTypesList.add(getString(R.string.wallet_fragment_total_tokens))
                 tokenTypesList.addAll(tokenTypes)
             }
         }
 
+        val tokenTypesListSpinner = tokenTypesList.map {
+            if (it.contains("/@")) {
+                it.split("/@")[1]
+            } else {
+                it
+            }
+        }
+
         val tokenTypesSpinner = ArrayAdapter(
-            activity!!, android.R.layout.simple_spinner_dropdown_item, tokenTypesList
+            activity!!, android.R.layout.simple_spinner_dropdown_item, tokenTypesListSpinner
         )
 
         tokenTypeSpinner.adapter = tokenTypesSpinner
