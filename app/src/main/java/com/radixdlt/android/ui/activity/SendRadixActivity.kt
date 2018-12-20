@@ -213,8 +213,6 @@ class SendRadixActivity : BaseActivity() {
             }
         }
 
-        Timber.tag("TokenTypesList").d(tokenTypesList.toString())
-
         val tokenTypesListSpinner = tokenTypesList.map {
             removeTokenCreatorAddress(it)
         }
