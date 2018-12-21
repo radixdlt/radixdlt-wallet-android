@@ -46,7 +46,7 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
         generateEncryptionKey()
 
         AndroidThreeTen.init(this)
-        RadixUniverse.bootstrap(Bootstrap.ALPHANET)
+        RadixUniverse.bootstrap(Bootstrap.ALPHANET2)
 
         densityPixel = dip(250)
     }

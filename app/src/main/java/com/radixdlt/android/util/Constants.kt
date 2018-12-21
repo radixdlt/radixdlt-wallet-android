@@ -1,4 +1,4 @@
 package com.radixdlt.android.util
 
 const val PREF_SECRET = "secretKey"
-const val FAUCET_ADDRESS = "9he94tVfQGAVr4xoUpG3uJfB2exURExzFV6E7dq4bxUWRbM5Edd" // alphanetwork
+const val FAUCET_ADDRESS = "9ey8A461d9hLUVXh7CgbYhfmqFzjzSBKHvPC8SMjccRDbkTs2aM" // alphanet2
