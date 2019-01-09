@@ -1,8 +1,7 @@
-package com.radixdlt.android
+package com.radixdlt.android.data.mapper
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import com.radixdlt.android.data.mapper.RadixMessageDataMapper
 import com.radixdlt.client.application.translate.data.DecryptedMessage
 import com.radixdlt.client.atommodel.accounts.RadixAddress
 import org.junit.jupiter.api.Assertions.assertEquals

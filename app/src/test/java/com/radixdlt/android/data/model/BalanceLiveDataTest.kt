@@ -1,4 +1,4 @@
-package com.radixdlt.android
+package com.radixdlt.android.data.model
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -13,6 +13,8 @@ import com.nhaarman.mockito_kotlin.whenever
 import com.radixdlt.android.data.model.transaction.BalanceLiveData
 import com.radixdlt.android.data.model.transaction.TransactionEntity
 import com.radixdlt.android.data.model.transaction.TransactionsDao
+import com.radixdlt.android.extension.ImmediateSchedulersExtension
+import com.radixdlt.android.extension.InstantTaskExecutorExtension
 import com.radixdlt.android.util.TOTAL
 import com.radixdlt.client.atommodel.tokens.TokenClassReference
 import io.reactivex.Flowable
@@ -36,24 +38,31 @@ class BalanceLiveDataTest {
     private val transactionsDao: TransactionsDao = mock()
 
     private val balanceLiveData: BalanceLiveData = BalanceLiveData(transactionsDao)
-    private val tokenType = "W00T"
+    private val xrdToken = "XRD"
+    private val w00tToken = "W00T"
 
     private val transactionEntity = TransactionEntity(
         "Test", 100L,
-        "+10", "message", true, 1000000,
-        "XRD", TokenClassReference.getSubunits()
+        "+100", "message", false, 1000000,
+        xrdToken, TokenClassReference.getSubunits()
     )
 
     private val transactionEntity2 = TransactionEntity(
-        "Test2", 101L,
-        "+11", "message", true, 1000001,
-        "XRD", TokenClassReference.getSubunits()
+        "Test2", 11L,
+        "11", "message", true, 1000001,
+        xrdToken, TokenClassReference.getSubunits()
     )
 
     private val transactionEntity3 = TransactionEntity(
-        "Test2", 102L,
-        "+11", "message", true, 1000002,
-        tokenType, TokenClassReference.getSubunits()
+        "Test3", 12L,
+        "+12", "message", false, 1000002,
+        xrdToken, TokenClassReference.getSubunits()
+    )
+
+    private val transactionEntity4 = TransactionEntity(
+        "Test4", 102L,
+        "+102", "message", false, 1000003,
+        w00tToken, TokenClassReference.getSubunits()
     )
 
     @BeforeEach
@@ -105,6 +114,32 @@ class BalanceLiveDataTest {
         }
 
         @Nested
+        @DisplayName("When there have not been any transactions")
+        inner class EmptyTransactions {
+            private val transactionEntities = mutableListOf<TransactionEntity>()
+
+            @BeforeEach
+            fun setup() {
+                whenever(transactionsDao.getAllTransactions()).thenReturn(
+                    Maybe.just(transactionEntities)
+                )
+                whenever(transactionsDao.getLatestTransaction()).thenReturn(
+                    Flowable.empty()
+                )
+
+                lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
+                lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
+                lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            }
+
+            @Test
+            @DisplayName("Then we do not receive a postValue callback")
+            fun observerCallback() {
+                verify(observer, never()).onChanged(any())
+            }
+        }
+
+        @Nested
         @DisplayName("When the balance is updated")
         inner class Balance {
             private val transactionEntities = mutableListOf<TransactionEntity>()
@@ -128,12 +163,13 @@ class BalanceLiveDataTest {
             @DisplayName("Then view receives a single postValue callback")
             fun observerCallback() {
                 verify(observer, times(1)).onChanged(any())
+                verify(observer, times(1)).onChanged("100")
             }
         }
 
         @Nested
-        @DisplayName("When last retrieved transaction is different")
-        inner class NewTransaction {
+        @DisplayName("When last retrieved transaction is different and sent")
+        inner class NewTransactionSent {
             private val transactionEntities = mutableListOf<TransactionEntity>()
 
             @BeforeEach
@@ -154,7 +190,44 @@ class BalanceLiveDataTest {
             @Test
             @DisplayName("Then view receives two postValue callback")
             fun observerCallback() {
+                // Number of times postValue is called
                 verify(observer, times(2)).onChanged(any())
+
+                // Values that postValue should return when called
+                verify(observer, times(1)).onChanged("100")
+                verify(observer, times(1)).onChanged("89")
+            }
+        }
+
+        @Nested
+        @DisplayName("When last retrieved transaction is different and received")
+        inner class NewTransactionReceived {
+            private val transactionEntities = mutableListOf<TransactionEntity>()
+
+            @BeforeEach
+            fun setup() {
+                transactionEntities.add(transactionEntity)
+                whenever(transactionsDao.getAllTransactions()).thenReturn(
+                    Maybe.just(transactionEntities)
+                )
+                whenever(transactionsDao.getLatestTransaction()).thenReturn(
+                    Flowable.just(transactionEntity3)
+                )
+
+                lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
+                lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
+                lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            }
+
+            @Test
+            @DisplayName("Then view receives two postValue callback")
+            fun observerCallback() {
+                // Number of times postValue is called
+                verify(observer, times(2)).onChanged(any())
+
+                // Values that postValue should return when called
+                verify(observer, times(1)).onChanged("100")
+                verify(observer, times(1)).onChanged("112")
             }
         }
 
@@ -167,32 +240,37 @@ class BalanceLiveDataTest {
             @BeforeEach
             fun setup() {
                 transactionEntities.add(transactionEntity)
-                transactionEntities.add(transactionEntity3)
+                transactionEntities.add(transactionEntity4)
                 whenever(transactionsDao.getAllTransactions()).thenReturn(
                     Maybe.just(transactionEntities)
                 )
                 whenever(transactionsDao.getLatestTransaction()).thenReturn(
-                    Flowable.just(transactionEntity3)
+                    Flowable.just(transactionEntity4)
                 )
 
                 lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
                 lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
                 lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
-                transactionEntitiesTokens.add(transactionEntity3)
-                whenever(transactionsDao.getAllTransactionsByTokenType(tokenType)).thenReturn(
+                transactionEntitiesTokens.add(transactionEntity4)
+                whenever(transactionsDao.getAllTransactionsByTokenType(w00tToken)).thenReturn(
                     Maybe.just(transactionEntitiesTokens)
                 )
-                whenever(transactionsDao.getLatestTransactionByTokenType(tokenType)).thenReturn(
-                    Flowable.just(transactionEntity3)
+                whenever(transactionsDao.getLatestTransactionByTokenType(w00tToken)).thenReturn(
+                    Flowable.just(transactionEntity4)
                 )
-                balanceLiveData.retrieveWalletBalance(tokenType)
+                balanceLiveData.retrieveWalletBalance(w00tToken)
             }
 
             @Test
             @DisplayName("Then the view receives two postValue callbacks")
             fun observerCallback() {
+                // Number of times postValue is called
                 verify(observer, times(2)).onChanged(any())
+
+                // Values that postValue should return when called
+                verify(observer, times(1)).onChanged("202")
+                verify(observer, times(1)).onChanged("102")
             }
         }
     }
@@ -221,12 +299,12 @@ class BalanceLiveDataTest {
             @BeforeEach
             fun setup() {
                 transactionEntities.add(transactionEntity)
-                transactionEntities.add(transactionEntity3)
+                transactionEntities.add(transactionEntity4)
                 whenever(transactionsDao.getAllTransactions()).thenReturn(
                     Maybe.just(transactionEntities)
                 )
                 whenever(transactionsDao.getLatestTransaction()).thenReturn(
-                    Flowable.just(transactionEntity3)
+                    Flowable.just(transactionEntity4)
                 )
                 balanceLiveData.retrieveWalletBalance(TOTAL)
             }

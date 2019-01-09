@@ -19,7 +19,7 @@ class BalanceLiveData @Inject constructor(
 
     private var lastTransaction: TransactionEntity? = null
 
-    private var tokenType = "TOTAL"
+    private var tokenType = TOTAL
 
     override fun onActive() {
         super.onActive()

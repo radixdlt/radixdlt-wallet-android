@@ -1,4 +1,4 @@
-package com.radixdlt.android
+package com.radixdlt.android.extension
 
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers

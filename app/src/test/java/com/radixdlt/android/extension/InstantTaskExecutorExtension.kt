@@ -1,4 +1,4 @@
-package com.radixdlt.android
+package com.radixdlt.android.extension
 
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.arch.core.executor.TaskExecutor

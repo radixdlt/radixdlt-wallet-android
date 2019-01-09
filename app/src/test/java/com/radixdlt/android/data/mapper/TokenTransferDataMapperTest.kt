@@ -1,4 +1,4 @@
-package com.radixdlt.android
+package com.radixdlt.android.data.mapper
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
