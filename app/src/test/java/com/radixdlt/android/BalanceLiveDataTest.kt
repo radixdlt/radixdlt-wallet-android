@@ -36,6 +36,7 @@ class BalanceLiveDataTest {
     private val transactionsDao: TransactionsDao = mock()
 
     private val balanceLiveData: BalanceLiveData = BalanceLiveData(transactionsDao)
+    private val tokenType = "W00T"
 
     private val transactionEntity = TransactionEntity(
         "Test", 100L,
@@ -52,7 +53,7 @@ class BalanceLiveDataTest {
     private val transactionEntity3 = TransactionEntity(
         "Test2", 102L,
         "+11", "message", true, 1000002,
-        "W00T", TokenClassReference.getSubunits()
+        tokenType, TokenClassReference.getSubunits()
     )
 
     @BeforeEach
@@ -84,6 +85,7 @@ class BalanceLiveDataTest {
 
             @BeforeEach
             fun setup() {
+                balanceLiveData.retrieveWalletBalance(TOTAL)
             }
 
             @Test
@@ -160,7 +162,6 @@ class BalanceLiveDataTest {
         @DisplayName("When a different token is selected")
         inner class TokenSelected {
             private val transactionEntities = mutableListOf<TransactionEntity>()
-            private val tokenType = "W00T"
             private val transactionEntitiesTokens = mutableListOf<TransactionEntity>()
 
             @BeforeEach
