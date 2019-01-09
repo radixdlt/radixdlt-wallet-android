@@ -6,18 +6,18 @@ import com.radixdlt.client.application.translate.data.DecryptedMessage
 object RadixMessageDataMapper {
 
     /**
-     * Transform a [RadixMessage] into a [MessageEntity].
+     * Transform a [DecryptedMessage] into a [MessageEntity].
      *
-     * @param radixMessage Object to be transformed.
+     * @param decryptedMessage Object to be transformed.
      * @return [MessageEntity]
      */
-    fun transform(radixMessage: DecryptedMessage): MessageEntity {
+    fun transform(decryptedMessage: DecryptedMessage): MessageEntity {
 
         return MessageEntity(
-            radixMessage.from.toString(),
-            radixMessage.to.toString(),
-            String(radixMessage.data),
-            radixMessage.timestamp
+            decryptedMessage.from.toString(),
+            decryptedMessage.to.toString(),
+            String(decryptedMessage.data),
+            decryptedMessage.timestamp
         )
     }
 }

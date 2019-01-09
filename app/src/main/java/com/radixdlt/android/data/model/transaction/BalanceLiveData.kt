@@ -1,11 +1,11 @@
 package com.radixdlt.android.data.model.transaction
 
 import androidx.lifecycle.LiveData
+import com.radixdlt.android.util.TOTAL
 import com.radixdlt.android.util.fixedStripTrailingZeros
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class BalanceLiveData @Inject constructor(
 
     private var lastTransaction: TransactionEntity? = null
 
-    var tokenType = "TOTAL"
+    private var tokenType = "TOTAL"
 
     override fun onActive() {
         super.onActive()
@@ -37,8 +37,7 @@ class BalanceLiveData @Inject constructor(
     }
 
     private fun retrieveSumOfStoredTransactions() {
-        Timber.tag("TOTAL").d("retrieveSumOfStoredTransactions")
-        if (tokenType == "TOTAL") {
+        if (tokenType == TOTAL) {
             transactionsDao.getAllTransactions()
                 .subscribeOn(Schedulers.io())
                 .subscribe(::calculateBalanceAndPostValue)
@@ -60,7 +59,7 @@ class BalanceLiveData @Inject constructor(
     }
 
     private fun listenToNewTransaction() {
-        if (tokenType == "TOTAL") {
+        if (tokenType == TOTAL) {
             transactionsDao.getLatestTransaction()
                 .subscribeOn(Schedulers.io())
                 .subscribe(::calculateNewBalanceAndPostValue)
@@ -82,14 +81,14 @@ class BalanceLiveData @Inject constructor(
         postValue(total.fixedStripTrailingZeros().toPlainString())
     }
 
-    private fun sumStoredTransactions(it: List<TransactionEntity>) {
-        val sumSent = it.asSequence().filter { transactions ->
+    private fun sumStoredTransactions(transactionEntities: List<TransactionEntity>) {
+        val sumSent = transactionEntities.asSequence().filter { transactions ->
             transactions.sent
         }.map { transactionEntity ->
             BigDecimal(transactionEntity.formattedAmount)
         }.fold(BigDecimal.ZERO, BigDecimal::add)
 
-        val sumReceived = it.asSequence().filterNot { transactions ->
+        val sumReceived = transactionEntities.asSequence().filterNot { transactions ->
             transactions.sent
         }.map { transactionEntity ->
             BigDecimal(transactionEntity.formattedAmount)
