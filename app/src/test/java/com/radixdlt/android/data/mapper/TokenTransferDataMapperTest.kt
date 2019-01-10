@@ -2,7 +2,6 @@ package com.radixdlt.android.data.mapper
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import com.radixdlt.android.data.mapper.TokenTransferDataMapper
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
 import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.atommodel.tokens.TokenClassReference
