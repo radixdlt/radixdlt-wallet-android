@@ -42,8 +42,8 @@ import com.radixdlt.android.R
 import com.radixdlt.android.ui.camera.BarcodeGraphic
 import com.radixdlt.android.ui.camera.BarcodeGraphicTracker
 import com.radixdlt.android.ui.camera.CameraSource
-import com.radixdlt.android.ui.camera.CameraSourcePreview
 import com.radixdlt.android.ui.camera.GraphicOverlay
+import kotlinx.android.synthetic.main.barcode_capture.*
 import timber.log.Timber
 import java.io.IOException
 
@@ -54,28 +54,25 @@ import java.io.IOException
  */
 class BarcodeCaptureActivity : BaseActivity() {
 
-    private var mCameraSource: CameraSource? = null
-    private var mPreview: CameraSourcePreview? = null
-    private var mGraphicOverlay: GraphicOverlay<BarcodeGraphic>? = null
+    private var cameraSource: CameraSource? = null
+    private var graphicOverlayBarcodeGraphic: GraphicOverlay<BarcodeGraphic>? = null
 
     private var gotQRCode: Boolean = false
 
     /**
      * Initializes the UI and creates the detector pipeline.
      */
-    public override fun onCreate(icicle: Bundle?) {
-        super.onCreate(icicle)
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.barcode_capture)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
+        setSupportActionBar(toolbar as Toolbar)
 
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        mPreview = findViewById(R.id.preview)
-        mGraphicOverlay = findViewById(R.id.graphicOverlay)
+        @Suppress("UNCHECKED_CAST")
+        graphicOverlayBarcodeGraphic = graphicOverlay as? GraphicOverlay<BarcodeGraphic>
 
         // read parameters from the intent used to launch the activity.
         val autoFocus = intent.getBooleanExtra(AutoFocus, true)
@@ -122,9 +119,9 @@ class BarcodeCaptureActivity : BaseActivity() {
             )
         }
 
-        findViewById<View>(R.id.topLayout).setOnClickListener(listener)
+        topLayout.setOnClickListener(listener)
         Snackbar.make(
-            mGraphicOverlay!!,
+            graphicOverlay!!,
             R.string.permission_camera_rationale,
             Snackbar.LENGTH_INDEFINITE
         ).setAction(android.R.string.ok, listener).show()
@@ -149,8 +146,8 @@ class BarcodeCaptureActivity : BaseActivity() {
         val barcodeDetector =
             BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build()
 
-        val graphic = BarcodeGraphic(mGraphicOverlay!!)
-        val barcodeGraphicTracker = BarcodeGraphicTracker(mGraphicOverlay!!, graphic)
+        val graphic = BarcodeGraphic(graphicOverlayBarcodeGraphic!!)
+        val barcodeGraphicTracker = BarcodeGraphicTracker(graphicOverlayBarcodeGraphic!!, graphic)
 
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
             override fun release() {
@@ -218,7 +215,7 @@ class BarcodeCaptureActivity : BaseActivity() {
                 builder.setFocusMode(if (autoFocus) Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE else null)
         }
 
-        mCameraSource =
+        cameraSource =
             builder.setFlashMode(if (useFlash) Camera.Parameters.FLASH_MODE_TORCH else null).build()
     }
 
@@ -237,8 +234,8 @@ class BarcodeCaptureActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         Timber.d("onPause")
-        if (mPreview != null) {
-            mPreview!!.stop()
+        if (preview != null) {
+            preview!!.stop()
         }
     }
 
@@ -248,8 +245,8 @@ class BarcodeCaptureActivity : BaseActivity() {
      */
     override fun onDestroy() {
         super.onDestroy()
-        if (mPreview != null) {
-            mPreview!!.release()
+        if (preview != null) {
+            preview!!.release()
         }
     }
 
@@ -334,14 +331,14 @@ class BarcodeCaptureActivity : BaseActivity() {
             dlg.show()
         }
 
-        if (mCameraSource != null) {
+        if (cameraSource != null) {
             BaseActivity.openedPermissionDialog = false
             try {
-                mPreview!!.start(mCameraSource!!, mGraphicOverlay!!)
+                preview!!.start(cameraSource!!, graphicOverlay!!)
             } catch (e: IOException) {
                 Timber.e(e, "Unable to start camera source.")
-                mCameraSource!!.release()
-                mCameraSource = null
+                cameraSource!!.release()
+                cameraSource = null
             }
         }
     }

@@ -163,10 +163,10 @@ private constructor() {
      * Builder for configuring and creating an associated camera source.
      */
     class Builder
-    /**
-     * Creates a camera source builder with the supplied context and detector.  Camera preview
-     * images will be streamed to the associated detector upon starting the camera source.
-     */
+        /**
+         * Creates a camera source builder with the supplied context and detector.  Camera preview
+         * images will be streamed to the associated detector upon starting the camera source.
+         */
         (context: Context?, private val mDetector: Detector<*>?) {
         private val mCameraSource = CameraSource()
 
@@ -501,7 +501,8 @@ private constructor() {
     /**
      * Gets the current focus mode setting.
      *
-     * @return current focus mode. This value is null if the camera is not yet created. Applications should call [ ][.autoFocus] to start the focus if focus
+     * @return current focus mode. This value is null if the camera is not yet created. Applications
+     * should call [ ][.autoFocus] to start the focus if focus
      * mode is FOCUS_MODE_AUTO or FOCUS_MODE_MACRO.
      * @see Camera.Parameters.FOCUS_MODE_AUTO
      *
@@ -1105,7 +1106,7 @@ private constructor() {
         @SuppressLint("InlinedApi")
         val CAMERA_FACING_FRONT = CameraInfo.CAMERA_FACING_FRONT
 
-        private val TAG = "OpenCameraSource"
+        private const val TAG = "OpenCameraSource"
 
         /**
          * The dummy surface texture must be assigned a chosen name.  Since we never use an OpenGL
