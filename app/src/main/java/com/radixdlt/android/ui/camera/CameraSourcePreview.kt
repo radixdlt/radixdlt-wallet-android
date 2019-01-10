@@ -27,18 +27,18 @@ import androidx.annotation.RequiresPermission
 import timber.log.Timber
 import java.io.IOException
 
-class CameraSourcePreview(private val mContext: Context, attrs: AttributeSet) :
-    ViewGroup(mContext, attrs) {
-    private val mSurfaceView: SurfaceView
-    private var mStartRequested: Boolean = false
-    private var mSurfaceAvailable: Boolean = false
-    private var mCameraSource: CameraSource? = null
+class CameraSourcePreview(private val ctx: Context, attrs: AttributeSet) :
+    ViewGroup(ctx, attrs) {
+    private val surfaceView: SurfaceView
+    private var startRequested: Boolean = false
+    private var surfaceAvailable: Boolean = false
+    private var cameraSource: CameraSource? = null
 
-    private var mOverlay: GraphicOverlay<*>? = null
+    private var overlay: GraphicOverlay<*>? = null
 
     private val isPortraitMode: Boolean
         get() {
-            val orientation = mContext.resources.configuration.orientation
+            val orientation = ctx.resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 return false
             }
@@ -51,12 +51,12 @@ class CameraSourcePreview(private val mContext: Context, attrs: AttributeSet) :
         }
 
     init {
-        mStartRequested = false
-        mSurfaceAvailable = false
+        startRequested = false
+        surfaceAvailable = false
 
-        mSurfaceView = SurfaceView(mContext)
-        mSurfaceView.holder.addCallback(SurfaceCallback())
-        addView(mSurfaceView)
+        surfaceView = SurfaceView(ctx)
+        surfaceView.holder.addCallback(SurfaceCallback())
+        addView(surfaceView)
     }
 
     @RequiresPermission(Manifest.permission.CAMERA)
@@ -66,10 +66,10 @@ class CameraSourcePreview(private val mContext: Context, attrs: AttributeSet) :
             stop()
         }
 
-        mCameraSource = cameraSource
+        this.cameraSource = cameraSource
 
-        if (mCameraSource != null) {
-            mStartRequested = true
+        if (this.cameraSource != null) {
+            startRequested = true
             startIfReady()
         }
     }
@@ -77,48 +77,48 @@ class CameraSourcePreview(private val mContext: Context, attrs: AttributeSet) :
     @RequiresPermission(Manifest.permission.CAMERA)
     @Throws(IOException::class, SecurityException::class)
     fun start(cameraSource: CameraSource, overlay: GraphicOverlay<*>) {
-        mOverlay = overlay
+        this.overlay = overlay
         start(cameraSource)
     }
 
     fun stop() {
-        if (mCameraSource != null) {
-            mCameraSource!!.stop()
+        if (cameraSource != null) {
+            cameraSource!!.stop()
         }
     }
 
     fun release() {
-        if (mCameraSource != null) {
-            mCameraSource!!.release()
-            mCameraSource = null
+        if (cameraSource != null) {
+            cameraSource!!.release()
+            cameraSource = null
         }
     }
 
     @RequiresPermission(Manifest.permission.CAMERA)
     @Throws(IOException::class, SecurityException::class)
     private fun startIfReady() {
-        if (mStartRequested && mSurfaceAvailable) {
-            mCameraSource!!.start(mSurfaceView.holder)
-            if (mOverlay != null) {
-                val size = mCameraSource!!.previewSize!!
+        if (startRequested && surfaceAvailable) {
+            cameraSource!!.start(surfaceView.holder)
+            if (overlay != null) {
+                val size = cameraSource!!.previewSize!!
                 val min = Math.min(size.width, size.height)
                 val max = Math.max(size.width, size.height)
                 if (isPortraitMode) {
                     // Swap width and height sizes when in portrait, since it will be rotated by
                     // 90 degrees
-                    mOverlay!!.setCameraInfo(min, max, mCameraSource!!.cameraFacing)
+                    overlay!!.setCameraInfo(min, max, cameraSource!!.cameraFacing)
                 } else {
-                    mOverlay!!.setCameraInfo(max, min, mCameraSource!!.cameraFacing)
+                    overlay!!.setCameraInfo(max, min, cameraSource!!.cameraFacing)
                 }
-                mOverlay!!.clear()
+                overlay!!.clear()
             }
-            mStartRequested = false
+            startRequested = false
         }
     }
 
     private inner class SurfaceCallback : SurfaceHolder.Callback {
         override fun surfaceCreated(surface: SurfaceHolder) {
-            mSurfaceAvailable = true
+            surfaceAvailable = true
             try {
                 startIfReady()
             } catch (se: SecurityException) {
@@ -129,7 +129,7 @@ class CameraSourcePreview(private val mContext: Context, attrs: AttributeSet) :
         }
 
         override fun surfaceDestroyed(surface: SurfaceHolder) {
-            mSurfaceAvailable = false
+            surfaceAvailable = false
         }
 
         override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -139,8 +139,8 @@ class CameraSourcePreview(private val mContext: Context, attrs: AttributeSet) :
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         var previewWidth = 320
         var previewHeight = 240
-        if (mCameraSource != null) {
-            val size = mCameraSource!!.previewSize
+        if (cameraSource != null) {
+            val size = cameraSource!!.previewSize
             if (size != null) {
                 previewWidth = size.width
                 previewHeight = size.height
