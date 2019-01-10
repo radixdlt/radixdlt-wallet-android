@@ -30,7 +30,6 @@ class BarcodeGraphic(overlay: GraphicOverlay<*>) : GraphicOverlay.Graphic(overla
     var id: Int = 0
 
     private val mRectPaint: Paint
-    private val mTextPaint: Paint? = null
     @Volatile
     var barcode: Barcode? = null
         private set
@@ -44,10 +43,6 @@ class BarcodeGraphic(overlay: GraphicOverlay<*>) : GraphicOverlay.Graphic(overla
         mRectPaint.color = selectedColor
         mRectPaint.style = Paint.Style.STROKE
         mRectPaint.strokeWidth = 8.0f
-
-//        mTextPaint = new Paint();
-//        mTextPaint.setColor(selectedColor);
-//        mTextPaint.setTextSize(36.0f);
     }
 
     /**
@@ -72,9 +67,6 @@ class BarcodeGraphic(overlay: GraphicOverlay<*>) : GraphicOverlay.Graphic(overla
         rect.right = translateX(rect.right)
         rect.bottom = translateY(rect.bottom)
         canvas.drawRect(rect, mRectPaint)
-
-        // Draws a label at the bottom of the barcode indicate the barcode value that was detected.
-//        canvas.drawText(barcode.rawValue, rect.left, rect.bottom, mTextPaint);
     }
 
     companion object {
