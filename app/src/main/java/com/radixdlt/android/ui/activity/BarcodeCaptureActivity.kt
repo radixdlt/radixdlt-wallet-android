@@ -27,7 +27,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.common.ConnectionResult
@@ -44,6 +43,7 @@ import com.radixdlt.android.ui.camera.BarcodeGraphicTracker
 import com.radixdlt.android.ui.camera.CameraSource
 import com.radixdlt.android.ui.camera.GraphicOverlay
 import kotlinx.android.synthetic.main.barcode_capture.*
+import org.jetbrains.anko.toast
 import timber.log.Timber
 import java.io.IOException
 
@@ -75,8 +75,8 @@ class BarcodeCaptureActivity : BaseActivity() {
         graphicOverlayBarcodeGraphic = graphicOverlay as? GraphicOverlay<BarcodeGraphic>
 
         // read parameters from the intent used to launch the activity.
-        val autoFocus = intent.getBooleanExtra(AutoFocus, true)
-        val useFlash = intent.getBooleanExtra(UseFlash, false)
+        val autoFocus = intent.getBooleanExtra(AUTO_FOCUS, true)
+        val useFlash = intent.getBooleanExtra(USER_FLASH, false)
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -161,7 +161,7 @@ class BarcodeCaptureActivity : BaseActivity() {
                     if (!gotQRCode) {
                         gotQRCode = true
                         val data = Intent()
-                        data.putExtra(BarcodeObject, barcodes.valueAt(0))
+                        data.putExtra(BARCODE_OBJECT, barcodes.valueAt(0))
                         setResult(CommonStatusCodes.SUCCESS, data)
                         finish()
                     }
@@ -185,16 +185,11 @@ class BarcodeCaptureActivity : BaseActivity() {
 
             // Check for low storage.  If there is low storage, the native library will not be
             // downloaded, so detection will not become operational.
-            val lowstorageFilter = IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW)
-            val hasLowStorage = registerReceiver(null, lowstorageFilter) != null
+            val lowStorageFilter = IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW)
+            val hasLowStorage = registerReceiver(null, lowStorageFilter) != null
 
             if (hasLowStorage) {
-
-                Toast.makeText(
-                    this, R.string.low_storage_error,
-                    Toast.LENGTH_LONG
-                ).show()
-
+                toast(R.string.low_storage_error)
                 Timber.w(getString(R.string.low_storage_error))
             }
         }
@@ -206,13 +201,14 @@ class BarcodeCaptureActivity : BaseActivity() {
             CameraSource.Builder(applicationContext, barcodeDetector).setFacing(
                 CameraSource.CAMERA_FACING_BACK
             )
-                .setRequestedPreviewSize(1600, 1024)
-                .setRequestedFps(30.0f)
+                .setRequestedPreviewSize(WIDTH, HEIGHT)
+                .setRequestedFps(FPS)
 
         // make sure that auto focus is an available option
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            builder =
-                builder.setFocusMode(if (autoFocus) Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE else null)
+            builder = builder.setFocusMode(
+                if (autoFocus) Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE else null
+            )
         }
 
         cameraSource =
@@ -278,18 +274,18 @@ class BarcodeCaptureActivity : BaseActivity() {
             return
         }
 
-        if (grantResults.size != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Timber.d("Camera permission granted - initialize the camera source")
             // we have permission, so create the camerasource
-            val autoFocus = intent.getBooleanExtra(AutoFocus, true)
-            val useFlash = intent.getBooleanExtra(UseFlash, false)
+            val autoFocus = intent.getBooleanExtra(AUTO_FOCUS, true)
+            val useFlash = intent.getBooleanExtra(USER_FLASH, false)
             createCameraSource(autoFocus, useFlash)
             return
         }
 
         Timber.e(
             "Permission not granted: results len = %d Result code = %s",
-            grantResults.size, if (grantResults.size > 0) grantResults[0] else "(empty)"
+            grantResults.size, if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
         )
 
         val listener = DialogInterface.OnClickListener { _, _ ->
@@ -345,14 +341,20 @@ class BarcodeCaptureActivity : BaseActivity() {
 
     companion object {
         // intent request code to handle updating play services if needed.
-        private val RC_HANDLE_GMS = 9001
+        private const val RC_HANDLE_GMS = 9001
 
         // permission request codes need to be < 256
-        private val RC_HANDLE_CAMERA_PERM = 2
+        private const val RC_HANDLE_CAMERA_PERM = 2
 
         // constants used to pass extra data in the intent
-        val AutoFocus = "AutoFocus"
-        val UseFlash = "UseFlash"
-        val BarcodeObject = "Barcode"
+        const val AUTO_FOCUS = "AutoFocus"
+        const val USER_FLASH = "UseFlash"
+        const val BARCODE_OBJECT = "Barcode"
+
+        // constants used for preview size
+        const val WIDTH = 1600
+        const val HEIGHT = 1024
+
+        const val FPS = 30.0f
     }
 }
