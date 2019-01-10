@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.radixdlt.android.ui.activity
 
 import android.Manifest
@@ -293,7 +295,7 @@ class BarcodeCaptureActivity : BaseActivity() {
             finish()
         }
 
-        val settingsListener = DialogInterface.OnClickListener { dialog, id ->
+        val settingsListener = DialogInterface.OnClickListener { _, _ ->
             BaseActivity.openedPermissionDialog = false
             val i = Intent(
                 android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
