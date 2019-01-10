@@ -25,7 +25,6 @@ import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
 import android.os.Build
 import android.os.SystemClock
-import android.util.Log
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -36,10 +35,10 @@ import androidx.annotation.StringDef
 import com.google.android.gms.common.images.Size
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.Frame
+import org.jetbrains.anko.toast
+import timber.log.Timber
 import java.io.IOException
 import java.lang.Thread.State
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
 import java.nio.ByteBuffer
 import java.util.ArrayList
 import java.util.HashMap
@@ -78,12 +77,12 @@ class CameraSource
  */
 private constructor() {
 
-    private var mContext: Context? = null
+    private var context: Context? = null
 
-    private val mCameraLock = Any()
+    private val cameraLock = Any()
 
-    // Guarded by mCameraLock
-    private var mCamera: Camera? = null
+    // Guarded by cameraLock
+    private var camera: Camera? = null
 
     /**
      * Returns the selected camera; one of [.CAMERA_FACING_BACK] or
@@ -96,7 +95,7 @@ private constructor() {
      * Rotation of the device, and thus the associated preview images captured from the device.
      * See [Frame.Metadata.getRotation].
      */
-    private var mRotation: Int = 0
+    private var rotation: Int = 0
 
     /**
      * Returns the preview size that is currently in use by the underlying camera.
@@ -106,32 +105,32 @@ private constructor() {
 
     // These values may be requested by the caller.  Due to hardware limitations, we may need to
     // select close, but not exactly the same values for these.
-    private var mRequestedFps = 30.0f
-    private var mRequestedPreviewWidth = 1024
-    private var mRequestedPreviewHeight = 768
+    private var requestedFps = 30.0f
+    private var requestedPreviewWidth = 1024
+    private var requestedPreviewHeight = 768
 
-    private var mFocusMode: String? = null
-    private var mFlashMode: String? = null
+    private var focusMode: String? = null
+    private var flashMode: String? = null
 
     // These instances need to be held onto to avoid GC of their underlying resources.  Even though
     // these aren't used outside of the method that creates them, they still must have hard
     // references maintained to them.
-    private var mDummySurfaceView: SurfaceView? = null
-    private var mDummySurfaceTexture: SurfaceTexture? = null
+    private var dummySurfaceView: SurfaceView? = null
+    private var dummySurfaceTexture: SurfaceTexture? = null
 
     /**
      * Dedicated thread and associated runnable for calling into the detector with frames, as the
      * frames become available from the camera.
      */
-    private var mProcessingThread: Thread? = null
-    private var mFrameProcessor: FrameProcessingRunnable? = null
+    private var processingThread: Thread? = null
+    private var frameProcessor: FrameProcessingRunnable? = null
 
     /**
      * Map to transform between a byte array, received from the camera, and its associated byte
      * buffer.  We use byte buffers internally because this is a more efficient way to call into
      * native code later (avoids a potential copy).
      */
-    private val mBytesToByteBuffer = HashMap<ByteArray, ByteBuffer>()
+    private val bytesToByteBuffer = HashMap<ByteArray, ByteBuffer>()
 
     @StringDef(
         Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
@@ -142,7 +141,7 @@ private constructor() {
         Camera.Parameters.FOCUS_MODE_INFINITY,
         Camera.Parameters.FOCUS_MODE_MACRO
     )
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention(AnnotationRetention.SOURCE)
     private annotation class FocusMode
 
     @StringDef(
@@ -152,7 +151,7 @@ private constructor() {
         Camera.Parameters.FLASH_MODE_RED_EYE,
         Camera.Parameters.FLASH_MODE_TORCH
     )
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention(AnnotationRetention.SOURCE)
     private annotation class FlashMode
 
     //==============================================================================================
@@ -162,22 +161,24 @@ private constructor() {
     /**
      * Builder for configuring and creating an associated camera source.
      */
-    class Builder
+    class Builder(
         /**
          * Creates a camera source builder with the supplied context and detector.  Camera preview
          * images will be streamed to the associated detector upon starting the camera source.
          */
-        (context: Context?, private val mDetector: Detector<*>?) {
-        private val mCameraSource = CameraSource()
+        context: Context?,
+        private val detector: Detector<*>?
+    ) {
+        private val cameraSource = CameraSource()
 
         init {
             if (context == null) {
                 throw IllegalArgumentException("No context supplied.")
             }
-            if (mDetector == null) {
+            if (detector == null) {
                 throw IllegalArgumentException("No detector supplied.")
             }
-            mCameraSource.mContext = context
+            cameraSource.context = context
         }
 
         /**
@@ -188,17 +189,17 @@ private constructor() {
             if (fps <= 0) {
                 throw IllegalArgumentException("Invalid fps: $fps")
             }
-            mCameraSource.mRequestedFps = fps
+            cameraSource.requestedFps = fps
             return this
         }
 
         fun setFocusMode(@FocusMode mode: String?): Builder {
-            mCameraSource.mFocusMode = mode
+            cameraSource.focusMode = mode
             return this
         }
 
         fun setFlashMode(@FlashMode mode: String?): Builder {
-            mCameraSource.mFlashMode = mode
+            cameraSource.flashMode = mode
             return this
         }
 
@@ -212,12 +213,12 @@ private constructor() {
             // Restrict the requested range to something within the realm of possibility.  The
             // choice of 1000000 is a bit arbitrary -- intended to be well beyond resolutions that
             // devices can support.  We bound this to avoid int overflow in the code later.
-            val MAX = 1000000
-            if (width <= 0 || width > MAX || height <= 0 || height > MAX) {
+            val max = 1000000
+            if (width <= 0 || width > max || height <= 0 || height > max) {
                 throw IllegalArgumentException("Invalid preview size: " + width + "x" + height)
             }
-            mCameraSource.mRequestedPreviewWidth = width
-            mCameraSource.mRequestedPreviewHeight = height
+            cameraSource.requestedPreviewWidth = width
+            cameraSource.requestedPreviewHeight = height
             return this
         }
 
@@ -229,7 +230,7 @@ private constructor() {
             if (facing != CAMERA_FACING_BACK && facing != CAMERA_FACING_FRONT) {
                 throw IllegalArgumentException("Invalid camera: $facing")
             }
-            mCameraSource.cameraFacing = facing
+            cameraSource.cameraFacing = facing
             return this
         }
 
@@ -237,8 +238,8 @@ private constructor() {
          * Creates an instance of the camera source.
          */
         fun build(): CameraSource {
-            mCameraSource.mFrameProcessor = mCameraSource.FrameProcessingRunnable(mDetector)
-            return mCameraSource
+            cameraSource.frameProcessor = cameraSource.FrameProcessingRunnable(detector)
+            return cameraSource
         }
     }
 
@@ -294,8 +295,10 @@ private constructor() {
      *
      *
      *
-     * This is only supported in continuous autofocus modes -- [ ][Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO] and [ ][Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE]. Applications can show
-     * autofocus animation based on this.
+     * This is only supported in continuous autofocus modes --
+     * [ ][Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO] and
+     * [ ][Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE].
+     * Applications can show autofocus animation based on this.
      */
     interface AutoFocusMoveCallback {
         /**
@@ -314,9 +317,9 @@ private constructor() {
      * Stops the camera and releases the resources of the camera and underlying detector.
      */
     fun release() {
-        synchronized(mCameraLock) {
+        synchronized(cameraLock) {
             stop()
-            mFrameProcessor!!.release()
+            frameProcessor!!.release()
         }
     }
 
@@ -330,31 +333,31 @@ private constructor() {
     @RequiresPermission(Manifest.permission.CAMERA)
     @Throws(IOException::class)
     fun start(): CameraSource {
-        synchronized(mCameraLock) {
-            if (mCamera != null) {
+        synchronized(cameraLock) {
+            if (camera != null) {
                 return this
             }
 
-            mCamera = createCamera()
+            camera = createCamera()
 
             // SurfaceTexture was introduced in Honeycomb (11), so if we are running and
             // old version of Android. fall back to use SurfaceView.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                mDummySurfaceTexture = SurfaceTexture(DUMMY_TEXTURE_NAME)
-                mCamera!!.setPreviewTexture(mDummySurfaceTexture)
+                dummySurfaceTexture = SurfaceTexture(DUMMY_TEXTURE_NAME)
+                camera!!.setPreviewTexture(dummySurfaceTexture)
             } else {
-                mDummySurfaceView = SurfaceView(mContext)
-                mCamera!!.setPreviewDisplay(mDummySurfaceView!!.holder)
+                dummySurfaceView = SurfaceView(context)
+                camera!!.setPreviewDisplay(dummySurfaceView!!.holder)
             }
             try {
-                mCamera!!.startPreview()
+                camera!!.startPreview()
             } catch (e: Exception) {
-                Toast.makeText(mContext, "Camera could not be opened", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Camera could not be opened", Toast.LENGTH_SHORT).show()
             }
 
-            mProcessingThread = Thread(mFrameProcessor)
-            mFrameProcessor?.setActive(true)
-            mProcessingThread?.start()
+            processingThread = Thread(frameProcessor)
+            frameProcessor?.setActive(true)
+            processingThread?.start()
         }
         return this
     }
@@ -370,22 +373,22 @@ private constructor() {
     @RequiresPermission(Manifest.permission.CAMERA)
     @Throws(IOException::class)
     fun start(surfaceHolder: SurfaceHolder): CameraSource {
-        synchronized(mCameraLock) {
-            if (mCamera != null) {
+        synchronized(cameraLock) {
+            if (camera != null) {
                 return this
             }
 
-            mCamera = createCamera()
-            mCamera!!.setPreviewDisplay(surfaceHolder)
+            camera = createCamera()
+            camera!!.setPreviewDisplay(surfaceHolder)
             try {
-                mCamera!!.startPreview()
+                camera!!.startPreview()
             } catch (e: Exception) {
-                Toast.makeText(mContext, "Camera could not be opened", Toast.LENGTH_SHORT).show()
+                context?.toast("Camera could not be opened")
             }
 
-            mProcessingThread = Thread(mFrameProcessor)
-            mFrameProcessor?.setActive(true)
-            mProcessingThread?.start()
+            processingThread = Thread(frameProcessor)
+            frameProcessor?.setActive(true)
+            processingThread?.start()
         }
         return this
     }
@@ -402,58 +405,59 @@ private constructor() {
      * resources of the underlying detector.
      */
     fun stop() {
-        synchronized(mCameraLock) {
-            mFrameProcessor!!.setActive(false)
-            if (mProcessingThread != null) {
+        synchronized(cameraLock) {
+            frameProcessor!!.setActive(false)
+            if (processingThread != null) {
                 try {
                     // Wait for the thread to complete to ensure that we can't have multiple threads
                     // executing at the same time (i.e., which would happen if we called start too
                     // quickly after stop).
-                    mProcessingThread?.join()
+                    processingThread?.join()
                 } catch (e: InterruptedException) {
-                    Log.d(TAG, "Frame processing thread interrupted on release.")
+                    Timber.d("Frame processing thread interrupted on release.")
                 }
 
-                mProcessingThread = null
+                processingThread = null
             }
 
             // clear the buffer to prevent oom exceptions
-            mBytesToByteBuffer.clear()
+            bytesToByteBuffer.clear()
 
-            if (mCamera != null) {
-                mCamera!!.stopPreview()
-                mCamera!!.setPreviewCallbackWithBuffer(null)
+            if (camera != null) {
+                camera!!.stopPreview()
+                camera!!.setPreviewCallbackWithBuffer(null)
                 try {
                     // We want to be compatible back to Gingerbread, but SurfaceTexture
-                    // wasn't introduced until Honeycomb.  Since the interface cannot use a SurfaceTexture, if the
-                    // developer wants to display a preview we must use a SurfaceHolder.  If the developer doesn't
-                    // want to display a preview we use a SurfaceTexture if we are running at least Honeycomb.
+                    // wasn't introduced until Honeycomb.  Since the interface cannot use a
+                    // SurfaceTexture, if the developer wants to display a preview we must use
+                    // a SurfaceHolder.  If the developer doesn't want to display a preview we
+                    // use a SurfaceTexture if we are running at least Honeycomb.
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                        mCamera!!.setPreviewTexture(null)
+                        camera!!.setPreviewTexture(null)
                     } else {
-                        mCamera!!.setPreviewDisplay(null)
+                        camera!!.setPreviewDisplay(null)
                     }
                 } catch (e: Exception) {
-                    Log.e(TAG, "Failed to clear camera preview: $e")
+                    Timber.e("Failed to clear camera preview: $e")
                 }
 
-                mCamera!!.release()
-                mCamera = null
+                camera!!.release()
+                camera = null
             }
         }
     }
 
     fun doZoom(scale: Float): Int {
-        synchronized(mCameraLock) {
-            if (mCamera == null) {
+        synchronized(cameraLock) {
+            if (camera == null) {
                 return 0
             }
             var currentZoom = 0
             val maxZoom: Int
-            val parameters = mCamera!!.parameters
+            val parameters = camera!!.parameters
             if (!parameters.isZoomSupported) {
-                Log.w(TAG, "Zoom is not supported on this device")
+                Timber.w("Zoom is not supported on this device")
                 return currentZoom
             }
             maxZoom = parameters.maxZoom
@@ -472,7 +476,7 @@ private constructor() {
                 currentZoom = maxZoom
             }
             parameters.zoom = currentZoom
-            mCamera!!.parameters = parameters
+            camera!!.parameters = parameters
             return currentZoom
         }
     }
@@ -487,13 +491,13 @@ private constructor() {
      * @param jpeg    the callback for JPEG image data, or null
      */
     fun takePicture(shutter: ShutterCallback, jpeg: PictureCallback) {
-        synchronized(mCameraLock) {
-            if (mCamera != null) {
+        synchronized(cameraLock) {
+            if (camera != null) {
                 val startCallback = PictureStartCallback()
-                startCallback.mDelegate = shutter
+                startCallback.delegate = shutter
                 val doneCallback = PictureDoneCallback()
-                doneCallback.mDelegate = jpeg
-                mCamera!!.takePicture(startCallback, null, null, doneCallback)
+                doneCallback.delegate = jpeg
+                camera!!.takePicture(startCallback, null, null, doneCallback)
             }
         }
     }
@@ -520,7 +524,7 @@ private constructor() {
      */
     @FocusMode
     fun getFocusMode(): String? {
-        return mFocusMode
+        return focusMode
     }
 
     /**
@@ -531,13 +535,13 @@ private constructor() {
      * @see .getFocusMode
      */
     fun setFocusMode(@FocusMode mode: String?): Boolean {
-        synchronized(mCameraLock) {
-            if (mCamera != null && mode != null) {
-                val parameters = mCamera!!.parameters
+        synchronized(cameraLock) {
+            if (camera != null && mode != null) {
+                val parameters = camera!!.parameters
                 if (parameters.supportedFocusModes.contains(mode)) {
                     parameters.focusMode = mode
-                    mCamera!!.parameters = parameters
-                    mFocusMode = mode
+                    camera!!.parameters = parameters
+                    focusMode = mode
                     return true
                 }
             }
@@ -563,7 +567,7 @@ private constructor() {
      */
     @FlashMode
     fun getFlashMode(): String? {
-        return mFlashMode
+        return flashMode
     }
 
     /**
@@ -574,13 +578,13 @@ private constructor() {
      * @see .getFlashMode
      */
     fun setFlashMode(@FlashMode mode: String?): Boolean {
-        synchronized(mCameraLock) {
-            if (mCamera != null && mode != null) {
-                val parameters = mCamera!!.parameters
+        synchronized(cameraLock) {
+            if (camera != null && mode != null) {
+                val parameters = camera!!.parameters
                 if (parameters.supportedFlashModes.contains(mode)) {
                     parameters.flashMode = mode
-                    mCamera!!.parameters = parameters
-                    mFlashMode = mode
+                    camera!!.parameters = parameters
+                    flashMode = mode
                     return true
                 }
             }
@@ -614,14 +618,14 @@ private constructor() {
      * @see .cancelAutoFocus
      */
     fun autoFocus(cb: AutoFocusCallback?) {
-        synchronized(mCameraLock) {
-            if (mCamera != null) {
+        synchronized(cameraLock) {
+            if (camera != null) {
                 var autoFocusCallback: CameraAutoFocusCallback? = null
                 if (cb != null) {
                     autoFocusCallback = CameraAutoFocusCallback()
-                    autoFocusCallback.mDelegate = cb
+                    autoFocusCallback.delegate = cb
                 }
-                mCamera!!.autoFocus(autoFocusCallback)
+                camera!!.autoFocus(autoFocusCallback)
             }
         }
     }
@@ -635,9 +639,9 @@ private constructor() {
      * @see .autoFocus
      */
     fun cancelAutoFocus() {
-        synchronized(mCameraLock) {
-            if (mCamera != null) {
-                mCamera!!.cancelAutoFocus()
+        synchronized(cameraLock) {
+            if (camera != null) {
+                camera!!.cancelAutoFocus()
             }
         }
     }
@@ -654,14 +658,14 @@ private constructor() {
             return false
         }
 
-        synchronized(mCameraLock) {
-            if (mCamera != null) {
+        synchronized(cameraLock) {
+            if (camera != null) {
                 var autoFocusMoveCallback: CameraAutoFocusMoveCallback? = null
                 if (cb != null) {
                     autoFocusMoveCallback = CameraAutoFocusMoveCallback()
-                    autoFocusMoveCallback.mDelegate = cb
+                    autoFocusMoveCallback.delegate = cb
                 }
-                mCamera!!.setAutoFocusMoveCallback(autoFocusMoveCallback)
+                camera!!.setAutoFocusMoveCallback(autoFocusMoveCallback)
             }
         }
 
@@ -669,13 +673,13 @@ private constructor() {
     }
 
     /**
-     * Wraps the camera1 shutter callback so that the deprecated API isn't exposed.
+     * Wraps the camera shutter callback so that the deprecated API isn't exposed.
      */
     private inner class PictureStartCallback : Camera.ShutterCallback {
-        internal var mDelegate: ShutterCallback? = null
+        internal var delegate: ShutterCallback? = null
 
         override fun onShutter() {
-            mDelegate?.onShutter()
+            delegate?.onShutter()
         }
     }
 
@@ -684,17 +688,16 @@ private constructor() {
      * preview back on after the picture has been taken.
      */
     private inner class PictureDoneCallback : Camera.PictureCallback {
-        internal var mDelegate: PictureCallback? = null
+        internal var delegate: PictureCallback? = null
 
         override fun onPictureTaken(data: ByteArray, camera: Camera) {
-            mDelegate?.onPictureTaken(data)
-            synchronized(mCameraLock) {
-                if (mCamera != null) {
+            delegate?.onPictureTaken(data)
+            synchronized(cameraLock) {
+                if (this@CameraSource.camera != null) {
                     try {
-                        mCamera!!.startPreview()
+                        this@CameraSource.camera!!.startPreview()
                     } catch (e: Exception) {
-                        Toast.makeText(mContext, "Camera could not be opened", Toast.LENGTH_SHORT)
-                            .show()
+                        context?.toast("Camera could not be opened")
                     }
                 }
             }
@@ -702,25 +705,25 @@ private constructor() {
     }
 
     /**
-     * Wraps the camera1 auto focus callback so that the deprecated API isn't exposed.
+     * Wraps the camera auto focus callback so that the deprecated API isn't exposed.
      */
     private inner class CameraAutoFocusCallback : Camera.AutoFocusCallback {
-        internal var mDelegate: AutoFocusCallback? = null
+        internal var delegate: AutoFocusCallback? = null
 
         override fun onAutoFocus(success: Boolean, camera: Camera) {
-            mDelegate?.onAutoFocus(success)
+            delegate?.onAutoFocus(success)
         }
     }
 
     /**
-     * Wraps the camera1 auto focus move callback so that the deprecated API isn't exposed.
+     * Wraps the camera auto focus move callback so that the deprecated API isn't exposed.
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private inner class CameraAutoFocusMoveCallback : Camera.AutoFocusMoveCallback {
-        internal var mDelegate: AutoFocusMoveCallback? = null
+        internal var delegate: AutoFocusMoveCallback? = null
 
         override fun onAutoFocusMoving(start: Boolean, camera: Camera) {
-            mDelegate?.onAutoFocusMoving(start)
+            delegate?.onAutoFocusMoving(start)
         }
     }
 
@@ -737,14 +740,13 @@ private constructor() {
         }
         val camera = Camera.open(requestedCameraId)
 
-        val sizePair = selectSizePair(camera, mRequestedPreviewWidth, mRequestedPreviewHeight)
-            ?: throw RuntimeException(
-                "Could not find suitable preview size."
-            )
+        val sizePair =
+            selectSizePair(camera, requestedPreviewWidth, requestedPreviewHeight)
+                ?: throw RuntimeException("Could not find suitable preview size.")
         val pictureSize = sizePair.pictureSize()
         previewSize = sizePair.previewSize()
 
-        val previewFpsRange = selectPreviewFpsRange(camera, mRequestedFps)
+        val previewFpsRange = selectPreviewFpsRange(camera, requestedFps)
             ?: throw RuntimeException("Could not find suitable preview frames per second range.")
 
         val parameters = camera.parameters
@@ -762,43 +764,39 @@ private constructor() {
 
         setRotation(camera, parameters, requestedCameraId)
 
-        if (mFocusMode != null) {
-            if (parameters.supportedFocusModes.contains(
-                    mFocusMode
-                )
-            ) {
-                parameters.focusMode = mFocusMode
+        if (focusMode != null) {
+            if (parameters.supportedFocusModes.contains(focusMode)) {
+                parameters.focusMode = focusMode
             } else {
-                Log.i(TAG, "Camera focus mode: $mFocusMode is not supported on this device.")
+                Timber.i("Camera focus mode: $focusMode is not supported on this device.")
             }
         }
 
-        // setting mFocusMode to the one set in the params
-        mFocusMode = parameters.focusMode
+        // setting focusMode to the one set in the params
+        focusMode = parameters.focusMode
 
-        if (mFlashMode != null) {
+        if (flashMode != null) {
             if (parameters.supportedFlashModes != null) {
-                if (parameters.supportedFlashModes.contains(
-                        mFlashMode
-                    )
-                ) {
-                    parameters.flashMode = mFlashMode
+                if (parameters.supportedFlashModes.contains(flashMode)) {
+                    parameters.flashMode = flashMode
                 } else {
-                    Log.i(TAG, "Camera flash mode: $mFlashMode is not supported on this device.")
+                    Timber.i(
+                        "Camera flash mode: $flashMode is not supported on this device."
+                    )
                 }
             }
         }
 
-        // setting mFlashMode to the one set in the params
-        mFlashMode = parameters.flashMode
+        // setting flashMode to the one set in the params
+        flashMode = parameters.flashMode
 
         camera.parameters = parameters
 
         // Four frame buffers are needed for working with the camera:
         //
-        //   one for the frame that is currently being executed upon in doing detection
-        //   one for the next pending frame to process immediately upon completing detection
-        //   two for the frames that the camera uses to populate future preview images
+        // one for the frame that is currently being executed upon in doing detection
+        // one for the next pending frame to process immediately upon completing detection
+        // two for the frames that the camera uses to populate future preview images
         camera.setPreviewCallbackWithBuffer(CameraPreviewCallback())
         camera.addCallbackBuffer(createPreviewBuffer(previewSize!!))
         camera.addCallbackBuffer(createPreviewBuffer(previewSize!!))
@@ -818,22 +816,21 @@ private constructor() {
         previewSize: Camera.Size,
         pictureSize: Camera.Size?
     ) {
-        private val mPreview: Size
-        private var mPicture: Size? = null
+        private val preview: Size = Size(previewSize.width, previewSize.height)
+        private var picture: Size? = null
 
         init {
-            mPreview = Size(previewSize.width, previewSize.height)
             if (pictureSize != null) {
-                mPicture = Size(pictureSize.width, pictureSize.height)
+                picture = Size(pictureSize.width, pictureSize.height)
             }
         }
 
         fun previewSize(): Size {
-            return mPreview
+            return preview
         }
 
         fun pictureSize(): Size? {
-            return mPicture
+            return picture
         }
     }
 
@@ -859,8 +856,10 @@ private constructor() {
         var minDiff = Integer.MAX_VALUE
         val previewFpsRangeList = camera.parameters.supportedPreviewFpsRange
         for (range in previewFpsRangeList) {
-            val deltaMin = desiredPreviewFpsScaled - range[Camera.Parameters.PREVIEW_FPS_MIN_INDEX]
-            val deltaMax = desiredPreviewFpsScaled - range[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]
+            val deltaMin =
+                desiredPreviewFpsScaled - range[Camera.Parameters.PREVIEW_FPS_MIN_INDEX]
+            val deltaMax =
+                desiredPreviewFpsScaled - range[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]
             val diff = Math.abs(deltaMin) + Math.abs(deltaMax)
             if (diff < minDiff) {
                 selectedFpsRange = range
@@ -878,7 +877,8 @@ private constructor() {
      * @param cameraId   the camera id to set rotation based on
      */
     private fun setRotation(camera: Camera, parameters: Camera.Parameters, cameraId: Int) {
-        val windowManager = mContext!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val windowManager =
+            context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         var degrees = 0
         val rotation = windowManager.defaultDisplay.rotation
         when (rotation) {
@@ -886,7 +886,7 @@ private constructor() {
             Surface.ROTATION_90 -> degrees = 90
             Surface.ROTATION_180 -> degrees = 180
             Surface.ROTATION_270 -> degrees = 270
-            else -> Log.e(TAG, "Bad rotation value: $rotation")
+            else -> Timber.e("Bad rotation value: $rotation")
         }
 
         val cameraInfo = CameraInfo()
@@ -903,7 +903,7 @@ private constructor() {
         }
 
         // This corresponds to the rotation constants in {@link Frame}.
-        mRotation = angle / 90
+        this.rotation = angle / 90
 
         camera.setDisplayOrientation(displayAngle)
         parameters.setRotation(angle)
@@ -928,13 +928,13 @@ private constructor() {
         // should guarantee that there will be an array to work with.
         val byteArray = ByteArray(bufferSize)
         val buffer = ByteBuffer.wrap(byteArray)
-        if (!buffer.hasArray() || buffer.array() != byteArray) {
+        if (!buffer.hasArray() || !buffer.array()!!.contentEquals(byteArray)) {
             // I don't think that this will ever happen.  But if it does, then we wouldn't be
             // passing the preview content to the underlying detector later.
             throw IllegalStateException("Failed to create valid buffer for camera source.")
         }
 
-        mBytesToByteBuffer[byteArray] = buffer
+        bytesToByteBuffer[byteArray] = buffer
         return byteArray
     }
 
@@ -947,7 +947,7 @@ private constructor() {
      */
     private inner class CameraPreviewCallback : Camera.PreviewCallback {
         override fun onPreviewFrame(data: ByteArray, camera: Camera) {
-            mFrameProcessor!!.setNextFrame(data, camera)
+            frameProcessor!!.setNextFrame(data, camera)
         }
     }
 
@@ -962,18 +962,19 @@ private constructor() {
      * associated processing are done for the previous frame, detection on the mostly recently
      * received frame will immediately start on the same thread.
      */
-    private inner class FrameProcessingRunnable internal constructor(private var mDetector: Detector<*>?) :
-        Runnable {
-        private val mStartTimeMillis = SystemClock.elapsedRealtime()
+    private inner class FrameProcessingRunnable internal constructor(
+        private var detector: Detector<*>?
+    ) : Runnable {
+        private val startTimeMillis = SystemClock.elapsedRealtime()
 
         // This lock guards all of the member variables below.
-        private val mLock = Object()
-        private var mActive = true
+        private val lock = Object()
+        private var active = true
 
         // These pending variables hold the state associated with the new frame awaiting processing.
-        private var mPendingTimeMillis: Long = 0
-        private var mPendingFrameId = 0
-        private var mPendingFrameData: ByteBuffer? = null
+        private var pendingTimeMillis: Long = 0
+        private var pendingFrameId = 0
+        private var pendingFrameData: ByteBuffer? = null
 
         /**
          * Releases the underlying receiver.  This is only safe to do after the associated thread
@@ -981,18 +982,18 @@ private constructor() {
          */
         @SuppressLint("Assert")
         internal fun release() {
-            assert(mProcessingThread?.state == State.TERMINATED)
-            mDetector!!.release()
-            mDetector = null
+            assert(processingThread?.state == State.TERMINATED)
+            detector!!.release()
+            detector = null
         }
 
         /**
          * Marks the runnable as active/not active.  Signals any blocked threads to continue.
          */
         internal fun setActive(active: Boolean) {
-            synchronized(mLock) {
-                mActive = active
-                mLock.notifyAll()
+            synchronized(lock) {
+                this.active = active
+                lock.notifyAll()
             }
         }
 
@@ -1001,29 +1002,30 @@ private constructor() {
          * (if present) back to the camera, and keeps a pending reference to the frame data for
          * future use.
          */
+        @SuppressLint("BinaryOperationInTimber")
         internal fun setNextFrame(data: ByteArray, camera: Camera) {
-            synchronized(mLock) {
-                if (mPendingFrameData != null) {
-                    camera.addCallbackBuffer(mPendingFrameData!!.array())
-                    mPendingFrameData = null
+            synchronized(lock) {
+                if (pendingFrameData != null) {
+                    camera.addCallbackBuffer(pendingFrameData!!.array())
+                    pendingFrameData = null
                 }
 
-                if (!mBytesToByteBuffer.containsKey(data)) {
-                    Log.d(
-                        TAG,
-                        "Skipping frame.  Could not find ByteBuffer associated with the image " + "data from the camera."
+                if (!bytesToByteBuffer.containsKey(data)) {
+                    Timber.d(
+                        "Skipping frame. Could not find ByteBuffer associated " +
+                            "with the image data from the camera."
                     )
                     return
                 }
 
                 // Timestamp and frame ID are maintained here, which will give downstream code some
                 // idea of the timing of frames received and when frames were dropped along the way.
-                mPendingTimeMillis = SystemClock.elapsedRealtime() - mStartTimeMillis
-                mPendingFrameId++
-                mPendingFrameData = mBytesToByteBuffer[data]
+                pendingTimeMillis = SystemClock.elapsedRealtime() - startTimeMillis
+                pendingFrameId++
+                pendingFrameData = bytesToByteBuffer[data]
 
                 // Notify the processor thread if it is waiting on the next frame (see below).
-                mLock.notifyAll()
+                lock.notifyAll()
             }
         }
 
@@ -1048,19 +1050,19 @@ private constructor() {
             var data: ByteBuffer? = null
 
             while (true) {
-                synchronized(mLock) {
-                    while (mActive && mPendingFrameData == null) {
+                synchronized(lock) {
+                    while (active && pendingFrameData == null) {
                         try {
                             // Wait for the next frame to be received from the camera, since we
                             // don't have it yet.
-                            mLock.wait()
+                            lock.wait()
                         } catch (e: InterruptedException) {
-                            Log.d(TAG, "Frame processing loop terminated.", e)
+                            Timber.e(e, "Frame processing loop terminated.")
                             return
                         }
                     }
 
-                    if (!mActive) {
+                    if (!active) {
                         // Exit the loop once this camera source is stopped or released.  We check
                         // this here, immediately after the wait() above, to handle the case where
                         // setActive(false) had been called, triggering the termination of this
@@ -1070,31 +1072,30 @@ private constructor() {
 
                     outputFrame = Frame.Builder()
                         .setImageData(
-                            mPendingFrameData!!, previewSize!!.width,
+                            pendingFrameData!!, previewSize!!.width,
                             previewSize!!.height, ImageFormat.NV21
                         )
-                        .setId(mPendingFrameId)
-                        .setTimestampMillis(mPendingTimeMillis)
-                        .setRotation(mRotation)
+                        .setId(pendingFrameId)
+                        .setTimestampMillis(pendingTimeMillis)
+                        .setRotation(rotation)
                         .build()
 
                     // Hold onto the frame data locally, so that we can use this for detection
-                    // below.  We need to clear mPendingFrameData to ensure that this buffer isn't
+                    // below.  We need to clear pendingFrameData to ensure that this buffer isn't
                     // recycled back to the camera before we are done using that data.
-                    data = mPendingFrameData!!
-                    mPendingFrameData = null
+                    data = pendingFrameData!!
+                    pendingFrameData = null
                 }
 
                 // The code below needs to run outside of synchronization, because this will allow
                 // the camera to add pending frame(s) while we are running detection on the current
                 // frame.
-
                 try {
-                    mDetector!!.receiveFrame(outputFrame)
+                    detector!!.receiveFrame(outputFrame)
                 } catch (t: Throwable) {
-                    Log.e(TAG, "Exception thrown from receiver.", t)
+                    Timber.e(t, "Exception thrown from receiver.")
                 } finally {
-                    mCamera!!.addCallbackBuffer(data?.array())
+                    camera!!.addCallbackBuffer(data?.array())
                 }
             }
         }
@@ -1106,23 +1107,21 @@ private constructor() {
         @SuppressLint("InlinedApi")
         val CAMERA_FACING_FRONT = CameraInfo.CAMERA_FACING_FRONT
 
-        private const val TAG = "OpenCameraSource"
-
         /**
          * The dummy surface texture must be assigned a chosen name.  Since we never use an OpenGL
          * context, we can choose any ID we want here.
          */
-        private val DUMMY_TEXTURE_NAME = 100
+        private const val DUMMY_TEXTURE_NAME = 100
 
         /**
          * If the absolute difference between a preview size aspect ratio and a picture size aspect
          * ratio is less than this tolerance, they are considered to be the same aspect ratio.
          */
-        private val ASPECT_RATIO_TOLERANCE = 0.01f
+        private const val ASPECT_RATIO_TOLERANCE = 0.01f
 
         /**
-         * Gets the id for the camera specified by the direction it is facing.  Returns -1 if no such
-         * camera was found.
+         * Gets the id for the camera specified by the direction it is facing.  Returns -1 if
+         * no such camera was found.
          *
          * @param facing the desired camera (front-facing or rear-facing)
          */
@@ -1142,9 +1141,9 @@ private constructor() {
          *
          *
          * Even though we may only need the preview size, it's necessary to find both the preview
-         * size and the picture size of the camera together, because these need to have the same aspect
-         * ratio.  On some hardware, if you would only set the preview size, you will get a distorted
-         * image.
+         * size and the picture size of the camera together, because these need to have the same
+         * aspect ratio. On some hardware, if you would only set the preview size, you will get a
+         * distorted image.
          *
          * @param camera        the camera to select a preview size from
          * @param desiredWidth  the desired width of the camera preview frames
@@ -1158,10 +1157,10 @@ private constructor() {
         ): SizePair? {
             val validPreviewSizes = generateValidPreviewSizeList(camera)
 
-            // The method for selecting the best size is to minimize the sum of the differences between
-            // the desired values and the actual values for width and height.  This is certainly not the
-            // only way to select the best size, but it provides a decent tradeoff between using the
-            // closest aspect ratio vs. using the closest pixel area.
+            // The method for selecting the best size is to minimize the sum of the differences
+            // between the desired values and the actual values for width and height.  This is
+            // certainly not the only way to select the best size, but it provides a decent trade
+            // off between using the closest aspect ratio vs. using the closest pixel area.
             var selectedPair: SizePair? = null
             var minDiff = Integer.MAX_VALUE
             for (sizePair in validPreviewSizes) {
@@ -1178,14 +1177,15 @@ private constructor() {
         }
 
         /**
-         * Generates a list of acceptable preview sizes.  Preview sizes are not acceptable if there is
-         * not a corresponding picture size of the same aspect ratio.  If there is a corresponding
-         * picture size of the same aspect ratio, the picture size is paired up with the preview size.
+         * Generates a list of acceptable preview sizes. Preview sizes are not acceptable if there
+         * is not a corresponding picture size of the same aspect ratio.  If there is a
+         * corresponding picture size of the same aspect ratio, the picture size is paired up with
+         * the preview size.
          *
          *
-         * This is necessary because even if we don't use still pictures, the still picture size must be
-         * set to a size that is the same aspect ratio as the preview size we choose.  Otherwise, the
-         * preview images may be distorted on some devices.
+         * This is necessary because even if we don't use still pictures, the still picture size
+         * must be set to a size that is the same aspect ratio as the preview size we choose.
+         * Otherwise, the preview images may be distorted on some devices.
          */
         private fun generateValidPreviewSizeList(camera: Camera): List<SizePair> {
             val parameters = camera.parameters
@@ -1193,7 +1193,8 @@ private constructor() {
             val supportedPictureSizes = parameters.supportedPictureSizes
             val validPreviewSizes = ArrayList<SizePair>()
             for (previewSize in supportedPreviewSizes) {
-                val previewAspectRatio = previewSize.width.toFloat() / previewSize.height.toFloat()
+                val previewAspectRatio =
+                    previewSize.width.toFloat() / previewSize.height.toFloat()
 
                 // By looping through the picture sizes in order, we favor the higher resolutions.
                 // We choose the highest resolution in order to support taking the full resolution
@@ -1201,18 +1202,23 @@ private constructor() {
                 for (pictureSize in supportedPictureSizes) {
                     val pictureAspectRatio =
                         pictureSize.width.toFloat() / pictureSize.height.toFloat()
-                    if (Math.abs(previewAspectRatio - pictureAspectRatio) < ASPECT_RATIO_TOLERANCE) {
+
+                    val absoluteValue = Math.abs(previewAspectRatio - pictureAspectRatio)
+
+                    if (absoluteValue < ASPECT_RATIO_TOLERANCE) {
                         validPreviewSizes.add(SizePair(previewSize, pictureSize))
                         break
                     }
                 }
             }
 
-            // If there are no picture sizes with the same aspect ratio as any preview sizes, allow all
-            // of the preview sizes and hope that the camera can handle it.  Probably unlikely, but we
-            // still account for it.
+            // If there are no picture sizes with the same aspect ratio as any preview sizes, allow
+            // all of the preview sizes and hope that the camera can handle it.  Probably unlikely,
+            // but we still account for it.
             if (validPreviewSizes.size == 0) {
-                Log.w(TAG, "No preview sizes have a corresponding same-aspect-ratio picture size")
+                Timber.w(
+                    "No preview sizes have a corresponding same-aspect-ratio picture size"
+                )
                 for (previewSize in supportedPreviewSizes) {
                     // The null picture size will let us know that we shouldn't set a picture size.
                     validPreviewSizes.add(SizePair(previewSize, null))

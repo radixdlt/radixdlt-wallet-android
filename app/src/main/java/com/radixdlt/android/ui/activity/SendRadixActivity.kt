@@ -216,7 +216,7 @@ class SendRadixActivity : BaseActivity() {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     val barcode: Barcode =
-                        data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject)
+                        data.getParcelableExtra(BarcodeCaptureActivity.BARCODE_OBJECT)
                     inputAddressTIET.setText(barcode.displayValue.trim())
                     Timber.d("Barcode read: ${barcode.displayValue.trim()}")
                 } else {
