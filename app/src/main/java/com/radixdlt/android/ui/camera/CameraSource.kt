@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.radixdlt.android.ui.camera
 
 import android.Manifest
@@ -329,7 +331,7 @@ private constructor() {
      *
      * @throws IOException if the camera's preview texture or display could not be initialized
      */
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "ObsoleteSdkInt")
     @RequiresPermission(Manifest.permission.CAMERA)
     @Throws(IOException::class)
     fun start(): CameraSource {
@@ -404,6 +406,7 @@ private constructor() {
      * Call [.release] instead to completely shut down this camera source and release the
      * resources of the underlying detector.
      */
+    @SuppressLint("ObsoleteSdkInt")
     fun stop() {
         synchronized(cameraLock) {
             frameProcessor!!.setActive(false)
@@ -448,6 +451,7 @@ private constructor() {
         }
     }
 
+    @Suppress("unused")
     fun doZoom(scale: Float): Int {
         synchronized(cameraLock) {
             if (camera == null) {
@@ -464,10 +468,10 @@ private constructor() {
 
             currentZoom = parameters.zoom + 1
             val newZoom: Float
-            if (scale > 1) {
-                newZoom = currentZoom + scale * (maxZoom / 10)
+            newZoom = if (scale > 1) {
+                currentZoom + scale * (maxZoom / 10)
             } else {
-                newZoom = currentZoom * scale
+                currentZoom * scale
             }
             currentZoom = Math.round(newZoom) - 1
             if (currentZoom < 0) {
@@ -490,6 +494,7 @@ private constructor() {
      * @param shutter the callback for image capture moment, or null
      * @param jpeg    the callback for JPEG image data, or null
      */
+    @Suppress("unused")
     fun takePicture(shutter: ShutterCallback, jpeg: PictureCallback) {
         synchronized(cameraLock) {
             if (camera != null) {
@@ -522,6 +527,7 @@ private constructor() {
      *
      * @see Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
      */
+    @Suppress("unused")
     @FocusMode
     fun getFocusMode(): String? {
         return focusMode
@@ -534,6 +540,7 @@ private constructor() {
      * @return `true` if the focus mode is set, `false` otherwise
      * @see .getFocusMode
      */
+    @Suppress("unused")
     fun setFocusMode(@FocusMode mode: String?): Boolean {
         synchronized(cameraLock) {
             if (camera != null && mode != null) {
@@ -565,6 +572,7 @@ private constructor() {
      *
      * @see Camera.Parameters.FLASH_MODE_TORCH
      */
+    @Suppress("unused")
     @FlashMode
     fun getFlashMode(): String? {
         return flashMode
@@ -577,6 +585,7 @@ private constructor() {
      * @return `true` if the flash mode is set, `false` otherwise
      * @see .getFlashMode
      */
+    @Suppress("unused")
     fun setFlashMode(@FlashMode mode: String?): Boolean {
         synchronized(cameraLock) {
             if (camera != null && mode != null) {
@@ -617,6 +626,7 @@ private constructor() {
      * @param cb the callback to run
      * @see .cancelAutoFocus
      */
+    @Suppress("unused")
     fun autoFocus(cb: AutoFocusCallback?) {
         synchronized(cameraLock) {
             if (camera != null) {
@@ -638,6 +648,7 @@ private constructor() {
      *
      * @see .autoFocus
      */
+    @Suppress("unused")
     fun cancelAutoFocus() {
         synchronized(cameraLock) {
             if (camera != null) {
@@ -652,7 +663,9 @@ private constructor() {
      * @param cb the callback to run
      * @return `true` if the operation is supported (i.e. from Jelly Bean), `false` otherwise
      */
+    @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Suppress("unused")
     fun setAutoFocusMoveCallback(cb: AutoFocusMoveCallback?): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             return false
