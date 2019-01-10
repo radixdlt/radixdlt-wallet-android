@@ -70,9 +70,9 @@ import java.util.HashMap
  *
  */
 class CameraSource
-//==============================================================================================
+// =================================================================================================
 // Private
-//==============================================================================================
+// =================================================================================================
 
 /**
  * Only allow creation via the builder class.
@@ -156,9 +156,9 @@ private constructor() {
     @Retention(AnnotationRetention.SOURCE)
     private annotation class FlashMode
 
-    //==============================================================================================
+    // =============================================================================================
     // Builder
-    //==============================================================================================
+    // =============================================================================================
 
     /**
      * Builder for configuring and creating an associated camera source.
@@ -245,9 +245,9 @@ private constructor() {
         }
     }
 
-    //==============================================================================================
+    // =============================================================================================
     // Bridge Functionality for the Camera1 API
-    //==============================================================================================
+    // =============================================================================================
 
     /**
      * Callback interface used to signal the moment of actual image capture.
@@ -311,9 +311,9 @@ private constructor() {
         fun onAutoFocusMoving(start: Boolean)
     }
 
-    //==============================================================================================
+    // =============================================================================================
     // Public
-    //==============================================================================================
+    // =============================================================================================
 
     /**
      * Stops the camera and releases the resources of the camera and underlying detector.
@@ -492,7 +492,7 @@ private constructor() {
      * done.
      *
      * @param shutter the callback for image capture moment, or null
-     * @param jpeg    the callback for JPEG image data, or null
+     * @param jpeg the callback for JPEG image data, or null
      */
     @Suppress("unused")
     fun takePicture(shutter: ShutterCallback, jpeg: PictureCallback) {
@@ -851,7 +851,7 @@ private constructor() {
      * Selects the most suitable preview frames per second range, given the desired frames per
      * second.
      *
-     * @param camera            the camera to select a frames per second range from
+     * @param camera the camera to select a frames per second range from
      * @param desiredPreviewFps the desired frames per second for the camera preview frames
      * @return the selected preview frames per second range
      */
@@ -884,10 +884,10 @@ private constructor() {
 
     /**
      * Calculates the correct rotation for the given camera id and sets the rotation in the
-     * parameters.  It also sets the camera's display orientation and rotation.
+     * parameters. It also sets the camera's display orientation and rotation.
      *
      * @param parameters the camera parameters for which to set the rotation
-     * @param cameraId   the camera id to set rotation based on
+     * @param cameraId the camera id to set rotation based on
      */
     private fun setRotation(camera: Camera, parameters: Camera.Parameters, cameraId: Int) {
         val windowManager =
@@ -910,7 +910,7 @@ private constructor() {
         if (cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT) {
             angle = (cameraInfo.orientation + degrees) % 360
             displayAngle = (360 - angle) % 360 // compensate for it being mirrored
-        } else {  // back-facing
+        } else { // back-facing
             angle = (cameraInfo.orientation - degrees + 360) % 360
             displayAngle = angle
         }
@@ -951,9 +951,9 @@ private constructor() {
         return byteArray
     }
 
-    //==============================================================================================
+    // =============================================================================================
     // Frame processing
-    //==============================================================================================
+    // =============================================================================================
 
     /**
      * Called when the camera has a new preview frame.
@@ -1049,11 +1049,9 @@ private constructor() {
          * run detection on that frame.  It immediately loops back for the next frame without
          * pausing.
          *
-         *
          * If detection takes longer than the time in between new frames from the camera, this will
          * mean that this loop will run without ever waiting on a frame, avoiding any context
          * switching or frame acquisition time latency.
-         *
          *
          * If you find that this is using more CPU than you'd like, you should probably decrease the
          * FPS setting above to allow for some idle time in between frames.
@@ -1158,8 +1156,8 @@ private constructor() {
          * aspect ratio. On some hardware, if you would only set the preview size, you will get a
          * distorted image.
          *
-         * @param camera        the camera to select a preview size from
-         * @param desiredWidth  the desired width of the camera preview frames
+         * @param camera the camera to select a preview size from
+         * @param desiredWidth the desired width of the camera preview frames
          * @param desiredHeight the desired height of the camera preview frames
          * @return the selected preview and picture size pair
          */
@@ -1229,9 +1227,7 @@ private constructor() {
             // all of the preview sizes and hope that the camera can handle it.  Probably unlikely,
             // but we still account for it.
             if (validPreviewSizes.size == 0) {
-                Timber.w(
-                    "No preview sizes have a corresponding same-aspect-ratio picture size"
-                )
+                Timber.w("No preview sizes have a corresponding same-aspect-ratio picture size")
                 for (previewSize in supportedPreviewSizes) {
                     // The null picture size will let us know that we shouldn't set a picture size.
                     validPreviewSizes.add(SizePair(previewSize, null))

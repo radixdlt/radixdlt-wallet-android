@@ -144,8 +144,8 @@ class CenterIconButton : AppCompatButton {
         val paddingSize: Int
 
         paddingSize = if (leftDrawable != null && rightDrawable != null) {
-            (width - leftDrawable.intrinsicWidth
-                - rightDrawable.intrinsicWidth - textWidth - iconPadding * 4) / 2
+            (width - leftDrawable.intrinsicWidth -
+                rightDrawable.intrinsicWidth - textWidth - iconPadding * 4) / 2
         } else if (leftDrawable != null) {
             (width - leftDrawable.intrinsicWidth - iconPadding * 2 - textWidth) / 2
         } else {

@@ -266,7 +266,8 @@ class BarcodeCaptureActivity : BaseActivity() {
      * @see .requestPermissions
      */
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>,
+        requestCode: Int,
+        permissions: Array<String>,
         grantResults: IntArray
     ) {
         if (requestCode != RC_HANDLE_CAMERA_PERM) {
