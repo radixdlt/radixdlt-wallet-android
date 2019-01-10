@@ -49,30 +49,30 @@ import java.util.Vector
  */
 class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: AttributeSet) :
     View(context, attrs) {
-    private val mLock = Any()
-    private var mPreviewWidth: Int = 0
+    private val lock = Any()
+    private var previewWidth: Int = 0
     /**
      * Returns the horizontal scale factor.
      */
     var widthScaleFactor = 1.0f
         private set
-    private var mPreviewHeight: Int = 0
+    private var previewHeight: Int = 0
     /**
      * Returns the vertical scale factor.
      */
     var heightScaleFactor = 1.0f
         private set
-    private var mFacing = CameraSource.CAMERA_FACING_BACK
-    private val mGraphics = HashSet<T>()
+    private var facing = CameraSource.CAMERA_FACING_BACK
+    private val graphics = HashSet<T>()
 
     /**
      * Returns a copy (as a list) of the set of all active graphics.
      * @return list of all active graphics.
      */
     @Suppress("unused")
-    val graphics: List<T>
-        get() = synchronized(mLock) {
-            return Vector(mGraphics)
+    val vectorGraphics: List<T>
+        get() = synchronized(lock) {
+            return Vector(graphics)
         }
 
     /**
@@ -80,7 +80,7 @@ class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: Attrib
      * this and implement the [Graphic.draw] method to define the
      * graphics element.  Add instances to the overlay using [GraphicOverlay.add].
      */
-    abstract class Graphic(private val mOverlay: GraphicOverlay<*>) {
+    abstract class Graphic(private val overlay: GraphicOverlay<*>) {
 
         /**
          * Draw the graphic on the supplied canvas.  Drawing should use the following methods to
@@ -101,14 +101,14 @@ class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: Attrib
          * scale.
          */
         fun scaleX(horizontal: Float): Float {
-            return horizontal * mOverlay.widthScaleFactor
+            return horizontal * overlay.widthScaleFactor
         }
 
         /**
          * Adjusts a vertical value of the supplied value from the preview scale to the view scale.
          */
         fun scaleY(vertical: Float): Float {
-            return vertical * mOverlay.heightScaleFactor
+            return vertical * overlay.heightScaleFactor
         }
 
         /**
@@ -116,8 +116,8 @@ class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: Attrib
          * system.
          */
         fun translateX(x: Float): Float {
-            return if (mOverlay.mFacing == CameraSource.CAMERA_FACING_FRONT) {
-                mOverlay.width - scaleX(x)
+            return if (overlay.facing == CameraSource.CAMERA_FACING_FRONT) {
+                overlay.width - scaleX(x)
             } else {
                 scaleX(x)
             }
@@ -132,7 +132,7 @@ class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: Attrib
         }
 
         fun postInvalidate() {
-            mOverlay.postInvalidate()
+            overlay.postInvalidate()
         }
     }
 
@@ -140,8 +140,8 @@ class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: Attrib
      * Removes all graphics from the overlay.
      */
     fun clear() {
-        synchronized(mLock) {
-            mGraphics.clear()
+        synchronized(lock) {
+            graphics.clear()
         }
         postInvalidate()
     }
@@ -150,8 +150,8 @@ class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: Attrib
      * Adds a graphic to the overlay.
      */
     fun add(graphic: T) {
-        synchronized(mLock) {
-            mGraphics.add(graphic)
+        synchronized(lock) {
+            graphics.add(graphic)
         }
         postInvalidate()
     }
@@ -160,8 +160,8 @@ class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: Attrib
      * Removes a graphic from the overlay.
      */
     fun remove(graphic: T) {
-        synchronized(mLock) {
-            mGraphics.remove(graphic)
+        synchronized(lock) {
+            graphics.remove(graphic)
         }
         postInvalidate()
     }
@@ -171,10 +171,10 @@ class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: Attrib
      * image coordinates later.
      */
     fun setCameraInfo(previewWidth: Int, previewHeight: Int, facing: Int) {
-        synchronized(mLock) {
-            mPreviewWidth = previewWidth
-            mPreviewHeight = previewHeight
-            mFacing = facing
+        synchronized(lock) {
+            this.previewWidth = previewWidth
+            this.previewHeight = previewHeight
+            this.facing = facing
         }
         postInvalidate()
     }
@@ -186,13 +186,13 @@ class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: Attrib
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        synchronized(mLock) {
-            if (mPreviewWidth != 0 && mPreviewHeight != 0) {
-                widthScaleFactor = canvas.width.toFloat() / mPreviewWidth.toFloat()
-                heightScaleFactor = canvas.height.toFloat() / mPreviewHeight.toFloat()
+        synchronized(lock) {
+            if (previewWidth != 0 && previewHeight != 0) {
+                widthScaleFactor = canvas.width.toFloat() / previewWidth.toFloat()
+                heightScaleFactor = canvas.height.toFloat() / previewHeight.toFloat()
             }
 
-            for (graphic in mGraphics) {
+            for (graphic in graphics) {
                 graphic.draw(canvas)
             }
         }
