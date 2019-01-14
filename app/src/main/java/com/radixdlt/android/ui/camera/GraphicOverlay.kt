@@ -1,6 +1,8 @@
 /*
  * Copyright (C) The Android Open Source Project
  *
+ * Modifications copyright (C) 2019 Radix DLT
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
