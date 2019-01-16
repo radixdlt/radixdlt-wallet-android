@@ -118,7 +118,7 @@ class MainActivity : BaseActivity() {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     val barcode: Barcode = data.getParcelableExtra(
-                            BarcodeCaptureActivity.BarcodeObject
+                            BarcodeCaptureActivity.BARCODE_OBJECT
                     )
                     if (isRadixAddress(barcode.displayValue)) {
                         ConversationActivity.newIntent(this, barcode.displayValue)
