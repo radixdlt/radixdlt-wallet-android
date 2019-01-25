@@ -3,10 +3,13 @@ package com.radixdlt.android.ui.fragment
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -14,12 +17,15 @@ import com.radixdlt.android.BuildConfig
 import com.radixdlt.android.R
 import com.radixdlt.android.data.model.message.MessagesDao
 import com.radixdlt.android.data.model.transaction.TransactionsDao
+import com.radixdlt.android.helper.CustomTabsHelper
+import com.radixdlt.android.helper.WebviewFallback
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.android.ui.activity.BaseActivity
 import com.radixdlt.android.ui.activity.NewWalletActivity
 import com.radixdlt.android.ui.dialog.AutoLockTimeOutDialog
 import com.radixdlt.android.ui.dialog.DeleteWalletDialog
 import com.radixdlt.android.util.QueryPreferences
+import com.radixdlt.android.util.URL_REPORT_ISSUE
 import com.radixdlt.android.util.Vault
 import com.radixdlt.android.util.multiClickingPrevention
 import dagger.android.support.AndroidSupportInjection
@@ -27,7 +33,6 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_more_options.*
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -41,6 +46,8 @@ class MoreOptionsFragment : Fragment() {
     lateinit var messagesDao: MessagesDao
 
     lateinit var ctx: Context
+
+    private lateinit var customTabsIntent: CustomTabsIntent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -64,6 +71,7 @@ class MoreOptionsFragment : Fragment() {
         val isPasswordEnabled = initialisePasswordSwitch()
         passwordEnabledUI(isPasswordEnabled)
         autoLockTimeOutTimeTextView.text = displayAutoLockTime()
+        createCustomTabsBuilder()
         setClickListeners()
     }
 
@@ -82,6 +90,15 @@ class MoreOptionsFragment : Fragment() {
         setExportWalletClickListener()
         setAutoLockTimeOutClickListener()
         setReportAnIssueClickListener()
+    }
+
+    private fun createCustomTabsBuilder() {
+        customTabsIntent = CustomTabsIntent.Builder()
+            .setToolbarColor(ContextCompat.getColor(activity!!, R.color.colorPrimary))
+            .setShowTitle(true)
+            .enableUrlBarHiding()
+            .setCloseButtonIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_arrow_back))
+            .build()
     }
 
     private fun setAutoLockTimeOutClickListener() {
@@ -130,7 +147,37 @@ class MoreOptionsFragment : Fragment() {
 
     private fun setReportAnIssueClickListener() {
         reportAnIssueTextView.setOnClickListener {
-            activity?.toast("Report an issue!")
+            BaseActivity.openedCustomTabs = true
+            openCustomTab(
+                activity!!, customTabsIntent, Uri.parse(URL_REPORT_ISSUE),
+                WebviewFallback()
+            )
+        }
+    }
+
+    /**
+     * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
+     *
+     * @param activity The host activity.
+     * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
+     * @param uri the Uri to be opened.
+     * @param fallback a CustomTabFallback to be used if Custom Tabs is not available.
+     */
+    private fun openCustomTab(
+        activity: Activity,
+        customTabsIntent: CustomTabsIntent,
+        uri: Uri,
+        fallback: CustomTabsHelper.CustomTabFallback?
+    ) {
+        val packageName = CustomTabsHelper.getPackageNameToUse(activity)
+
+        // If we cant find a package name, it means theres no browser that supports
+        // Chrome Custom Tabs installed. So, we fallback to the webview
+        if (packageName == null) {
+            fallback?.openUri(activity, uri)
+        } else {
+            customTabsIntent.intent.setPackage(packageName)
+            customTabsIntent.launchUrl(activity, uri)
         }
     }
 
@@ -201,6 +248,7 @@ class MoreOptionsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         BaseActivity.openedShareDialog = false
+        BaseActivity.openedCustomTabs = false
     }
 
     companion object {
