@@ -27,6 +27,7 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_more_options.*
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -80,6 +81,7 @@ class MoreOptionsFragment : Fragment() {
         setDeleteWalletClickListener()
         setExportWalletClickListener()
         setAutoLockTimeOutClickListener()
+        setReportAnIssueClickListener()
     }
 
     private fun setAutoLockTimeOutClickListener() {
@@ -123,6 +125,12 @@ class MoreOptionsFragment : Fragment() {
                 this@MoreOptionsFragment, REQUEST_CODE_DELETE_WALLET
             )
             deleteWalletDialog.show(fragmentManager, "DELETE_WALLET_DIALOG")
+        }
+    }
+
+    private fun setReportAnIssueClickListener() {
+        reportAnIssueTextView.setOnClickListener {
+            activity?.toast("Report an issue!")
         }
     }
 
