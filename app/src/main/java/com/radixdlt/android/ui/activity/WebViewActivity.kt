@@ -3,11 +3,13 @@ package com.radixdlt.android.ui.activity
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
+import android.webkit.CookieManager
 import android.webkit.WebViewClient
 import androidx.appcompat.widget.Toolbar
 import com.radixdlt.android.R
 import kotlinx.android.synthetic.main.activity_webview.*
 import kotlinx.android.synthetic.main.barcode_capture.*
+import timber.log.Timber
 
 /**
  * This Activity is used as a fallback when there is no browser installed that supports
@@ -41,11 +43,26 @@ class WebViewActivity : BaseActivity() {
         when (item.itemId) {
             // Respond to the action bar's Up/Home button
             android.R.id.home -> {
+                clearWebViewHistory()
                 finish()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun clearWebViewHistory() {
+        webview.clearCache(true)
+        webview.clearHistory()
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.removeAllCookies { b ->
+            Timber.d("Cookies removed $b")
+        }
+    }
+
+    override fun onBackPressed() {
+        clearWebViewHistory()
+        super.onBackPressed()
     }
 
     companion object {
