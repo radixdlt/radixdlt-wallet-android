@@ -20,7 +20,6 @@ import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.TimeUnit
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -37,7 +36,8 @@ class MoreOptionsFragmentTest {
      * Rules are interceptors which are executed for each test method and are important building
      * blocks of Junit tests.
      */
-    @get:Rule var newWalletActivityTestRule: ActivityTestRule<NewWalletActivity> =
+    @get:Rule
+    var newWalletActivityTestRule: ActivityTestRule<NewWalletActivity> =
         ActivityTestRule(NewWalletActivity::class.java)
 
     // Clear all app's SharedPreferences
@@ -45,7 +45,8 @@ class MoreOptionsFragmentTest {
     var clearPreferencesRule = ClearPreferencesRule()
 
     // Delete all tables from all the app's SQLite Databases
-    @get:Rule var clearDatabaseRule = ClearDatabaseRule()
+    @get:Rule
+    var clearDatabaseRule = ClearDatabaseRule()
 
     // Delete all files in getFilesDir() and getCacheDir()
     @get:Rule
@@ -62,8 +63,6 @@ class MoreOptionsFragmentTest {
         assertDisplayed(R.string.more_options_fragment_xml_report_an_issue)
 
         clickOn(R.id.reportAnIssueTextView)
-
-        Thread.sleep(TimeUnit.SECONDS.toMillis(6))
 
         intended(toPackage("com.android.chrome"))
 

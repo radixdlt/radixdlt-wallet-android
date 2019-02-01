@@ -34,17 +34,21 @@ class CreateNewWalletTest {
      * Rules are interceptors which are executed for each test method and are important building
      * blocks of Junit tests.
      */
-    @get:Rule var newWalletActivityTestRule: ActivityTestRule<NewWalletActivity> =
+    @get:Rule
+    var newWalletActivityTestRule: ActivityTestRule<NewWalletActivity> =
         ActivityTestRule(NewWalletActivity::class.java)
 
     // Clear all app's SharedPreferences
-    @get:Rule var clearPreferencesRule = ClearPreferencesRule()
+    @get:Rule
+    var clearPreferencesRule = ClearPreferencesRule()
 
     // Delete all tables from all the app's SQLite Databases
-    @get:Rule var clearDatabaseRule = ClearDatabaseRule()
+    @get:Rule
+    var clearDatabaseRule = ClearDatabaseRule()
 
     // Delete all files in getFilesDir() and getCacheDir()
-    @get:Rule var clearFilesRule = ClearFilesRule()
+    @get:Rule
+    var clearFilesRule = ClearFilesRule()
 
     @Test
     fun testCreatingNewWallet() {
