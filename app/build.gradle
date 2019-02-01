@@ -18,8 +18,17 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode versionCodeNumber
         versionName "${versionMajor}.${versionMinor}.${String.format("%02d", versionPatch)}"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
+
+        // The following argument makes the Android Test Orchestrator run its
+        // "pm clear" command after each test invocation. This command ensures
+        // that the app's state is completely cleared between tests.
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+    }
+
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     buildTypes {
@@ -89,6 +98,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:$androidx_version"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.browser:browser:1.0.0'
     implementation 'com.google.firebase:firebase-core:16.0.5'
     implementation "android.arch.persistence.room:runtime:1.1.1"
     implementation "android.arch.persistence.room:rxjava2:1.1.1"
@@ -136,8 +146,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation "com.nhaarman:mockito-kotlin:1.5.0"
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.1.0'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation('com.schibsted.spain:barista:2.7.0') {
+        exclude group: 'com.android.support'
+        exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
+    }
+    androidTestUtil 'androidx.test:orchestrator:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.1'
 
     // Testing support
     androidTestImplementation "android.arch.core:core-testing:1.1.1"

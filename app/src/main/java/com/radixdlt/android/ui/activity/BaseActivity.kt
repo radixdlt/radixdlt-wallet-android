@@ -57,7 +57,8 @@ open class BaseActivity : AppCompatActivity() {
         if (QueryPreferences.getPrefAddress(this).isBlank()) return
 
         if ((RadixWalletApplication.wasInBackground && !openedShareDialog &&
-                !openedPermissionDialog && QueryPreferences.getPrefPasswordEnabled(this)) ||
+                !openedCustomTabs && !openedPermissionDialog &&
+                QueryPreferences.getPrefPasswordEnabled(this)) ||
             lockActive) {
             QueryPreferences.setPrefAddress(this, "")
             lockActive = true
@@ -83,6 +84,7 @@ open class BaseActivity : AppCompatActivity() {
     companion object {
         internal var lockActive: Boolean = false
         internal var openedShareDialog = false
+        internal var openedCustomTabs = false
         @JvmField
         internal var openedPermissionDialog = false
     }
