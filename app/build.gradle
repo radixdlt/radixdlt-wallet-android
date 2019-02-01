@@ -18,9 +18,18 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode versionCodeNumber
         versionName "${versionMajor}.${versionMinor}.${String.format("%02d", versionPatch)}"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
+
+        // The following argument makes the Android Test Orchestrator run its
+        // "pm clear" command after each test invocation. This command ensures
+        // that the app's state is completely cleared between tests.
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+    }
+
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     buildTypes {
@@ -171,6 +180,15 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // Tests
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation('com.schibsted.spain:barista:2.7.0') {
+        exclude group: 'com.android.support'
+        exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
+    }
+    androidTestUtil 'androidx.test:orchestrator:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.1'
 
     // Testing support
     androidTestImplementation "android.arch.core:core-testing:1.1.1"
