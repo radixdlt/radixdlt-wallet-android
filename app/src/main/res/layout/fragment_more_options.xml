@@ -176,6 +176,49 @@
       </androidx.cardview.widget.CardView>
 
       <TextView
+          android:id="@+id/networkTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="16dp"
+          android:layout_marginStart="19dp"
+          android:layout_marginTop="16dp"
+          android:text="@string/more_options_fragment_xml_network_title"
+          android:textAlignment="center"
+          android:textAllCaps="true"
+          android:textSize="15sp"
+          android:textStyle="bold"/>
+
+      <androidx.cardview.widget.CardView
+          android:id="@+id/edit_network_card_view"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="16dp"
+          android:layout_marginEnd="3dp"
+          android:layout_marginLeft="3dp"
+          android:layout_marginRight="3dp"
+          android:layout_marginStart="3dp"
+          android:layout_marginTop="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+          <androidx.appcompat.widget.AppCompatTextView
+              android:id="@+id/chooseNetworkTextView"
+              android:layout_width="match_parent"
+              android:layout_height="56dp"
+              android:background="?selectableItemBackground"
+              android:gravity="center_vertical"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:text="@string/more_options_fragment_xml_choose_network"
+              android:textColor="@color/materialGrey700"
+              android:textSize="15sp"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+
+      <TextView
           android:id="@+id/needHelpLabelTextView"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
