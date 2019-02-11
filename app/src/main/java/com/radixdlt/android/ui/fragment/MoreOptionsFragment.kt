@@ -269,7 +269,7 @@ class MoreOptionsFragment : Fragment() {
         Identity.clear()
 
         Completable.fromAction(::deleteTables)
-            .subscribeOn(Schedulers.single())
+            .subscribeOn(Schedulers.io())
             .subscribe()
     }
 
