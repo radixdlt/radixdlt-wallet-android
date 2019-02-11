@@ -249,10 +249,14 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
     }
 
     private fun resetData() {
+        Completable.fromAction { Vault.resetKey() }
+            .subscribeOn(Schedulers.computation())
+            .subscribe()
+
         val myKeyFile = File(filesDir, "keystore.key")
         myKeyFile.delete()
         QueryPreferences.setPrefAddress(this, "")
-        Vault.resetKey()
+
         QueryPreferences.setPrefAutoLockTimeOut(this, 2000)
         Identity.clear()
 

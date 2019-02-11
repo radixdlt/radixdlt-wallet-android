@@ -141,8 +141,17 @@
   <!-- FRAGMENT DIALOGS -->
   <!-- Delete Wallet Dialog -->
   <string name="delete_wallet_dialog_title">Delete Existing Wallet?</string>
-  <string name="delete_wallet_dialog_message">"Are you sure you want to delete the existing wallet?\n\nPlease make sure you have backed up the wallet first as this operation cannot be undone."</string>
+  <string name="delete_wallet_dialog_message">Are you sure you want to delete the existing wallet?\n\nPlease make sure you have backed up the wallet first as this operation cannot be undone.</string>
   <string name="delete_wallet_dialog_delete">Delete</string>
+
+  <!-- Warning Dialog -->
+  <string name="warning_dialog_title">Are you sure you want to change network?</string>
+  <string name="warning_dialog_message">Changing network will clear all data from current universe.</string>
+  <string name="warning_dialog_change">OK</string>
+
+  <!-- Choose Network -->
+  <string name="choose_network_dialog_title">Choose Network?</string>
+  <string name="choose_network_select">Select</string>
 
   <!-- New Conversation Dialog -->
   <string name="new_conversation_dialog_new">New</string>

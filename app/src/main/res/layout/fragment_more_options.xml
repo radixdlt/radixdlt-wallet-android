@@ -204,17 +204,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-          <androidx.appcompat.widget.AppCompatTextView
-              android:id="@+id/chooseNetworkTextView"
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:id="@+id/chooseNetworkLayout"
               android:layout_width="match_parent"
-              android:layout_height="56dp"
-              android:background="?selectableItemBackground"
-              android:gravity="center_vertical"
-              android:paddingLeft="16dp"
-              android:paddingRight="16dp"
-              android:text="@string/more_options_fragment_xml_choose_network"
-              android:textColor="@color/materialGrey700"
-              android:textSize="15sp"/>
+              android:layout_height="wrap_content"
+              android:background="?selectableItemBackground">
+
+            <TextView
+                android:id="@+id/chooseNetworkTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/more_options_fragment_xml_choose_network"
+                android:textColor="@color/materialGrey700"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/networkSelectedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="ALPHANET"/>
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
       </androidx.cardview.widget.CardView>
 
