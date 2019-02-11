@@ -28,6 +28,7 @@
   <string name="enter_password_activity_unlock_button">Unlock Wallet</string>
   <string name="enter_password_activity_creating_wallet_progress_dialog">Creating Wallet…</string>
   <string name="enter_password_activity_unlocking_wallet_progress_dialog">Unlocking Wallet…</string>
+  <string name="enter_password_activity_xml_universe">Connecting to universe&#160;</string>
   <!-- toasts -->
   <string name="toast_no_internet">No internet connection.</string>
   <string name="toast_passwords_dont_match_error">Passwords don\'t match</string>
