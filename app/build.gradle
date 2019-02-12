@@ -87,7 +87,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
 
     // Radix DLT client library
-    implementation 'com.radixdlt:radixdlt-kotlin:0.11.6'
+    implementation 'com.radixdlt:radixdlt-kotlin:0.11.7'
 
     def androidx_version = "1.0.0"
     implementation "androidx.legacy:legacy-support-v4:$androidx_version"
@@ -138,6 +138,7 @@ dependencies {
     // Jake Wharton
     implementation 'com.jakewharton.timber:timber:4.7.0'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.0.5'
+    implementation 'com.jakewharton:process-phoenix:2.0.0'
 
     // Vault
     implementation 'com.bottlerocketstudios:vault:1.4.2'

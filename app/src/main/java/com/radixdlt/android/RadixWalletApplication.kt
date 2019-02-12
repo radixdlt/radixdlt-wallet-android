@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.radixdlt.android.di.component.DaggerRadixWalletComponent
 import com.radixdlt.android.di.component.RadixWalletComponent
+import com.radixdlt.android.util.ALPHANET
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.Vault
 import com.radixdlt.client.core.Bootstrap
@@ -46,7 +47,12 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
         generateEncryptionKey()
 
         AndroidThreeTen.init(this)
-        RadixUniverse.bootstrap(Bootstrap.ALPHANET)
+
+        if (QueryPreferences.getPrefNetwork(this) == ALPHANET) {
+            RadixUniverse.bootstrap(Bootstrap.ALPHANET)
+        } else {
+            RadixUniverse.bootstrap(Bootstrap.ALPHANET2)
+        }
 
         densityPixel = dip(250)
     }
@@ -79,20 +85,15 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
             }
         }
 
-        activityTransitionTimer!!.schedule(
+        activityTransitionTimer?.schedule(
             activityTransitionTimerTask,
             QueryPreferences.getPrefAutoLockTimeOut(this)
         )
     }
 
     fun stopActivityTransitionTimer() {
-        if (activityTransitionTimerTask != null) {
-            activityTransitionTimerTask!!.cancel()
-        }
-
-        if (activityTransitionTimer != null) {
-            activityTransitionTimer!!.cancel()
-        }
+        activityTransitionTimerTask?.cancel()
+        activityTransitionTimer?.cancel()
 
         wasInBackground = false
     }

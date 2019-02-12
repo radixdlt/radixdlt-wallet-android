@@ -8,6 +8,7 @@ object QueryPreferences {
     private const val PREF_ADDRESS = "address"
     private const val PREF_PASSWORD = "password"
     private const val PREF_AUTOLOCK_TIMEOUT = "autolock_timeout"
+    private const val PREF_NETWORK = "network"
 
     fun getPrefAddress(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -46,5 +47,18 @@ object QueryPreferences {
                 .edit()
                 .putLong(PREF_AUTOLOCK_TIMEOUT, timeout)
                 .apply()
+    }
+
+    @Universe
+    fun getPrefNetwork(context: Context): String? {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(PREF_NETWORK, ALPHANET)
+    }
+
+    fun setPrefNetwork(context: Context, @Universe network: String) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putString(PREF_NETWORK, network)
+            .apply()
     }
 }

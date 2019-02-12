@@ -8,9 +8,11 @@ import android.text.TextUtils
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.content.ContextCompat
 import com.radixdlt.android.R
 import com.radixdlt.android.data.model.message.MessagesDao
 import com.radixdlt.android.data.model.transaction.TransactionsDao
+import com.radixdlt.android.helper.TextFormatHelper
 import com.radixdlt.android.identity.AndroidRadixIdentity
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.android.ui.dialog.DeleteWalletDialog
@@ -70,6 +72,8 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_enter_password)
+
+        setConnectingUniverseName()
 
         uri = intent.getParcelableExtra(EXTRA_URI)
 
@@ -174,6 +178,20 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
         }
     }
 
+    private fun setConnectingUniverseName() {
+        val universe = TextFormatHelper.normal(
+            TextFormatHelper.color(
+                ContextCompat.getColor(this, R.color.white),
+                getString(R.string.enter_password_activity_xml_universe)
+            ), TextFormatHelper.color(
+                ContextCompat.getColor(this, R.color.colorAccentSecondary),
+                QueryPreferences.getPrefNetwork(this)!!
+            )
+        )
+
+        universeTextView.text = universe
+    }
+
     private fun passwordLengthChecker(): Boolean {
         if (inputPasswordTIET.text!!.length < 6) {
             toast(getString(R.string.toast_password_length_error))
@@ -249,10 +267,14 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
     }
 
     private fun resetData() {
+        Completable.fromAction { Vault.resetKey() }
+            .subscribeOn(Schedulers.computation())
+            .subscribe()
+
         val myKeyFile = File(filesDir, "keystore.key")
         myKeyFile.delete()
         QueryPreferences.setPrefAddress(this, "")
-        Vault.resetKey()
+
         QueryPreferences.setPrefAutoLockTimeOut(this, 2000)
         Identity.clear()
 

@@ -28,6 +28,7 @@
   <string name="enter_password_activity_unlock_button">Unlock Wallet</string>
   <string name="enter_password_activity_creating_wallet_progress_dialog">Creating Wallet…</string>
   <string name="enter_password_activity_unlocking_wallet_progress_dialog">Unlocking Wallet…</string>
+  <string name="enter_password_activity_xml_universe">Connecting to universe&#160;</string>
   <!-- toasts -->
   <string name="toast_no_internet">No internet connection.</string>
   <string name="toast_passwords_dont_match_error">Passwords don\'t match</string>
@@ -131,7 +132,9 @@
   <string name="more_options_fragment_xml_export_backup_wallet">Export/Backup wallet</string>
   <string name="more_options_fragment_xml_delete_wallet">Delete wallet</string>
   <string name="more_options_fragment_xml_security_title">Security</string>
+  <string name="more_options_fragment_xml_network_title">Network</string>
   <string name="more_options_fragment_xml_help_title">Need Help?</string>
+  <string name="more_options_fragment_xml_choose_network">Choose a network</string>
   <string name="more_options_fragment_xml_report_an_issue">Report an issue</string>
   <string name="more_options_fragment_xml_toggle_password">Enable wallet password</string>
   <string name="more_options_fragment_xml_autolock_timeout">Autolock timeout</string>
@@ -139,8 +142,17 @@
   <!-- FRAGMENT DIALOGS -->
   <!-- Delete Wallet Dialog -->
   <string name="delete_wallet_dialog_title">Delete Existing Wallet?</string>
-  <string name="delete_wallet_dialog_message">"Are you sure you want to delete the existing wallet?\n\nPlease make sure you have backed up the wallet first as this operation cannot be undone."</string>
+  <string name="delete_wallet_dialog_message">Are you sure you want to delete the existing wallet?\n\nPlease make sure you have backed up the wallet first as this operation cannot be undone.</string>
   <string name="delete_wallet_dialog_delete">Delete</string>
+
+  <!-- Warning Dialog -->
+  <string name="warning_dialog_title">Are you sure you want to change network?</string>
+  <string name="warning_dialog_message">Changing network will clear all data from current universe.</string>
+  <string name="warning_dialog_change">OK</string>
+
+  <!-- Choose Network -->
+  <string name="choose_network_dialog_title">Choose Network?</string>
+  <string name="choose_network_select">Select</string>
 
   <!-- New Conversation Dialog -->
   <string name="new_conversation_dialog_new">New</string>
