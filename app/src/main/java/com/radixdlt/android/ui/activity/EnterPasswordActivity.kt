@@ -42,7 +42,7 @@ import java.io.File
 import java.io.FileReader
 import javax.inject.Inject
 
-open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWalletDialogListener {
+class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWalletDialogListener {
 
     @Inject
     lateinit var transactionsDao: TransactionsDao
@@ -99,15 +99,6 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
         } else {
             newUser = true
         }
-
-        // Connect to the network and retrieve list of
-        // nodes you can connect to
-        RadixUniverse.getInstance()
-            .network
-            .connectAndGetStatusUpdates()
-            .subscribe {
-                Timber.tag("NetworkStatus").d("$it")
-            }
 
         createWalletButton.setOnClickListener {
             var exception: Exception? = null
