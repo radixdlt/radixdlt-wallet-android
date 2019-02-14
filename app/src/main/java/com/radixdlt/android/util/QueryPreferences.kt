@@ -9,6 +9,8 @@ object QueryPreferences {
     private const val PREF_PASSWORD = "password"
     private const val PREF_AUTOLOCK_TIMEOUT = "autolock_timeout"
     private const val PREF_NETWORK = "network"
+    private const val PREF_RANDOM_SELECTION = "random_selection"
+    private const val PREF_NODE_IP = "node_ip"
 
     fun getPrefAddress(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -59,6 +61,43 @@ object QueryPreferences {
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()
             .putString(PREF_NETWORK, network)
+            .apply()
+    }
+
+    /**
+     * Node selection boolean flag to determine whether node selection
+     * is random or custom
+     *
+     * @param context
+     * @return true if node selection is random
+     * */
+    fun getPrefIsRandomNodeSelection(context: Context): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean(PREF_RANDOM_SELECTION, true)
+    }
+
+    /**
+     * Sets whether node selection should be random or custom
+     *
+     * @param context
+     * @param random
+     * */
+    fun setPrefRandomNodeSelection(context: Context, random: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putBoolean(PREF_RANDOM_SELECTION, random)
+            .apply()
+    }
+
+    fun getPrefNodeIP(context: Context): String {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(PREF_NODE_IP, "")!!
+    }
+
+    fun setPrefNodeIP(context: Context, network: String) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putString(PREF_NODE_IP, network)
             .apply()
     }
 }

@@ -239,6 +239,47 @@
                 tools:text="ALPHANET"/>
 
           </androidx.constraintlayout.widget.ConstraintLayout>
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:background="#ff9b9b9b"/>
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:id="@+id/selectNodeLayout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?selectableItemBackground">
+
+            <TextView
+                android:id="@+id/inputNodeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/more_options_fragment_xml_select_node"
+                android:textColor="@color/materialGrey700"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/inputNodeSelectedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="52.232.97.53"/>
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
       </androidx.cardview.widget.CardView>
 

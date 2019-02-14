@@ -74,6 +74,7 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
         setContentView(R.layout.activity_enter_password)
 
         setConnectingUniverseName()
+        setConnectingToSpecificNode()
 
         uri = intent.getParcelableExtra(EXTRA_URI)
 
@@ -98,6 +99,15 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
         } else {
             newUser = true
         }
+
+        // Connect to the network and retrieve list of
+        // nodes you can connect to
+        RadixUniverse.getInstance()
+            .network
+            .connectAndGetStatusUpdates()
+            .subscribe {
+                Timber.tag("NetworkStatus").d("$it")
+            }
 
         createWalletButton.setOnClickListener {
             var exception: Exception? = null
@@ -190,6 +200,25 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
         )
 
         universeTextView.text = universe
+    }
+
+    private fun setConnectingToSpecificNode() {
+        if (!QueryPreferences.getPrefIsRandomNodeSelection(this)) {
+            specificNodeTextView.visibility = View.VISIBLE
+            val node = TextFormatHelper.normal(
+                TextFormatHelper.color(
+                    ContextCompat.getColor(this, R.color.white),
+                    getString(R.string.enter_password_activity_xml_specific_node)
+                ), TextFormatHelper.color(
+                    ContextCompat.getColor(this, R.color.colorAccentSecondary),
+                    QueryPreferences.getPrefNodeIP(this)
+                )
+            )
+
+            specificNodeTextView.text = node
+        } else {
+            specificNodeTextView.visibility = View.GONE
+        }
     }
 
     private fun passwordLengthChecker(): Boolean {

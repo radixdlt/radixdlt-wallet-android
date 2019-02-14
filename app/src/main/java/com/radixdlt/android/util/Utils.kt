@@ -27,6 +27,7 @@ import java.math.BigDecimal
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Locale
+import java.util.regex.Pattern
 
 object EmptyTextWatcher : TextWatcher {
     override fun afterTextChanged(p0: Editable?) {}
@@ -245,4 +246,13 @@ fun copyToClipboard(context: Context, myAddress: String) {
     ) as ClipboardManager
     val clip = ClipData.newPlainText("address", myAddress)
     clipboard.primaryClip = clip
+}
+
+fun validateIPAddress(ipAddress: String): Boolean {
+    val ipv4 = Pattern.compile(IPV4_ADDRESS_PATTERN).matcher(ipAddress)
+    if (ipv4.matches()) {
+        return true
+    }
+
+    return Pattern.compile(IPV6_ADDRESS_PATTERN).matcher(ipAddress).matches()
 }

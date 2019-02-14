@@ -29,6 +29,7 @@
   <string name="enter_password_activity_creating_wallet_progress_dialog">Creating Wallet…</string>
   <string name="enter_password_activity_unlocking_wallet_progress_dialog">Unlocking Wallet…</string>
   <string name="enter_password_activity_xml_universe">Connecting to universe&#160;</string>
+  <string name="enter_password_activity_xml_specific_node">and node&#160;</string>
   <!-- toasts -->
   <string name="toast_no_internet">No internet connection.</string>
   <string name="toast_passwords_dont_match_error">Passwords don\'t match</string>
@@ -48,7 +49,7 @@
 
   <!-- Send Radix Activity -->
   <string name="send_radix_activity_title">Send Radix</string>
-  <string name="send_radix_activity_sendgin_progress_dialog">Sending…</string>
+  <string name="send_radix_activity_sending_progress_dialog">Sending…</string>
   <string name="send_activity_enter_address_hint">Enter address</string>
   <string name="send_activity_xml_amount">AMOUNT</string>
   <string name="send_activity_xml_radix_r">R</string>
@@ -135,9 +136,11 @@
   <string name="more_options_fragment_xml_network_title">Network</string>
   <string name="more_options_fragment_xml_help_title">Need Help?</string>
   <string name="more_options_fragment_xml_choose_network">Choose a network</string>
+  <string name="more_options_fragment_xml_select_node">Node selected</string>
   <string name="more_options_fragment_xml_report_an_issue">Report an issue</string>
   <string name="more_options_fragment_xml_toggle_password">Enable wallet password</string>
   <string name="more_options_fragment_xml_autolock_timeout">Autolock timeout</string>
+  <string name="more_options_fragment_xml_random_node">Random</string>
 
   <!-- FRAGMENT DIALOGS -->
   <!-- Delete Wallet Dialog -->
@@ -146,8 +149,12 @@
   <string name="delete_wallet_dialog_delete">Delete</string>
 
   <!-- Warning Dialog -->
-  <string name="warning_dialog_title">Are you sure you want to change network?</string>
-  <string name="warning_dialog_message">Changing network will clear all data from current universe.</string>
+  <string name="warning_dialog_changing_universe_title">Are you sure you want to change network?</string>
+  <string name="warning_dialog_changing_universe_message">Changing network will clear all data from current universe.</string>
+  <string name="warning_dialog_node_selection_title">Are you sure you want to select a specific node?</string>
+  <string name="warning_dialog_node_selection_message">Selecting a specific node will require the app to restart.</string>
+  <string name="warning_dialog_random_selection_title">Are you sure you want to set random node selection?</string>
+  <string name="warning_dialog_random_selection_message">Changing the setting to random selection will require the app to restart.</string>
   <string name="warning_dialog_change">OK</string>
 
   <!-- Choose Network -->
@@ -161,6 +168,14 @@
   <string name="new_conversation_dialog_address_hint">Address</string>
   <!-- toast -->
   <string name="toast_entered_own_address">You have entered your own address.</string>
+
+  <!-- Node IP address Dialog -->
+  <string name="node_ip_address_dialog_set">Set</string>
+  <string name="node_ip_address_dialog_scan">Cancel</string>
+  <string name="node_ip_address_dialog_enter_address_title">Enter node ip address:</string>
+  <string name="node_ip_address_dialog_address_hint">IP Address</string>
+  <string name="node_ip_address_dialog_random_radio_button">Random</string>
+  <string name="node_ip_address_dialog_custom_radio_button">Custom</string>
 
   <!-- Receive Radix Dialog -->
   <string name="receive_radix_dialog_title">Radix Address</string>

@@ -13,7 +13,10 @@ annotation class Universe
 const val ALPHANET = "ALPHANET"
 const val ALPHANET2 = "ALPHANET2"
 
-enum class UniverseEnum {
-    ALPHANET,
-    ALPHANET2
-}
+const val IPV4_ADDRESS_PATTERN =
+    "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$"
+
+const val IPV6_ADDRESS_PATTERN = "^([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}\$"
