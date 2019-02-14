@@ -19,6 +19,7 @@ import com.radixdlt.android.ui.dialog.DeleteWalletDialog
 import com.radixdlt.android.util.PREF_SECRET
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.Vault
+import com.radixdlt.android.util.deleteAllData
 import com.radixdlt.android.util.createProgressDialog
 import com.radixdlt.android.util.hideKeyboard
 import com.radixdlt.android.util.setDialogMessage
@@ -280,32 +281,20 @@ class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWall
     }
 
     private fun deleteWallet() {
-        resetData()
+        deleteAllData(this)
+        deleteTables()
 
         startActivity<NewWalletActivity>()
         finishAffinity()
     }
 
-    private fun resetData() {
-        Completable.fromAction { Vault.resetKey() }
-            .subscribeOn(Schedulers.computation())
-            .subscribe()
-
-        val myKeyFile = File(filesDir, "keystore.key")
-        myKeyFile.delete()
-        QueryPreferences.setPrefAddress(this, "")
-
-        QueryPreferences.setPrefAutoLockTimeOut(this, 2000)
-        Identity.clear()
-
-        Completable.fromAction(::deleteTables)
+    private fun deleteTables() {
+        Completable.fromAction {
+            transactionsDao.deleteTable()
+            messagesDao.deleteTable()
+        }
             .subscribeOn(Schedulers.io())
             .subscribe()
-    }
-
-    private fun deleteTables() {
-        transactionsDao.deleteTable()
-        messagesDao.deleteTable()
     }
 
     override fun onBackPressed() {

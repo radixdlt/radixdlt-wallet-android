@@ -20,7 +20,6 @@ import com.radixdlt.android.data.model.message.MessagesDao
 import com.radixdlt.android.data.model.transaction.TransactionsDao
 import com.radixdlt.android.helper.CustomTabsHelper
 import com.radixdlt.android.helper.WebviewFallback
-import com.radixdlt.android.identity.Identity
 import com.radixdlt.android.ui.activity.BaseActivity
 import com.radixdlt.android.ui.activity.NewWalletActivity
 import com.radixdlt.android.ui.dialog.AutoLockTimeOutDialog
@@ -32,8 +31,9 @@ import com.radixdlt.android.util.ALPHANET
 import com.radixdlt.android.util.ALPHANET2
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.URL_REPORT_ISSUE
-import com.radixdlt.android.util.Vault
+import com.radixdlt.android.util.deleteAllData
 import com.radixdlt.android.util.multiClickingPrevention
+import com.radixdlt.android.util.resetData
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
@@ -249,8 +249,7 @@ class MoreOptionsFragment : Fragment() {
         when (requestCode) {
             REQUEST_CODE_SET_TIME_OUT -> autoLockTimeOutTimeTextView.text = displayAutoLockTime()
             REQUEST_CODE_DELETE_WALLET -> {
-                resetData()
-                deleteKeystoreFile()
+                deleteWallet()
 
                 activity!!.startActivity<NewWalletActivity>()
                 activity!!.finish()
@@ -290,35 +289,29 @@ class MoreOptionsFragment : Fragment() {
                     }
                 }
 
-                resetData()
+                changeUniverse()
                 ProcessPhoenix.triggerRebirth(activity)
             }
         }
     }
 
-    private fun resetData() {
-        Completable.fromAction { Vault.resetKey() }
-            .subscribeOn(Schedulers.computation())
-            .subscribe()
-
-        QueryPreferences.setPrefAddress(activity!!, "")
-        QueryPreferences.setPrefPasswordEnabled(activity!!, true)
-        QueryPreferences.setPrefAutoLockTimeOut(activity!!, 2000)
-        Identity.clear()
-
-        Completable.fromAction(::deleteTables)
-            .subscribeOn(Schedulers.io())
-            .subscribe()
+    private fun changeUniverse() {
+        resetData(activity!!)
+        deleteTables()
     }
 
-    private fun deleteKeystoreFile() {
-        val myKeyFile = File(activity!!.filesDir, "keystore.key")
-        myKeyFile.delete()
+    private fun deleteWallet() {
+        deleteAllData(activity!!)
+        deleteTables()
     }
 
     private fun deleteTables() {
-        transactionsDao.deleteTable()
-        messagesDao.deleteTable()
+        Completable.fromAction {
+            transactionsDao.deleteTable()
+            messagesDao.deleteTable()
+        }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 
     private fun displayAutoLockTime(): String {
