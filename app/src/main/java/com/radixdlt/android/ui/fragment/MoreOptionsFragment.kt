@@ -84,7 +84,7 @@ class MoreOptionsFragment : Fragment() {
         networkSelectedTextView.text = QueryPreferences.getPrefNetwork(activity!!)
 
         if (QueryPreferences.getPrefIsRandomNodeSelection(activity!!)) {
-            inputNodeSelectedTextView.text= getString(R.string.more_options_fragment_xml_random_node)
+            inputNodeSelectedTextView.text = getString(R.string.more_options_fragment_xml_random_node)
         } else {
             inputNodeSelectedTextView.text = QueryPreferences.getPrefNodeIP(activity!!)
         }
