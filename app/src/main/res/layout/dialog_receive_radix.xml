@@ -28,13 +28,13 @@
       android:id="@+id/imageViewFrameLayout"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="16dp"
       android:layout_marginTop="16dp"
       android:foreground="?selectableItemBackground"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/addressTextView"
+      app:layout_constraintVertical_bias="0.0"
       card_view:cardCornerRadius="6dp"
       card_view:cardUseCompatPadding="true">
 
@@ -49,5 +49,22 @@
         android:contentDescription="@string/receive_radix_dialog_xml_qr_code_description"
         tools:src="@drawable/ic_qr_code"/>
   </androidx.cardview.widget.CardView>
+
+  <androidx.appcompat.widget.AppCompatButton
+      android:id="@+id/generateInvoiceButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:text="@string/receive_radix_dialog_generate_invoice_button"
+      android:textColor="@android:color/white"
+      android:theme="@style/AccentButton"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/imageViewFrameLayout"
+      tools:backgroundTint="@color/colorAccent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

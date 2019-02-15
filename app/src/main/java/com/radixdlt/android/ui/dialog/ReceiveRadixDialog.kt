@@ -12,6 +12,7 @@ import com.google.zxing.EncodeHintType
 import com.radixdlt.android.R
 import com.radixdlt.android.RadixWalletApplication
 import com.radixdlt.android.ui.activity.BaseActivity
+import com.radixdlt.android.ui.activity.ReceiveRadixInvoiceActivity
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.setAddressWithColors
 import kotlinx.android.synthetic.main.dialog_receive_radix.view.*
@@ -34,6 +35,11 @@ open class ReceiveRadixDialog : AppCompatDialogFragment() {
             .bitmap()
 
         Glide.with(activity!!).load(qrCode).into(v.imageView)
+
+        v.generateInvoiceButton.setOnClickListener {
+            dismiss()
+            ReceiveRadixInvoiceActivity.newIntent(activity!!)
+        }
 
         return AlertDialog.Builder(activity!!)
             .setTitle(getString(R.string.receive_radix_dialog_title))

@@ -97,6 +97,12 @@
   <string name="conversation_activity_xml_attachment_button_description">Attachment button</string>
   <string name="conversation_activity_xml_send_button_description">Send button</string>
 
+  <!-- Receive Radix Invoice Activity -->
+  <string name="receive_radix_activity_amount_hint">Amount</string>
+  <string name="receive_radix_activity_message_hint">Message</string>
+  <string name="receive_radix_activity_title">Generate Invoice</string>
+  <string name="receive_radix_activity_copy_invoice_button">Copy</string>
+  <string name="receive_radix_activity_share_invoice_button">Share</string>
 
   <!-- FRAGMENTS -->
   <!-- Wallet Fragment -->
@@ -158,5 +164,6 @@
   <string name="receive_radix_dialog_share">Share</string>
   <string name="receive_radix_dialog_intent_chooser_title">Share address</string>
   <string name="receive_radix_dialog_xml_qr_code_description">QR code</string>
+  <string name="receive_radix_dialog_generate_invoice_button">Generate Invoice</string>
 
 </resources>
