@@ -19,6 +19,7 @@ import com.radixdlt.android.ui.dialog.DeleteWalletDialog
 import com.radixdlt.android.util.PREF_SECRET
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.Vault
+import com.radixdlt.android.util.deleteAllData
 import com.radixdlt.android.util.createProgressDialog
 import com.radixdlt.android.util.hideKeyboard
 import com.radixdlt.android.util.setDialogMessage
@@ -42,7 +43,7 @@ import java.io.File
 import java.io.FileReader
 import javax.inject.Inject
 
-open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWalletDialogListener {
+class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWalletDialogListener {
 
     @Inject
     lateinit var transactionsDao: TransactionsDao
@@ -74,6 +75,7 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
         setContentView(R.layout.activity_enter_password)
 
         setConnectingUniverseName()
+        setConnectingToSpecificNode()
 
         uri = intent.getParcelableExtra(EXTRA_URI)
 
@@ -192,6 +194,25 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
         universeTextView.text = universe
     }
 
+    private fun setConnectingToSpecificNode() {
+        if (!QueryPreferences.getPrefIsRandomNodeSelection(this)) {
+            specificNodeTextView.visibility = View.VISIBLE
+            val node = TextFormatHelper.normal(
+                TextFormatHelper.color(
+                    ContextCompat.getColor(this, R.color.white),
+                    getString(R.string.enter_password_activity_xml_specific_node)
+                ), TextFormatHelper.color(
+                    ContextCompat.getColor(this, R.color.colorAccentSecondary),
+                    QueryPreferences.getPrefNodeIP(this)
+                )
+            )
+
+            specificNodeTextView.text = node
+        } else {
+            specificNodeTextView.visibility = View.GONE
+        }
+    }
+
     private fun passwordLengthChecker(): Boolean {
         if (inputPasswordTIET.text!!.length < 6) {
             toast(getString(R.string.toast_password_length_error))
@@ -260,32 +281,20 @@ open class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.Delet
     }
 
     private fun deleteWallet() {
-        resetData()
+        deleteAllData(this)
+        deleteTables()
 
         startActivity<NewWalletActivity>()
         finishAffinity()
     }
 
-    private fun resetData() {
-        Completable.fromAction { Vault.resetKey() }
-            .subscribeOn(Schedulers.computation())
-            .subscribe()
-
-        val myKeyFile = File(filesDir, "keystore.key")
-        myKeyFile.delete()
-        QueryPreferences.setPrefAddress(this, "")
-
-        QueryPreferences.setPrefAutoLockTimeOut(this, 2000)
-        Identity.clear()
-
-        Completable.fromAction(::deleteTables)
+    private fun deleteTables() {
+        Completable.fromAction {
+            transactionsDao.deleteTable()
+            messagesDao.deleteTable()
+        }
             .subscribeOn(Schedulers.io())
             .subscribe()
-    }
-
-    private fun deleteTables() {
-        transactionsDao.deleteTable()
-        messagesDao.deleteTable()
     }
 
     override fun onBackPressed() {

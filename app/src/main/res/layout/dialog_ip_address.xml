@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+  <TextView
+      android:id="@+id/titleEnterAddress"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:gravity="center_vertical"
+      android:text="@string/node_ip_address_dialog_enter_address_title"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      style="@style/Base.DialogWindowTitle.AppCompat"/>
+
+  <RadioGroup
+      android:id="@+id/ipAddressRadioGroup"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:orientation="vertical"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/titleEnterAddress">
+
+    <RadioButton
+        android:id="@+id/randomRadioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/node_ip_address_dialog_random_radio_button"/>
+
+    <RadioButton
+        android:id="@+id/customRadioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/node_ip_address_dialog_custom_radio_button"/>
+  </RadioGroup>
+
+  <EditText
+      android:id="@+id/inputIPAddressEditText"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:hint="@string/node_ip_address_dialog_address_hint"
+      android:inputType="textCapWords"
+      android:maxLines="1"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/ipAddressRadioGroup"
+      tools:ignore="Autofill"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

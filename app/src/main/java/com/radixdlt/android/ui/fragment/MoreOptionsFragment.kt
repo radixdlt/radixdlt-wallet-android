@@ -20,19 +20,20 @@ import com.radixdlt.android.data.model.message.MessagesDao
 import com.radixdlt.android.data.model.transaction.TransactionsDao
 import com.radixdlt.android.helper.CustomTabsHelper
 import com.radixdlt.android.helper.WebviewFallback
-import com.radixdlt.android.identity.Identity
 import com.radixdlt.android.ui.activity.BaseActivity
 import com.radixdlt.android.ui.activity.NewWalletActivity
 import com.radixdlt.android.ui.dialog.AutoLockTimeOutDialog
 import com.radixdlt.android.ui.dialog.ChooseNetworkDialog
 import com.radixdlt.android.ui.dialog.DeleteWalletDialog
+import com.radixdlt.android.ui.dialog.InputNodeIPAddressDialog
 import com.radixdlt.android.ui.dialog.WarningDialog
 import com.radixdlt.android.util.ALPHANET
 import com.radixdlt.android.util.ALPHANET2
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.URL_REPORT_ISSUE
-import com.radixdlt.android.util.Vault
+import com.radixdlt.android.util.deleteAllData
 import com.radixdlt.android.util.multiClickingPrevention
+import com.radixdlt.android.util.resetData
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
@@ -55,6 +56,8 @@ class MoreOptionsFragment : Fragment() {
     private lateinit var customTabsIntent: CustomTabsIntent
 
     private var universe: Int = 0
+    private var randomSelection = false
+    private lateinit var ipAddress: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -79,9 +82,14 @@ class MoreOptionsFragment : Fragment() {
         passwordEnabledUI(isPasswordEnabled)
         autoLockTimeOutTimeTextView.text = displayAutoLockTime()
         networkSelectedTextView.text = QueryPreferences.getPrefNetwork(activity!!)
+
+        if (QueryPreferences.getPrefIsRandomNodeSelection(activity!!)) {
+            inputNodeSelectedTextView.text= getString(R.string.more_options_fragment_xml_random_node)
+        } else {
+            inputNodeSelectedTextView.text = QueryPreferences.getPrefNodeIP(activity!!)
+        }
         createCustomTabsBuilder()
         setClickListeners()
-
     }
 
     private fun initialisePasswordSwitch(): Boolean {
@@ -99,6 +107,7 @@ class MoreOptionsFragment : Fragment() {
         setExportWalletClickListener()
         setAutoLockTimeOutClickListener()
         setChooseNetworkClickListener()
+        setSelectNodeListener()
         setReportAnIssueClickListener()
     }
 
@@ -162,6 +171,16 @@ class MoreOptionsFragment : Fragment() {
                 this@MoreOptionsFragment, REQUEST_CODE_CHOOSE_NETWORK
             )
             chooseNetworkDialog.show(fragmentManager, "CHOOSE_NETWORK_DIALOG")
+        }
+    }
+
+    private fun setSelectNodeListener() {
+        selectNodeLayout.setOnClickListener {
+            val inputNodeIPDialog = InputNodeIPAddressDialog.newInstance()
+            inputNodeIPDialog.setTargetFragment(
+                this@MoreOptionsFragment, REQUEST_CODE_SELECT_NODE
+            )
+            inputNodeIPDialog.show(fragmentManager, "SELECT_NODE_DIALOG")
         }
     }
 
@@ -230,8 +249,7 @@ class MoreOptionsFragment : Fragment() {
         when (requestCode) {
             REQUEST_CODE_SET_TIME_OUT -> autoLockTimeOutTimeTextView.text = displayAutoLockTime()
             REQUEST_CODE_DELETE_WALLET -> {
-                resetData()
-                deleteKeystoreFile()
+                deleteWallet()
 
                 activity!!.startActivity<NewWalletActivity>()
                 activity!!.finish()
@@ -239,48 +257,61 @@ class MoreOptionsFragment : Fragment() {
             REQUEST_CODE_CHOOSE_NETWORK -> {
                 universe = data!!.getIntExtra(ChooseNetworkDialog.EXTRA_UNIVERSE, 0)
 
-                val warningDialog = WarningDialog.newInstance()
+                val warningDialog = WarningDialog.newInstance(false, null)
+                warningDialog.setTargetFragment(
+                    this@MoreOptionsFragment, REQUEST_CODE_WARNING
+                )
+                warningDialog.show(fragmentManager, "WARNING_DIALOG")
+            }
+            REQUEST_CODE_SELECT_NODE -> {
+                ipAddress = data!!.getStringExtra(InputNodeIPAddressDialog.EXTRA_ADDRESS)
+                randomSelection = data.getBooleanExtra(InputNodeIPAddressDialog.EXTRA_RANDOM_SELECTION, false)
+                val warningDialog = WarningDialog.newInstance(true, randomSelection)
                 warningDialog.setTargetFragment(
                     this@MoreOptionsFragment, REQUEST_CODE_WARNING
                 )
                 warningDialog.show(fragmentManager, "WARNING_DIALOG")
             }
             REQUEST_CODE_WARNING -> {
-                if (universe == 0) {
-                    QueryPreferences.setPrefNetwork(activity!!, ALPHANET)
+                if (data!!.getBooleanExtra(WarningDialog.EXTRA_NODE_SELECTION, false)) {
+                    QueryPreferences.setPrefNodeIP(activity!!, ipAddress)
+                    QueryPreferences.setPrefRandomNodeSelection(activity!!, randomSelection)
+                    ProcessPhoenix.triggerRebirth(activity)
                 } else {
-                    QueryPreferences.setPrefNetwork(activity!!, ALPHANET2)
+                    if (universe == 0) {
+                        QueryPreferences.setPrefNetwork(activity!!, ALPHANET)
+                        QueryPreferences.setPrefRandomNodeSelection(activity!!, true)
+                        QueryPreferences.setPrefNodeIP(activity!!, "")
+                    } else {
+                        QueryPreferences.setPrefNetwork(activity!!, ALPHANET2)
+                        QueryPreferences.setPrefRandomNodeSelection(activity!!, true)
+                        QueryPreferences.setPrefNodeIP(activity!!, "")
+                    }
                 }
 
-                resetData()
+                changeUniverse()
                 ProcessPhoenix.triggerRebirth(activity)
             }
         }
     }
 
-    private fun resetData() {
-        Completable.fromAction { Vault.resetKey() }
-            .subscribeOn(Schedulers.computation())
-            .subscribe()
-
-        QueryPreferences.setPrefAddress(activity!!, "")
-        QueryPreferences.setPrefPasswordEnabled(activity!!, true)
-        QueryPreferences.setPrefAutoLockTimeOut(activity!!, 2000)
-        Identity.clear()
-
-        Completable.fromAction(::deleteTables)
-            .subscribeOn(Schedulers.io())
-            .subscribe()
+    private fun changeUniverse() {
+        resetData(activity!!)
+        deleteTables()
     }
 
-    private fun deleteKeystoreFile() {
-        val myKeyFile = File(activity!!.filesDir, "keystore.key")
-        myKeyFile.delete()
+    private fun deleteWallet() {
+        deleteAllData(activity!!)
+        deleteTables()
     }
 
     private fun deleteTables() {
-        transactionsDao.deleteTable()
-        messagesDao.deleteTable()
+        Completable.fromAction {
+            transactionsDao.deleteTable()
+            messagesDao.deleteTable()
+        }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 
     private fun displayAutoLockTime(): String {
@@ -307,5 +338,6 @@ class MoreOptionsFragment : Fragment() {
         private const val REQUEST_CODE_DELETE_WALLET = 1
         private const val REQUEST_CODE_CHOOSE_NETWORK = 2
         private const val REQUEST_CODE_WARNING = 3
+        private const val REQUEST_CODE_SELECT_NODE = 4
     }
 }

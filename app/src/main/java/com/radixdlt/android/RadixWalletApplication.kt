@@ -12,6 +12,8 @@ import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.Vault
 import com.radixdlt.client.core.Bootstrap
 import com.radixdlt.client.core.RadixUniverse
+import com.radixdlt.client.core.address.RadixUniverseConfigs
+import com.radixdlt.client.core.network.SinglePeer
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -48,13 +50,31 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
 
         AndroidThreeTen.init(this)
 
-        if (QueryPreferences.getPrefNetwork(this) == ALPHANET) {
-            RadixUniverse.bootstrap(Bootstrap.ALPHANET)
-        } else {
-            RadixUniverse.bootstrap(Bootstrap.ALPHANET2)
-        }
+        connectToBootstrapNode()
 
         densityPixel = dip(250)
+    }
+
+    private fun connectToBootstrapNode() {
+        if (QueryPreferences.getPrefNetwork(this) == ALPHANET) {
+            if (QueryPreferences.getPrefIsRandomNodeSelection(this)) {
+                RadixUniverse.bootstrap(Bootstrap.ALPHANET)
+            } else {
+                val ipAddress = QueryPreferences.getPrefNodeIP(this)
+                RadixUniverse.bootstrap(
+                    RadixUniverseConfigs.alphanet, SinglePeer(ipAddress, true, 443)
+                )
+            }
+        } else {
+            if (QueryPreferences.getPrefIsRandomNodeSelection(this)) {
+                RadixUniverse.bootstrap(Bootstrap.ALPHANET2)
+            } else {
+                val ipAddress = QueryPreferences.getPrefNodeIP(this)
+                RadixUniverse.bootstrap(
+                    RadixUniverseConfigs.alphanet2, SinglePeer(ipAddress, true, 443)
+                )
+            }
+        }
     }
 
     /**

@@ -146,7 +146,7 @@ class SendRadixActivity : BaseActivity() {
 
                 prepareForNextStep(
                     sendButton,
-                    getString(R.string.send_radix_activity_sendgin_progress_dialog)
+                    getString(R.string.send_radix_activity_sending_progress_dialog)
                 )
                 r.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
