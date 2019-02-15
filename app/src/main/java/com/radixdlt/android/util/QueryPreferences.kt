@@ -57,11 +57,12 @@ object QueryPreferences {
             .getString(PREF_NETWORK, ALPHANET)
     }
 
+    @SuppressLint("ApplySharedPref")
     fun setPrefNetwork(context: Context, @Universe network: String) {
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()
             .putString(PREF_NETWORK, network)
-            .apply()
+            .commit()
     }
 
     /**
@@ -82,11 +83,12 @@ object QueryPreferences {
      * @param context
      * @param random
      * */
+    @SuppressLint("ApplySharedPref")
     fun setPrefRandomNodeSelection(context: Context, random: Boolean) {
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()
             .putBoolean(PREF_RANDOM_SELECTION, random)
-            .apply()
+            .commit()
     }
 
     fun getPrefNodeIP(context: Context): String {
@@ -94,10 +96,11 @@ object QueryPreferences {
             .getString(PREF_NODE_IP, "")!!
     }
 
+    @SuppressLint("ApplySharedPref")
     fun setPrefNodeIP(context: Context, network: String) {
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()
             .putString(PREF_NODE_IP, network)
-            .apply()
+            .commit()
     }
 }
