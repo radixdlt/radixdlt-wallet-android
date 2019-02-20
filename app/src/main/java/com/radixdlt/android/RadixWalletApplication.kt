@@ -7,10 +7,13 @@ import androidx.fragment.app.Fragment
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.radixdlt.android.di.component.DaggerRadixWalletComponent
 import com.radixdlt.android.di.component.RadixWalletComponent
+import com.radixdlt.android.util.ALPHANET
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.Vault
 import com.radixdlt.client.core.Bootstrap
 import com.radixdlt.client.core.RadixUniverse
+import com.radixdlt.client.core.address.RadixUniverseConfigs
+import com.radixdlt.client.core.network.SinglePeer
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -46,9 +49,32 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
         generateEncryptionKey()
 
         AndroidThreeTen.init(this)
-        RadixUniverse.bootstrap(Bootstrap.BETANET)
+
+        connectToBootstrapNode()
 
         densityPixel = dip(250)
+    }
+
+    private fun connectToBootstrapNode() {
+        if (QueryPreferences.getPrefNetwork(this) == ALPHANET) {
+            if (QueryPreferences.getPrefIsRandomNodeSelection(this)) {
+                RadixUniverse.bootstrap(Bootstrap.ALPHANET)
+            } else {
+                val ipAddress = QueryPreferences.getPrefNodeIP(this)
+                RadixUniverse.bootstrap(
+                    RadixUniverseConfigs.alphanet, SinglePeer(ipAddress, true, 443)
+                )
+            }
+        } else {
+            if (QueryPreferences.getPrefIsRandomNodeSelection(this)) {
+                RadixUniverse.bootstrap(Bootstrap.BETANET)
+            } else {
+                val ipAddress = QueryPreferences.getPrefNodeIP(this)
+                RadixUniverse.bootstrap(
+                    RadixUniverseConfigs.alphanet2, SinglePeer(ipAddress, true, 443)
+                )
+            }
+        }
     }
 
     /**
@@ -79,20 +105,15 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
             }
         }
 
-        activityTransitionTimer!!.schedule(
+        activityTransitionTimer?.schedule(
             activityTransitionTimerTask,
             QueryPreferences.getPrefAutoLockTimeOut(this)
         )
     }
 
     fun stopActivityTransitionTimer() {
-        if (activityTransitionTimerTask != null) {
-            activityTransitionTimerTask!!.cancel()
-        }
-
-        if (activityTransitionTimer != null) {
-            activityTransitionTimer!!.cancel()
-        }
+        activityTransitionTimerTask?.cancel()
+        activityTransitionTimer?.cancel()
 
         wasInBackground = false
     }

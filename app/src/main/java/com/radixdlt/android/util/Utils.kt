@@ -17,16 +17,21 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.radixdlt.android.R
 import com.radixdlt.android.helper.TextFormatHelper
+import com.radixdlt.android.identity.Identity
 import com.radixdlt.client.core.atoms.RadixHash
 import com.radixdlt.client.core.util.Base58
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
+import java.io.File
 import java.math.BigDecimal
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Locale
+import java.util.regex.Pattern
 
 object EmptyTextWatcher : TextWatcher {
     override fun afterTextChanged(p0: Editable?) {}
@@ -245,4 +250,49 @@ fun copyToClipboard(context: Context, myAddress: String) {
     ) as ClipboardManager
     val clip = ClipData.newPlainText("address", myAddress)
     clipboard.primaryClip = clip
+}
+
+fun validateIPAddress(ipAddress: String): Boolean {
+    val ipv4 = Pattern.compile(IPV4_ADDRESS_PATTERN).matcher(ipAddress)
+    if (ipv4.matches()) {
+        return true
+    }
+
+    return Pattern.compile(IPV6_ADDRESS_PATTERN).matcher(ipAddress).matches()
+}
+
+/**
+ * Resets data to default values
+ *
+ * @param context
+ * */
+fun resetData(context: Context) {
+    Completable.fromAction { Vault.resetKey() }
+        .subscribeOn(Schedulers.computation())
+        .subscribe()
+
+    QueryPreferences.setPrefAddress(context, "")
+    QueryPreferences.setPrefPasswordEnabled(context, true)
+    QueryPreferences.setPrefAutoLockTimeOut(context, 2000)
+    Identity.clear()
+}
+
+/**
+ * Deletes stored keystore file
+ *
+ * @param context
+ * */
+private fun deleteKeystoreFile(context: Context) {
+    val myKeyFile = File(context.filesDir, "keystore.key")
+    myKeyFile.delete()
+}
+
+/**
+ * Deletes all stored data from currently active wallet
+ *
+ * @param context
+ * */
+fun deleteAllData(context: Context) {
+    resetData(context)
+    deleteKeystoreFile(context)
 }

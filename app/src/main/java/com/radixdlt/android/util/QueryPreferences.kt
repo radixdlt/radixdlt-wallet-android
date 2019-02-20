@@ -8,6 +8,9 @@ object QueryPreferences {
     private const val PREF_ADDRESS = "address"
     private const val PREF_PASSWORD = "password"
     private const val PREF_AUTOLOCK_TIMEOUT = "autolock_timeout"
+    private const val PREF_NETWORK = "network"
+    private const val PREF_RANDOM_SELECTION = "random_selection"
+    private const val PREF_NODE_IP = "node_ip"
 
     fun getPrefAddress(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -46,5 +49,58 @@ object QueryPreferences {
                 .edit()
                 .putLong(PREF_AUTOLOCK_TIMEOUT, timeout)
                 .apply()
+    }
+
+    @Universe
+    fun getPrefNetwork(context: Context): String? {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(PREF_NETWORK, ALPHANET)
+    }
+
+    @SuppressLint("ApplySharedPref")
+    fun setPrefNetwork(context: Context, @Universe network: String) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putString(PREF_NETWORK, network)
+            .commit()
+    }
+
+    /**
+     * Node selection boolean flag to determine whether node selection
+     * is random or custom
+     *
+     * @param context
+     * @return true if node selection is random
+     * */
+    fun getPrefIsRandomNodeSelection(context: Context): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean(PREF_RANDOM_SELECTION, true)
+    }
+
+    /**
+     * Sets whether node selection should be random or custom
+     *
+     * @param context
+     * @param random
+     * */
+    @SuppressLint("ApplySharedPref")
+    fun setPrefRandomNodeSelection(context: Context, random: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putBoolean(PREF_RANDOM_SELECTION, random)
+            .commit()
+    }
+
+    fun getPrefNodeIP(context: Context): String {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(PREF_NODE_IP, "")!!
+    }
+
+    @SuppressLint("ApplySharedPref")
+    fun setPrefNodeIP(context: Context, network: String) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putString(PREF_NODE_IP, network)
+            .commit()
     }
 }
