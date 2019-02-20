@@ -50,19 +50,22 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
 
         AndroidThreeTen.init(this)
 
-        connectToBootstrapNode()
+//        connectToBootstrapNode()
+        RadixUniverse.bootstrap(Bootstrap.BETANET)
 
         densityPixel = dip(250)
     }
 
+    // TODO: Implement once we have both main and test networks
     private fun connectToBootstrapNode() {
         if (QueryPreferences.getPrefNetwork(this) == ALPHANET) {
             if (QueryPreferences.getPrefIsRandomNodeSelection(this)) {
-                RadixUniverse.bootstrap(Bootstrap.ALPHANET)
+                RadixUniverse.bootstrap(Bootstrap.BETANET)
             } else {
                 val ipAddress = QueryPreferences.getPrefNodeIP(this)
                 RadixUniverse.bootstrap(
-                    RadixUniverseConfigs.alphanet, SinglePeer(ipAddress, true, 443)
+                    RadixUniverseConfigs.getBetanet(),
+                    SinglePeer(ipAddress, true, 443)
                 )
             }
         } else {
@@ -71,7 +74,8 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
             } else {
                 val ipAddress = QueryPreferences.getPrefNodeIP(this)
                 RadixUniverse.bootstrap(
-                    RadixUniverseConfigs.alphanet2, SinglePeer(ipAddress, true, 443)
+                    RadixUniverseConfigs.getBetanet(),
+                    SinglePeer(ipAddress, true, 443)
                 )
             }
         }
