@@ -1059,8 +1059,8 @@ private constructor() {
          * FPS setting above to allow for some idle time in between frames.
          */
         override fun run() {
-            var outputFrame: Frame? = null
-            var data: ByteBuffer? = null
+            var outputFrame: Frame?
+            var data: ByteBuffer?
 
             while (true) {
                 synchronized(lock) {
