@@ -3,6 +3,7 @@ package com.radixdlt.android.data.model.message
 import androidx.lifecycle.LiveData
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.client.atommodel.accounts.RadixAddress
+import com.radixdlt.client.core.network.actions.SubmitAtomResultAction
 import com.radixdlt.client.dapps.messaging.RadixMessaging
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -28,8 +29,8 @@ class SendMessageLiveData @Inject constructor(
                 .toObservable()
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    if (it.getState().isComplete) {
-                        postValue(it.getState().name)
+                    if ((it as SubmitAtomResultAction).type == SubmitAtomResultAction.SubmitAtomResultActionType.STORED) {
+                        postValue(it.type.name)
                     }
                     Timber.d("Network status is... $it")
                 }.addTo(compositeDisposable)

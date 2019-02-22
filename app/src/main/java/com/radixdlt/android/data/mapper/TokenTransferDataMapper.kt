@@ -1,8 +1,8 @@
 package com.radixdlt.android.data.mapper
 
 import com.radixdlt.android.data.model.transaction.TransactionEntity
+import com.radixdlt.client.application.translate.tokens.TokenClassReference
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
-import com.radixdlt.client.atommodel.tokens.TokenClassReference
 import java.math.RoundingMode
 
 object TokenTransferDataMapper {

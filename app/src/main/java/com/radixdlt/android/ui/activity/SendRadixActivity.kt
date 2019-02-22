@@ -23,7 +23,7 @@ import com.radixdlt.android.util.setDialogMessage
 import com.radixdlt.android.util.setProgressDialogVisible
 import com.radixdlt.client.application.RadixApplicationAPI
 import com.radixdlt.client.application.translate.tokens.InsufficientFundsException
-import com.radixdlt.client.core.network.AtomSubmissionUpdate
+import com.radixdlt.client.core.network.actions.SubmitAtomResultAction
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_send_radix.*
 import org.jetbrains.anko.longToast
@@ -133,7 +133,7 @@ class SendRadixActivity : BaseActivity() {
         sendTokensViewModel.sendTokensLiveData.observe(this, Observer { status ->
             status?.apply {
                 setProgressDialogVisible(progressDialog, false)
-                if (status == AtomSubmissionUpdate.AtomSubmissionState.STORED.name) {
+                if (status == SubmitAtomResultAction.SubmitAtomResultActionType.STORED.name) {
                     if (uri != null) {
                         intent.removeExtra(SendRadixActivity.EXTRA_URI)
                         finishAffinity()

@@ -13,11 +13,12 @@ import com.radixdlt.android.util.Vault
 import com.radixdlt.client.core.Bootstrap
 import com.radixdlt.client.core.RadixUniverse
 import com.radixdlt.client.core.address.RadixUniverseConfigs
-import com.radixdlt.client.core.network.SinglePeer
+import com.radixdlt.client.core.network.RadixNode
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.Observable
 import org.jetbrains.anko.dip
 import timber.log.Timber
 import java.util.Timer
@@ -51,7 +52,7 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
         AndroidThreeTen.init(this)
 
 //        connectToBootstrapNode()
-        RadixUniverse.bootstrap(Bootstrap.BETANET)
+        RadixUniverse.bootstrap(Bootstrap.SUNSTONE)
 
         densityPixel = dip(250)
     }
@@ -65,7 +66,7 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
                 val ipAddress = QueryPreferences.getPrefNodeIP(this)
                 RadixUniverse.bootstrap(
                     RadixUniverseConfigs.getBetanet(),
-                    SinglePeer(ipAddress, true, 443)
+                    Observable.just(RadixNode(ipAddress, true, 443))
                 )
             }
         } else {
@@ -75,7 +76,7 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
                 val ipAddress = QueryPreferences.getPrefNodeIP(this)
                 RadixUniverse.bootstrap(
                     RadixUniverseConfigs.getBetanet(),
-                    SinglePeer(ipAddress, true, 443)
+                    Observable.just(RadixNode(ipAddress, true, 443))
                 )
             }
         }
