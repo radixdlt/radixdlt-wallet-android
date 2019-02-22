@@ -89,7 +89,7 @@ class ContactsFragment : Fragment() {
             newConversationDialog.setTargetFragment(
                 this@ContactsFragment, REQUEST_CODE_NEW_CONVERSATION
             )
-            newConversationDialog.show(fragmentManager, null)
+            newConversationDialog.show(fragmentManager!!, null)
         }
     }
 

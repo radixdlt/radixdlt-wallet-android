@@ -48,7 +48,7 @@ open class DeleteWalletDialog : AppCompatDialogFragment() {
         targetFragment!!.onActivityResult(targetRequestCode, resultCode, null)
     }
 
-    override fun onAttach(activity: Context?) {
+    override fun onAttach(activity: Context) {
         super.onAttach(activity)
         // Needed only if dialog is shown from an Activity
         if (activity is DeleteWalletDialogListener) {
