@@ -118,6 +118,12 @@ androidExtensions {
     })
 }
 
+configurations {
+    all {
+        exclude("com.google.guava", "listenablefuture")
+    }
+}
+
 dependencies {
     ktlint(Libraries.ktlint)
 

@@ -142,7 +142,7 @@ class WalletFragment : Fragment() {
             receiveRadixDialog.setTargetFragment(
                 this@WalletFragment, REQUEST_CODE_RECEIVE_RADIX
             )
-            receiveRadixDialog.show(fragmentManager, null)
+            receiveRadixDialog.show(fragmentManager!!, null)
         }
     }
 

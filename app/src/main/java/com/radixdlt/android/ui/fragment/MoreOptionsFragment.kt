@@ -127,7 +127,7 @@ class MoreOptionsFragment : Fragment() {
             autoLockTimeOutDialog.setTargetFragment(
                 this@MoreOptionsFragment, REQUEST_CODE_SET_TIME_OUT
             )
-            autoLockTimeOutDialog.show(fragmentManager, null)
+            autoLockTimeOutDialog.show(fragmentManager!!, null)
         }
     }
 
@@ -160,7 +160,7 @@ class MoreOptionsFragment : Fragment() {
             deleteWalletDialog.setTargetFragment(
                 this@MoreOptionsFragment, REQUEST_CODE_DELETE_WALLET
             )
-            deleteWalletDialog.show(fragmentManager, "DELETE_WALLET_DIALOG")
+            deleteWalletDialog.show(fragmentManager!!, "DELETE_WALLET_DIALOG")
         }
     }
 
@@ -170,7 +170,7 @@ class MoreOptionsFragment : Fragment() {
             chooseNetworkDialog.setTargetFragment(
                 this@MoreOptionsFragment, REQUEST_CODE_CHOOSE_NETWORK
             )
-            chooseNetworkDialog.show(fragmentManager, "CHOOSE_NETWORK_DIALOG")
+            chooseNetworkDialog.show(fragmentManager!!, "CHOOSE_NETWORK_DIALOG")
         }
     }
 
@@ -180,7 +180,7 @@ class MoreOptionsFragment : Fragment() {
             inputNodeIPDialog.setTargetFragment(
                 this@MoreOptionsFragment, REQUEST_CODE_SELECT_NODE
             )
-            inputNodeIPDialog.show(fragmentManager, "SELECT_NODE_DIALOG")
+            inputNodeIPDialog.show(fragmentManager!!, "SELECT_NODE_DIALOG")
         }
     }
 
@@ -261,7 +261,7 @@ class MoreOptionsFragment : Fragment() {
                 warningDialog.setTargetFragment(
                     this@MoreOptionsFragment, REQUEST_CODE_WARNING
                 )
-                warningDialog.show(fragmentManager, "WARNING_DIALOG")
+                warningDialog.show(fragmentManager!!, "WARNING_DIALOG")
             }
             REQUEST_CODE_SELECT_NODE -> {
                 ipAddress = data!!.getStringExtra(InputNodeIPAddressDialog.EXTRA_ADDRESS)
@@ -270,7 +270,7 @@ class MoreOptionsFragment : Fragment() {
                 warningDialog.setTargetFragment(
                     this@MoreOptionsFragment, REQUEST_CODE_WARNING
                 )
-                warningDialog.show(fragmentManager, "WARNING_DIALOG")
+                warningDialog.show(fragmentManager!!, "WARNING_DIALOG")
             }
             REQUEST_CODE_WARNING -> {
                 if (data!!.getBooleanExtra(WarningDialog.EXTRA_NODE_SELECTION, false)) {
