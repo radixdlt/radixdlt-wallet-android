@@ -140,6 +140,8 @@ class SendRadixActivity : BaseActivity() {
                     } else {
                         finish()
                     }
+                } else if (status == SubmitAtomResultAction.SubmitAtomResultActionType.COLLISION.name) {
+                    toast(getString(R.string.toast_collision_error))
                 } else if (status == InsufficientFundsException::class.java.simpleName) {
                     toast(getString(R.string.toast_not_enough_tokens_error))
                 } else if (status == IllegalArgumentException::class.java.simpleName) {
@@ -175,12 +177,17 @@ class SendRadixActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
+            val selectedToken = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
+
+            if (selectedToken == getString(R.string.send_activity_token_type_spinner)) {
+                toast("Please select type of token to send")
+                return@setOnClickListener
+            }
+
             prepareForNextStep(
                 sendButton,
                 getString(R.string.send_radix_activity_sending_progress_dialog)
             )
-
-            val selectedToken = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
 
             sendTokensViewModel.sendToken(
                 inputAddressTIET.text.toString().trim(),
@@ -204,6 +211,7 @@ class SendRadixActivity : BaseActivity() {
     }
 
     private fun setTokenTypeSpinner(tokenTypes: List<String>) {
+        tokenTypesList.clear()
         when {
             tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.send_activity_no_tokens_spinner))
             tokenTypes.size == 1 -> tokenTypesList.add(tokenTypes.first())

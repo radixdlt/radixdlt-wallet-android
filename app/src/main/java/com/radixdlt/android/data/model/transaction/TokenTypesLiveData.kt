@@ -19,7 +19,6 @@ class TokenTypesLiveData @Inject constructor(
 
     override fun onActive() {
         super.onActive()
-        Timber.d("TokenTypesLiveData onActive $sendingTokens list ---> $availableTokens")
         retrieveTokenTypes()
     }
 
@@ -27,9 +26,9 @@ class TokenTypesLiveData @Inject constructor(
         transactionsDao.getAllTokenTypes()
             .subscribeOn(Schedulers.io())
             .subscribe ({
+                availableTokens.clear()
                 availableTokens.addAll(it)
                 getAllTransactionsFromEachToken(it)
-                Timber.tag("TokenTypes").d(it.toString())
             }, { Timber.e(it) })
             .addTo(compositeDisposable)
     }

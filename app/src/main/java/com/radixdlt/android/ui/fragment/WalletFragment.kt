@@ -27,6 +27,7 @@ import com.radixdlt.android.util.multiClickingPrevention
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import org.jetbrains.anko.toast
+import timber.log.Timber
 import javax.inject.Inject
 
 class WalletFragment : Fragment() {
@@ -240,6 +241,7 @@ class WalletFragment : Fragment() {
         if (transactionEntities.size > 1) {
             this.transactions.clear()
             this.transactions.addAll(transactionEntities)
+            Timber.tag("ListTransactions").d(transactionEntities.toString())
             showTransactions()
         } else {
             // There can be an existing individual transaction hence

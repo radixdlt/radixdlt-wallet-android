@@ -52,7 +52,7 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
         AndroidThreeTen.init(this)
 
 //        connectToBootstrapNode()
-        RadixUniverse.bootstrap(Bootstrap.SUNSTONE)
+        RadixUniverse.bootstrap(Bootstrap.BETANET)
 
         densityPixel = dip(250)
     }

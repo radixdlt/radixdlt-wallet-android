@@ -71,6 +71,7 @@ class TransactionsRepository(
         allTransactions: Observable<TokenTransfer>
     ): Single<ArrayList<TokenTransfer>> {
 
+        // Retrieve existing transactions from DB first
         getStoredTransactions()
 
         val oldTransactionsList: Single<ArrayList<TokenTransfer>> = allTransactions

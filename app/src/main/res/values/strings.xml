@@ -64,6 +64,7 @@
   <string name="toast_entered_own_address_error">You have entered your own address.</string>
   <string name="toast_wrong_address_format_error">Wrong address format, check again!</string>
   <string name="toast_not_enough_tokens_error">You don\'t have enough tokens!</string>
+  <string name="toast_collision_error">There was an error, please try again!</string>
   <string name="toast_too_many_decimal_places_error">Test tokens only allow up to 5 decimal places</string>
   <string name="toast_error_reading_qr_code">Error reading QR code</string>
   <string name="toast_token_not_owned">"Token not owned!"</string>

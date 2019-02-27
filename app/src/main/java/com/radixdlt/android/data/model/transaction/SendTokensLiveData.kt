@@ -26,21 +26,22 @@ class SendTokensLiveData @Inject constructor(
 
     fun sendToken(to: String, amount: BigDecimal, token: String, payLoad: String?) {
         Identity.api!!.getBalance(Identity.api!!.getMyAddress())
-            .subscribe { it ->
-
-                var balance: BigDecimal = BigDecimal.ZERO
+            .subscribe {
 
                 val tokenClassReference = it.map { map ->
-                    balance = map.value
-                    map.key
+                    map
                 }.find {
-                    it.toString() == token
-                } ?: return@subscribe
-
-                if (it.isNotEmpty() && balance > BigDecimal.ZERO) {
-                    sendTokens(to, amount, tokenClassReference, payLoad)
+                    it.key.toString() == token
+                } ?: run {
+                    postValue("ERROR")
+                    return@subscribe
                 }
-                // else fail???
+
+                if (it.isNotEmpty() && tokenClassReference.value > BigDecimal.ZERO) {
+                    sendTokens(to, amount, tokenClassReference.key, payLoad)
+                } else {
+                    postValue("ERROR")
+                }
             }.addTo(compositeDisposable)
     }
 
@@ -72,18 +73,19 @@ class SendTokensLiveData @Inject constructor(
 
             r.subscribeOn(Schedulers.io())
                 .subscribe({
-                    if ((it as SubmitAtomResultAction).type == SubmitAtomResultAction.SubmitAtomResultActionType.STORED) {
-                        // TODO: Will likely need the atom hid to do this
-//                        if (it.state.name == AtomSubmissionUpdate.AtomSubmissionState.STORED.name) {
-//
+                    if (it is SubmitAtomResultAction) {
+                        if (it.type == SubmitAtomResultAction.SubmitAtomResultActionType.STORED) {
+                            // TODO: Will likely need the atom hid to do this which I now can!!
 //                            val transactionEntity = createTransactionEntity(
 //                                amount, to, payLoad, it, tokenClassReference
 //                            )
-//
 //                            transactionsDao.insertTransaction(transactionEntity)
-//                        }
+//                            postValue(it.type.name)
+//                            return@subscribe
+                        }
                         postValue(it.type.name)
                     }
+
                     Timber.d("Network status is... $it")
                 }, {
                     Timber.e(it, "There is an error!!!")
