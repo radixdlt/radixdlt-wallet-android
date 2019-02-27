@@ -25,7 +25,7 @@ class TokenTypesLiveData @Inject constructor(
     private fun retrieveTokenTypes() {
         transactionsDao.getAllTokenTypes()
             .subscribeOn(Schedulers.io())
-            .subscribe ({
+            .subscribe({
                 availableTokens.clear()
                 availableTokens.addAll(it)
                 getAllTransactionsFromEachToken(it)

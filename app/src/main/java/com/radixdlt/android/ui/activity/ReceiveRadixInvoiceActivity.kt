@@ -66,7 +66,6 @@ class ReceiveRadixInvoiceActivity : BaseActivity() {
         }
 
         shareInvoiceButton.setOnClickListener {
-
         }
     }
 
