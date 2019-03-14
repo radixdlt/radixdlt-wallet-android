@@ -52,13 +52,17 @@ class TransactionsRepository(
             oldTransactionsList.toObservable(),
             allTransactions
         ) { listOfOld, transaction ->
+            Timber.tag("TEST_TRANS").d("$transaction")
             if (listOfOld.contains(transaction)) {
                 Maybe.empty()
             } else {
                 Maybe.just(transaction)
             }
         }.flatMapMaybe { it }
-            .map { mutableListOf(TokenTransferDataMapper.transform(it, myAddress)) }
+            .map {
+                Timber.tag("TEST_TRANS").d("$it")
+                mutableListOf(TokenTransferDataMapper.transform(it, myAddress))
+            }
             .subscribeOn(Schedulers.io())
             .subscribe({
                 transactionsDao.insertTransaction(it.first()) // insert in DB

@@ -140,7 +140,8 @@ class SendRadixActivity : BaseActivity() {
                     } else {
                         finish()
                     }
-                } else if (status == SubmitAtomResultAction.SubmitAtomResultActionType.COLLISION.name) {
+                } else if (status == SubmitAtomResultAction.SubmitAtomResultActionType.COLLISION.name ||
+                    status == SubmitAtomResultAction.SubmitAtomResultActionType.VALIDATION_ERROR.name) {
                     toast(getString(R.string.toast_collision_error))
                 } else if (status == InsufficientFundsException::class.java.simpleName) {
                     toast(getString(R.string.toast_not_enough_tokens_error))

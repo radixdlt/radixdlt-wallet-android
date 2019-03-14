@@ -34,8 +34,18 @@ android {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("${System.getProperties()["user.home"]}/.android/debug.keystore")
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storePassword = "android"
+        }
+    }
+
     buildTypes {
         getByName("release") {
+            resValue("string", "app_name", "Radix")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android.txt"),
@@ -49,6 +59,16 @@ android {
                 getDefaultProguardFile("proguard-android.txt"),
                 "proguard-rules.pro"
             )
+        }
+        create("dev") {
+            versionNameSuffix = "-betanet"
+            isDebuggable = true
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -71,11 +91,21 @@ android {
             setDimension("sdk")
             minSdkVersion(26)
         }
+        create("betanet") {
+            setDimension("sdk")
+            minSdkVersion(26)
+            applicationIdSuffix = ".betanet"
+            resValue("string", "app_name", "Radix (betanet)")
+        }
     }
 
     variantFilter {
-        if (buildType.name == "release" && flavors[0].name == "oreo") {
-            setIgnore(true)
+        when {
+            (buildType.name == "release" && flavors[0].name == "oreo") ||
+            (buildType.name == "release" && flavors[0].name == "betanet") ||
+            (buildType.name == "dev" && flavors[0].name == "oreo") ||
+            (buildType.name == "debug" && flavors[0].name == "betanet") ||
+            (buildType.name == "dev" && flavors[0].name == "normal") -> setIgnore(true)
         }
     }
 }

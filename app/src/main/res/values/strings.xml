@@ -1,5 +1,6 @@
 <resources>
-  <string name="app_name">Radix</string>
+  <!-- DEFINED IN .gradle buildTypes -->
+  <!--<string name="app_name">Radix</string>-->
 
   <!-- QR camera reader -->
   <string name="permission_camera_rationale">Access to the camera is needed to scan QR code</string>
@@ -104,8 +105,9 @@
   <string name="receive_radix_activity_amount_hint">Amount</string>
   <string name="receive_radix_activity_message_hint">Message</string>
   <string name="receive_radix_activity_title">Generate Invoice</string>
-  <string name="receive_radix_activity_copy_invoice_button">Copy</string>
-  <string name="receive_radix_activity_share_invoice_button">Share</string>
+  <string name="receive_radix_activity_copy_address_button">Copy Address</string>
+  <string name="receive_radix_activity_copy_invoice_button">Copy Invoice</string>
+  <string name="receive_radix_activity_share_invoice_button">Share Invoice</string>
 
   <!-- FRAGMENTS -->
   <!-- Wallet Fragment -->

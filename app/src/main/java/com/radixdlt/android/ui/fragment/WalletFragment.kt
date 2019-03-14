@@ -108,11 +108,7 @@ class WalletFragment : Fragment() {
         }
 
         val tokenTypesListSpinner = tokenTypesList.map {
-            if (it.contains("/@")) {
-                it.split("/@")[1]
-            } else {
-                it
-            }
+            removeTokenCreatorAddress(it)
         }
 
         val tokenTypesSpinner = ArrayAdapter(
@@ -122,6 +118,14 @@ class WalletFragment : Fragment() {
         tokenTypeSpinner.adapter = tokenTypesSpinner
 
         tokenTypeSpinner.setSelection(tokenTypeSelectedPosition)
+    }
+
+    private fun removeTokenCreatorAddress(tokenType: String): String {
+        return if (tokenType.contains("/@")) {
+            tokenType.split("/@")[1]
+        } else {
+            tokenType
+        }
     }
 
     private fun setListeners() {
