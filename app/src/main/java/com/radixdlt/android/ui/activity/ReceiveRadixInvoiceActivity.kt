@@ -73,16 +73,16 @@ class ReceiveRadixInvoiceActivity : BaseActivity() {
         attachment: String? = null
     ): String {
         val domain = "https://www.radixdlt.com"
-        val schema = "/dapp/payment/send"
+        val path = "/dapp/payment/send"
         val queryTo = "?to=$address"
         val queryAmount = "&amount=$amount"
         val queryToken = "&token=$token"
         val queryAttachment = "&attachment=$attachment"
 
         return if (attachment == null) {
-            "$domain$schema$queryTo$queryAmount$queryToken"
+            "$domain$path$queryTo$queryAmount$queryToken"
         } else {
-            "$domain$schema$queryTo$queryAmount$queryToken$queryAttachment"
+            "$domain$path$queryTo$queryAmount$queryToken$queryAttachment"
         }
     }
 

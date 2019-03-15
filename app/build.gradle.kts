@@ -53,6 +53,7 @@ android {
             )
         }
         getByName("debug") {
+            resValue("string", "app_name", "Radix")
             isDebuggable = true
             isMinifyEnabled = false
             proguardFiles(
@@ -61,6 +62,7 @@ android {
             )
         }
         create("dev") {
+            resValue("string", "app_name", "Radix")
             versionNameSuffix = "-betanet"
             isDebuggable = true
             isMinifyEnabled = false
@@ -92,10 +94,10 @@ android {
             minSdkVersion(26)
         }
         create("betanet") {
+            resValue("string", "app_name", "Radix (betanet)")
             setDimension("sdk")
             minSdkVersion(26)
             applicationIdSuffix = ".betanet"
-            resValue("string", "app_name", "Radix (betanet)")
         }
     }
 

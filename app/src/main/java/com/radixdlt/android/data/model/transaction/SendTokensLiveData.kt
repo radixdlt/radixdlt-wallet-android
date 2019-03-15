@@ -29,7 +29,10 @@ class SendTokensLiveData @Inject constructor(
         balanceChecked = false
         Identity.api!!.getBalance(Identity.api!!.getMyAddress())
             .subscribe {
-                if (balanceChecked) return@subscribe
+                // FIXME: currently getBalance() has a bit of an erratic behaviour. Check again with future updates!
+                if (balanceChecked) {
+                    return@subscribe
+                }
                 balanceChecked = true
                 val tokenClassReference = it.map { map ->
                     map
