@@ -62,7 +62,6 @@ android {
             )
         }
         create("dev") {
-            resValue("string", "app_name", "Radix")
             versionNameSuffix = "-betanet"
             isDebuggable = true
             isMinifyEnabled = false

@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_receive_radix_invoice.*
 import net.glxn.qrgen.android.QRCode
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import java.net.URLEncoder
 import javax.inject.Inject
 
 class ReceiveRadixInvoiceActivity : BaseActivity() {
@@ -77,11 +78,11 @@ class ReceiveRadixInvoiceActivity : BaseActivity() {
         val queryTo = "?to=$address"
         val queryAmount = "&amount=$amount"
         val queryToken = "&token=$token"
-        val queryAttachment = "&attachment=$attachment"
 
         return if (attachment == null) {
             "$domain$path$queryTo$queryAmount$queryToken"
         } else {
+            val queryAttachment = "&attachment=${URLEncoder.encode(attachment, "UTF-8")}"
             "$domain$path$queryTo$queryAmount$queryToken$queryAttachment"
         }
     }
