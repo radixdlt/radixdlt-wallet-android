@@ -3,7 +3,7 @@ package com.radixdlt.android.data.model.transaction
 import androidx.lifecycle.LiveData
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.client.application.translate.tokens.InsufficientFundsException
-import com.radixdlt.client.application.translate.tokens.TokenClassReference
+import com.radixdlt.client.application.translate.tokens.TokenTypeReference
 import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.network.actions.SubmitAtomAction
 import com.radixdlt.client.core.network.actions.SubmitAtomResultAction
@@ -23,11 +23,17 @@ class SendTokensLiveData @Inject constructor(
 ) : LiveData<String>() {
 
     private val compositeDisposable = CompositeDisposable()
+    private var balanceChecked = false
 
     fun sendToken(to: String, amount: BigDecimal, token: String, payLoad: String?) {
+        balanceChecked = false
         Identity.api!!.getBalance(Identity.api!!.getMyAddress())
             .subscribe {
-
+                // FIXME: currently getBalance() has a bit of an erratic behaviour. Check again with future updates!
+                if (balanceChecked) {
+                    return@subscribe
+                }
+                balanceChecked = true
                 val tokenClassReference = it.map { map ->
                     map
                 }.find {
@@ -38,6 +44,7 @@ class SendTokensLiveData @Inject constructor(
                 }
 
                 if (it.isNotEmpty() && tokenClassReference.value > BigDecimal.ZERO) {
+                    Timber.tag("SEND_TOKENS").d("$to, $amount, ${tokenClassReference.key}, $payLoad")
                     sendTokens(to, amount, tokenClassReference.key, payLoad)
                 } else {
                     postValue("ERROR")
@@ -48,7 +55,7 @@ class SendTokensLiveData @Inject constructor(
     private fun sendTokens(
         to: String,
         amount: BigDecimal,
-        tokenClassReference: TokenClassReference,
+        tokenClassReference: TokenTypeReference,
         payLoad: String?
     ) {
         try {
@@ -74,15 +81,15 @@ class SendTokensLiveData @Inject constructor(
             r.subscribeOn(Schedulers.io())
                 .subscribe({
                     if (it is SubmitAtomResultAction) {
-                        if (it.type == SubmitAtomResultAction.SubmitAtomResultActionType.STORED) {
-                            // TODO: Will likely need the atom hid to do this which I now can!!
+//                        if (it.type == SubmitAtomResultAction.SubmitAtomResultActionType.STORED) {
+//                             TODO: Will likely need the atom hid to do this which I now can!!
 //                            val transactionEntity = createTransactionEntity(
 //                                amount, to, payLoad, it, tokenClassReference
 //                            )
 //                            transactionsDao.insertTransaction(transactionEntity)
 //                            postValue(it.type.name)
 //                            return@subscribe
-                        }
+//                        }
                         postValue(it.type.name)
                     }
 
@@ -104,7 +111,7 @@ class SendTokensLiveData @Inject constructor(
         to: String,
         payLoad: String?,
         it: SubmitAtomAction,
-        tokenClassReference: TokenClassReference
+        tokenClassReference: TokenTypeReference
     ): TransactionEntity {
         val amountFormatted = amount.setScale(
             5, RoundingMode.HALF_UP
@@ -118,7 +125,7 @@ class SendTokensLiveData @Inject constructor(
             true,
             it.atom.timestamp,
             tokenClassReference.symbol,
-            TokenClassReference.getSubunits()
+            TokenTypeReference.getSubunits()
         )
     }
 

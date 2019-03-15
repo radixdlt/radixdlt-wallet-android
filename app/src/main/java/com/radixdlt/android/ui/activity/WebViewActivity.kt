@@ -8,7 +8,6 @@ import android.webkit.WebViewClient
 import androidx.appcompat.widget.Toolbar
 import com.radixdlt.android.R
 import kotlinx.android.synthetic.main.activity_webview.*
-import kotlinx.android.synthetic.main.barcode_capture.*
 import timber.log.Timber
 
 /**

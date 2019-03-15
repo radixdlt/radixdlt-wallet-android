@@ -2,6 +2,7 @@ package com.radixdlt.android.di.module
 
 import com.radixdlt.android.ui.activity.ConversationActivity
 import com.radixdlt.android.ui.activity.EnterPasswordActivity
+import com.radixdlt.android.ui.activity.ReceiveRadixInvoiceActivity
 import com.radixdlt.android.ui.activity.SendRadixActivity
 import com.radixdlt.android.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.ui.fragment.ContactsFragment
@@ -33,4 +34,7 @@ abstract class AndroidBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun bindSendRadixActivity(): SendRadixActivity
+
+    @ContributesAndroidInjector
+    abstract fun bindReceiveRadixInvoiceActivity(): ReceiveRadixInvoiceActivity
 }

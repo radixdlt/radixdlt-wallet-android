@@ -1,8 +1,8 @@
 package com.radixdlt.android.data.mapper
 
 import com.radixdlt.android.data.model.transaction.TransactionEntity
-import com.radixdlt.client.application.translate.tokens.TokenClassReference
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
+import com.radixdlt.client.application.translate.tokens.TokenTypeReference
 import java.math.RoundingMode
 
 object TokenTransferDataMapper {
@@ -26,7 +26,7 @@ object TokenTransferDataMapper {
         val tokenClassISO: String = tokenTransfer.tokenClass.toString()
         // TODO: Currently it is fixed and the plan is for all tokens to have the same subunits
         // TODO: Recent update has changed this to 10^18
-        val tokenClassSubUnits = TokenClassReference.getSubunits()
+        val tokenClassSubUnits = TokenTypeReference.getSubunits()
 
         return TransactionEntity(
                 address,

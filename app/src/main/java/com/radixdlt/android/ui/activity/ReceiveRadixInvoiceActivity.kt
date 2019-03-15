@@ -1,24 +1,41 @@
 package com.radixdlt.android.ui.activity
 
 import android.content.Context
-import android.net.Uri
+import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.google.zxing.EncodeHintType
 import com.radixdlt.android.R
 import com.radixdlt.android.RadixWalletApplication
+import com.radixdlt.android.ui.fragment.TransactionsViewModel
+import com.radixdlt.android.util.EmptyTextWatcher
+import com.radixdlt.android.util.GENESIS_XRD
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.copyToClipboard
 import com.radixdlt.android.util.setAddressWithColors
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_receive_radix_invoice.*
 import net.glxn.qrgen.android.QRCode
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import javax.inject.Inject
 
 class ReceiveRadixInvoiceActivity : BaseActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var transactionsViewModel: TransactionsViewModel
 
     private val size = RadixWalletApplication.densityPixel!!
 
@@ -26,9 +43,7 @@ class ReceiveRadixInvoiceActivity : BaseActivity() {
 
     private val tokenTypesList = arrayListOf<String>()
 
-    private var uri: Uri? = null
-    private var tokenTypeExtra: String? = null
-    private lateinit var token: String
+    private lateinit var generatedURI: String
 
     companion object {
         fun newIntent(ctx: Context) {
@@ -37,50 +52,136 @@ class ReceiveRadixInvoiceActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        AndroidInjection.inject(this)
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receive_radix_invoice)
 
         showAddress()
-
-        val qrCode = QRCode.from(myAddress)
-            .withSize(size, size)
-            .withHint(EncodeHintType.MARGIN, 1)
-            .bitmap()
-
-        Glide.with(this).load(qrCode).into(imageView)
 
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.title = getString(R.string.receive_radix_activity_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setListeners()
-//        initialiseViewModels()
+        initialiseViewModels()
+    }
+
+    private fun generateURI(
+        address: String = myAddress,
+        token: String = GENESIS_XRD,
+        amount: String = "O",
+        attachment: String? = null
+    ): String {
+        val domain = "https://www.radixdlt.com"
+        val path = "/dapp/payment/send"
+        val queryTo = "?to=$address"
+        val queryAmount = "&amount=$amount"
+        val queryToken = "&token=$token"
+        val queryAttachment = "&attachment=$attachment"
+
+        return if (attachment == null) {
+            "$domain$path$queryTo$queryAmount$queryToken"
+        } else {
+            "$domain$path$queryTo$queryAmount$queryToken$queryAttachment"
+        }
+    }
+
+    private fun generateQR(uri: String) {
+        val qrCode = QRCode.from(uri)
+            .withSize(size, size)
+            .withHint(EncodeHintType.MARGIN, 1)
+            .bitmap()
+
+        Glide.with(this).load(qrCode).into(imageView)
     }
 
     private fun setListeners() {
-        copyInvoiceButton.setOnClickListener {
-            copyToClipboard(this, "")
+        amountEditText.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
+            override fun afterTextChanged(amount: Editable?) {
+                val token = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
+                val attachment = if (inputMessageTIET.text.isNullOrBlank()) null else inputMessageTIET.text.toString()
+                if (amount.isNullOrEmpty()) {
+                    generatedURI = generateURI(token = token)
+                    generateQR(generatedURI)
+                } else {
+                    generatedURI = generateURI(amount = "$amount", token = token, attachment = attachment)
+                    generateQR(generatedURI)
+                }
+            }
+        })
 
-            toast("")
+        inputMessageTIET.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
+            override fun afterTextChanged(message: Editable?) {
+                val amount = if (amountEditText.text.isNullOrBlank()) "0" else amountEditText.text.toString()
+                val token = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
+                if (message.isNullOrEmpty()) {
+                    generatedURI = generateURI(amount = amount, token = token, attachment = null)
+                    generateQR(generatedURI)
+                } else {
+                    generatedURI = generateURI(amount = amount, token = token, attachment = "$message")
+                    generateQR(generatedURI)
+                }
+            }
+        })
+
+        tokenTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Not used
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val token = tokenTypesList[position]
+                val amount = if (amountEditText.text.isNullOrBlank()) "0" else amountEditText.text.toString()
+                val attachment = if (inputMessageTIET.text.isNullOrBlank()) null else inputMessageTIET.text.toString()
+                generatedURI = generateURI(amount = amount, token = token, attachment = attachment)
+                generateQR(generatedURI)
+            }
+        }
+
+        copyInvoiceButton.setOnClickListener {
+            copyToClipboard(this, generatedURI)
+            toast(generatedURI)
         }
 
         shareInvoiceButton.setOnClickListener {
+            BaseActivity.openedShareDialog = true
+
+            val sharingIntent = Intent(Intent.ACTION_SEND)
+            sharingIntent.type = "text/plain"
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, generatedURI)
+            startActivity(
+                Intent.createChooser(
+                    sharingIntent,
+                    getString(R.string.account_fragment_sharing_intent_chooser_title)
+                )
+            )
+        }
+
+        copyAddressButton.setOnClickListener {
+            copyToClipboard(this, myAddress)
+            toast("Copied address: $myAddress")
         }
     }
 
     private fun initialiseViewModels() {
+        transactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(TransactionsViewModel::class.java)
+
+        transactionsViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
+            tokenTypes?.apply {
+                setTokenTypeSpinner(tokenTypes)
+            }
+        })
     }
 
     private fun setTokenTypeSpinner(tokenTypes: List<String>) {
-        when {
-            tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.send_activity_no_tokens_spinner))
-            tokenTypes.size == 1 -> tokenTypesList.add(tokenTypes.first())
-            else -> {
-                tokenTypesList.add(getString(R.string.send_activity_token_type_spinner))
-                tokenTypesList.addAll(tokenTypes)
-            }
+        tokenTypesList.clear()
+
+        if (!tokenTypes.contains(GENESIS_XRD)) {
+            tokenTypesList.add(GENESIS_XRD)
         }
+
+        tokenTypesList.addAll(tokenTypes)
 
         val tokenTypesListSpinner = tokenTypesList.map {
             removeTokenCreatorAddress(it)
@@ -92,15 +193,7 @@ class ReceiveRadixInvoiceActivity : BaseActivity() {
 
         tokenTypeSpinner.adapter = tokenTypesSpinner
 
-        // set spinner selection if token passed from transaction details
-        tokenTypeExtra?.let {
-            setTokenInSpinner(tokenTypes, it)
-        }
-
-        // set spinner selection if populating from a URI
-        uri?.let {
-            setTokenInSpinner(tokenTypes, token)
-        }
+        tokenTypeSpinner.setSelection(tokenTypesListSpinner.indexOf("XRD"))
     }
 
     private fun removeTokenCreatorAddress(tokenType: String): String {
@@ -108,20 +201,6 @@ class ReceiveRadixInvoiceActivity : BaseActivity() {
             tokenType.split("/@")[1]
         } else {
             tokenType
-        }
-    }
-
-    private fun setTokenInSpinner(tokenTypes: List<String>, token: String) {
-        val tokenTypeIndex = tokenTypes.indexOf(token)
-        if (tokenTypeIndex == -1) {
-            toast(getString(R.string.toast_token_not_owned))
-            return
-        }
-
-        if (tokenTypes.size > 1) {
-            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token) + 1)
-        } else {
-            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token))
         }
     }
 
@@ -138,5 +217,10 @@ class ReceiveRadixInvoiceActivity : BaseActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        BaseActivity.openedShareDialog = false
     }
 }
