@@ -29,7 +29,7 @@ class SendMessageLiveData @Inject constructor(
                 .toObservable()
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    if ((it as SubmitAtomResultAction).type == SubmitAtomResultAction.SubmitAtomResultActionType.STORED) {
+                    if (it is SubmitAtomResultAction) {
                         postValue(it.type.name)
                     }
                     Timber.d("Network status is... $it")

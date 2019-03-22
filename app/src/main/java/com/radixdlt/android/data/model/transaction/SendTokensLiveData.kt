@@ -3,7 +3,7 @@ package com.radixdlt.android.data.model.transaction
 import androidx.lifecycle.LiveData
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.client.application.translate.tokens.InsufficientFundsException
-import com.radixdlt.client.application.translate.tokens.TokenTypeReference
+import com.radixdlt.client.application.translate.tokens.TokenDefinitionReference
 import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.network.actions.SubmitAtomAction
 import com.radixdlt.client.core.network.actions.SubmitAtomResultAction
@@ -49,13 +49,13 @@ class SendTokensLiveData @Inject constructor(
                 } else {
                     postValue("ERROR")
                 }
-            }.addTo(compositeDisposable)
+            }.addTo(compositeDisposable) // TODO: Maybe dispose after initial balance check!
     }
 
     private fun sendTokens(
         to: String,
         amount: BigDecimal,
-        tokenClassReference: TokenTypeReference,
+        tokenClassReference: TokenDefinitionReference,
         payLoad: String?
     ) {
         try {
@@ -111,7 +111,7 @@ class SendTokensLiveData @Inject constructor(
         to: String,
         payLoad: String?,
         it: SubmitAtomAction,
-        tokenClassReference: TokenTypeReference
+        tokenClassReference: TokenDefinitionReference
     ): TransactionEntity {
         val amountFormatted = amount.setScale(
             5, RoundingMode.HALF_UP
@@ -125,7 +125,7 @@ class SendTokensLiveData @Inject constructor(
             true,
             it.atom.timestamp,
             tokenClassReference.symbol,
-            TokenTypeReference.getSubunits()
+            TokenDefinitionReference.getSubunits()
         )
     }
 

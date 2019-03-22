@@ -98,10 +98,10 @@ class TransactionDetailsActivity : BaseActivity() {
     }
 
     private fun setTokenType(transactionEntity: TransactionEntity) {
-        if (transactionEntity.tokenClassISO != GENESIS_XRD) {
+//        if (transactionEntity.tokenClassISO != GENESIS_XRD) {
             testTokensTextView.text = transactionEntity.tokenClassISO.split("/@")[1]
             testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-        }
+//        }
     }
 
     private fun initialiseViewModel(transactionDetailsExtra: TransactionEntity) {

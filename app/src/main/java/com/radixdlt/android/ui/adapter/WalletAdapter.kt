@@ -90,18 +90,18 @@ class WalletAdapter(
         }
 
         private fun setTokenType(transactionEntity: TransactionEntity) {
-            if (transactionEntity.tokenClassISO != GENESIS_XRD) {
+//            if (transactionEntity.tokenClassISO != GENESIS_XRD) {
                 itemView.testTokensTextView.text = transactionEntity.tokenClassISO.split("/@")[1]
                 itemView.testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-            } else {
-                itemView.testTokensTextView.text = ctx.getString(R.string.wallet_fragment_item_xml_test_tokens)
-                itemView.testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    ContextCompat.getDrawable(ctx, R.drawable.ic_warning_line_small),
-                    null
-                )
-            }
+//            } else {
+//                itemView.testTokensTextView.text = ctx.getString(R.string.wallet_fragment_item_xml_test_tokens)
+//                itemView.testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(
+//                    null,
+//                    null,
+//                    ContextCompat.getDrawable(ctx, R.drawable.ic_warning_line_small),
+//                    null
+//                )
+//            }
         }
 
         // Detect if message attached toAddress transactionList, set and make VISIBLE or set as GONE
