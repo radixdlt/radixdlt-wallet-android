@@ -14,8 +14,8 @@ android {
         applicationId = "com.radixdlt.android"
         minSdkVersion(AndroidSdk.min)
         targetSdkVersion(AndroidSdk.target)
-        versionCode = 6
-        versionName = "0.15.00"
+        versionCode = 7
+        versionName = "0.20.00"
 
         testInstrumentationRunnerArgument(
             "runnerBuilder",
@@ -36,7 +36,9 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android.txt"),
                 "proguard-rules.pro"
