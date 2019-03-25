@@ -54,7 +54,7 @@ object QueryPreferences {
     @Universe
     fun getPrefNetwork(context: Context): String? {
         return PreferenceManager.getDefaultSharedPreferences(context)
-            .getString(PREF_NETWORK, ALPHANET)
+            .getString(PREF_NETWORK, ALPHANET2)
     }
 
     @SuppressLint("ApplySharedPref")
