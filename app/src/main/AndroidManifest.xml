@@ -24,7 +24,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-                <!-- for Pheonix -->
+                <!-- for Phoenix -->
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter
