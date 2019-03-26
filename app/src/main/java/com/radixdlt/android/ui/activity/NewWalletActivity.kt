@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import com.radixdlt.android.R
+import com.radixdlt.android.util.KEYSTORE_FILE
 import com.radixdlt.android.util.createProgressDialog
 import kotlinx.android.synthetic.main.activity_new_wallet.*
 import org.jetbrains.anko.startActivity
@@ -22,16 +23,17 @@ class NewWalletActivity : BaseActivity() {
         const val READ_REQUEST_CODE = 42
     }
 
-    private var newUser: Boolean = false
+    private var deepLink: Uri? = null
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_wallet)
 
+        deepLink = intent.data
         progressDialog = createProgressDialog(this)
 
-        val myKeyFile = File(filesDir, "keystore.key")
+        val myKeyFile = File(filesDir, KEYSTORE_FILE)
         if (myKeyFile.exists()) {
 
             // In case of dealing with intent which has a uri extra, check if launched from
@@ -43,18 +45,20 @@ class NewWalletActivity : BaseActivity() {
                 false
             }
 
-            if (!launchFromHistory && Intent.ACTION_VIEW == intent.action && intent.data != null) {
-                EnterPasswordActivity.newIntent(this, intent.data!!)
+            if (!launchFromHistory && Intent.ACTION_VIEW == intent.action && deepLink != null) {
+                EnterPasswordActivity.newIntent(this, deepLink!!)
             } else {
                 EnterPasswordActivity.newIntent(this)
             }
             finish()
-        } else {
-            newUser = true
         }
 
         createNewWalletButton.setOnClickListener {
-            startActivity<EnterPasswordActivity>()
+            if (Intent.ACTION_VIEW == intent.action && deepLink != null) {
+                EnterPasswordActivity.newIntent(this, deepLink!!)
+            } else {
+                startActivity<EnterPasswordActivity>()
+            }
         }
 
         importWalletButton.setOnClickListener {
@@ -86,7 +90,11 @@ class NewWalletActivity : BaseActivity() {
                 Timber.i("Uri: ${uri!!} and type ${contentResolver.getType(uri)}")
                 val fileContents = readTextFromUri(uri)
                 createFile(fileContents, File(filesDir, "keystore.key").path)
-                startActivity<EnterPasswordActivity>()
+                if (deepLink != null) {
+                    EnterPasswordActivity.newIntent(this, deepLink!!)
+                } else {
+                    startActivity<EnterPasswordActivity>()
+                }
                 finish()
             }
         }

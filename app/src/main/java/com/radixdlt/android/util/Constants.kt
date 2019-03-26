@@ -7,6 +7,7 @@ const val FAUCET_ADDRESS = "9he94tVfQGAVr4xoUpG3uJfB2exURExzFV6E7dq4bxUWRbM5Edd"
 const val GENESIS_XRD = "JHuDLpGefPssAY3v1pTXTQWHGv1tkTCEdq7RQYPnLuin1cfoath/tokens/@XRD"
 const val TOTAL = "TOTAL"
 const val URL_REPORT_ISSUE = "https://radixdlt.typeform.com/to/kPFmVy"
+const val KEYSTORE_FILE = "keystore.key"
 
 @Retention(AnnotationRetention.SOURCE)
 @StringDef(ALPHANET, ALPHANET2)
