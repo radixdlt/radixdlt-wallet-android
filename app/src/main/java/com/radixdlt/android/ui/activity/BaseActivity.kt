@@ -8,12 +8,14 @@ import com.radixdlt.android.R
 import com.radixdlt.android.RadixWalletApplication
 import com.radixdlt.android.identity.AndroidRadixIdentity
 import com.radixdlt.android.identity.Identity
+import com.radixdlt.android.util.KEYSTORE_FILE
 import com.radixdlt.android.util.PREF_SECRET
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.Vault
 import com.radixdlt.client.core.crypto.ECKeyPair
 import okio.ByteString
 import org.jetbrains.anko.startActivity
+import java.io.File
 
 @SuppressLint("Registered")
 open class BaseActivity : AppCompatActivity() {
@@ -28,7 +30,8 @@ open class BaseActivity : AppCompatActivity() {
         // would trigger app to start a new activity if auto lock was activated and end up
         // with a duplicate password screen causing problems.
         (this as? NewWalletActivity)?.let {
-            if (QueryPreferences.getPrefPasswordEnabled(this) &&
+            if (File(filesDir, KEYSTORE_FILE).exists() &&
+                QueryPreferences.getPrefPasswordEnabled(this) &&
                 intent.action != null && intent.action == Intent.ACTION_VIEW
             ) {
                 QueryPreferences.setPrefAddress(this, "")
@@ -56,10 +59,12 @@ open class BaseActivity : AppCompatActivity() {
         // If not logged in
         if (QueryPreferences.getPrefAddress(this).isBlank()) return
 
-        if ((RadixWalletApplication.wasInBackground && !openedShareDialog &&
-                !openedCustomTabs && !openedPermissionDialog &&
-                QueryPreferences.getPrefPasswordEnabled(this)) ||
-            lockActive) {
+        if ((RadixWalletApplication.wasInBackground &&
+                !openedShareDialog &&
+                !openedCustomTabs &&
+                !openedPermissionDialog &&
+                QueryPreferences.getPrefPasswordEnabled(this)) || lockActive
+        ) {
             QueryPreferences.setPrefAddress(this, "")
             lockActive = true
             startActivity<NewWalletActivity>() // With persistence we could probably finish activities and restart from first screen
