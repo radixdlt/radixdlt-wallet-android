@@ -197,6 +197,7 @@ dependencies {
     implementation(Libraries.threeTenABP)
     implementation(Libraries.processPhoenix)
     implementation(Libraries.vault)
+    implementation(Libraries.novaCryptoBIP39)
 
     testImplementation(TestLibraries.mockitoKotlin)
     testImplementation(TestLibraries.mockk)

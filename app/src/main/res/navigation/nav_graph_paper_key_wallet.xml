@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_paper_key_wallet"
+    app:startDestination="@id/navigation_paper_key_welcome">
+    <fragment
+        android:id="@+id/navigation_paper_key_welcome"
+        android:name="com.radixdlt.android.ui.fragment.PaperKeyWelcomeFragment"
+        android:label="fragment_paper_key_welcome"
+        tools:layout="@layout/fragment_paper_key_welcome">
+        <action
+            android:id="@+id/action_navigation_paper_key_welcome_to_navigation_paper_key_mnemonic_displayed"
+            app:destination="@id/navigation_paper_key_mnemonic_displayed"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_from_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_from_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_paper_key_mnemonic_displayed"
+        android:name="com.radixdlt.android.ui.fragment.PaperKeyMnemonicDisplayedFragment"
+        android:label="fragment_paper_key_mnemonic_displayed"
+        tools:layout="@layout/fragment_paper_key_mnemonic_displayed">
+        <action
+            android:id="@+id/action_navigation_paper_key_mnemonic_displayed_to_navigation_paper_key_mnemonic_confirmation"
+            app:destination="@id/navigation_paper_key_mnemonic_confirmation"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_from_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_from_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_paper_key_mnemonic_confirmation"
+        android:name="com.radixdlt.android.ui.fragment.PaperKeyMnemonicConfirmationFragment"
+        android:label="fragment_paper_key_mnemonic_confirmation"
+        tools:layout="@layout/fragment_paper_key_mnemonic_confirmation" />
+</navigation>

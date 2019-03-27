@@ -53,6 +53,7 @@ object Libraries {
         const val threeTenABP = "1.1.2"
         const val timber = "4.7.1"
         const val processPhoenix = "2.0.0"
+        const val novaCryptoBIP39 = "2019.01.27"
     }
 
     const val ktlint = "com.github.shyiko:ktlint:${Versions.ktlint}"
@@ -105,6 +106,8 @@ object Libraries {
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val daggerAndroidCompiler =
         "com.google.dagger:dagger-android-processor:${Versions.dagger}"
+
+    const val novaCryptoBIP39 = "io.github.novacrypto:BIP39:${Versions.novaCryptoBIP39}"
 }
 
 object TestLibraries {

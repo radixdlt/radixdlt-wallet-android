@@ -16,6 +16,7 @@
   <string name="new_wallet_activity_xml_welcome_title">Welcome to Radix</string>
   <string name="new_wallet_activity_xml_create_import">Create a new password protected wallet or import an existing one</string>
   <string name="new_wallet_activity_xml_create_new_wallet_button">Create new wallet</string>
+  <string name="new_wallet_activity_xml_create_paper_key_wallet_button">Create paper key wallet</string>
   <string name="new_wallet_activity_xml_import_wallet_button">Import existing wallet</string>
 
   <!-- Enter Password Activity -->

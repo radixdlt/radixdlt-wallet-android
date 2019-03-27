@@ -61,6 +61,10 @@ class NewWalletActivity : BaseActivity() {
             }
         }
 
+        createPaperKeyWalletButton.setOnClickListener {
+            startActivity<NewPaperKeyWalletActivity>()
+        }
+
         importWalletButton.setOnClickListener {
             performFileSearch()
         }
