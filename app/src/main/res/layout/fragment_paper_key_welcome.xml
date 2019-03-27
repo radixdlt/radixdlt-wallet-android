@@ -7,30 +7,47 @@
     android:background="@color/mainBackground"
     tools:context=".ui.fragment.PaperKeyWelcomeFragment">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome"
-        android:textSize="32sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/tool_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:text="A paper key is one way to restore your Radix wallet.\n\nWe will show you a list of words to write down on a piece of paper and keep safe."
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/nextButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Next"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:textSize="18sp"
+        android:textAllCaps="false"
+        android:text="Write Down Paper Key"
+        android:textColor="@color/white"
+        android:theme="@style/AccentButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:backgroundTint="@color/colorAccent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
