@@ -58,6 +58,9 @@
             android:name="com.radixdlt.android.ui.activity.EnterPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.radixdlt.android.ui.activity.EnterMnemonicActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.radixdlt.android.ui.activity.NewPaperKeyWalletActivity"
             android:screenOrientation="portrait" />
         <activity

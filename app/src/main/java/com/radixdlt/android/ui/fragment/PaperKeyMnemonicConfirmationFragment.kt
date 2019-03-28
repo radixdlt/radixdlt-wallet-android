@@ -1,5 +1,6 @@
 package com.radixdlt.android.ui.fragment
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,15 +13,28 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.radixdlt.android.R
+import com.radixdlt.android.identity.AndroidRadixIdentity
+import com.radixdlt.android.identity.Identity
 import com.radixdlt.android.ui.activity.MainActivity
-import com.radixdlt.android.util.EmptyTextWatcher
+import com.radixdlt.android.util.*
+import com.radixdlt.client.core.RadixUniverse
+import com.radixdlt.client.core.crypto.ECKeyPair
+import com.radixdlt.client.core.crypto.RadixECKeyPairs
+import io.github.novacrypto.bip39.SeedCalculator
 import kotlinx.android.synthetic.main.fragment_paper_key_mnemonic_confirmation.*
-import org.jetbrains.anko.startActivity
+import okio.ByteString
+import timber.log.Timber
+import java.io.File
 
 class PaperKeyMnemonicConfirmationFragment : Fragment() {
 
     private var firstRandomWordVerified: Boolean = false
     private var secondRandomWordVerified: Boolean = false
+
+    private val sharedPreferenceVault = Vault.getVault()
+    private lateinit var progressDialog: ProgressDialog
+
+    private lateinit var mnemonicStringArray: Array<String>
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -38,13 +52,15 @@ class PaperKeyMnemonicConfirmationFragment : Fragment() {
         )
         setHasOptionsMenu(true)
 
-        val mnemonicStringArray = arguments?.getStringArray("mnemonicStringArray")!!
+        progressDialog = createProgressDialog(activity!!)
+
+        mnemonicStringArray = arguments?.getStringArray("mnemonicStringArray")!!
+        Timber.tag("MNEMONIC").d(mnemonicStringArray.toString())
 
         finishButton.setOnClickListener {
             // TODO: create private key and store it in Vault and disable auto lock for show case purposes
             if (firstRandomWordVerified && secondRandomWordVerified) {
-                activity!!.finishAffinity()
-                activity!!.startActivity<MainActivity>()
+                confirm()
             }
         }
 
@@ -77,6 +93,49 @@ class PaperKeyMnemonicConfirmationFragment : Fragment() {
                 }
             }
         })
+    }
+
+    fun confirm() {
+        val mnemonicBuilder = StringBuilder()
+        for ((index, value) in mnemonicStringArray.withIndex()) {
+            if (index > 0) mnemonicBuilder.append(" ")
+            mnemonicBuilder.append(value)
+        }
+        val mnemonicString = mnemonicBuilder.toString().trim()
+        Timber.tag("MNEMONIC").d(mnemonicString)
+
+        val privateKey = RadixECKeyPairs
+                .newInstance()
+                .generateKeyPairFromSeed(SeedCalculator().calculateSeed(mnemonicString, ""))
+                .privateKey
+
+        val privateKeyHex: String = ByteString.of(*privateKey).hex() // Note the spread operator
+        saveKey(privateKeyHex)
+
+        Identity.myIdentity = AndroidRadixIdentity(ECKeyPair(privateKey))
+
+        val address = RadixUniverse.getInstance().getAddressFrom(
+                Identity.myIdentity!!.getPublicKey()
+        ).toString()
+
+        QueryPreferences.setPrefAddress(activity!!, address)
+        QueryPreferences.setPrefPasswordEnabled(activity!!, false)  // set to false
+        File(activity!!.filesDir, "keystore.key").createNewFile()
+        openWallet()
+    }
+
+    private fun openWallet() {
+        setProgressDialogVisible(progressDialog, false)
+        MainActivity.newIntent(activity!!)
+        activity!!.finishAffinity()
+    }
+
+    private fun saveKey(key: String) {
+        sharedPreferenceVault.edit().putString(PREF_SECRET, key).apply()
+    }
+
+    private fun loadKey(): String? {
+        return sharedPreferenceVault.getString(PREF_SECRET, null)
     }
 
     private fun randomSecondNumberNotFirst(firstRandomWord: Int): Int {

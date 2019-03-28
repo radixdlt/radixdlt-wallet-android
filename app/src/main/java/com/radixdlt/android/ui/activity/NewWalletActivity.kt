@@ -68,6 +68,10 @@ class NewWalletActivity : BaseActivity() {
         importWalletButton.setOnClickListener {
             performFileSearch()
         }
+
+        importWalletFromMnemonicButton.setOnClickListener {
+            startActivity<EnterMnemonicActivity>()
+        }
     }
 
     /**

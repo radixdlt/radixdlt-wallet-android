@@ -52,11 +52,11 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
         AndroidThreeTen.init(this)
 
 //        connectToBootstrapNode()
-        RadixUniverse.bootstrap(Bootstrap.SUNSTONE)
-//        RadixUniverse.bootstrap(
-//            RadixUniverseConfigs.getSunstone(),
-//            Observable.just(RadixNode("13.73.151.49", true, 443))
-//        )
+//        RadixUniverse.bootstrap(Bootstrap.SUNSTONE)
+        RadixUniverse.bootstrap(
+            RadixUniverseConfigs.getSunstone(),
+            Observable.just(RadixNode("23.97.197.75", true, 443))
+        )
 
         densityPixel = dip(250)
     }
