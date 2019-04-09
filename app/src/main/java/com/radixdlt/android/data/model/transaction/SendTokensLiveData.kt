@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.client.application.translate.tokens.InsufficientFundsException
 import com.radixdlt.client.application.translate.tokens.TokenDefinitionReference
+import com.radixdlt.client.application.translate.tokens.TokenUnitConversions
 import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.network.actions.SubmitAtomAction
 import com.radixdlt.client.core.network.actions.SubmitAtomResultAction
@@ -60,7 +61,7 @@ class SendTokensLiveData @Inject constructor(
     ) {
         try {
             val r: Observable<SubmitAtomAction> = if (payLoad != null) {
-                Identity.api!!.sendTokens(
+                Identity.api!!.transferTokens(
                     RadixAddress.from(to),
                     amount,
                     tokenClassReference, // Identity.api!!.nativeTokenRef
@@ -69,7 +70,7 @@ class SendTokensLiveData @Inject constructor(
                     .toObservable()
                     .doOnError(::checkErrorAndShowToast)
             } else {
-                Identity.api!!.sendTokens(
+                Identity.api!!.transferTokens(
                     RadixAddress.from(to),
                     amount,
                     tokenClassReference
@@ -125,7 +126,7 @@ class SendTokensLiveData @Inject constructor(
             true,
             it.atom.timestamp,
             tokenClassReference.symbol,
-            TokenDefinitionReference.getSubunits()
+            TokenUnitConversions.getSubunits()
         )
     }
 

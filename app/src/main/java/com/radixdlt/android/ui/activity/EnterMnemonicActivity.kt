@@ -11,15 +11,12 @@ import com.radixdlt.android.identity.Identity
 import com.radixdlt.android.util.*
 import com.radixdlt.client.application.identity.PrivateKeyEncrypter
 import com.radixdlt.client.application.identity.RadixIdentities
-import com.radixdlt.client.core.RadixUniverse
 import com.radixdlt.client.core.crypto.ECKeyPair
+import com.radixdlt.client.core.crypto.RadixECKeyPairs
 import io.github.novacrypto.bip39.MnemonicValidator
+import io.github.novacrypto.bip39.SeedCalculator
 import io.github.novacrypto.bip39.wordlists.English
 import kotlinx.android.synthetic.main.activity_enter_mnemonic.*
-import org.jetbrains.anko.toast
-import com.radixdlt.client.core.crypto.RadixECKeyPairs
-import org.bouncycastle.util.encoders.Hex
-import io.github.novacrypto.bip39.SeedCalculator
 import kotlinx.android.synthetic.main.activity_enter_password.*
 import okio.ByteString
 import java.io.File
@@ -71,9 +68,7 @@ class EnterMnemonicActivity : AppCompatActivity() {
 
             Identity.myIdentity = AndroidRadixIdentity(ECKeyPair(privateKey))
 
-            val address = RadixUniverse.getInstance().getAddressFrom(
-                    Identity.myIdentity!!.getPublicKey()
-            ).toString()
+            val address = Identity.api!!.myAddress.toString()
 
             QueryPreferences.setPrefAddress(this, address)
             QueryPreferences.setPrefPasswordEnabled(this, false)  // set to false
@@ -87,9 +82,7 @@ class EnterMnemonicActivity : AppCompatActivity() {
                 myKeyFile.path, inputPasswordTIET.text.toString()
         )
 
-        val address = RadixUniverse.getInstance().getAddressFrom(
-                Identity.myIdentity!!.getPublicKey()
-        ).toString()
+        val address = Identity.api!!.myAddress.toString()
 
         QueryPreferences.setPrefAddress(this, address)
 

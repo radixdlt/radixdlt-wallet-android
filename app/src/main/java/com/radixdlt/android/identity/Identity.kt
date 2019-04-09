@@ -2,6 +2,7 @@ package com.radixdlt.android.identity
 
 import com.radixdlt.client.application.RadixApplicationAPI
 import com.radixdlt.client.application.identity.RadixIdentity
+import com.radixdlt.client.core.Bootstrap
 
 /**
  * We use a simple object acting as a Singleton in Kotlin to keep a reference to
@@ -14,7 +15,8 @@ object Identity {
         get() = field?.let {
             return it
         } ?: run {
-            field = myIdentity?.let { RadixApplicationAPI.create(it) }
+            field = myIdentity?.let { RadixApplicationAPI.create(Bootstrap.SUNSTONE, it) }
+            field?.pull()
             return field
         }
         private set

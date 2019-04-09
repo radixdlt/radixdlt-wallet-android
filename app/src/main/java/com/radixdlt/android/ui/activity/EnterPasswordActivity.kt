@@ -16,18 +16,9 @@ import com.radixdlt.android.helper.TextFormatHelper
 import com.radixdlt.android.identity.AndroidRadixIdentity
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.android.ui.dialog.DeleteWalletDialog
-import com.radixdlt.android.util.PREF_SECRET
-import com.radixdlt.android.util.QueryPreferences
-import com.radixdlt.android.util.Vault
-import com.radixdlt.android.util.deleteAllData
-import com.radixdlt.android.util.createProgressDialog
-import com.radixdlt.android.util.hideKeyboard
-import com.radixdlt.android.util.setDialogMessage
-import com.radixdlt.android.util.setProgressDialogVisible
-import com.radixdlt.android.util.showKeyboard
+import com.radixdlt.android.util.*
 import com.radixdlt.client.application.identity.PrivateKeyEncrypter
 import com.radixdlt.client.application.identity.RadixIdentities
-import com.radixdlt.client.core.RadixUniverse
 import com.radixdlt.client.core.crypto.ECKeyPair
 import dagger.android.AndroidInjection
 import io.reactivex.Completable
@@ -226,9 +217,7 @@ class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWall
             myKeyFile.path, inputPasswordTIET.text.toString()
         )
 
-        val address = RadixUniverse.getInstance().getAddressFrom(
-            Identity.myIdentity!!.getPublicKey()
-        ).toString()
+        val address = Identity.api!!.myAddress.toString()
 
         QueryPreferences.setPrefAddress(this@EnterPasswordActivity, address)
 

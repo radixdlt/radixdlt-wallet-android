@@ -17,7 +17,6 @@ import com.radixdlt.android.identity.AndroidRadixIdentity
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.android.ui.activity.MainActivity
 import com.radixdlt.android.util.*
-import com.radixdlt.client.core.RadixUniverse
 import com.radixdlt.client.core.crypto.ECKeyPair
 import com.radixdlt.client.core.crypto.RadixECKeyPairs
 import io.github.novacrypto.bip39.SeedCalculator
@@ -114,9 +113,7 @@ class PaperKeyMnemonicConfirmationFragment : Fragment() {
 
         Identity.myIdentity = AndroidRadixIdentity(ECKeyPair(privateKey))
 
-        val address = RadixUniverse.getInstance().getAddressFrom(
-                Identity.myIdentity!!.getPublicKey()
-        ).toString()
+        val address = Identity.api!!.myAddress.toString()
 
         QueryPreferences.setPrefAddress(activity!!, address)
         QueryPreferences.setPrefPasswordEnabled(activity!!, false)  // set to false

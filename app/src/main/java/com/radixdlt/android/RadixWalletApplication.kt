@@ -7,22 +7,17 @@ import androidx.fragment.app.Fragment
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.radixdlt.android.di.component.DaggerRadixWalletComponent
 import com.radixdlt.android.di.component.RadixWalletComponent
-import com.radixdlt.android.util.ALPHANET
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.android.util.Vault
-import com.radixdlt.client.core.Bootstrap
-import com.radixdlt.client.core.RadixUniverse
-import com.radixdlt.client.core.address.RadixUniverseConfigs
-import com.radixdlt.client.core.network.RadixNode
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.Observable
 import org.jetbrains.anko.dip
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
+
 import javax.inject.Inject
 
 class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFragmentInjector {
@@ -51,40 +46,42 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
 
         AndroidThreeTen.init(this)
 
+        // TODO: Bootstrapping has changed therefore in order to connect to individual nodes best way
+        // TODO: would be to implement BootstrapConfig interface and create custom Bootstrapping
 //        connectToBootstrapNode()
 //        RadixUniverse.bootstrap(Bootstrap.SUNSTONE)
-        RadixUniverse.bootstrap(
-            RadixUniverseConfigs.getSunstone(),
-            Observable.just(RadixNode("23.97.197.75", true, 443))
-        )
+//        RadixUniverse.bootstrap(
+//            RadixUniverseConfigs.getSunstone(),
+//            Observable.just(RadixNode("23.97.197.75", true, 443))
+//        )
 
         densityPixel = dip(250)
     }
 
     // TODO: Implement once we have both main and test networks
-    private fun connectToBootstrapNode() {
-        if (QueryPreferences.getPrefNetwork(this) == ALPHANET) {
-            if (QueryPreferences.getPrefIsRandomNodeSelection(this)) {
-                RadixUniverse.bootstrap(Bootstrap.BETANET)
-            } else {
-                val ipAddress = QueryPreferences.getPrefNodeIP(this)
-                RadixUniverse.bootstrap(
-                    RadixUniverseConfigs.getBetanet(),
-                    Observable.just(RadixNode(ipAddress, true, 443))
-                )
-            }
-        } else {
-            if (QueryPreferences.getPrefIsRandomNodeSelection(this)) {
-                RadixUniverse.bootstrap(Bootstrap.BETANET)
-            } else {
-                val ipAddress = QueryPreferences.getPrefNodeIP(this)
-                RadixUniverse.bootstrap(
-                    RadixUniverseConfigs.getBetanet(),
-                    Observable.just(RadixNode(ipAddress, true, 443))
-                )
-            }
-        }
-    }
+//    private fun connectToBootstrapNode() {
+//        if (QueryPreferences.getPrefNetwork(this) == ALPHANET) {
+//            if (QueryPreferences.getPrefIsRandomNodeSelection(this)) {
+//                RadixUniverse.bootstrap(Bootstrap.BETANET)
+//            } else {
+//                val ipAddress = QueryPreferences.getPrefNodeIP(this)
+//                RadixUniverse.bootstrap(
+//                    RadixUniverseConfigs.getBetanet(),
+//                    Observable.just(RadixNode(ipAddress, true, 443))
+//                )
+//            }
+//        } else {
+//            if (QueryPreferences.getPrefIsRandomNodeSelection(this)) {
+//                RadixUniverse.bootstrap(Bootstrap.BETANET)
+//            } else {
+//                val ipAddress = QueryPreferences.getPrefNodeIP(this)
+//                RadixUniverse.bootstrap(
+//                    RadixUniverseConfigs.getBetanet(),
+//                    Observable.just(RadixNode(ipAddress, true, 443))
+//                )
+//            }
+//        }
+//    }
 
     /**
      * Generate encryption key and store it in vault
