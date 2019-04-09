@@ -22,10 +22,7 @@ object TokenTransferDataMapper {
         val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
         val dateUnix: Long = tokenTransfer.timestamp
-//        val tokenClassISO: String = tokenTransfer.tokenClass.symbol
         val tokenClassISO: String = tokenTransfer.tokenClass.toString()
-        // TODO: Currently it is fixed and the plan is for all tokens to have the same subunits
-        // TODO: Recent update has changed this to 10^18
         val tokenClassSubUnits = TokenUnitConversions.getSubunits()
 
         return TransactionEntity(
