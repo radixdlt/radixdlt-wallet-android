@@ -3,7 +3,7 @@ package com.radixdlt.android.util
 import androidx.annotation.StringDef
 
 const val PREF_SECRET = "secretKey"
-const val FAUCET_ADDRESS = "9i8LKZAVF3is4C4Ga75t9PbvXPXFQpZwa9s1Nifc3weXMBVdnmn" // alphanetwork // old: 9he94tVfQGAVr4xoUpG3uJfB2exURExzFV6E7dq4bxUWRbM5Edd
+const val FAUCET_ADDRESS = "9i8LKZAVF3is4C4Ga75t9PbvXPXFQpZwa9s1Nifc3weXMBVdnmn" // alphanet2 // old: 9febp9SmTHbTxDbL2ZQ3XAAxyXDrBPpjFhWQHFHRY9n7QMWWCpa
 const val URL_REPORT_ISSUE = "https://radixdlt.typeform.com/to/kPFmVy"
 const val KEYSTORE_FILE = "keystore.key"
 
