@@ -252,6 +252,8 @@ class WalletFragment : Fragment() {
             // check if it exists before adding and then showing
             this.transactions.find {
                 it.dateUnix == transactionEntities.first().dateUnix
+            }.also {
+                setLayoutResourcesWithTransactions()
             } ?: run {
                 this.transactions.add(0, transactionEntities.first())
                 showNewTransaction()
@@ -327,7 +329,7 @@ class WalletFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) return
 
-        if (requestCode == WalletFragment.REQUEST_CODE_RECEIVE_RADIX) {
+        if (requestCode == REQUEST_CODE_RECEIVE_RADIX) {
             copyAddressToClipBoard(QueryPreferences.getPrefAddress(activity!!))
         }
     }

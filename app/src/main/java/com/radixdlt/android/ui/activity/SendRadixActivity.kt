@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
@@ -45,6 +46,10 @@ class SendRadixActivity : BaseActivity() {
 
     private val tokenTypesList = arrayListOf<String>()
 
+    private val minimumSendAmount = 0.00001.toBigDecimal()
+
+    private lateinit var myAddress: String
+
     private var uri: Uri? = null
     private var tokenTypeExtra: String? = null
     private lateinit var token: String
@@ -76,6 +81,8 @@ class SendRadixActivity : BaseActivity() {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_radix)
+
+        myAddress = QueryPreferences.getPrefAddress(this)
 
         val addressExtra = intent.getStringExtra(EXTRA_TRANSACTION_ADDRESS)
         tokenTypeExtra = intent.getStringExtra(EXTRA_TRANSACTION_TOKEN_TYPE)
@@ -156,24 +163,22 @@ class SendRadixActivity : BaseActivity() {
 
     private fun setListeners() {
         sendButton.setOnClickListener {
-            val amount = if (amountEditText.text.isNullOrEmpty()) {
+            val amountText = amountEditText.text?.toString()
+            val payLoad = if (inputMessageTIET.text.isNullOrBlank()) null else inputMessageTIET.text.toString()
+
+            val amount = if (amountText.isNullOrEmpty()) {
                 toast(getString(R.string.toast_enter_valid_amount_error))
                 return@setOnClickListener
             } else {
-                amountEditText.text.toString().toBigDecimal()
+                amountText.toBigDecimal()
             }
 
-            if (amount < 0.00001.toBigDecimal()) {
+            if (amount < minimumSendAmount) {
                 longToast(getString(R.string.toast_amount_too_small_error))
                 return@setOnClickListener
             }
 
-            val payLoad = when {
-                inputMessageTIET.text.isNullOrEmpty() -> null
-                else -> inputMessageTIET.text.toString()
-            }
-
-            if (inputAddressTIET.text.toString() == QueryPreferences.getPrefAddress(this)) {
+            if (inputAddressTIET.text.toString() == myAddress) {
                 toast(getString(R.string.toast_entered_own_address_error))
                 return@setOnClickListener
             }
@@ -185,17 +190,16 @@ class SendRadixActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            prepareForNextStep(
-                sendButton,
-                getString(R.string.send_radix_activity_sending_progress_dialog)
-            )
+            prepareForNextStep(it, getString(R.string.send_radix_activity_sending_progress_dialog))
 
-            sendTokensViewModel.sendToken(
-                inputAddressTIET.text.toString().trim(),
-                amount,
-                selectedToken,
-                payLoad
-            )
+            Handler().postDelayed({
+                sendTokensViewModel.sendToken(
+                    inputAddressTIET.text.toString().trim(),
+                    amount,
+                    selectedToken,
+                    payLoad
+                )
+            }, 50)
         }
 
         qrScanButton.setOnClickListener {
