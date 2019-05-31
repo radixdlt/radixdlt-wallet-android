@@ -3,9 +3,9 @@ package com.radixdlt.android.data.model.transaction
 import androidx.lifecycle.LiveData
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.client.application.translate.tokens.InsufficientFundsException
-import com.radixdlt.client.application.translate.tokens.TokenDefinitionReference
 import com.radixdlt.client.application.translate.tokens.TokenUnitConversions
 import com.radixdlt.client.atommodel.accounts.RadixAddress
+import com.radixdlt.client.core.atoms.particles.RRI
 import com.radixdlt.client.core.network.actions.SubmitAtomAction
 import com.radixdlt.client.core.network.actions.SubmitAtomResultAction
 import io.reactivex.Observable
@@ -56,7 +56,7 @@ class SendTokensLiveData @Inject constructor(
     private fun sendTokens(
         to: String,
         amount: BigDecimal,
-        tokenClassReference: TokenDefinitionReference,
+        rri: RRI,
         payLoad: String?
     ) {
         try {
@@ -64,7 +64,7 @@ class SendTokensLiveData @Inject constructor(
                 Identity.api!!.transferTokens(
                     RadixAddress.from(to),
                     amount,
-                    tokenClassReference, // Identity.api!!.nativeTokenRef
+                    rri, // Identity.api!!.nativeTokenRef
                     payLoad
                 )
                     .toObservable()
@@ -73,7 +73,7 @@ class SendTokensLiveData @Inject constructor(
                 Identity.api!!.transferTokens(
                     RadixAddress.from(to),
                     amount,
-                    tokenClassReference
+                    rri
                 ) // Identity.api!!.nativeTokenRef
                     .toObservable()
                     .doOnError(::checkErrorAndShowToast)
@@ -112,7 +112,7 @@ class SendTokensLiveData @Inject constructor(
         to: String,
         payLoad: String?,
         it: SubmitAtomAction,
-        tokenClassReference: TokenDefinitionReference
+        rri: RRI
     ): TransactionEntity {
         val amountFormatted = amount.setScale(
             5, RoundingMode.HALF_UP
@@ -125,7 +125,7 @@ class SendTokensLiveData @Inject constructor(
             payLoad,
             true,
             it.atom.timestamp,
-            tokenClassReference.symbol,
+            rri.name,
             TokenUnitConversions.getSubunits()
         )
     }

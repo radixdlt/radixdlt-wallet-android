@@ -158,7 +158,7 @@ configurations {
 dependencies {
     ktlint(Libraries.ktlint)
 
-    implementation(project(":radixdlt-java"))
+    implementation("com.radixdlt:radixdlt-java:v21-beta")
 
     implementation(Libraries.kotlinStdLib)
     implementation(Libraries.ankoCommons)

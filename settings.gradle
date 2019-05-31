@@ -1,3 +1,1 @@
 include ':app'
-include 'radixdlt-java'
-project(':radixdlt-java').projectDir = new File(settingsDir, "../../Java/radixdlt-java/radixdlt-java")

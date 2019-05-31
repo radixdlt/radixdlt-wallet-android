@@ -8,7 +8,6 @@ import com.radixdlt.android.util.FAUCET_ADDRESS
 import com.radixdlt.android.util.QueryPreferences
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
 import com.radixdlt.client.atommodel.accounts.RadixAddress
-import com.radixdlt.client.dapps.messaging.RadixMessaging
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -118,8 +117,9 @@ class TransactionsRepository(
      * */
     fun requestTestTokenFromFaucet() {
         // Send a message!
-        RadixMessaging(Identity.api!!).sendMessage(
-            "Give me some radix!!",
+        Identity.api!!.sendMessage(
+            "Give me some radix!!".toByteArray(),
+            true,
             RadixAddress.from(FAUCET_ADDRESS)
         )
             .toCompletable()

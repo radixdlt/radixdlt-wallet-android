@@ -15,7 +15,7 @@ object Identity {
         get() = field?.let {
             return it
         } ?: run {
-            field = myIdentity?.let { RadixApplicationAPI.create(Bootstrap.SUNSTONE, it) }
+            field = myIdentity?.let { RadixApplicationAPI.create(Bootstrap.BETANET, it) }
             field?.pull()
             return field
         }

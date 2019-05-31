@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import com.radixdlt.android.data.mapper.RadixMessageDataMapper
 import com.radixdlt.android.identity.Identity
 import com.radixdlt.client.application.translate.data.DecryptedMessage
-import com.radixdlt.client.dapps.messaging.RadixMessaging
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -28,8 +27,7 @@ abstract class MessagesLiveData(
     }
 
     private fun retrieveMessages() {
-        val radixWalletMessagesObservable = RadixMessaging(Identity.api!!)
-            .allMessages
+        val radixWalletMessagesObservable = Identity.api!!.messages
 
         val allMessages = radixWalletMessagesObservable
             .publish()
