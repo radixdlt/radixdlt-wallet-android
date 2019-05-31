@@ -158,7 +158,8 @@ configurations {
 dependencies {
     ktlint(Libraries.ktlint)
 
-    implementation("com.radixdlt:radixdlt-java:v21-beta")
+    val tagVersion = "v21-beta"
+    implementation("com.radixdlt:radixdlt-java:$tagVersion")
 
     implementation(Libraries.kotlinStdLib)
     implementation(Libraries.ankoCommons)
