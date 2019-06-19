@@ -11,7 +11,7 @@ plugins {
 android {
     compileSdkVersion(AndroidSdk.compile)
     defaultConfig {
-        applicationId = "com.radixdlt.android"
+        applicationId = "com.radixdlt.android.apps.wallet"
         minSdkVersion(AndroidSdk.min)
         targetSdkVersion(AndroidSdk.target)
         versionCode = 6
@@ -158,7 +158,7 @@ configurations {
 dependencies {
     ktlint(Libraries.ktlint)
 
-    val tagVersion = "v21-beta"
+    val tagVersion = "v23-beta"
     implementation("com.radixdlt:radixdlt-java:$tagVersion")
 
     implementation(Libraries.kotlinStdLib)

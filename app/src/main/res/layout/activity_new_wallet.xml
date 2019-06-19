@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".ui.activity.EnterPasswordActivity">
+    tools:context=".apps.wallet.ui.activity.EnterPasswordActivity">
 
     <TextView
         android:id="@+id/welcomeTextView"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackground"
-    tools:context=".ui.fragment.MoreOptionsFragment">
+    tools:context=".apps.wallet.ui.fragment.MoreOptionsFragment">
 
   <ScrollView
       android:id="@+id/edit_account_scroll_view"
