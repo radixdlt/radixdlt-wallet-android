@@ -5,23 +5,18 @@ object BuildPlugins {
         const val androidBuildToolsVersion = "3.3.1"
     }
 
-    const val androidGradlePlugin =
-        "com.android.tools.build:gradle:${Versions.androidBuildToolsVersion}"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidBuildToolsVersion}"
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
     const val androidApplication = "com.android.application"
-    const val androidLibrary = "com.android.library"
     const val kotlinAndroid = "kotlin-android"
     const val kotlinAndroidExtensions = "kotlin-android-extensions"
     const val kotlinKapt = "kotlin-kapt"
-//    const val kotlinAndroid = "android"
-//    const val kotlinAndroidExtensions = "android-extensions"
-//    const val kotlinKapt = "kapt"
     const val androidJunit5 = "de.mannodermaus.android-junit5"
 }
 
 object AndroidSdk {
-    const val min = 21
+    const val min = 24
     const val compile = 28
     const val target = compile
 }

@@ -4,17 +4,18 @@ import androidx.annotation.StringDef
 
 const val PREF_SECRET = "secretKey"
 const val FAUCET_ADDRESS = "9he94tVfQGAVr4xoUpG3uJfB2exURExzFV6E7dq4bxUWRbM5Edd" // alphanetwork
-const val GENESIS_XRD = "JHuDLpGefPssAY3v1pTXTQWHGv1tkTCEdq7RQYPnLuin1cfoath/tokens/@XRD"
+const val GENESIS_XRD = "/JHuDLpGefPssAY3v1pTXTQWHGv1tkTCEdq7RQYPnLuin1cfoath/XRD"
 const val TOTAL = "TOTAL"
 const val URL_REPORT_ISSUE = "https://radixdlt.typeform.com/to/kPFmVy"
 const val KEYSTORE_FILE = "keystore.key"
 
 @Retention(AnnotationRetention.SOURCE)
-@StringDef(ALPHANET, ALPHANET2)
+@StringDef(ALPHANET, ALPHANET2, BETANET)
 annotation class Universe
 
 const val ALPHANET = "ALPHANET"
 const val ALPHANET2 = "ALPHANET2"
+const val BETANET = "BETANET"
 
 const val IPV4_ADDRESS_PATTERN =
     "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +

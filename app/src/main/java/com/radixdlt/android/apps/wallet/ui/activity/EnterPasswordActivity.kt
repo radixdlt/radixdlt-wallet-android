@@ -226,7 +226,7 @@ class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWall
             myKeyFile.path, inputPasswordTIET.text.toString()
         )
 
-        val address = Identity.api!!.myAddress.toString()
+        val address = Identity.api!!.address.toString()
 
         QueryPreferences.setPrefAddress(this@EnterPasswordActivity, address)
 

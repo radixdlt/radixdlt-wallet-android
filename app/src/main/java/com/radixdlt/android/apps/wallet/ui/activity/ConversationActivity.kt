@@ -21,7 +21,7 @@ import com.radixdlt.android.apps.wallet.util.EmptyTextWatcher
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.setAddressWithColors
 import com.radixdlt.android.apps.wallet.util.showKeyboard
-import com.radixdlt.client.core.network.actions.SubmitAtomResultAction
+import com.radixdlt.client.core.atoms.AtomStatus
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_conversation.*
@@ -149,7 +149,7 @@ class ConversationActivity : BaseActivity() {
 
         conversationViewModel.sendMessageLiveData.observe(this, Observer { status ->
             status?.apply {
-                if (status == SubmitAtomResultAction.SubmitAtomResultActionType.STORED.name) {
+                if (status == AtomStatus.STORED.name) {
                     inputMsg.text.clear()
                 } else {
                     toast(getString(R.string.conversation_activity_send_message_error))

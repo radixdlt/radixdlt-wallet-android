@@ -198,8 +198,8 @@ class ReceiveRadixInvoiceActivity : BaseActivity() {
     }
 
     private fun removeTokenCreatorAddress(tokenType: String): String {
-        return if (tokenType.contains("/@")) {
-            tokenType.split("/@")[1]
+        return if (tokenType.contains("/")) {
+            tokenType.split("/")[2]
         } else {
             tokenType
         }

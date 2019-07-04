@@ -27,7 +27,7 @@ abstract class MessagesLiveData(
     }
 
     private fun retrieveMessages() {
-        val radixWalletMessagesObservable = Identity.api!!.messages
+        val radixWalletMessagesObservable = Identity.api!!.observeMessages()
 
         val allMessages = radixWalletMessagesObservable
             .publish()

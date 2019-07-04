@@ -32,7 +32,7 @@ class TransactionsRepository(
     }
 
     private fun retrieveAllTransactions() {
-        val radixWalletTransactionsObservable = Identity.api!!.myTokenTransfers
+        val radixWalletTransactionsObservable = Identity.api!!.observeTokenTransfers()
 
         val allTransactions: Observable<TokenTransfer> = radixWalletTransactionsObservable
             .publish()
@@ -118,9 +118,9 @@ class TransactionsRepository(
     fun requestTestTokenFromFaucet() {
         // Send a message!
         Identity.api!!.sendMessage(
+            RadixAddress.from(FAUCET_ADDRESS),
             "Give me some radix!!".toByteArray(),
-            true,
-            RadixAddress.from(FAUCET_ADDRESS)
+            true
         )
             .toCompletable()
             .subscribeOn(Schedulers.io())

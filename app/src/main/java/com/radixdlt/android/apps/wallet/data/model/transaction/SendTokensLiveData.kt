@@ -7,7 +7,7 @@ import com.radixdlt.client.application.translate.tokens.TokenUnitConversions
 import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.atoms.particles.RRI
 import com.radixdlt.client.core.network.actions.SubmitAtomAction
-import com.radixdlt.client.core.network.actions.SubmitAtomResultAction
+import com.radixdlt.client.core.network.actions.SubmitAtomStatusAction
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -28,7 +28,7 @@ class SendTokensLiveData @Inject constructor(
 
     fun sendToken(to: String, amount: BigDecimal, token: String, payLoad: String?) {
         balanceChecked = false
-        Identity.api!!.getBalance(Identity.api!!.getMyAddress())
+        Identity.api!!.observeBalances(Identity.api!!.address)
             .subscribe {
                 // FIXME: currently getBalance() has a bit of an erratic behaviour. Check again with future updates!
                 if (balanceChecked) {
@@ -61,19 +61,19 @@ class SendTokensLiveData @Inject constructor(
     ) {
         try {
             val r: Observable<SubmitAtomAction> = if (payLoad != null) {
-                Identity.api!!.transferTokens(
+                Identity.api!!.sendTokens(
+                    rri, // Identity.api!!.nativeTokenRef
                     RadixAddress.from(to),
                     amount,
-                    rri, // Identity.api!!.nativeTokenRef
                     payLoad
                 )
                     .toObservable()
                     .doOnError(::checkErrorAndShowToast)
             } else {
-                Identity.api!!.transferTokens(
+                Identity.api!!.sendTokens(
+                    rri, // Identity.api!!.nativeTokenRef
                     RadixAddress.from(to),
-                    amount,
-                    rri
+                    amount
                 ) // Identity.api!!.nativeTokenRef
                     .toObservable()
                     .doOnError(::checkErrorAndShowToast)
@@ -81,7 +81,7 @@ class SendTokensLiveData @Inject constructor(
 
             r.subscribeOn(Schedulers.io())
                 .subscribe({
-                    if (it is SubmitAtomResultAction) {
+                    if (it is SubmitAtomStatusAction) {
 //                        if (it.type == SubmitAtomResultAction.SubmitAtomResultActionType.STORED) {
 //                             TODO: Will likely need the atom hid to do this which I now can!!
 //                            val transactionEntity = createTransactionEntity(
@@ -91,7 +91,7 @@ class SendTokensLiveData @Inject constructor(
 //                            postValue(it.type.name)
 //                            return@subscribe
 //                        }
-                        postValue(it.type.name)
+                        postValue(it.statusNotification.atomStatus.name)
                     }
 
                     Timber.d("Network status is... $it")

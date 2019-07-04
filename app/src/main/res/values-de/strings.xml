@@ -1,0 +1,204 @@
+<resources>
+  <!-- DEFINED IN .gradle buildTypes -->
+  <!--<string name="app_name">Radix</string>-->
+
+  <!-- QR camera reader -->
+  <string name="permission_camera_rationale">Zum Scannen des QR-Codes ist ein Zugriff auf die Kamera erforderlich</string>
+  <string name="no_camera_permission">Der QR-Code-Scanner kann nicht ausgeführt werden, da er nicht über die Kameraberechtigung verfügt.</string>
+  <string name="low_storage_error">Abhängigkeiten können aufgrund des geringen Gerätespeichers nicht heruntergeladen werden</string>
+
+  <string name="barcode_success">Barcode erfolgreich gelesen</string>
+  <string name="barcode_failure">Kein Barcode erfasst</string>
+  <string name="barcode_error">Fehler beim Lesen des Barcodes: %1$s</string>
+
+  <!-- ACTIVITIES -->
+  <!-- New Wallet Activity -->
+  <string name="new_wallet_activity_xml_welcome_title">Willkommen bei Radix</string>
+  <string name="new_wallet_activity_xml_create_import">Erstellen Sie eine neue passwortgeschützte Brieftasche oder importieren Sie eine vorhandene</string>
+  <string name="new_wallet_activity_xml_create_new_wallet_button">Erstellen Sie eine neue Brieftasche</string>
+  <string name="new_wallet_activity_xml_create_paper_key_wallet_button">Erstelle Papier-Wallet</string>
+  <string name="new_wallet_activity_xml_import_wallet_button">Importieren Sie die vorhandene Brieftasche</string>
+  <string name="new_wallet_activity_xml_import_wallet_from_mnemonic_or_seed_button">Importiere Wallet von Papier-Wallet oder Seed</string>
+  <string name="new_wallet_activity_xml_import_wallet_from_seed_button">Importiere Wallet von Seed</string>
+
+  <!-- Enter Password Activity -->
+  <string name="enter_password_activity_xml_welcome_title">Willkommen bei Radix</string>
+  <string name="enter_password_activity_xml_choose_password">Wählen Sie ein Passwort für Ihre Brieftasche</string>
+  <string name="enter_password_activity_xml_password_hint">Password</string>
+  <string name="enter_password_activity_xml_repeat_password_hint">Wiederhole das Passwort</string>
+  <string name="enter_password_activity_xml_create_wallet_button">Brieftasche erstellen</string>
+  <string name="enter_password_activity_xml_delete_wallet_button">Bestehende Brieftasche löschen</string>
+  <string name="enter_password_activity_sub_welcome_msg">Geben Sie Ihr Passwort ein, um die Brieftasche zu entsperren</string>
+  <string name="enter_password_activity_unlock_button">Brieftasche freischalten</string>
+  <string name="enter_password_activity_creating_wallet_progress_dialog">Brieftasche erstellen…</string>
+  <string name="enter_password_activity_unlocking_wallet_progress_dialog">Brieftasche wird entsperrt…</string>
+  <string name="enter_password_activity_xml_universe">Verbindung zum Universum\u0020</string>
+  <string name="enter_password_activity_xml_specific_node">und Knoten\u0020</string>
+  <!-- toasts -->
+  <string name="toast_no_internet">Keine Internetverbindung.</string>
+  <string name="toast_passwords_dont_match_error">Passwörter stimmen nicht überein</string>
+  <string name="toast_creating_wallet_error">Beim Erstellen Ihrer Brieftasche ist ein Fehler aufgetreten!</string>
+  <string name="toast_decrypting_wallet_error">Datei kann nicht entschlüsselt werden, bitte versuchen Sie es erneut!</string>
+  <string name="toast_password_length_error">Das Passwort muss aus mindestens 6 Zeichen bestehen</string>
+
+  <!-- Main Activity -->
+  <string name="main_activity_address_copied">Adresse in die Zwischenablage kopiert</string>
+  <!-- Bottom Navigator -->
+  <string name="bottom_nav_title_chat">Chat</string>
+  <string name="bottom_nav_title_contacts">Kontakte</string>
+  <string name="bottom_nav_title_account">Account</string>
+  <string name="bottom_nav_title_network">Netzwerk</string>
+  <!-- toasts -->
+  <string name="invalid_address_toast">Die Adresse ist ungültig</string>
+
+  <!-- Send Radix Activity -->
+  <string name="send_radix_activity_title">Sende Radix</string>
+  <string name="send_radix_activity_sending_progress_dialog">Senden…</string>
+  <string name="send_activity_enter_address_hint">Adresse eingeben</string>
+  <string name="send_activity_no_tokens_spinner">NO TOKENS AVAILABLE</string>
+  <string name="send_activity_token_type_spinner">TOKEN</string>
+  <string name="send_activity_xml_amount">AMOUNT</string>
+  <string name="send_activity_xml_radix_r">R</string>
+  <string name="send_activity_xml_amount_hint">0</string>
+  <string name="send_activity_xml_message_hint">Nachricht</string>
+  <string name="send_activity_xml_send_button">Send</string>
+  <!-- toasts -->
+  <string name="toast_enter_valid_amount_error">Bitte geben Sie einen gültigen Betrag ein!</string>
+  <string name="toast_amount_too_small_error">Im Moment kann nicht weniger als 0,00001 XRD gesendet werden</string>
+  <string name="toast_entered_own_address_error">Sie haben Ihre eigene Adresse eingegeben.</string>
+  <string name="toast_wrong_address_format_error">Falsches Adressformat, nochmals prüfen!</string>
+  <string name="toast_not_enough_tokens_error">Du hast nicht genug Token!</string>
+  <string name="toast_collision_error">There was an error, please try again!</string>
+  <string name="toast_too_many_decimal_places_error">Test-Tokens lassen nur bis zu 5 Dezimalstellen zu</string>
+  <string name="toast_error_reading_qr_code">Fehler beim Lesen des QR-Codes</string>
+  <string name="toast_token_not_owned">Token not owned!</string>
+
+  <!-- TransactionEntity Details Activity -->
+  <string name="transaction_details_activity_title">Transaction</string>
+  <string name="transaction_details_activity_received">Sie erhielten</string>
+  <string name="transaction_details_activity_from">Von</string>
+  <string name="transaction_details_activity_sent">Du hast geschickt</string>
+  <string name="transaction_details_activity_to">Zu</string>
+  <string name="transaction_details_activity_xml_image_background_description">Bildhintergrund</string>
+  <string name="transaction_details_activity_xml_details_title">Details</string>
+  <string name="transaction_details_activity_xml_test_tokens">TEST TOKENS</string>
+  <string name="transaction_details_activity_xml_message_icon_description">Nachrichtensymbol</string>
+  <string name="transaction_details_activity_xml_send_tokens">Token senden</string>
+  <string name="transaction_details_activity_xml_history_title">Verlauf</string>
+  <string name="transaction_details_activity_xml_number_of_transactions">Anzahl der Transaktionen</string>
+  <string name="transaction_details_activity_xml_total_sent">Gesamt gesendet</string>
+  <string name="transaction_details_activity_xml_total_received">Gesamt erhalten</string>
+  <plurals name="transaction_details_activity_total_transactions">
+    <item quantity="one">%1$s transaction</item>
+    <item quantity="other">%1$s transactions</item>
+  </plurals>
+
+  <!-- Conversation Activity -->
+  <string name="conversation_activity_title">Konversation</string>
+  <string name="conversation_activity_me_label">Ich</string>
+  <string name="conversation_activity_today_label">Heute</string>
+  <string name="conversation_activity_yesterday_label">Gestern</string>
+  <string name="conversation_activity_message_bubble" translatable="false">%1$s&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
+  <string name="conversation_activity_send_message_error">Nachricht kann nicht gesendet werden, bitte versuchen Sie es erneut!</string>
+  <string name="conversation_activity_xml_write_message">Nachricht schreiben</string>
+  <string name="conversation_activity_xml_attachment_button_description">Schaltfläche "Anhang"</string>
+  <string name="conversation_activity_xml_send_button_description">Schaltfläche "Senden"</string>
+
+  <!-- Receive Radix Invoice Activity -->
+  <string name="receive_radix_activity_amount_hint">Amount</string>
+  <string name="receive_radix_activity_message_hint">Message</string>
+  <string name="receive_radix_activity_title">Erstelle Rechnung</string>
+  <string name="receive_radix_activity_copy_address_button">Kopiere Adresse</string>
+  <string name="receive_radix_activity_copy_invoice_button">Kopiere Rechnung</string>
+  <string name="receive_radix_activity_share_invoice_button">Teile Rechnung</string>
+
+  <!-- FRAGMENTS -->
+  <!-- Wallet Fragment -->
+  <string name="wallet_fragment_retrieving_transactions">Transaktionen werden abgerufen…</string>
+  <string name="wallet_fragment_all_transactions">Alle Transaktionen</string>
+  <string name="wallet_fragment_no_transactions">Keine Transaktionen</string>
+  <string name="wallet_fragment_total_tokens">TOTAL</string>
+  <string name="wallet_fragment_xml_default_zero">0</string>
+  <string name="wallet_fragment_xml_account_balance_title">KONTOSTAND</string>
+  <string name="wallet_fragment_xml_send_button">Senden</string>
+  <string name="wallet_fragment_xml_receive_button">Erhalten</string>
+  <string name="wallet_fragment_xml_get_test_tokens_button">Test Tokens bekommen</string>
+  <string name="wallet_fragment_xml_empty_transactions_background_description">Leerer transactionEntities-Hintergrund</string>
+  <string name="wallet_fragment_item_xml_test_tokens">TEST TOKENS</string>
+  <!-- toast -->
+  <string name="toast_request_tokens_faucet">Angeforderte Token von Faucet!</string>
+
+  <!-- Contacts Fragment -->
+  <string name="contacts_fragment_user_faucet">Wasserhahn</string>
+  <string name="contacts_fragment_now">Jetzt</string>
+  <string name="contacts_fragment_xml_empty_contacts_image_background_description">Bildhintergrund, wenn keine Nachrichten vorhanden sind</string>
+  <string name="toast_copied_clipboard">in die Zwischenablage kopiert</string>
+
+  <!-- Account Fragment -->
+  <string name="account_fragment_sharing_intent_chooser_title">Adresse teilen</string>
+  <string name="account_fragment_xml_scan_qr">QR-Code scannen, um Adresse zu teilen</string>
+  <string name="account_fragment_xml_radix_address">RADIX ADDRESSE</string>
+  <string name="account_fragment_xml_tap_qr_instructions">Tippen Sie auf den QR-Code, um die Adresse zu kopieren, oder halten Sie die Taste gedrückt, um sie zu teilen</string>
+  <string name="account_fragment_xml_generated_qr_code_description">Generierter QR-Code</string>
+  <!-- toast -->
+  <string name="toast_address_copied_clipboard">Adresse in die Zwischenablage kopiert</string>
+
+  <!-- More Options Fragment -->
+  <string name="more_options_fragment_export_intent_chooser_title">Adresse exportieren</string>
+  <string name="more_options_fragment_xml_wallet_options_title">Brieftaschenoptionen</string>
+  <string name="more_options_fragment_xml_export_backup_wallet">Brieftasche exportieren/sichern</string>
+  <string name="more_options_fragment_xml_delete_wallet">Brieftasche löschen</string>
+  <string name="more_options_fragment_xml_security_title">Sicherheit</string>
+  <string name="more_options_fragment_xml_network_title">Netzwerk</string>
+  <string name="more_options_fragment_xml_help_title">Brauche Hilfe?</string>
+  <string name="more_options_fragment_xml_choose_network">Wähle ein Netzwerk</string>
+  <string name="more_options_fragment_xml_select_node">Knoten ausgewählt</string>
+  <string name="more_options_fragment_xml_report_an_issue">Ein Problem melden</string>
+  <string name="more_options_fragment_xml_toggle_password">Brieftaschenpasswort aktivieren</string>
+  <string name="more_options_fragment_xml_autolock_timeout">Autolock-Timeout</string>
+  <string name="more_options_fragment_xml_random_node">Zufällig</string>
+
+  <!-- FRAGMENT DIALOGS -->
+  <!-- Delete Wallet Dialog -->
+  <string name="delete_wallet_dialog_title">Bestehende Brieftasche löschen?</string>
+  <string name="delete_wallet_dialog_message">Möchten Sie die vorhandene Brieftasche wirklich löschen?\n\nBitte stellen Sie sicher, dass Sie zuerst die Brieftasche gesichert haben, da dieser Vorgang nicht rückgängig gemacht werden kann.</string>
+  <string name="delete_wallet_dialog_delete">Löschen</string>
+
+  <!-- Warning Dialog -->
+  <string name="warning_dialog_changing_universe_title">Möchten Sie das Netzwerk wirklich ändern?</string>
+  <string name="warning_dialog_changing_universe_message">Beim Wechsel des Netzwerks werden alle Daten aus dem aktuellen Universum gelöscht.</string>
+  <string name="warning_dialog_node_selection_title">Möchten Sie wirklich einen bestimmten Knoten auswählen?</string>
+  <string name="warning_dialog_node_selection_message">Wenn Sie einen bestimmten Knoten auswählen, muss die App neu gestartet werden.</string>
+  <string name="warning_dialog_random_selection_title">Möchten Sie wirklich eine zufällige Knotenauswahl festlegen?</string>
+  <string name="warning_dialog_random_selection_message">Wenn Sie die Einstellung in eine zufällige Auswahl ändern, muss die App neu gestartet werden.</string>
+  <string name="warning_dialog_change">OK</string>
+
+  <!-- Choose Network -->
+  <string name="choose_network_dialog_title">Netzwerk wählen?</string>
+  <string name="choose_network_select">Wählen</string>
+
+  <!-- New Conversation Dialog -->
+  <string name="new_conversation_dialog_new">New</string>
+  <string name="new_conversation_dialog_scan">Scanen</string>
+  <string name="new_conversations_dialog_enter_address_title">Adresse eingeben:</string>
+  <string name="new_conversation_dialog_address_hint">Adresse</string>
+  <!-- toast -->
+  <string name="toast_entered_own_address">Sie haben Ihre eigene Adresse eingegeben.</string>
+
+  <!-- Node IP address Dialog -->
+  <string name="node_ip_address_dialog_set">Einstellen</string>
+  <string name="node_ip_address_dialog_scan">Abbrechen</string>
+  <string name="node_ip_address_dialog_enter_address_title">Geben Sie die IP-Adresse des Knotens ein:</string>
+  <string name="node_ip_address_dialog_address_hint">IP Address</string>
+  <string name="node_ip_address_dialog_random_radio_button">Zufällig</string>
+  <string name="node_ip_address_dialog_custom_radio_button">Benutzerdefiniert</string>
+
+  <!-- Receive Radix Dialog -->
+  <string name="receive_radix_dialog_title">Radix Adresse</string>
+  <string name="receive_radix_dialog_copy">Kopieren</string>
+  <string name="receive_radix_dialog_share">Teilen</string>
+  <string name="receive_radix_dialog_intent_chooser_title">Adresse teilen</string>
+  <string name="receive_radix_dialog_xml_qr_code_description">QR code</string>
+  <string name="receive_radix_dialog_generate_invoice_button">Erstelle Rechnung</string>
+
+</resources>

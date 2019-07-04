@@ -55,6 +55,9 @@ class EnterMnemonicActivity : AppCompatActivity() {
 
         createWalletFromMnemonicButton.setOnClickListener {
             val mnemonicOrSeed = inputMnemonicOrSeedTIET.text
+
+            if (mnemonicOrSeed.isNullOrEmpty()) return@setOnClickListener
+
             val seed: ByteArray
 
             seed = if (validMnemonic(mnemonicOrSeed)) {
@@ -74,10 +77,11 @@ class EnterMnemonicActivity : AppCompatActivity() {
             Identity.myIdentity =
                 AndroidRadixIdentity(ECKeyPair(privateKey))
 
-            val address = Identity.api!!.myAddress.toString()
+            val address = Identity.api!!.address.toString()
 
             QueryPreferences.setPrefAddress(this, address)
             QueryPreferences.setPrefPasswordEnabled(this, false)  // set to false
+            QueryPreferences.setPrefCreatedByMnemonicOrSeed(this, true)
             File(filesDir, "keystore.key").createNewFile()
             openWallet()
         }
@@ -88,7 +92,7 @@ class EnterMnemonicActivity : AppCompatActivity() {
                 myKeyFile.path, inputPasswordTIET.text.toString()
         )
 
-        val address = Identity.api!!.myAddress.toString()
+        val address = Identity.api!!.address.toString()
 
         QueryPreferences.setPrefAddress(this, address)
 

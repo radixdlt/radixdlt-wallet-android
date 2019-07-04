@@ -11,6 +11,7 @@ object QueryPreferences {
     private const val PREF_NETWORK = "network"
     private const val PREF_RANDOM_SELECTION = "random_selection"
     private const val PREF_NODE_IP = "node_ip"
+    private const val PREF_MNEMONIC_SEED = "mnemonic_seed"
 
     fun getPrefAddress(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -56,7 +57,7 @@ object QueryPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)
             .getString(
                 PREF_NETWORK,
-                ALPHANET
+                BETANET
             )
     }
 
@@ -66,6 +67,18 @@ object QueryPreferences {
             .edit()
             .putString(PREF_NETWORK, network)
             .commit()
+    }
+
+    fun getPrefCreatedByMnemonicOrSeed(context: Context): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean(PREF_MNEMONIC_SEED, false)
+    }
+
+    fun setPrefCreatedByMnemonicOrSeed(context: Context, created: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putBoolean(PREF_MNEMONIC_SEED, created)
+            .apply()
     }
 
     /**

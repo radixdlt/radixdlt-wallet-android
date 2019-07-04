@@ -24,7 +24,7 @@ import com.radixdlt.android.apps.wallet.util.setDialogMessage
 import com.radixdlt.android.apps.wallet.util.setProgressDialogVisible
 import com.radixdlt.client.application.RadixApplicationAPI
 import com.radixdlt.client.application.translate.tokens.InsufficientFundsException
-import com.radixdlt.client.core.network.actions.SubmitAtomResultAction
+import com.radixdlt.client.core.atoms.AtomStatus
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_send_radix.*
 import org.jetbrains.anko.longToast
@@ -140,15 +140,15 @@ class SendRadixActivity : BaseActivity() {
         sendTokensViewModel.sendTokensLiveData.observe(this, Observer { status ->
             status?.apply {
                 setProgressDialogVisible(progressDialog, false)
-                if (status == SubmitAtomResultAction.SubmitAtomResultActionType.STORED.name) {
+                if (status == AtomStatus.STORED.name) {
                     if (uri != null) {
                         intent.removeExtra(EXTRA_URI)
                         finishAffinity()
                     } else {
                         finish()
                     }
-                } else if (status == SubmitAtomResultAction.SubmitAtomResultActionType.COLLISION.name ||
-                    status == SubmitAtomResultAction.SubmitAtomResultActionType.VALIDATION_ERROR.name) {
+                } else if (status == AtomStatus.CONFLICT_LOSER.name ||
+                    status == AtomStatus.EVICTED_INVALID_ATOM.name) {
                     toast(getString(R.string.toast_collision_error))
                 } else if (status == InsufficientFundsException::class.java.simpleName) {
                     toast(getString(R.string.toast_not_enough_tokens_error))
@@ -249,8 +249,8 @@ class SendRadixActivity : BaseActivity() {
     }
 
     private fun removeTokenCreatorAddress(tokenType: String): String {
-        return if (tokenType.contains("/@")) {
-            tokenType.split("/@")[1]
+        return if (tokenType.contains("/")) {
+            tokenType.split("/")[2]
         } else {
             tokenType
         }

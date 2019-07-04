@@ -80,9 +80,25 @@
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
 
-## Need toAddress remove bottom line toAddress automatically upload mapping file
+## Need to remove bottom line to automatically upload mapping file
 # -printmapping mapping.txt
 
 # Bouncycastle
 -keep class org.bouncycastle.** { *; }
 -dontwarn org.bouncycastle.**
+
+# Jackson
+-keepattributes Signature,*Annotation*,EnclosingMethod # (Because jackson uses annotation)
+-keep class com.fasterxml.jackson.** { *; } # (Keep everything under the jackson package)
+-dontwarn com.fasterxml.jackson.databind.** # (Do not throw warning from here)
+-dontwarn com.fasterxml.jackson.** # (Do not throw any kind of warning from here)
+-keep class org.json.JSONObject.** {** put(java.lang.String,java.util.Map);}
+
+# Guava
+-dontwarn java.lang.ClassValue
+-keep class java.lang.ClassValue { *; }
+-dontwarn com.google.common.util.concurrent.FuturesGetChecked**
+-dontwarn com.google.common.reflect.Parameter**
+-dontwarn com.google.common.reflect.Invokable**
+
+

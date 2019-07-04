@@ -102,7 +102,7 @@ class TransactionDetailsActivity : BaseActivity() {
 
     private fun setTokenType(transactionEntity: TransactionEntity) {
 //        if (transactionEntity.tokenClassISO != GENESIS_XRD) {
-            testTokensTextView.text = transactionEntity.tokenClassISO.split("/@")[1]
+            testTokensTextView.text = transactionEntity.tokenClassISO.split("/")[2]
             testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 //        }
     }

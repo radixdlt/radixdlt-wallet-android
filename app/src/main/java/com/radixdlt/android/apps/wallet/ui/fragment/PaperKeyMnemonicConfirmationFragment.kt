@@ -119,7 +119,7 @@ class PaperKeyMnemonicConfirmationFragment : Fragment() {
         Identity.myIdentity =
             AndroidRadixIdentity(ECKeyPair(privateKey))
 
-        val address = Identity.api!!.myAddress.toString()
+        val address = Identity.api!!.address.toString()
 
         QueryPreferences.setPrefAddress(activity!!, address)
         QueryPreferences.setPrefPasswordEnabled(activity!!, false)  // set to false

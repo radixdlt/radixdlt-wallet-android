@@ -109,6 +109,18 @@ class MoreOptionsFragment : Fragment() {
         setChooseNetworkClickListener()
         setSelectNodeListener()
         setReportAnIssueClickListener()
+
+        // Quick fix in the event wallet is created with seed or mnemonic
+        // No further implementation will be done since V2 of the wallet will be
+        // a complete new design and implementation
+        if (QueryPreferences.getPrefCreatedByMnemonicOrSeed(activity!!)) {
+            enablePasswordSwitch.isEnabled = false
+            enablePasswordSwitch.isClickable = false
+            selectNodeLayout.isEnabled = false
+            selectNodeLayout.isClickable = false
+            chooseNetworkLayout.isEnabled = false
+            chooseNetworkLayout.isClickable = false
+        }
     }
 
     private fun createCustomTabsBuilder() {

@@ -14,8 +14,8 @@ android {
         applicationId = "com.radixdlt.android.apps.wallet"
         minSdkVersion(AndroidSdk.min)
         targetSdkVersion(AndroidSdk.target)
-        versionCode = 6
-        versionName = "0.15.00"
+        versionCode = 3
+        versionName = "0.20.00"
 
         testInstrumentationRunnerArgument(
             "runnerBuilder",
@@ -46,7 +46,8 @@ android {
     buildTypes {
         getByName("release") {
             resValue("string", "app_name", "Radix")
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android.txt"),
                 "proguard-rules.pro"
@@ -109,6 +110,10 @@ android {
             (buildType.name == "dev" && flavors[0].name == "normal") -> setIgnore(true)
         }
     }
+
+    lintOptions {
+        isCheckReleaseBuilds = false
+    }
 }
 
 val ktlint by configurations.creating
@@ -158,8 +163,8 @@ configurations {
 dependencies {
     ktlint(Libraries.ktlint)
 
-    val tagVersion = "v23-beta"
-    implementation("com.radixdlt:radixdlt-java:$tagVersion")
+    val betanetRC = "rc~1.0.0-beta-SNAPSHOT"
+    implementation("com.radixdlt:radixdlt-java:$betanetRC")
 
     implementation(Libraries.kotlinStdLib)
     implementation(Libraries.ankoCommons)

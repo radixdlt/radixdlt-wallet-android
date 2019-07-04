@@ -3,7 +3,7 @@ package com.radixdlt.android.apps.wallet.data.model.message
 import androidx.lifecycle.LiveData
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.client.atommodel.accounts.RadixAddress
-import com.radixdlt.client.core.network.actions.SubmitAtomResultAction
+import com.radixdlt.client.core.network.actions.SubmitAtomStatusAction
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -24,12 +24,12 @@ class SendMessageLiveData @Inject constructor(
         Timber.d(otherAddress)
         try {
             Identity.api!!
-                .sendMessage(message.toByteArray(), true, RadixAddress.from(otherAddress))
+                .sendMessage(RadixAddress.from(otherAddress), message.toByteArray(), true)
                 .toObservable()
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    if (it is SubmitAtomResultAction) {
-                        postValue(it.type.name)
+                    if (it is SubmitAtomStatusAction) {
+                        postValue(it.statusNotification.atomStatus.name)
                     }
                     Timber.d("Network status is... $it")
                 }.addTo(compositeDisposable)
