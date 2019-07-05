@@ -106,6 +106,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
+        <activity
+            android:name=".apps.wallet.ui.activity.ReceiptActivity"
+            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.activity.ReceiptActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

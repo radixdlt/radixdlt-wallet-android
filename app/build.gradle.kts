@@ -164,6 +164,7 @@ dependencies {
     ktlint(Libraries.ktlint)
 
     val betanetRC = "rc~1.0.0-beta-SNAPSHOT"
+    val bugfixBetanetAttachment = "betanet~1.0.0-beta-SNAPSHOT"
     implementation("com.radixdlt:radixdlt-java:$betanetRC")
 
     implementation(Libraries.kotlinStdLib)

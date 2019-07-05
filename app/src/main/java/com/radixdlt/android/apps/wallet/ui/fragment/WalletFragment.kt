@@ -3,6 +3,7 @@ package com.radixdlt.android.apps.wallet.ui.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -156,7 +157,9 @@ class WalletFragment : Fragment() {
         receiveFromFaucetButton.setOnClickListener {
             if (multiClickingPrevention(2000)) return@setOnClickListener
             activity!!.toast(activity!!.getString(R.string.toast_request_tokens_faucet))
-            transactionsViewModel.requestTokensFromFaucet()
+            Handler().postDelayed({
+                transactionsViewModel.requestTokensFromFaucet()
+            }, 100)
         }
     }
 

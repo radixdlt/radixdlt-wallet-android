@@ -74,6 +74,10 @@ class TransactionDetailsActivity : BaseActivity() {
                 transactionDetailsExtra.address
             )
         }
+
+        transactionMessage.setOnClickListener {
+            ReceiptActivity.newIntent(this, transactionDetailsExtra.message!!)
+        }
     }
 
     private fun bindIndividualTransactionDetailsData(transactionDetailsExtra: TransactionEntity) {
