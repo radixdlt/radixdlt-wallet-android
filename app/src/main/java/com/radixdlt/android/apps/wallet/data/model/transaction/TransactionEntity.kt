@@ -3,6 +3,7 @@ package com.radixdlt.android.apps.wallet.data.model.transaction
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import com.radixdlt.client.application.translate.data.receipt.Receipt
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 
@@ -16,6 +17,7 @@ data class TransactionEntity(
     val subUnitAmount: Long,
     val formattedAmount: String,
     val message: String?,
+    val receiptByteArray: ByteArray?,
     val sent: Boolean,
     val dateUnix: Long,
     val tokenClassISO: String,

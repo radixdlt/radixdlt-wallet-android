@@ -123,6 +123,7 @@ class SendTokensLiveData @Inject constructor(
             amount.toLong(),
             amountFormatted,
             payLoad,
+            null,
             true,
             it.atom.timestamp,
             rri.name,

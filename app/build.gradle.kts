@@ -1,3 +1,4 @@
+import AndroidSdk.compile
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 
 plugins {
@@ -163,9 +164,7 @@ configurations {
 dependencies {
     ktlint(Libraries.ktlint)
 
-    val betanetRC = "rc~1.0.0-beta-SNAPSHOT"
-    val bugfixBetanetAttachment = "betanet~1.0.0-beta-SNAPSHOT"
-    implementation("com.radixdlt:radixdlt-java:$betanetRC")
+    implementation("com.github.radixdlt:radixdlt-java:2678633")
 
     implementation(Libraries.kotlinStdLib)
     implementation(Libraries.ankoCommons)

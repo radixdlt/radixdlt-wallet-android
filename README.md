@@ -34,6 +34,12 @@ implementation(group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: '2.2.0'
 }
 ```
 
+### Debug Keystore
+Before you can run the simulator you need to have a `~/.android/debug.keystore` file, otherwise the app will crash. You can easily create it like so:
+```bash
+$ keytool -genkey -v -keystore ~/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000
+```
+
 ## Code style
 
 This project uses [ktlint](https://github.com/shyiko/ktlint) via [Gradle](https://gradle.org/) dependency.
