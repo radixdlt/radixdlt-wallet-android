@@ -23,14 +23,15 @@ object TokenTransferDataMapper {
         val formattedAmount: String =
             getAmount(tokenTransfer, myAddress)
 
-        val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null
+        var message: String? = null
         var receiptBytes: ByteArray? = null
 
         if (tokenTransfer.hasReceipt()) {
             val receipt: Receipt = tokenTransfer.receiptFromAttachment.get()
             receiptBytes = receipt.serializedJsonBytes
+        } else if (tokenTransfer.attachmentAsString.isPresent) {
+            message = tokenTransfer.attachmentAsString.get()
         }
-
 
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
         val dateUnix: Long = tokenTransfer.timestamp
