@@ -164,7 +164,7 @@ configurations {
 dependencies {
     ktlint(Libraries.ktlint)
 
-    implementation("com.github.radixdlt:radixdlt-java:2678633")
+    implementation("com.github.radixdlt:radixdlt-java:a2f8f55")
 
     implementation(Libraries.kotlinStdLib)
     implementation(Libraries.ankoCommons)
