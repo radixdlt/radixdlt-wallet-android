@@ -19,6 +19,7 @@ import com.radixdlt.android.apps.wallet.util.formatCharactersForAmount
 import com.radixdlt.android.apps.wallet.util.formatDateTime
 import com.radixdlt.android.apps.wallet.util.setAddressWithColors
 import com.radixdlt.android.apps.wallet.util.setConstraintLayoutMargin
+import com.radixdlt.client.application.translate.data.receipt.Receipt
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_transaction_details.*
 import org.jetbrains.anko.dip
@@ -75,9 +76,12 @@ class TransactionDetailsActivity : BaseActivity() {
             )
         }
 
-        transactionMessage.setOnClickListener {
-            ReceiptActivity.newIntent(this, transactionDetailsExtra.message!!)
+        if (transactionDetailsExtra.receiptByteArray != null) {
+            transactionMessage.setOnClickListener {
+                ReceiptActivity.newIntent(this, transactionDetailsExtra.receiptByteArray )
+            }
         }
+
     }
 
     private fun bindIndividualTransactionDetailsData(transactionDetailsExtra: TransactionEntity) {

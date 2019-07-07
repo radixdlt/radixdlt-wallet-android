@@ -1,6 +1,7 @@
 package com.radixdlt.android.apps.wallet.data.mapper
 
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionEntity
+import com.radixdlt.client.application.translate.data.receipt.Receipt
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
 import com.radixdlt.client.application.translate.tokens.TokenUnitConversions
 import java.math.RoundingMode
@@ -21,7 +22,17 @@ object TokenTransferDataMapper {
         val subUnitAmount: Long = tokenTransfer.amount.toLong()
         val formattedAmount: String =
             getAmount(tokenTransfer, myAddress)
-        val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null
+
+        var message: String? = null
+        var receiptBytes: ByteArray? = null
+
+        if (tokenTransfer.hasReceipt()) {
+            val receipt: Receipt = tokenTransfer.receiptFromAttachment.get()
+            receiptBytes = receipt.serializedJsonBytes
+        } else if (tokenTransfer.attachmentAsString.isPresent) {
+            message = tokenTransfer.attachmentAsString.get()
+        }
+
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
         val dateUnix: Long = tokenTransfer.timestamp
         val tokenClassISO: String = tokenTransfer.tokenClass.toString()
@@ -32,6 +43,7 @@ object TokenTransferDataMapper {
             subUnitAmount,
             formattedAmount,
             message,
+            receiptBytes,
             sent,
             dateUnix,
             tokenClassISO,

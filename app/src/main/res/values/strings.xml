@@ -84,6 +84,7 @@
   <string name="transaction_details_activity_xml_test_tokens">TEST TOKENS</string>
   <string name="transaction_details_activity_xml_message_icon_description">Message icon</string>
   <string name="transaction_details_activity_xml_send_tokens">Send tokens</string>
+  <string name="transaction_details_activity_xml_see_receipt">See receipt</string>
   <string name="transaction_details_activity_xml_history_title">History</string>
   <string name="transaction_details_activity_xml_number_of_transactions">Number of transactions</string>
   <string name="transaction_details_activity_xml_total_sent">Total sent</string>
