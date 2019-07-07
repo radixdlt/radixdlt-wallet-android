@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemsinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+        android:id="@+id/itemName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:paddingStart="16dp"
+        android:paddingEnd="0dp"
+        android:textColor="@color/materialDarkGrey"
+        android:textSize="18sp"
+        tools:text="Fine-ground coffee" />
+
+    <TextView
+        android:id="@+id/itemQuantity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:textColor="@color/materialDarkGrey"
+        android:textSize="18sp"
+        tools:text="3" />
+
+    <TextView
+        android:id="@+id/itemTotalPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:gravity="end"
+        android:paddingStart="0dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/materialDarkGrey"
+        android:textSize="18sp"
+        tools:text="$3.75" />
+</LinearLayout>

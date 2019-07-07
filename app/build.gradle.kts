@@ -165,7 +165,8 @@ dependencies {
 
     val betanetRC = "rc~1.0.0-beta-SNAPSHOT"
     val bugfixBetanetAttachment = "betanet~1.0.0-beta-SNAPSHOT"
-    implementation("com.radixdlt:radixdlt-java:$betanetRC")
+    val hackathonReceipt = "a2f8f55"
+    implementation("com.radixdlt:radixdlt-java:$hackathonReceipt")
 
     implementation(Libraries.kotlinStdLib)
     implementation(Libraries.ankoCommons)

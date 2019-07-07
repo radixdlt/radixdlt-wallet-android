@@ -19,7 +19,6 @@ class ReceiptActivity : AppCompatActivity() {
         setCloseButtonOnClickListener()
 
         val receipt = intent.getStringExtra(EXTRA_RECEIPT)
-        receiptContentTextView.text = receipt
     }
 
     private fun setToolbar() {
