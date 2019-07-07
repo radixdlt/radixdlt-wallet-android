@@ -1,4 +1,3 @@
-import AndroidSdk.compile
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 
 plugins {
@@ -164,7 +163,10 @@ configurations {
 dependencies {
     ktlint(Libraries.ktlint)
 
-    implementation("com.github.radixdlt:radixdlt-java:a2f8f55")
+    val betanetRC = "rc~1.0.0-beta-SNAPSHOT"
+    val bugfixBetanetAttachment = "betanet~1.0.0-beta-SNAPSHOT"
+    val hackathonReceipt = "a2f8f55"
+    implementation("com.radixdlt:radixdlt-java:$hackathonReceipt")
 
     implementation(Libraries.kotlinStdLib)
     implementation(Libraries.ankoCommons)
