@@ -108,6 +108,9 @@ class WalletAdapter(
             if (transactionEntity.message != null) {
                 itemView.messageTextView.visibility = View.VISIBLE
                 itemView.messageTextView.text = transactionEntity.message
+            } else if (transactionEntity.receiptByteArray != null) {
+                itemView.messageTextView.visibility = View.VISIBLE
+                itemView.messageTextView.text = "RECEIPT"
             } else {
                 itemView.messageTextView.visibility = View.GONE
             }

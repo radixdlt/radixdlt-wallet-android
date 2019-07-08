@@ -3,7 +3,6 @@ package com.radixdlt.android.apps.wallet.data.model.transaction
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.radixdlt.client.application.translate.data.receipt.Receipt
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 

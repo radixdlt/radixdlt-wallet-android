@@ -19,11 +19,11 @@ import com.radixdlt.android.apps.wallet.util.formatCharactersForAmount
 import com.radixdlt.android.apps.wallet.util.formatDateTime
 import com.radixdlt.android.apps.wallet.util.setAddressWithColors
 import com.radixdlt.android.apps.wallet.util.setConstraintLayoutMargin
-import com.radixdlt.client.application.translate.data.receipt.Receipt
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_transaction_details.*
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.intentFor
+import timber.log.Timber
 import javax.inject.Inject
 
 class TransactionDetailsActivity : BaseActivity() {
@@ -80,6 +80,8 @@ class TransactionDetailsActivity : BaseActivity() {
             transactionMessage.setOnClickListener {
                 ReceiptActivity.newIntent(this, transactionDetailsExtra.receiptByteArray )
             }
+        } else {
+            Timber.d("null yo")
         }
 
     }
@@ -95,6 +97,14 @@ class TransactionDetailsActivity : BaseActivity() {
         setResources()
         setTokenType(transactionDetailsExtra)
 
+        transactionDate.text = formatDateTime(transactionDetailsExtra.dateUnix)
+
+        transactionDetailsExtra.receiptByteArray?.let {
+            transactionMessage.text = "RECEIPT"
+            return
+        }
+
+
         transactionDetailsExtra.message?.let {
             transactionMessage.text = it
         } ?: run {
@@ -104,8 +114,6 @@ class TransactionDetailsActivity : BaseActivity() {
             // Add a little bit of top margin
             transactionDate.setConstraintLayoutMargin(0, dip(8), 0, 0)
         }
-
-        transactionDate.text = formatDateTime(transactionDetailsExtra.dateUnix)
     }
 
     private fun setTokenType(transactionEntity: TransactionEntity) {
