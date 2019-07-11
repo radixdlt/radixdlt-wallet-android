@@ -2,7 +2,6 @@ package com.radixdlt.android.apps.wallet.identity
 
 import com.radixdlt.client.application.RadixApplicationAPI
 import com.radixdlt.client.application.identity.RadixIdentity
-import com.radixdlt.client.core.Bootstrap
 
 /**
  * We use a simple object acting as a Singleton in Kotlin to keep a reference to
@@ -15,7 +14,7 @@ object Identity {
         get() = field?.let {
             return it
         } ?: run {
-            field = myIdentity?.let { RadixApplicationAPI.create(Bootstrap.BETANET, it) }
+            field = myIdentity?.let { RadixApplicationAPI.create(BootStrapConfigAndroidImpl.macAndroidEmulator(), it) }
             field?.pull()
             return field
         }
