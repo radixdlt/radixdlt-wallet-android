@@ -163,8 +163,9 @@ configurations {
 dependencies {
     ktlint(Libraries.ktlint)
 
-    val betanetRC = "release~1.0.0-beta-SNAPSHOT"
-    implementation("com.radixdlt:radixdlt-java:$betanetRC")
+    val betanet = "release~1.0.0-beta-SNAPSHOT"
+    val commit = "4158e57"
+    implementation("com.radixdlt:radixdlt-java:$commit")
 
     implementation(Libraries.kotlinStdLib)
     implementation(Libraries.ankoCommons)

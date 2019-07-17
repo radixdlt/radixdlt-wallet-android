@@ -8,13 +8,16 @@ import com.radixdlt.client.application.identity.RadixIdentity
  * our identity during the lifecycle of the application.
  * */
 object Identity {
+    // Choose where to bootstrap
+    private val bootstrap = BootStrapConfigAndroidImpl.macAndroidEmulator()
+
     var myIdentity: RadixIdentity? = null
 
     var api: RadixApplicationAPI? = null
         get() = field?.let {
             return it
         } ?: run {
-            field = myIdentity?.let { RadixApplicationAPI.create(BootStrapConfigAndroidImpl.macAndroidEmulator(), it) }
+            field = myIdentity?.let { RadixApplicationAPI.create(bootstrap, it) }
             field?.pull()
             return field
         }
