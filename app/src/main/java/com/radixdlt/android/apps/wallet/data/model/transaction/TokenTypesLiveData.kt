@@ -47,6 +47,12 @@ class TokenTypesLiveData @Inject constructor(
             }
         }
 
+
+//        availableTokens.clear()
+//        availableTokens.add("Rads")
+//        availableTokens.add("True USD")
+//        availableTokens.add("Paxos Standard")
+//        availableTokens.add("Bitcoin Rads")
         postValue(availableTokens)
     }
 

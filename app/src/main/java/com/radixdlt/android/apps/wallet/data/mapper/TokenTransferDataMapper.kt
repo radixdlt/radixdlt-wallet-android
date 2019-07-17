@@ -19,8 +19,7 @@ object TokenTransferDataMapper {
         val address: String =
             getAddress(tokenTransfer, myAddress)
         val subUnitAmount: Long = tokenTransfer.amount.toLong()
-        val formattedAmount: String =
-            getAmount(tokenTransfer, myAddress)
+        val formattedAmount: String = getAmount(tokenTransfer, myAddress)
         val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
         val dateUnix: Long = tokenTransfer.timestamp
