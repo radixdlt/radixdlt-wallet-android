@@ -23,7 +23,7 @@ For this reason, consider this branch to be used exclusively for testing and dev
 
 Use Android Studio 3.4.1 (or newer) to be able to build the app.
 
-Bootstrap to your desired network by modifying the bootstrapConfig variable in the [RadixWalletApplication.kt](https://github.com/radixdlt/radixdlt-wallet-android/blob/release/betanet/app/src/main/java/com/radixdlt/android/apps/wallet/RadixWalletApplication.kt) file.
+Bootstrap to your desired network by modifying the bootstrapConfig variable in the [RadixWalletApplication.kt](https://github.com/radixdlt/radixdlt-wallet-android/blob/release/1.0.0-beta/app/src/main/java/com/radixdlt/android/apps/wallet/RadixWalletApplication.kt) file.
 
 The bootstrap variable will look like `private val bootstrapConfig = BootStrapConfigAndroidImpl.macAndroidEmulator(this)` where you can choose 3 options using the BootStrapConfigAndroidImpl.class.  
 
