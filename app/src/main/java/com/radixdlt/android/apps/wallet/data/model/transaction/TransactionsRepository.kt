@@ -4,7 +4,8 @@ import android.content.Context
 import androidx.lifecycle.MediatorLiveData
 import com.radixdlt.android.apps.wallet.data.mapper.TokenTransferDataMapper
 import com.radixdlt.android.apps.wallet.identity.Identity
-import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS
+import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_HOSTED
+import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_SINGLE
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
 import com.radixdlt.client.atommodel.accounts.RadixAddress
@@ -25,6 +26,9 @@ class TransactionsRepository(
 
     private val compositeDisposable = CompositeDisposable()
     private val myAddress: String by lazy { QueryPreferences.getPrefAddress(context) }
+    private val faucetAddress: String by lazy {
+        if (QueryPreferences.isRemoteFaucet(context)) FAUCET_ADDRESS_HOSTED else FAUCET_ADDRESS_SINGLE
+    }
 
     override fun onActive() {
         super.onActive()
@@ -118,7 +122,7 @@ class TransactionsRepository(
     fun requestTestTokenFromFaucet() {
         // Send a message!
         Identity.api!!.sendMessage(
-            RadixAddress.from(FAUCET_ADDRESS),
+            RadixAddress.from(faucetAddress),
             "Give me some radix!!".toByteArray(),
             true
         )

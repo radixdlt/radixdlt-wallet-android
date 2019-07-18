@@ -12,6 +12,7 @@ object QueryPreferences {
     private const val PREF_RANDOM_SELECTION = "random_selection"
     private const val PREF_NODE_IP = "node_ip"
     private const val PREF_MNEMONIC_SEED = "mnemonic_seed"
+    private const val PREF_FAUCET = "faucet"
 
     fun getPrefAddress(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -118,5 +119,23 @@ object QueryPreferences {
             .edit()
             .putString(PREF_NODE_IP, network)
             .commit()
+    }
+
+    fun setRemoteFaucet(context: Context, created: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putBoolean(PREF_FAUCET, created)
+            .apply()
+    }
+
+    /**
+     * Check if using remote faucet
+     *
+     * @param context
+     * @return true if node selection is random
+     * */
+    fun isRemoteFaucet(context: Context): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean(PREF_FAUCET, true)
     }
 }

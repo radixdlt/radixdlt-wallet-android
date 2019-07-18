@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessageEntity
-import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS
+import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_HOSTED
+import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_SINGLE
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.setAddressWithColors
 import kotlinx.android.synthetic.main.item_contact.view.*
@@ -19,9 +20,11 @@ class ContactsAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     lateinit var ctx: Context
+    lateinit var faucetAddress: String
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         ctx = viewGroup.context
+        faucetAddress = if (QueryPreferences.isRemoteFaucet(ctx)) FAUCET_ADDRESS_HOSTED else FAUCET_ADDRESS_SINGLE
         return ContactsViewHolder(
             LayoutInflater
                 .from(ctx).inflate(R.layout.item_contact, viewGroup, false), itemClick
@@ -70,7 +73,7 @@ class ContactsAdapter(
 
     private fun displayContacts(address: String, messageEntities: MessageEntity, itemView: View) {
 
-        itemView.addressTextView.text = if (address == FAUCET_ADDRESS) {
+        itemView.addressTextView.text = if (address == faucetAddress) {
             ctx.getString(R.string.contacts_fragment_user_faucet)
         } else {
             setAddressWithColors(ctx, address, R.color.materialDarkGrey)

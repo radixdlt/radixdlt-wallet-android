@@ -3,7 +3,8 @@ package com.radixdlt.android.apps.wallet.util
 import androidx.annotation.StringDef
 
 const val PREF_SECRET = "secretKey"
-const val FAUCET_ADDRESS = "9ecjMNCFDSbLZxVpfbFwFTLWuL7SH3Q49uzGrpK3bUcze6CJtDr"
+const val FAUCET_ADDRESS_HOSTED = "9ecjMNCFDSbLZxVpfbFwFTLWuL7SH3Q49uzGrpK3bUcze6CJtDr"
+const val FAUCET_ADDRESS_SINGLE = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
 const val GENESIS_XRD = "/JHuDLpGefPssAY3v1pTXTQWHGv1tkTCEdq7RQYPnLuin1cfoath/XRD"
 const val TOTAL = "TOTAL"
 const val URL_REPORT_ISSUE = "https://radixdlt.typeform.com/to/kPFmVy"

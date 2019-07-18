@@ -11,9 +11,14 @@ import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.isRadixAddress
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.toolbar
+import kotlinx.android.synthetic.main.tool_bar.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import timber.log.Timber
@@ -22,6 +27,9 @@ class MainActivity : BaseActivity() {
 
     private lateinit var options: NavOptions.Builder
     private var uri: Uri? = null
+
+
+    private val compositeDisposable = CompositeDisposable()
 
     companion object {
         private const val RC_BARCODE_CAPTURE = 9000
@@ -45,6 +53,7 @@ class MainActivity : BaseActivity() {
         supportActionBar?.title = getString(R.string.app_name)
 
         initialiseNavigation()
+        detectIfConnectedToRadixNetwork()
 
         uri = intent.getParcelableExtra(EXTRA_URI)
 
@@ -55,6 +64,39 @@ class MainActivity : BaseActivity() {
                 navigation.selectedItemId = R.id.navigation_contacts
                 ConversationActivity.newIntent(this, it)
             }
+        }
+    }
+
+    /**
+     * Quick and dirty implementation which should be moved to ViewModel but
+     * this wallet will become deprecated so good enough until v2 with new design
+     * is launched.
+     * */
+    private fun detectIfConnectedToRadixNetwork() {
+        Identity.api!!.networkState
+            .distinct { it.nodeStates.values.first().status.name }
+            .subscribe {
+                when (it.nodeStates.values.first().status.name) {
+                    "CONNECTING" -> setConnectionText("CONNECTING")
+                    "CONNECTED" -> setConnectionText("CONNECTED")
+                    "FAILED" -> {
+                        showToastOnMainThread("Unable to connect to the Radix network!")
+                        setConnectionText("DISCONNECTED")
+                    }
+                }
+                Timber.tag("CONNECTED").d(it.nodeStates.values.first().status.name)
+            }.addTo(compositeDisposable)
+    }
+
+    private fun showToastOnMainThread(text: String) {
+        runOnUiThread {
+            toast(text)
+        }
+    }
+
+    private fun setConnectionText(text: String) {
+        runOnUiThread {
+            toolbarConnectionTextView.text = text
         }
     }
 
@@ -155,6 +197,7 @@ class MainActivity : BaseActivity() {
 
     override fun onDestroy() {
         Timber.d("onDestroy")
+        compositeDisposable.clear()
         if (QueryPreferences.getPrefPasswordEnabled(this)) {
             QueryPreferences.setPrefAddress(this, "")
         }
