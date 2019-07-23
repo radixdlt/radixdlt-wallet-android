@@ -16,14 +16,13 @@ object TokenTransferDataMapper {
      */
     fun transform(tokenTransfer: TokenTransfer, myAddress: String): TransactionEntity {
 
-        val address: String =
-            getAddress(tokenTransfer, myAddress)
+        val address: String = getAddress(tokenTransfer, myAddress)
         val subUnitAmount: Long = tokenTransfer.amount.toLong()
         val formattedAmount: String = getAmount(tokenTransfer, myAddress)
         val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
         val dateUnix: Long = tokenTransfer.timestamp
-        val tokenClassISO: String = tokenTransfer.tokenClass.toString()
+        val rri: String = tokenTransfer.tokenClass.toString()
         val tokenClassSubUnits = TokenUnitConversions.getSubunits()
 
         return TransactionEntity(
@@ -33,7 +32,7 @@ object TokenTransferDataMapper {
             message,
             sent,
             dateUnix,
-            tokenClassISO,
+            rri,
             tokenClassSubUnits
         )
     }

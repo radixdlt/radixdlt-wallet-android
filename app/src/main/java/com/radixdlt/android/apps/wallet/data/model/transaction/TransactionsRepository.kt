@@ -56,7 +56,6 @@ class TransactionsRepository(
             allTransactions
         ) { listOfOld, transaction ->
             Timber.tag("TEST_TRANS").d("$transaction")
-//            Timber.tag("TokenNameSymbol").d("Symbol: ${Identity.api!!.getTokenDef(transaction.tokenClass).name}")
             if (listOfOld.contains(transaction)) {
                 Maybe.empty()
             } else {
@@ -65,8 +64,6 @@ class TransactionsRepository(
         }.flatMapMaybe { it }
             .map {
                 Timber.tag("TEST_TRANS").d("$it")
-//                Timber.tag("TokenNameSymbol").d("Symbol: ${Identity.api!!.getTokenDef(it.tokenClass).name}")
-                // TODO: api.getTokenDef(tokenRRI) tokenRRI from TokenTransfer
                 mutableListOf(TokenTransferDataMapper.transform(it, myAddress))
             }
             .subscribeOn(Schedulers.io())

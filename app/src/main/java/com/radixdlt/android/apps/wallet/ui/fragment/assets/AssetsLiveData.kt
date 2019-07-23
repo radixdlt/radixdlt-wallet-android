@@ -31,7 +31,7 @@ class AssetsLiveData @Inject constructor(
         transactionsDao.getAllTokenTypes()
             .subscribeOn(Schedulers.io())
             .subscribe({
-                Timber.d("retrieveTokenTypes ${it.size}")
+                Timber.tag("ASSETS").d("retrieveTokenTypes ${it.size}")
                 assets.clear() // if a new transaction is received it will call the DB again
                 numberOfOwnedTokens = it.size
                 pullAtoms(it)
@@ -68,7 +68,7 @@ class AssetsLiveData @Inject constructor(
 
                     // Get and sum transactions
                     val total = sumStoredTransactions(it).toPlainString()
-                    Timber.d("total ${it.first().tokenClassISO}")
+                    Timber.d("total ${it.first().rri}")
 
                     retrieveTokenDefinition(rri, total)
                 }, {

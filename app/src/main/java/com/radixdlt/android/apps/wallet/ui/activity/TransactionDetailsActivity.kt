@@ -64,7 +64,7 @@ class TransactionDetailsActivity : BaseActivity() {
     private fun initialiseClickListeners(transactionDetailsExtra: TransactionEntity) {
         transactionSendTokens.setOnClickListener {
             SendRadixActivity.newIntent(
-                this, transactionDetailsExtra.address, transactionDetailsExtra.tokenClassISO
+                this, transactionDetailsExtra.address, transactionDetailsExtra.rri
             )
         }
 
@@ -102,7 +102,7 @@ class TransactionDetailsActivity : BaseActivity() {
 
     private fun setTokenType(transactionEntity: TransactionEntity) {
 //        if (transactionEntity.tokenClassISO != GENESIS_XRD) {
-            testTokensTextView.text = transactionEntity.tokenClassISO.split("/")[2]
+            testTokensTextView.text = transactionEntity.rri.split("/")[2]
             testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 //        }
     }
@@ -113,7 +113,7 @@ class TransactionDetailsActivity : BaseActivity() {
 
         transactionsViewModel.transactionDetailsAddress(
             transactionDetailsExtra.address,
-            transactionDetailsExtra.tokenClassISO
+            transactionDetailsExtra.rri
         )
 
         transactionsViewModel.transactions.observe(this, Observer {

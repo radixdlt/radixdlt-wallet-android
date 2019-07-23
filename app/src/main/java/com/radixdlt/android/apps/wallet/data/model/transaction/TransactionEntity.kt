@@ -18,6 +18,6 @@ data class TransactionEntity(
     val message: String?,
     val sent: Boolean,
     val dateUnix: Long,
-    val tokenClassISO: String,  // TODO: Should rename to rri
+    val rri: String,
     val tokenClassSubUnits: BigDecimal
 ) : Parcelable

@@ -12,13 +12,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lapism.searchview.Search
 import com.radixdlt.android.R
-import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.adapter.AssetsAdapter
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.tool_bar_search.*
-import org.jetbrains.anko.toast
-import timber.log.Timber
 import javax.inject.Inject
 
 class AssetsFragment : Fragment() {
@@ -65,10 +62,6 @@ class AssetsFragment : Fragment() {
                 assetsAdapter.filter.filter(newText.toString().toLowerCase())
             }
         })
-
-        Identity.api!!.networkState.subscribe {
-            Timber.tag("NETSTATE").d(it.toString())
-        }
     }
 
     private fun initialiseViewModels() {
