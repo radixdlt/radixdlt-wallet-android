@@ -14,8 +14,8 @@ android {
         applicationId = "com.radixdlt.android.apps.wallet"
         minSdkVersion(AndroidSdk.min)
         targetSdkVersion(AndroidSdk.target)
-        versionCode = 3
-        versionName = "0.20.00"
+        versionCode = 4
+        versionName = "0.20.01"
 
         testInstrumentationRunnerArgument(
             "runnerBuilder",
