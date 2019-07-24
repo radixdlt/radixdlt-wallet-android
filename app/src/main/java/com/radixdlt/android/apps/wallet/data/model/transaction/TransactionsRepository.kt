@@ -55,7 +55,6 @@ class TransactionsRepository(
             oldTransactionsList.toObservable(),
             allTransactions
         ) { listOfOld, transaction ->
-            Timber.tag("TEST_TRANS").d("$transaction")
             if (listOfOld.contains(transaction)) {
                 Maybe.empty()
             } else {
@@ -63,7 +62,6 @@ class TransactionsRepository(
             }
         }.flatMapMaybe { it }
             .map {
-                Timber.tag("TEST_TRANS").d("$it")
                 mutableListOf(TokenTransferDataMapper.transform(it, myAddress))
             }
             .subscribeOn(Schedulers.io())
@@ -94,7 +92,6 @@ class TransactionsRepository(
             .toObservable()
             .flatMapIterable { list -> list }
             .map {
-//                Timber.tag("TokenNameSymbol").d("Symbol: ${Identity.api!!.getTokenDef(it.tokenClass)}") // TODO
                 TokenTransferDataMapper.transform(it, myAddress)
             }
             .toList()
