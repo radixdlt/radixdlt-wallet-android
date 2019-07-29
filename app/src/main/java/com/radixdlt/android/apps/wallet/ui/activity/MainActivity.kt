@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -131,24 +132,24 @@ class MainActivity : BaseActivity() {
                         .findNavController(this, R.id.my_nav_host_fragment)
 
                 when (item.itemId) {
-                    R.id.navigation_wallet -> {
-                        navController.navigate(R.id.navigation_wallet, null,
-                                options.setPopUpTo(R.id.navigation_wallet, true).build())
+                    R.id.navigation_assets -> {
+                        navController.navigate(R.id.navigation_assets, null,
+                                options.setPopUpTo(R.id.navigation_assets, true).build())
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_contacts -> {
                         navController.navigate(R.id.navigation_contacts, null,
-                                options.setPopUpTo(R.id.navigation_wallet, false).build())
+                                options.setPopUpTo(R.id.navigation_assets, false).build())
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_account -> {
                         navController.navigate(R.id.navigation_account, null,
-                                options.setPopUpTo(R.id.navigation_wallet, false).build())
+                                options.setPopUpTo(R.id.navigation_assets, false).build())
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_more_options -> {
                         navController.navigate(R.id.navigation_more_options, null,
-                                options.setPopUpTo(R.id.navigation_wallet, false).build())
+                                options.setPopUpTo(R.id.navigation_assets, false).build())
                         return@OnNavigationItemSelectedListener true
                     }
                 }
@@ -184,9 +185,11 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    override fun onSupportNavigateUp() = findNavController(R.id.my_nav_host_fragment).navigateUp()
+
     override fun onBackPressed() {
         super.onBackPressed()
-        navigation.menu.findItem(R.id.navigation_wallet).isChecked = true
+        navigation.menu.findItem(R.id.navigation_assets).isChecked = true
     }
 
     override fun onStop() {

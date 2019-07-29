@@ -128,6 +128,9 @@
   <!-- toast -->
   <string name="toast_request_tokens_faucet">Requested tokens from Faucet!</string>
 
+  <!-- Asset Transactions Fragment -->
+  <string name="asset_transactions_fragment_xml_your_balance_title">YOUR BALANCE</string>
+
   <!-- Contacts Fragment -->
   <string name="contacts_fragment_user_faucet">Faucet</string>
   <string name="contacts_fragment_now">Now</string>

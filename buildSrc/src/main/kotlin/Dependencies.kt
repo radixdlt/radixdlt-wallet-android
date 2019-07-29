@@ -37,7 +37,7 @@ object Libraries {
         const val lifeCycleExtentions = "2.1.0-alpha02"
         const val dagger = "2.21"
         const val glide = "4.9.0"
-        const val material = "1.0.0"
+        const val material = "1.1.0-alpha08"
         const val playServicesVision = "17.0.2"
         const val icu = "63.1"
         const val circleImageView = "3.0.0"

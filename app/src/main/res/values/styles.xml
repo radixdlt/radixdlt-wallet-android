@@ -60,4 +60,6 @@
         <item name="android:colorForeground">#c5c5c5</item>
     </style>
 
+    <style name="MaterialButton" parent="Widget.MaterialComponents.Button"/>
+
 </resources>

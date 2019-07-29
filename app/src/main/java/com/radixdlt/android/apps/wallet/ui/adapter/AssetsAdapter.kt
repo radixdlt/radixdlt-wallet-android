@@ -128,7 +128,7 @@ class AssetsAdapter(
                 .into(itemView.circleImageView)
         }
 
-        // Detect if whole number or decimal toAddress change character size
+        // Detect if whole number or decimal to change character size
         fun setTotalAssetHoldings(item: Asset) {
             val total = BigDecimal(item.total)
                 .setScale(2, RoundingMode.HALF_UP)
