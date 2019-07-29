@@ -15,10 +15,9 @@ import com.radixdlt.android.apps.wallet.di.ViewModelFactory
 import com.radixdlt.android.apps.wallet.ui.activity.ConversationViewModel
 import com.radixdlt.android.apps.wallet.ui.activity.SendTokensViewModel
 import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsViewModel
-import com.radixdlt.android.apps.wallet.ui.fragment.ContactsViewModel
-import com.radixdlt.android.apps.wallet.ui.fragment.TransactionsViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.wallet.TransactionsViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsLiveData
-import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsState
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsViewModel
 import dagger.Binds
 import dagger.MapKey

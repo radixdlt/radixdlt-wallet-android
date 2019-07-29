@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.fragment
+package com.radixdlt.android.apps.wallet.ui.fragment.mnemonic
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.google.zxing.EncodeHintType
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.RadixWalletApplication
-import com.radixdlt.android.apps.wallet.ui.fragment.TransactionsViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.wallet.TransactionsViewModel
 import com.radixdlt.android.apps.wallet.util.EmptyTextWatcher
 import com.radixdlt.android.apps.wallet.util.GENESIS_XRD
 import com.radixdlt.android.apps.wallet.util.QueryPreferences

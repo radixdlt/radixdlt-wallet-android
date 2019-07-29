@@ -6,7 +6,7 @@
     app:startDestination="@id/navigation_paper_key_welcome">
     <fragment
         android:id="@+id/navigation_paper_key_welcome"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.PaperKeyWelcomeFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.mnemonic.PaperKeyWelcomeFragment"
         android:label="fragment_paper_key_welcome"
         tools:layout="@layout/fragment_paper_key_welcome">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_paper_key_mnemonic_displayed"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.PaperKeyMnemonicDisplayedFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.mnemonic.PaperKeyMnemonicDisplayedFragment"
         android:label="fragment_paper_key_mnemonic_displayed"
         tools:layout="@layout/fragment_paper_key_mnemonic_displayed">
         <action
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_paper_key_mnemonic_confirmation"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.PaperKeyMnemonicConfirmationFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.mnemonic.PaperKeyMnemonicConfirmationFragment"
         android:label="fragment_paper_key_mnemonic_confirmation"
         tools:layout="@layout/fragment_paper_key_mnemonic_confirmation" />
 </navigation>

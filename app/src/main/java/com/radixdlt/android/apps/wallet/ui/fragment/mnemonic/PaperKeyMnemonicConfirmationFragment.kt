@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.fragment
+package com.radixdlt.android.apps.wallet.ui.fragment.mnemonic
 
 import android.app.ProgressDialog
 import android.os.Bundle

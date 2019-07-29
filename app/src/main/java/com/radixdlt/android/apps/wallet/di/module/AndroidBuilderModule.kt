@@ -6,9 +6,9 @@ import com.radixdlt.android.apps.wallet.ui.activity.ReceiveRadixInvoiceActivity
 import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
 import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsFragment
-import com.radixdlt.android.apps.wallet.ui.fragment.ContactsFragment
-import com.radixdlt.android.apps.wallet.ui.fragment.MoreOptionsFragment
-import com.radixdlt.android.apps.wallet.ui.fragment.WalletFragment
+import com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsFragment
+import com.radixdlt.android.apps.wallet.ui.fragment.moreoptions.MoreOptionsFragment
+import com.radixdlt.android.apps.wallet.ui.fragment.wallet.WalletFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -12,16 +12,16 @@
   <fragment
       android:id="@+id/navigation_contacts"
       android:label="fragment_contacts"
-      android:name="com.radixdlt.android.apps.wallet.ui.fragment.ContactsFragment"
+      android:name="com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsFragment"
       tools:layout="@layout/fragment_contacts"/>
   <fragment
       android:id="@+id/navigation_account"
       android:label="fragment_account"
-      android:name="com.radixdlt.android.apps.wallet.ui.fragment.AccountFragment"
+      android:name="com.radixdlt.android.apps.wallet.ui.fragment.account.AccountFragment"
       tools:layout="@layout/fragment_account"/>
   <fragment
       android:id="@+id/navigation_more_options"
       android:label="fragment_more_options"
-      android:name="com.radixdlt.android.apps.wallet.ui.fragment.MoreOptionsFragment"
+      android:name="com.radixdlt.android.apps.wallet.ui.fragment.moreoptions.MoreOptionsFragment"
       tools:layout="@layout/fragment_more_options"/>
 </navigation>
