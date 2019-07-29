@@ -1,8 +1,8 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.assets
 
 import androidx.lifecycle.LiveData
-import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionEntity
-import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.client.core.atoms.particles.RRI
 import io.reactivex.disposables.CompositeDisposable
@@ -13,37 +13,36 @@ import java.math.BigDecimal
 import javax.inject.Inject
 
 class AssetsLiveData @Inject constructor(
-    private val transactionsDao: TransactionsDao
+    private val transactionsDao2: TransactionsDao2
 ) : LiveData<AssetsState>() {
 
     private val compositeDisposable = CompositeDisposable()
 
     private val assets = mutableListOf<Asset>()
 
-    private var numberOfOwnedTokens = 0
+    private val tokenDefRequested: MutableList<String> = mutableListOf()
+
+    private var numberOfAssets = 0
 
     override fun onActive() {
         super.onActive()
-        retrieveTokenTypes()
+        retrieveAssets()
     }
 
-    private fun retrieveTokenTypes() {
-        transactionsDao.getAllTokenTypes()
+    private fun retrieveAssets() {
+        transactionsDao2.getAllAssets()
             .subscribeOn(Schedulers.io())
             .subscribe({
-                Timber.tag("ASSETS").d("retrieveTokenTypes ${it.size}")
-                assets.clear() // if a new transaction is received it will call the DB again
-                numberOfOwnedTokens = it.size
-                pullAtoms(it)
+                assets.clear()
+                numberOfAssets = it.size
+                getAllTransactionsFromEachAsset(it)
             }, { Timber.e(it) })
             .addTo(compositeDisposable)
     }
 
-    private fun pullAtoms(tokenTypes: MutableList<String>) {
+    private fun pullAtoms(assets: MutableList<String>) {
         var counter = 0
-        val addresses = tokenTypes.map { RRI.fromString(it).address }.distinct()
-
-        Timber.tag("ASSETS").d("Number of assets: ${addresses.size}")
+        val addresses = assets.map { RRI.fromString(it).address }.distinct()
 
         addresses.forEach { address ->
             Identity.api!!
@@ -52,25 +51,46 @@ class AssetsLiveData @Inject constructor(
                 .subscribe {
                     counter++
                     if (counter == addresses.size) {
-                        getAllTransactionsFromEachToken(tokenTypes)
+                        retrieveTokenDefinition(assets)
                     }
                 }
                 .addTo(compositeDisposable)
         }
     }
 
-    private fun getAllTransactionsFromEachToken(tokenTypes: MutableList<String>) {
-        tokenTypes.forEach { tokenType ->
+    private fun getAllTransactionsFromEachAsset(assets: MutableList<String>) {
+        val tokenDefRequired: MutableList<String> = mutableListOf()
+        assets.forEach { tokenType ->
             val rri = RRI.fromString(tokenType)
-            transactionsDao.getAllTransactionsByTokenType(tokenType)
+            transactionsDao2.getAllTransactionsByTokenType(tokenType)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
 
+                    val tokenName = it.first().tokenName
+                    val tokenUrlIcon = it.first().tokenIconUrl
+
+                    if (tokenName == null && !tokenDefRequested.contains(it.first().rri)) {
+                        tokenDefRequired.add(it.first().rri)
+                        tokenDefRequested.add(it.first().rri)
+                    }
+
                     // Get and sum transactions
                     val total = sumStoredTransactions(it).toPlainString()
-                    Timber.d("total ${it.first().rri}")
 
-                    retrieveTokenDefinition(rri, total)
+                    this.assets.add(Asset(tokenName, rri.name, rri.address.toString(), tokenUrlIcon, total))
+
+                    // POST only when we have processed all tokens
+                    if (this.assets.size == numberOfAssets) {
+
+                        if (tokenDefRequired.isNotEmpty()) {
+                            pullAtoms(tokenDefRequired)
+                        }
+
+                        if (tokenDefRequested.isEmpty()) {
+                            postValue(AssetsState.Assets(this.assets.sortedBy(Asset::name)))
+                        }
+                    }
+
                 }, {
                     Timber.e(it)
                 })
@@ -78,58 +98,45 @@ class AssetsLiveData @Inject constructor(
         }
     }
 
-    private fun retrieveTokenDefinition(rri: RRI, total: String) {
-        Identity.api!!.observeTokenDef(rri)
-            .firstOrError() // Converting Observable to Single
-            .subscribeOn(Schedulers.io())
-            .subscribe({
-                Timber.d(it.toString())
+    private fun retrieveTokenDefinition(assets: MutableList<String>) {
 
-                assets.add(Asset(it.name, it.iso, rri.address.toString(), "url", total))
-                Timber.tag("ASSETS").d("${it.name} COMPLETED")
+        assets.forEach { rriString ->
+            Identity.api!!.observeTokenDef(RRI.fromString(rriString))
+                .firstOrError() // Converts Observable to Single
+                .subscribeOn(Schedulers.io())
+                .subscribe({ tokenState ->
 
-                // POST only when we have processed all tokens
-                if (assets.size == numberOfOwnedTokens) {
-                    postValue(AssetsState.Assets(assets.sortedBy(Asset::name)))
-                    Timber.tag("ASSETS").d("${it.name} POST")
-                }
-            }, {
-                Timber.e(it)
-            }).addTo(compositeDisposable)
+                    // Remove from requested list as obtained
+                    tokenDefRequested.remove(rriString)
+
+                    // Update entities in DB
+                    // FIXME: use urlIcon in next release of beta library for now use below to test
+                    val tokenIconUrl = "https://styles.redditmedia.com/t5_2qjzo/styles/communityIcon_o0xuar6bbpo21.png"
+                    transactionsDao2.updateEntities(
+                        tokenState.name,
+                        tokenState.description,
+                        tokenIconUrl,
+                        rriString,
+                        tokenState.totalSupply,
+                        tokenState.tokenSupplyType.name
+                    )
+                }, {
+                    Timber.e(it)
+                }).addTo(compositeDisposable)
+        }
     }
 
-    private fun retrieveTokenDefinition(rri: RRI) {
-        Identity.api!!.observeTokenDef(rri)
-            .firstOrError() // Converting Observable to Single
-            .subscribeOn(Schedulers.io())
-            .subscribe({
-                Timber.d(it.toString())
-            }, {
-                Timber.e(it)
-            }).addTo(compositeDisposable)
-    }
-
-    private fun addDummyTokens() {
-        assets.clear()
-        assets.add(Asset("Rads", "XRD", "afakeaddress", "url", "5000"))
-        assets.add(Asset("True USD", "TRU", "afakeaddress", "url", "200"))
-        assets.add(Asset("Paxos Standard", "PAX", "afakeaddress", "url", "10000"))
-        assets.add(Asset("Bitcoin Rads", "BTCR", "afakeaddress", "url", "15000"))
-
-        postValue(AssetsState.Assets(assets))
-    }
-
-    private fun sumStoredTransactions(transactionEntities: List<TransactionEntity>): BigDecimal {
+    private fun sumStoredTransactions(transactionEntities: List<TransactionEntity2>): BigDecimal {
         val sumSent = transactionEntities.asSequence().filter { transactions ->
             transactions.sent
         }.map { transactionEntity ->
-            BigDecimal(transactionEntity.formattedAmount)
+            transactionEntity.amount
         }.fold(BigDecimal.ZERO, BigDecimal::add)
 
         val sumReceived = transactionEntities.asSequence().filterNot { transactions ->
             transactions.sent
         }.map { transactionEntity ->
-            BigDecimal(transactionEntity.formattedAmount)
+            transactionEntity.amount
         }.fold(BigDecimal.ZERO, BigDecimal::add)
 
         return sumReceived - sumSent
@@ -138,7 +145,6 @@ class AssetsLiveData @Inject constructor(
     override fun onInactive() {
         super.onInactive()
         assets.clear()
-        numberOfOwnedTokens = 0
         compositeDisposable.clear()
     }
 }

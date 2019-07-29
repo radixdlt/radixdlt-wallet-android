@@ -4,4 +4,4 @@ sealed class AssetsState {
     class Assets(val assets: List<Asset>) : AssetsState()
 }
 
-data class Asset(val name: String, val iso: String, val address: String, val urlIcon: String, val total: String)
+data class Asset(var name: String?, val iso: String, val address: String, var urlIcon: String?, var total: String)

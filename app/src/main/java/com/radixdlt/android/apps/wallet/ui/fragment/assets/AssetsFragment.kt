@@ -16,6 +16,7 @@ import com.radixdlt.android.apps.wallet.ui.adapter.AssetsAdapter
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.tool_bar_search.*
+import org.jetbrains.anko.toast
 import javax.inject.Inject
 
 class AssetsFragment : Fragment() {
@@ -24,8 +25,6 @@ class AssetsFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var assetsViewModel: AssetsViewModel
-
-    private var assets = mutableListOf<Asset>()
 
     private lateinit var assetsAdapter: AssetsAdapter
 
@@ -45,13 +44,15 @@ class AssetsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initialiseRecyclerView()
         initialiseLoadingState()
         initialiseSwipeRefreshLayout()
         initialiseViewModels()
+        initialiseSearchView()
+    }
 
-        searchView.setLogoIcon(android.R.drawable.ic_menu_search) // replace with search
+    private fun initialiseSearchView() {
+        searchView.setLogoIcon(R.drawable.ic_search_24) // replace with search
         searchView.setOnQueryTextListener(object : Search.OnQueryTextListener {
             override fun onQueryTextSubmit(query: CharSequence?): Boolean {
                 assetsAdapter.filter.filter(query.toString().toLowerCase())
@@ -82,28 +83,24 @@ class AssetsFragment : Fragment() {
 
         assetsViewModel.assetsLiveData.observe(this, Observer { tokenTypes ->
             tokenTypes?.apply {
-                swipe_refresh_layout.isRefreshing = false
                 showOwnedAssets((this as AssetsState.Assets).assets)
             }
         })
     }
 
     private fun showOwnedAssets(tokenTypes: List<Asset>) {
-        assets.clear()
-        assets.addAll(tokenTypes)
-
+        assetsAdapter.originalList(tokenTypes)
+        assetsAdapter.replace(tokenTypes)
         setLayoutResources()
-        assetsAdapter.notifyDataSetChanged()
     }
-
     private fun initialiseRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        assetsAdapter = AssetsAdapter(assets, click)
+        assetsAdapter = AssetsAdapter(itemClick = click)
         recyclerView.adapter = assetsAdapter
     }
 
     private fun initialiseLoadingState() {
-        if (assets.isEmpty()) {
+        if (assetsAdapter.itemCount == 0) {
             swipe_refresh_layout.isRefreshing = true
             walletBackGroundFrameLayout.visibility = View.VISIBLE
         }
@@ -123,32 +120,12 @@ class AssetsFragment : Fragment() {
         swipe_refresh_layout.isRefreshing = true
         refreshing = true
         assetsViewModel.refresh()
-
-//        Identity.api!!
-//            .pullOnce(RadixAddress.from("JGPU2M7Wss6C3TjAtt3BaLESHGoWWCb5sKw5eQdsfHVk3CuPjpf"))
-//            .subscribeOn(Schedulers.io())
-//            .subscribe {
-//                tokenDef()
-//            }
-    }
-
-    private fun tokenDef() {
-//        val rri = RRI.of(RadixAddress.from(assets.first().address), assets.first().iso)
-//        Identity.api!!.observeTokenDef(rri)
-//            .firstOrError() // Converting Observable to Single
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe ({
-//                Timber.d(it.toString())
-//                activity?.toast(it.description)
-//                swipe_refresh_layout.isRefreshing = false
-//            }, {})
     }
 
     private fun setLayoutResources() {
-        if (assets.isEmpty() && loadedFromNetwork) {
+        if (assetsAdapter.itemCount == 0 && loadedFromNetwork) {
             setLayoutResourcesWithEmptyTransactions()
-        } else if (assets.isNotEmpty()) {
+        } else if (assetsAdapter.itemCount > 0) {
             setLayoutResourcesWithTransactions()
         }
     }
@@ -166,6 +143,8 @@ class AssetsFragment : Fragment() {
     }
 
     private val click = fun(item: String, longClick: Boolean) {
-        if (longClick) { }
+        if (!longClick) {
+            activity?.toast(item)
+        }
     }
 }
