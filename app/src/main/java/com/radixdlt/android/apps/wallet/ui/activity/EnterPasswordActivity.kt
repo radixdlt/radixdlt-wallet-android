@@ -16,6 +16,7 @@ import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.identity.AndroidRadixIdentity
 import com.radixdlt.android.apps.wallet.identity.Identity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.ui.dialog.DeleteWalletDialog
 import com.radixdlt.android.apps.wallet.util.PREF_SECRET
 import com.radixdlt.android.apps.wallet.util.QueryPreferences

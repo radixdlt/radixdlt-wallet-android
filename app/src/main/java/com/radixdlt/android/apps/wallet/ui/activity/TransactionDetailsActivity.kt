@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionDetails
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionEntity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.util.doOnLayout
 import com.radixdlt.android.apps.wallet.util.formatCharactersForAmount
 import com.radixdlt.android.apps.wallet.util.formatDateTime

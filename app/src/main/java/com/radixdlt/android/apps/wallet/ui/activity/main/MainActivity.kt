@@ -1,10 +1,12 @@
-package com.radixdlt.android.apps.wallet.ui.activity
+package com.radixdlt.android.apps.wallet.ui.activity.main
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -13,8 +15,13 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.identity.Identity
+import com.radixdlt.android.apps.wallet.ui.activity.BarcodeCaptureActivity
+import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
+import com.radixdlt.android.apps.wallet.ui.activity.ConversationActivity
+import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.isRadixAddress
+import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,12 +30,17 @@ import kotlinx.android.synthetic.main.tool_bar.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import timber.log.Timber
+import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var mainViewModel: MainViewModel
+
     private lateinit var options: NavOptions.Builder
     private var uri: Uri? = null
-
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -47,6 +59,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -54,6 +67,7 @@ class MainActivity : BaseActivity() {
         supportActionBar?.title = getString(R.string.app_name)
 
         initialiseNavigation()
+        initialiseViewModel()
         detectIfConnectedToRadixNetwork()
 
         uri = intent.getParcelableExtra(EXTRA_URI)
@@ -66,6 +80,10 @@ class MainActivity : BaseActivity() {
                 ConversationActivity.newIntent(this, it)
             }
         }
+    }
+
+    private fun initialiseViewModel() {
+        mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
     }
 
     /**

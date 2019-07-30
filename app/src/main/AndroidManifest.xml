@@ -65,7 +65,7 @@
             android:name="com.radixdlt.android.apps.wallet.ui.activity.NewPaperKeyWalletActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.MainActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
@@ -97,13 +97,13 @@
         <activity
             android:name="com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.activity.MainActivity"
+            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".apps.wallet.ui.activity.WebViewActivity"
-            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.activity.MainActivity"
+            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

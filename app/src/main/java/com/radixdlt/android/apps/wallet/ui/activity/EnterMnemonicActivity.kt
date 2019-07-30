@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.identity.AndroidRadixIdentity
 import com.radixdlt.android.apps.wallet.identity.Identity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.util.EmptyTextWatcher
 import com.radixdlt.android.apps.wallet.util.PREF_SECRET
 import com.radixdlt.android.apps.wallet.util.QueryPreferences

@@ -69,23 +69,15 @@ class AssetsFragment : Fragment() {
         assetsViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(AssetsViewModel::class.java)
 
-        assetsViewModel.transactionList.observe(this,
-            Observer { transactions ->
-                transactions?.apply {
-                    if (loadedFromNetwork && (isEmpty() || refreshing)) {
-                        refreshing = false
-                        swipe_refresh_layout.isRefreshing = false
-                    }
-                    loadedFromNetwork = true
-                }
-            }
-        )
+        assetsViewModel.assetsState.observe(this, Observer(::assetsStateChanged))
+    }
 
-        assetsViewModel.assetsLiveData.observe(this, Observer { tokenTypes ->
-            tokenTypes?.apply {
-                showOwnedAssets((this as AssetsState.Assets).assets)
-            }
-        })
+    private fun assetsStateChanged(state: AssetsState) {
+        when (state) {
+            is AssetsState.Loading -> {}
+            is AssetsState.ShowAssets -> showOwnedAssets(state.assets)
+            is AssetsState.Error -> {}
+        }
     }
 
     private fun showOwnedAssets(tokenTypes: List<Asset>) {
@@ -118,9 +110,9 @@ class AssetsFragment : Fragment() {
 
     private fun refreshTransactions() {
         loadedFromNetwork = false
-        swipe_refresh_layout.isRefreshing = true
+        swipe_refresh_layout.isRefreshing = false
         refreshing = true
-        assetsViewModel.refresh()
+//        assetsViewModel.refresh()
     }
 
     private fun setLayoutResources() {
