@@ -2,9 +2,10 @@ import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 
 plugins {
     id(BuildPlugins.androidApplication)
-    id(BuildPlugins.kotlinAndroid)
-    id(BuildPlugins.kotlinAndroidExtensions)
-    id(BuildPlugins.kotlinKapt)
+    kotlin(BuildPlugins.android)
+    kotlin(BuildPlugins.androidExtensions)
+    kotlin(BuildPlugins.kapt)
+    id(BuildPlugins.safeArgs)
     id(BuildPlugins.androidJunit5)
 }
 
@@ -172,8 +173,8 @@ dependencies {
     implementation(Libraries.appCompat)
     implementation(Libraries.material)
     implementation(Libraries.cardView)
-    implementation(Libraries.fragment)
     implementation(Libraries.lifeCycleExtensions)
+    implementation(Libraries.lifeCycleRuntimeKtx)
     implementation(Libraries.constraintLayout)
     implementation(Libraries.ktxCore)
     implementation(Libraries.browser)

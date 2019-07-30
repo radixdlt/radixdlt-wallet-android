@@ -2,16 +2,19 @@ const val kotlinVersion = "1.3.21"
 
 object BuildPlugins {
     object Versions {
-        const val androidBuildToolsVersion = "3.3.1"
+        const val gradlePluginVersion = "3.4.0"
+        const val safeArgs = "2.1.0-alpha04"
     }
 
-    const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidBuildToolsVersion}"
-    const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.gradlePluginVersion}"
+    const val gradlePlugin = "gradle-plugin"
+    const val safeArgsPlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.safeArgs}"
 
     const val androidApplication = "com.android.application"
-    const val kotlinAndroid = "kotlin-android"
-    const val kotlinAndroidExtensions = "kotlin-android-extensions"
-    const val kotlinKapt = "kotlin-kapt"
+    const val android = "android"
+    const val androidExtensions = "android.extensions"
+    const val kapt = "kapt"
+    const val safeArgs = "androidx.navigation.safeargs.kotlin"
     const val androidJunit5 = "de.mannodermaus.android-junit5"
 }
 
@@ -31,10 +34,9 @@ object Libraries {
         const val browser = "1.0.0"
         const val firebaseCore = "16.0.7"
         const val room = "1.1.1"
-        const val ktx = "1.1.0-alpha04"
-        const val navFragmentVersion = "1.0.0-rc01"
-        const val fragmentKtx = "1.1.0-alpha04"
-        const val lifeCycleExtentions = "2.1.0-alpha02"
+        const val ktx = "1.1.0-beta01"
+        const val navigationVersion = "2.1.0-alpha04"
+        const val lifeCycleExtentions = "2.2.0-alpha01"
         const val dagger = "2.21"
         const val glide = "4.9.0"
         const val material = "1.1.0-alpha08"
@@ -60,8 +62,8 @@ object Libraries {
     const val ktxCore = "androidx.core:core-ktx:${Versions.ktx}"
     const val material = "com.google.android.material:material:${Versions.material}"
     const val cardView = "androidx.cardview:cardview:${Versions.jepack}"
-    const val fragment = "androidx.fragment:fragment-ktx:${Versions.fragmentKtx}"
     const val lifeCycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifeCycleExtentions}"
+    const val lifeCycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifeCycleExtentions}"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
     const val browser = "androidx.browser:browser:${Versions.browser}"
     const val fireBaseCore = "com.google.firebase:firebase-core:${Versions.firebaseCore}"
@@ -69,8 +71,8 @@ object Libraries {
     const val roomRxJava =  "android.arch.persistence.room:rxjava2:${Versions.room}"
     const val roomCompiler = "android.arch.persistence.room:compiler:${Versions.room}"
 
-    const val navigationFragmentKtx = "android.arch.navigation:navigation-fragment-ktx:${Versions.navFragmentVersion}"
-    const val navigationUiKtx = "android.arch.navigation:navigation-fragment-ktx:${Versions.navFragmentVersion}"
+    const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:${Versions.navigationVersion}"
+    const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:${Versions.navigationVersion}"
 
     const val playServicesVision = "com.google.android.gms:play-services-vision:${Versions.playServicesVision}"
 

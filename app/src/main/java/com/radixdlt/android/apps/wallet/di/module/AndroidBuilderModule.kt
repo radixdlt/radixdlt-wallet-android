@@ -8,6 +8,7 @@ import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsFragment
 import com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsFragment
 import com.radixdlt.android.apps.wallet.ui.fragment.moreoptions.MoreOptionsFragment
+import com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsFragment
 import com.radixdlt.android.apps.wallet.ui.fragment.wallet.WalletFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -20,6 +21,9 @@ abstract class AndroidBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun bindAssetsFragment(): AssetsFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindAssetTransactionsFragment(): AssetTransactionsFragment
 
     @ContributesAndroidInjector
     abstract fun bindContactsFragment(): ContactsFragment

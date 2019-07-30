@@ -8,7 +8,6 @@ import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_HOSTED
 import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_SINGLE
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
-import com.radixdlt.client.atommodel.accounts.RadixAddress
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -62,14 +61,51 @@ class TransactionsRepository2(
             }
         }.flatMapMaybe { it }
             .map {
-                mutableListOf(TokenTransferDataMapper2.transform(it, myAddress))
+                TokenTransferDataMapper2.transform(it, myAddress)
             }
             .subscribeOn(Schedulers.io())
-            .subscribe({
-                transactionsDao2.insertTransaction(it.first()) // insert in DB
-                postValue(it)
-            }, Throwable::printStackTrace)
+            .subscribe(::attemptToRetrieveLastTransactionForAsset, Throwable::printStackTrace)
             .addTo(compositeDisposable)
+    }
+
+    private fun attemptToRetrieveLastTransactionForAsset(transactionEntitiy2: TransactionEntity2) {
+        transactionsDao2.getLastTransactionByTokenType(transactionEntitiy2.rri)
+            .subscribe({ lastTransactionForAsset ->
+                checkForExistingTokenDefinitionData(lastTransactionForAsset, transactionEntitiy2)
+            }, {
+                insertTransactionIntoDB(transactionEntitiy2)  // insert in DB since token type isn't owned
+            })
+            .addTo(compositeDisposable)
+    }
+
+    private fun checkForExistingTokenDefinitionData(
+        lastExistingTransaction: TransactionEntity2,
+        transactionEntitiy2: TransactionEntity2)
+    {
+        if (lastExistingTransaction.tokenName != null) {
+            val transaction = TransactionEntity2(
+                transactionEntitiy2.account,
+                transactionEntitiy2.address,
+                transactionEntitiy2.amount,
+                transactionEntitiy2.message,
+                transactionEntitiy2.sent,
+                transactionEntitiy2.timestamp,
+                transactionEntitiy2.rri,
+                lastExistingTransaction.tokenName,
+                lastExistingTransaction.tokenDescription,
+                lastExistingTransaction.tokenIconUrl,
+                lastExistingTransaction.tokenTotalSupply,
+                lastExistingTransaction.tokenSupplyType
+            )
+
+            insertTransactionIntoDB(transaction)   // insert in DB with all info
+        } else {
+            insertTransactionIntoDB(transactionEntitiy2)  // insert in DB with what we have
+        }
+    }
+
+    private fun insertTransactionIntoDB(transaction: TransactionEntity2) {
+        transactionsDao2.insertTransaction(transaction)
     }
 
     private fun retrieveListOfOldTransactions(
@@ -113,24 +149,6 @@ class TransactionsRepository2(
                 postValue(it)
             }
             .addTo(compositeDisposable)
-    }
-
-    /**
-     * Temporary method toAddress request tokens from faucet which gets added to the common
-     * composite disposable which gets disposed when inactive.
-     * */
-    fun requestTestTokenFromFaucet() {
-        // Send a message!
-        Identity.api!!.sendMessage(
-            RadixAddress.from(faucetAddress),
-            "Give me some radix!!".toByteArray(),
-            true
-        )
-            .toCompletable()
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                Timber.d("Submitted")
-            }.addTo(compositeDisposable)
     }
 
     override fun onInactive() {

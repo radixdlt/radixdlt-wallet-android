@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsRepository2
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -28,5 +29,10 @@ class AssetsViewModel @Inject constructor(
         transactionList.removeSource(transactionsRepository)
         transactionsRepository = TransactionsRepository2(context, transactionsDao2)
         transactionList.addSource(transactionsRepository, transactionList::setValue)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Timber.d("onCleared")
     }
 }

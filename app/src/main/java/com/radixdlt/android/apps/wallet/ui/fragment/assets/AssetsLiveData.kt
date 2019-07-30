@@ -144,6 +144,7 @@ class AssetsLiveData @Inject constructor(
 
     override fun onInactive() {
         super.onInactive()
+        Timber.d("onInactive")
         assets.clear()
         compositeDisposable.clear()
     }

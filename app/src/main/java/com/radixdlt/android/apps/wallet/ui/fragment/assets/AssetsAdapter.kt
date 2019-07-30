@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.adapter
+package com.radixdlt.android.apps.wallet.ui.fragment.assets
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.radixdlt.android.R
-import com.radixdlt.android.apps.wallet.ui.fragment.assets.Asset
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.client.atommodel.accounts.RadixAddress
+import com.radixdlt.client.core.atoms.particles.RRI
 import kotlinx.android.synthetic.main.item_asset.view.*
 import timber.log.Timber
 import java.math.BigDecimal
@@ -25,8 +26,8 @@ class AssetsAdapter(
 
     private lateinit var ctx: Context
     private lateinit var myAddress: String
-    private var listFiltered = items
-    private val fullList = mutableListOf<Asset>()
+    private var itemsFiltered = items
+    private val itemsAll = mutableListOf<Asset>()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         ctx = viewGroup.context
@@ -41,7 +42,7 @@ class AssetsAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as WalletViewHolder).bindList(listFiltered[position])
+        (holder as WalletViewHolder).bindList(itemsFiltered[position])
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
@@ -49,7 +50,7 @@ class AssetsAdapter(
             Timber.tag("payloads").d("empty")
             onBindViewHolder(holder, position)
         } else {
-            val asset = listFiltered[position]
+            val asset = itemsFiltered[position]
             for (data in payloads) {
                 Timber.tag("payloads").d("$data")
                 when (data as Int) {
@@ -61,17 +62,17 @@ class AssetsAdapter(
         }
     }
 
-    override fun getItemCount(): Int = listFiltered.size
+    override fun getItemCount(): Int = itemsFiltered.size
 
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(charSequence: CharSequence?): FilterResults {
                 val charString = charSequence.toString()
                 if (charString.isEmpty()) {
-                    listFiltered = fullList
+                    itemsFiltered = itemsAll
                 } else {
                     val filteredList = arrayListOf<Asset>()
-                    fullList.forEach {
+                    itemsAll.forEach {
                         if (it.name != null) {
                             if (it.name!!.toLowerCase().contains(charString) || it.iso.toLowerCase().contains(charString)) {
                                 filteredList.add(it)
@@ -83,17 +84,17 @@ class AssetsAdapter(
                         }
                     }
 
-                    listFiltered = filteredList
+                    itemsFiltered = filteredList
                 }
 
                 val filterResults = FilterResults()
-                filterResults.values = listFiltered
+                filterResults.values = itemsFiltered
                 return filterResults
             }
 
             override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults?) {
-                listFiltered = filterResults?.values as MutableList<Asset>
-                replace(listFiltered)
+                itemsFiltered = filterResults?.values as MutableList<Asset>
+                replace(itemsFiltered)
             }
         }
     }
@@ -110,7 +111,7 @@ class AssetsAdapter(
             setTotalAssetHoldings(item)
 
             // Item click listeners
-            setClickListener(item.iso)
+            setClickListener(RRI.of(RadixAddress.from(item.address), item.iso).toString())
             setLongClickListener(item.iso)
         }
 
@@ -153,15 +154,19 @@ class AssetsAdapter(
 
     @MainThread
     fun replace(assets: List<Asset>) {
-        val difference = DiffUtil.calculateDiff(AssetsDiffUtil(items, assets), false)
+        val difference = DiffUtil.calculateDiff(
+            AssetsDiffUtil(
+                items,
+                assets
+            ), false)
         difference.dispatchUpdatesTo(this)
         items.clear()
         items.addAll(assets)
     }
 
     fun originalList(assets: List<Asset>) {
-        fullList.clear()
-        fullList.addAll(assets)
+        itemsAll.clear()
+        itemsAll.addAll(assets)
     }
 
     private class AssetsDiffUtil(
@@ -169,6 +174,7 @@ class AssetsAdapter(
         private val newList: List<Asset>
     ) : DiffUtil.Callback() {
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            Timber.tag("diffUtil").d("areItemsTheSame")
             return oldList[oldItemPosition] === newList[newItemPosition]
         }
 
@@ -177,12 +183,14 @@ class AssetsAdapter(
         override fun getNewListSize(): Int = newList.size
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            Timber.tag("diffUtil").d("areContentsTheSame")
             return oldList[oldItemPosition].total == newList[newItemPosition].total &&
                 oldList[oldItemPosition].name == newList[newItemPosition].name &&
                 oldList[oldItemPosition].urlIcon == newList[newItemPosition].urlIcon
         }
 
         override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+            Timber.tag("diffUtil").d("getChangePayload")
             return when {
                 oldList[oldItemPosition].total != newList[newItemPosition].total -> UPDATE_TOTAL
                 oldList[oldItemPosition].name != newList[newItemPosition].name -> UPDATE_NAME

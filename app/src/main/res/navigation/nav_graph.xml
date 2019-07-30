@@ -8,16 +8,26 @@
         android:id="@+id/navigation_assets"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsFragment"
         android:label="fragment_assets"
-        tools:layout="@layout/fragment_wallet">
+        tools:layout="@layout/fragment_assets">
         <action
             android:id="@+id/action_navigation_assets_to_navigation_asset_transactions"
-            app:destination="@id/navigation_asset_transactions" />
+            app:destination="@id/navigation_asset_transactions">
+            <argument
+                android:name="rri"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/navigation_asset_transactions"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsFragment"
         android:label="fragment_asset_transactions"
-        tools:layout="@layout/fragment_asset_transactions" />
+        tools:layout="@layout/fragment_asset_transactions">
+        <argument
+            android:name="rri"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_contacts"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsFragment"

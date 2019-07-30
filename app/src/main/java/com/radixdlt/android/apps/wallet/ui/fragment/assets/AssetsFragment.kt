@@ -14,11 +14,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lapism.searchview.Search
 import com.radixdlt.android.R
-import com.radixdlt.android.apps.wallet.ui.adapter.AssetsAdapter
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.tool_bar_search.*
-import org.jetbrains.anko.toast
 import javax.inject.Inject
 
 class AssetsFragment : Fragment() {
@@ -95,6 +93,7 @@ class AssetsFragment : Fragment() {
         assetsAdapter.replace(tokenTypes)
         setLayoutResources()
     }
+
     private fun initialiseRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         assetsAdapter = AssetsAdapter(itemClick = click)
@@ -146,7 +145,8 @@ class AssetsFragment : Fragment() {
 
     private val click = fun(item: String, longClick: Boolean) {
         if (!longClick) {
-            findNavController().navigate(R.id.action_navigation_assets_to_navigation_asset_transactions)
+            val action = AssetsFragmentDirections.actionNavigationAssetsToNavigationAssetTransactions(item)
+            findNavController().navigate(action)
         }
     }
 
