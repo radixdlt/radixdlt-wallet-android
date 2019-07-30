@@ -30,6 +30,8 @@ class AssetTransactionsFragment : Fragment() {
 
     private val args: AssetTransactionsFragmentArgs by navArgs()
     private val rri: String by lazy { args.rri }
+    private val name: String by lazy { args.name }
+    private val balance: String by lazy { args.balance }
 
     private lateinit var assetTransactionsAdapter: AssetTransactionsAdapter
 
@@ -37,6 +39,7 @@ class AssetTransactionsFragment : Fragment() {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as? AppCompatActivity)?.supportActionBar?.title = name
     }
 
     override fun onCreateView(
@@ -47,6 +50,8 @@ class AssetTransactionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showAssetBalance(balance)
+        assetSymbolTextView.text = RRI.fromString(rri).name
         initialiseRecyclerView()
         initialiseViewModels(rri)
     }
@@ -77,11 +82,9 @@ class AssetTransactionsFragment : Fragment() {
             .setScale(2, RoundingMode.HALF_UP)
             .toPlainString()
         assetBalanceTextView.text = total
-        assetSymbolTextView.text = RRI.fromString(rri).name
     }
 
     private fun showAssetTransactions(transactions: List<TransactionEntity2>) {
-        (activity as? AppCompatActivity)?.supportActionBar?.title = transactions.first().tokenName
         assetTransactionsAdapter.replace(transactions)
     }
 

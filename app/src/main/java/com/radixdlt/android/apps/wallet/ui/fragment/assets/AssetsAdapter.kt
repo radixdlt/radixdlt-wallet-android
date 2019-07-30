@@ -20,8 +20,8 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 class AssetsAdapter(
-    private val items: MutableList<Asset> = mutableListOf(),
-    private val itemClick: (String, Boolean) -> Unit
+    private val itemClick: (String, String, String) -> Unit,
+    private val items: MutableList<Asset> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     private lateinit var ctx: Context
@@ -101,7 +101,7 @@ class AssetsAdapter(
 
     inner class WalletViewHolder(
         itemView: View,
-        private val itemClick: (String, Boolean) -> Unit
+        private val itemClick: (String, String, String) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
         fun bindList(item: Asset) {
@@ -111,8 +111,8 @@ class AssetsAdapter(
             setTotalAssetHoldings(item)
 
             // Item click listeners
-            setClickListener(RRI.of(RadixAddress.from(item.address), item.iso).toString())
-            setLongClickListener(item.iso)
+            val rri = RRI.of(RadixAddress.from(item.address), item.iso).toString()
+            setClickListener(rri, item.name ?: item.iso, item.total)
         }
 
         fun setName(item: Asset) {
@@ -138,16 +138,9 @@ class AssetsAdapter(
             itemView.transactionAmount.text = holdings
         }
 
-        private fun setClickListener(item: String) {
+        private fun setClickListener(rri: String, name: String, balance: String) {
             itemView.setOnClickListener {
-                itemClick(item, false)
-            }
-        }
-
-        private fun setLongClickListener(item: String) {
-            itemView.setOnLongClickListener {
-                //                itemClick(item, true)
-                return@setOnLongClickListener true
+                itemClick(rri, name, balance)
             }
         }
     }
@@ -158,7 +151,8 @@ class AssetsAdapter(
             AssetsDiffUtil(
                 items,
                 assets
-            ), false)
+            ), false
+        )
         difference.dispatchUpdatesTo(this)
         items.clear()
         items.addAll(assets)

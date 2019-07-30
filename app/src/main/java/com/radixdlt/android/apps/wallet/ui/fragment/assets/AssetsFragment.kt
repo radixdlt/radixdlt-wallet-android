@@ -87,7 +87,7 @@ class AssetsFragment : Fragment() {
 
     private fun initialiseRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        assetsAdapter = AssetsAdapter(itemClick = click)
+        assetsAdapter = AssetsAdapter(itemClick)
         recyclerView.adapter = assetsAdapter
     }
 
@@ -131,11 +131,10 @@ class AssetsFragment : Fragment() {
         swipe_refresh_layout.isRefreshing = false
     }
 
-    private val click = fun(item: String, longClick: Boolean) {
-        if (!longClick) {
-            val action = AssetsFragmentDirections.actionNavigationAssetsToNavigationAssetTransactions(item)
-            findNavController().navigate(action)
-        }
+    private val itemClick = fun(rri: String, name: String, balance: String) {
+        val action = AssetsFragmentDirections
+            .actionNavigationAssetsToNavigationAssetTransactions(rri, name, balance)
+        findNavController().navigate(action)
     }
 
     override fun onResume() {
