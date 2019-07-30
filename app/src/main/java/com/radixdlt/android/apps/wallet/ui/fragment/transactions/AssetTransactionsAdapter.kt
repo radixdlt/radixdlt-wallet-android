@@ -12,8 +12,7 @@ import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.formatCharactersForAmount
-import com.radixdlt.android.apps.wallet.util.setAddressWithColors
-import kotlinx.android.synthetic.main.item_wallet.view.*
+import kotlinx.android.synthetic.main.item_asset_transaction.view.*
 import timber.log.Timber
 import java.math.RoundingMode
 
@@ -31,7 +30,7 @@ class AssetTransactionsAdapter(
 
         return WalletViewHolder(
             LayoutInflater.from(viewGroup.context).inflate(
-                R.layout.item_wallet,
+                R.layout.item_asset_transaction,
                 viewGroup, false
             ), itemClick
         )
@@ -50,33 +49,29 @@ class AssetTransactionsAdapter(
 
         fun bindList(transactionEntity: TransactionEntity2) {
 
-            setAddress(transactionEntity)
+            setAccount()
             setResources(transactionEntity)
             setTransactionAmount(transactionEntity)
             setTokenType(transactionEntity)
-            setMessage(transactionEntity)
+            setAddress(transactionEntity)
 
             // Item click listeners
             setClickListener(transactionEntity)
             setLongClickListener(transactionEntity)
         }
 
-        private fun setAddress(transactionEntity: TransactionEntity2) {
-            itemView.addressTextView.text = setAddressWithColors(
-                ctx, transactionEntity.address, R.color.materialDarkGrey
-            )
+        private fun setAccount() {
+            itemView.accountTextView.text = "Personal"
         }
 
         // Set correct resources and colors depending if sent or received
         private fun setResources(transactionEntity: TransactionEntity2) {
             if (transactionEntity.sent) {
-                itemView.circleImageView.setImageResource(R.drawable.send_image_item_wallet)
-                itemView.transactionAmount.setTextColor(
-                    ContextCompat.getColor(ctx, R.color.materialGrey700)
-                )
+                itemView.circleImageView.setImageResource(R.drawable.new_send_image_item_wallet)
+                itemView.transactionAmount.setTextColor(ContextCompat.getColor(ctx, R.color.radixRed))
             } else {
-                itemView.circleImageView.setImageResource(R.drawable.receive_image_item_wallet)
-                itemView.transactionAmount.setTextColor(ContextCompat.getColor(ctx, R.color.green))
+                itemView.circleImageView.setImageResource(R.drawable.new_receive_image_item_wallet)
+                itemView.transactionAmount.setTextColor(ContextCompat.getColor(ctx, R.color.colorAccent))
             }
         }
 
@@ -99,28 +94,20 @@ class AssetTransactionsAdapter(
         }
 
         private fun setTokenType(transactionEntity: TransactionEntity2) {
-//            if (transactionEntity.tokenClassISO != GENESIS_XRD) {
-                itemView.testTokensTextView.text = transactionEntity.rri.split("/")[2]
-                itemView.testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-//            } else {
-//                itemView.testTokensTextView.text = ctx.getString(R.string.wallet_fragment_item_xml_test_tokens)
-//                itemView.testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(
-//                    null,
-//                    null,
-//                    ContextCompat.getDrawable(ctx, R.drawable.ic_warning_line_small),
-//                    null
-//                )
-//            }
+            var amount = transactionEntity.amount
+                .setScale(2, RoundingMode.HALF_UP)
+                .toPlainString()
+
+            amount = "$$amount"
+
+            itemView.fiatValueTextView.text = amount
         }
 
         // Detect if message attached to transactionList, set and make VISIBLE or set as GONE
-        private fun setMessage(transactionEntity: TransactionEntity2) {
-            if (transactionEntity.message != null) {
-                itemView.messageTextView.visibility = View.VISIBLE
-                itemView.messageTextView.text = transactionEntity.message
-            } else {
-                itemView.messageTextView.visibility = View.GONE
-            }
+        private fun setAddress(transactionEntity: TransactionEntity2) {
+            val address = transactionEntity.address
+            val message = if (transactionEntity.sent) "To: $address" else "From: $address"
+            itemView.addressTextView.text = message
         }
 
         private fun setClickListener(transactionEntity: TransactionEntity2) {
@@ -131,7 +118,7 @@ class AssetTransactionsAdapter(
 
         private fun setLongClickListener(transactionEntity: TransactionEntity2) {
             itemView.setOnLongClickListener {
-//                itemClick(transactionEntity, true)
+                //                itemClick(transactionEntity, true)
                 return@setOnLongClickListener true
             }
         }

@@ -17,7 +17,7 @@
         tools:src="@drawable/new_send_image_item_wallet" />
 
     <TextView
-        android:id="@+id/addressTextView"
+        android:id="@+id/accountTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -25,12 +25,28 @@
         android:ellipsize="middle"
         android:singleLine="true"
         android:textColor="@android:color/black"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/addressTextView"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toEndOf="@+id/circleImageView"
         app:layout_constraintTop_toTopOf="@+id/circleImageView"
-        tools:text="Rads" />
+        tools:text="Personal" />
+
+    <TextView
+        android:id="@+id/addressTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+        app:layout_constraintEnd_toStartOf="@+id/transactionAmount"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/circleImageView"
+        app:layout_constraintTop_toBottomOf="@+id/accountTextView"
+        tools:text="From: 9g4S5L3F6sNgJcLxqnG4w1W5sfnHrBuVjWT5acjU2YACUGGiMC1" />
 
     <TextView
         android:id="@+id/transactionAmount"
@@ -42,17 +58,31 @@
         android:textAlignment="textEnd"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/circleImageView"
-        tools:text="5 000 XRD" />
+        tools:text="+55.00000" />
+
+    <TextView
+        android:id="@+id/fiatValueTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:drawablePadding="4dp"
+        android:maxWidth="100dp"
+        android:textAlignment="textEnd"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/transactionAmount"
+        tools:ignore="SmallSp"
+        tools:text="2.52 USD" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.74" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

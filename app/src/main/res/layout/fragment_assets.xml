@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".apps.wallet.ui.fragment.wallet.WalletFragment">
+    tools:context=".apps.wallet.ui.fragment.assets.AssetsFragment">
 
     <include
-        layout="@layout/tool_bar_search"
-        android:id="@+id/toolbar_search" />
+        android:id="@+id/toolbar_search"
+        layout="@layout/tool_bar_search" />
 
     <FrameLayout
         android:id="@+id/walletBackGroundFrameLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/mainBackground"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/wallet_fragment_xml_empty_transactions_background_description"
             android:src="@drawable/ic_new_wallet"
-            android:tint="@color/veryLightGray" />
+            android:tint="@color/white" />
 
     </FrameLayout>
 
@@ -36,7 +36,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonsView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_search">
@@ -49,12 +49,49 @@
             tools:listitem="@layout/item_asset" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <View
+        android:id="@+id/buttonsView"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/receiveButton"
+        style="@style/MaterialButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Receive"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swipe_refresh_layout" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/payButton"
+        style="@style/MaterialButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Pay"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/buttonsView"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/swipe_refresh_layout" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -129,9 +128,6 @@ class AssetsFragment : Fragment() {
 
     private fun setLayoutResourcesWithTransactions() {
         walletBackGroundFrameLayout.visibility = View.GONE
-        swipe_refresh_layout.setBackgroundColor(
-            ContextCompat.getColor(activity!!, R.color.mainBackground)
-        )
         swipe_refresh_layout.isRefreshing = false
     }
 
@@ -144,6 +140,7 @@ class AssetsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 }

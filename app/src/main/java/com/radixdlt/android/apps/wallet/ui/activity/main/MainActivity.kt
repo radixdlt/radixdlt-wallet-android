@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -27,6 +28,7 @@ import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.tool_bar.*
+import org.jetbrains.anko.px2dip
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import timber.log.Timber
@@ -37,12 +39,12 @@ class MainActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var mainViewModel: MainViewModel
-
     private lateinit var options: NavOptions.Builder
     private var uri: Uri? = null
 
     private val compositeDisposable = CompositeDisposable()
+
+    val dimen: Int by lazy { resources.getDimension(R.dimen.toolbar_elevation).toInt() }
 
     companion object {
         private const val RC_BARCODE_CAPTURE = 9000
@@ -65,6 +67,7 @@ class MainActivity : BaseActivity() {
 
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.title = getString(R.string.app_name)
+        supportActionBar?.elevation = px2dip(0)
 
         initialiseNavigation()
         initialiseViewModel()
@@ -83,7 +86,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initialiseViewModel() {
-        mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+        ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
     }
 
     /**
@@ -151,21 +154,25 @@ class MainActivity : BaseActivity() {
 
                 when (item.itemId) {
                     R.id.navigation_assets -> {
+                        supportActionBar?.elevation = px2dip(0)
                         navController.navigate(R.id.navigation_assets, null,
                                 options.setPopUpTo(R.id.navigation_assets, true).build())
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_contacts -> {
+                        supportActionBar?.elevation = px2dip(dimen)
                         navController.navigate(R.id.navigation_contacts, null,
                                 options.setPopUpTo(R.id.navigation_assets, false).build())
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_account -> {
+                        supportActionBar?.elevation = px2dip(dimen)
                         navController.navigate(R.id.navigation_account, null,
                                 options.setPopUpTo(R.id.navigation_assets, false).build())
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_more_options -> {
+                        supportActionBar?.elevation = px2dip(dimen)
                         navController.navigate(R.id.navigation_more_options, null,
                                 options.setPopUpTo(R.id.navigation_assets, false).build())
                         return@OnNavigationItemSelectedListener true

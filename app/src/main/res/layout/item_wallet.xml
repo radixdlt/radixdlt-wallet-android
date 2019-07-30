@@ -15,7 +15,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      tools:src="@drawable/send_image_item_wallet"/>
+      tools:src="@drawable/new_send_image_item_wallet"/>
 
   <TextView
       android:id="@+id/addressTextView"

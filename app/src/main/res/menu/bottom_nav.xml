@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
   <item
       android:id="@+id/navigation_assets"
       android:icon="@drawable/ic_new_wallet"
-      tools:ignore="MenuTitle" />
+      android:title="ASSETS" />
 
   <item
       android:id="@+id/navigation_contacts"
       android:icon="@drawable/ic_chat"
-      tools:ignore="MenuTitle" />
+      android:title="MESSAGES" />
 
   <item
       android:id="@+id/navigation_account"
       android:icon="@drawable/ic_new_profile"
-      tools:ignore="MenuTitle" />
+      android:title="ACCOUNT" />
 
   <item
       android:id="@+id/navigation_more_options"
       android:icon="@drawable/ic_new_more_icon"
-      tools:ignore="MenuTitle" />
+      android:title="SETTINGS" />
 
 </menu>

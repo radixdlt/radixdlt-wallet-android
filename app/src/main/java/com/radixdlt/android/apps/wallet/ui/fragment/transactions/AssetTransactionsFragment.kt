@@ -81,6 +81,7 @@ class AssetTransactionsFragment : Fragment() {
     }
 
     private fun showAssetTransactions(transactions: List<TransactionEntity2>) {
+        (activity as? AppCompatActivity)?.supportActionBar?.title = transactions.first().tokenName
         assetTransactionsAdapter.replace(transactions)
     }
 
