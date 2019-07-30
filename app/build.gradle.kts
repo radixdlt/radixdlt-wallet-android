@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
-
 plugins {
     id(BuildPlugins.androidApplication)
     kotlin(BuildPlugins.android)
@@ -117,7 +115,7 @@ android {
     }
 }
 
-val ktlint by configurations.creating
+val ktlint: Configuration by configurations.creating
 
 tasks {
 
@@ -125,7 +123,12 @@ tasks {
         dependsOn(ktlint)
     }
 
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
     withType(Test::class) {
+        @Suppress("UnstableApiUsage")
         useJUnitPlatform()
     }
 
@@ -147,12 +150,6 @@ tasks {
         main = "com.github.shyiko.ktlint.Main"
         args("-F", "src/**/*.kt")
     }
-}
-
-androidExtensions {
-    configure(delegateClosureOf<AndroidExtensionsExtension> {
-        isExperimental = true
-    })
 }
 
 configurations {

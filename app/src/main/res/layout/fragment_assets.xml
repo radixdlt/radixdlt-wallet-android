@@ -27,7 +27,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/wallet_fragment_xml_empty_transactions_background_description"
             android:src="@drawable/ic_new_wallet"
-            android:tint="@color/white" />
+            android:tint="@color/veryLightGray" />
 
     </FrameLayout>
 
