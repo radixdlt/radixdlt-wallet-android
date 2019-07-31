@@ -53,7 +53,6 @@ class AssetTransactionsFragment : Fragment() {
         showAssetBalance(balance)
         assetSymbolTextView.text = RRI.fromString(rri).name
         initialiseRecyclerView()
-        initialiseSwipeRefreshLayout()
         initialiseViewModels(rri)
     }
 
@@ -70,17 +69,6 @@ class AssetTransactionsFragment : Fragment() {
         assetTransactionsViewModel.getAllTransactionsAsset(asset)
         assetTransactionsViewModel.assetTransactionsState.observe(this, Observer(::showAssetTransactions))
         assetTransactionsViewModel.assetBalance.observe(this, Observer(::showAssetBalance))
-    }
-
-    private fun initialiseSwipeRefreshLayout() {
-        swipe_refresh_layout.setColorSchemeResources(
-                R.color.colorPrimary, R.color.colorAccent, R.color.colorAccentSecondary
-        )
-        swipe_refresh_layout.setOnRefreshListener(::refreshTransactions)
-    }
-
-    private fun refreshTransactions() {
-        swipe_refresh_layout.isRefreshing = false
     }
 
     private fun showAssetTransactions(assetTransactionsState: AssetTransactionsState) {

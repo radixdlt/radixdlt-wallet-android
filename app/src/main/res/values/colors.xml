@@ -11,6 +11,7 @@
     <color name="notQuiteWhiteAlpha">#a0fefefe</color>
     <color name="notVeryLightGray">#bfbfbf</color>
     <color name="veryLightGray">#dfdfdf</color>
+    <color name="extremelyLightGray">#F0F0F0</color>
     <color name="greyAlpha">#78bfbfbf</color>
     <color name="materialDarkGrey">#3B3B3B</color>
     <color name="materialGrey700">#616161</color>

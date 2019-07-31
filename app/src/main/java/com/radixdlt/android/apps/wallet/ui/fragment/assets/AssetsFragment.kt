@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -57,15 +58,20 @@ class AssetsFragment : Fragment() {
     }
 
     private fun initialiseSearchView() {
-        searchView.setLogoIcon(R.drawable.ic_search_24) // replace with search
+        searchView.setLogoIcon(R.drawable.ic_search_24)
+        searchView.setOnLogoClickListener {
+            searchView.findViewById<EditText>(R.id.search_searchEditText).requestFocus()
+        }
         searchView.setOnQueryTextListener(object : Search.OnQueryTextListener {
             override fun onQueryTextSubmit(query: CharSequence?): Boolean {
                 assetsAdapter.filter.filter(query.toString().toLowerCase(Locale.ROOT))
+                assetSearched = searchView?.text.toString()
                 return false
             }
 
             override fun onQueryTextChange(newText: CharSequence?) {
                 assetsAdapter.filter.filter(newText.toString().toLowerCase(Locale.ROOT))
+                assetSearched = searchView?.text.toString()
             }
         })
 
@@ -98,9 +104,21 @@ class AssetsFragment : Fragment() {
     }
 
     private fun showOwnedAssets(tokenTypes: List<Asset>) {
+        checkAssetWasBeingSearched()
         assetsAdapter.originalList(tokenTypes)
         assetsAdapter.replace(tokenTypes)
         setLayoutResources()
+    }
+
+    private fun checkAssetWasBeingSearched() {
+        if (!assetSearched.isNullOrEmpty()) {
+            val assetSearched = searchView?.text.toString()
+            searchView.text?.clear()
+            this.assetSearched = assetSearched
+            searchView.setText(assetSearched)
+            searchView.findViewById<EditText>(R.id.search_searchEditText).setSelection(assetSearched.length)
+        }
+        checkAssetWasSearchedAndFilter()
     }
 
     private fun initialiseRecyclerView() {
@@ -144,10 +162,10 @@ class AssetsFragment : Fragment() {
     private fun setLayoutResourcesWithTransactions() {
         walletBackGroundFrameLayout.visibility = View.GONE
         swipe_refresh_layout.isRefreshing = false
+        swipe_refresh_layout.isEnabled = false
     }
 
     private val itemClick = fun(rri: String, name: String, balance: String) {
-        assetSearched = searchView?.text.toString()
         val action = AssetsFragmentDirections
             .actionNavigationAssetsToNavigationAssetTransactions(rri, name, balance)
         findNavController().navigate(action)
