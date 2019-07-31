@@ -18,10 +18,11 @@ import kotlinx.android.synthetic.main.item_asset.view.*
 import timber.log.Timber
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.Locale
 
 class AssetsAdapter(
-    private val itemClick: (String, String, String) -> Unit,
-    private val items: MutableList<Asset> = mutableListOf()
+        private val itemClick: (String, String, String) -> Unit,
+        private val items: MutableList<Asset> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     private lateinit var ctx: Context
@@ -34,10 +35,10 @@ class AssetsAdapter(
         myAddress = QueryPreferences.getPrefAddress(ctx)
 
         return WalletViewHolder(
-            LayoutInflater.from(viewGroup.context).inflate(
-                R.layout.item_asset,
-                viewGroup, false
-            ), itemClick
+                LayoutInflater.from(viewGroup.context).inflate(
+                        R.layout.item_asset,
+                        viewGroup, false
+                ), itemClick
         )
     }
 
@@ -74,11 +75,12 @@ class AssetsAdapter(
                     val filteredList = arrayListOf<Asset>()
                     itemsAll.forEach {
                         if (it.name != null) {
-                            if (it.name!!.toLowerCase().contains(charString) || it.iso.toLowerCase().contains(charString)) {
+                            if (it.name!!.toLowerCase(Locale.ROOT).contains(charString)
+                                    || it.iso.toLowerCase(Locale.ROOT).contains(charString)) {
                                 filteredList.add(it)
                             }
                         } else {
-                            if (it.iso.toLowerCase().contains(charString)) {
+                            if (it.iso.toLowerCase(Locale.ROOT).contains(charString)) {
                                 filteredList.add(it)
                             }
                         }
@@ -93,15 +95,15 @@ class AssetsAdapter(
             }
 
             override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults?) {
-                itemsFiltered = filterResults?.values as MutableList<Asset>
+                itemsFiltered = filterResults?.values as? MutableList<Asset> ?: itemsAll
                 replace(itemsFiltered)
             }
         }
     }
 
     inner class WalletViewHolder(
-        itemView: View,
-        private val itemClick: (String, String, String) -> Unit
+            itemView: View,
+            private val itemClick: (String, String, String) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
         fun bindList(item: Asset) {
@@ -124,16 +126,16 @@ class AssetsAdapter(
         fun setIcon(item: Asset) {
             val urlIcon = item.urlIcon
             Glide.with(ctx)
-                .load(urlIcon)
-                .fallback(R.drawable.no_token_icon)
-                .into(itemView.circleImageView)
+                    .load(urlIcon)
+                    .fallback(R.drawable.no_token_icon)
+                    .into(itemView.circleImageView)
         }
 
         // Detect if whole number or decimal to change character size
         fun setTotalAssetHoldings(item: Asset) {
             val total = BigDecimal(item.total)
-                .setScale(2, RoundingMode.HALF_UP)
-                .toPlainString()
+                    .setScale(2, RoundingMode.HALF_UP)
+                    .toPlainString()
             val holdings = "$total ${item.iso}"
             itemView.transactionAmount.text = holdings
         }
@@ -148,10 +150,10 @@ class AssetsAdapter(
     @MainThread
     fun replace(assets: List<Asset>) {
         val difference = DiffUtil.calculateDiff(
-            AssetsDiffUtil(
-                items,
-                assets
-            ), false
+                AssetsDiffUtil(
+                        items,
+                        assets
+                ), false
         )
         difference.dispatchUpdatesTo(this)
         items.clear()
@@ -164,8 +166,8 @@ class AssetsAdapter(
     }
 
     private class AssetsDiffUtil(
-        private val oldList: List<Asset>,
-        private val newList: List<Asset>
+            private val oldList: List<Asset>,
+            private val newList: List<Asset>
     ) : DiffUtil.Callback() {
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             Timber.tag("diffUtil").d("areItemsTheSame")
@@ -179,8 +181,8 @@ class AssetsAdapter(
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             Timber.tag("diffUtil").d("areContentsTheSame")
             return oldList[oldItemPosition].total == newList[newItemPosition].total &&
-                oldList[oldItemPosition].name == newList[newItemPosition].name &&
-                oldList[oldItemPosition].urlIcon == newList[newItemPosition].urlIcon
+                    oldList[oldItemPosition].name == newList[newItemPosition].name &&
+                    oldList[oldItemPosition].urlIcon == newList[newItemPosition].urlIcon
         }
 
         override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
