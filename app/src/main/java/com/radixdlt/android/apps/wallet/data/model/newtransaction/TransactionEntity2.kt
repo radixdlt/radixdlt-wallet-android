@@ -11,7 +11,8 @@ import java.math.BigDecimal
     primaryKeys = ["timestamp"]
 )
 data class TransactionEntity2(
-    val account: String,
+    val accountAddress: String,
+    val accountName: String,
     @ColumnInfo(index = true) val address: String,
     val amount: BigDecimal,
     val message: String?,

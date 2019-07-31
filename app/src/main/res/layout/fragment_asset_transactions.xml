@@ -66,6 +66,7 @@
       android:id="@+id/swipe_refresh_layout"
       android:layout_width="0dp"
       android:layout_height="0dp"
+      android:paddingTop="2dp"
       app:layout_constraintBottom_toTopOf="@+id/buttonsView"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.0"

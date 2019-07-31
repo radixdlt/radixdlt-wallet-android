@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="106dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/transactionConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:background="?selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/assetTransactionsDateTextView">
+
+        <TextView
+            android:id="@+id/accountTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="4dp"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toTopOf="@+id/addressTextView"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toEndOf="@+id/circleImageView"
+            app:layout_constraintTop_toTopOf="@+id/circleImageView"
+            tools:text="Personal" />
+
+        <TextView
+            android:id="@+id/addressTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+            app:layout_constraintEnd_toStartOf="@+id/transactionAmount"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/circleImageView"
+            app:layout_constraintTop_toBottomOf="@+id/accountTextView"
+            tools:text="From: 9g4S5L3F6sNgJcLxqnG4w1W5sfnHrBuVjWT5acjU2YACUGGiMC1" />
+
+        <TextView
+            android:id="@+id/transactionAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:maxWidth="100dp"
+            android:maxLines="1"
+            android:textAlignment="textEnd"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="@+id/circleImageView"
+            tools:text="+55.00000" />
+
+        <TextView
+            android:id="@+id/fiatValueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:drawablePadding="4dp"
+            android:maxWidth="100dp"
+            android:textAlignment="textEnd"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/transactionAmount"
+            tools:ignore="SmallSp"
+            tools:text="2.52 USD" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.74" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleImageView"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/new_send_image_item_wallet" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/assetTransactionsDateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:paddingStart="16dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="5dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="TUESDAY, 30th JULY, 2019" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

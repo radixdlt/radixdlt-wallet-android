@@ -125,7 +125,7 @@ class AssetsFragment : Fragment() {
 
     private fun refreshTransactions() {
         swipe_refresh_layout.isRefreshing = false
-        refreshing = true
+        refreshing = false
     }
 
     private fun setLayoutResources() {

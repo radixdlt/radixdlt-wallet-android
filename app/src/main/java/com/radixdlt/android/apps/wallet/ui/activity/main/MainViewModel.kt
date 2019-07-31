@@ -80,7 +80,8 @@ class MainViewModel @Inject constructor(
     {
         if (lastExistingTransaction.tokenName != null) {
             val transaction = TransactionEntity2(
-                transactionEntitiy2.account,
+                transactionEntitiy2.accountAddress,
+                transactionEntitiy2.accountName,
                 transactionEntitiy2.address,
                 transactionEntitiy2.amount,
                 transactionEntitiy2.message,

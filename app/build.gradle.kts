@@ -115,6 +115,10 @@ android {
     }
 }
 
+androidExtensions {
+    isExperimental = true
+}
+
 val ktlint: Configuration by configurations.creating
 
 tasks {
