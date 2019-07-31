@@ -14,12 +14,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lapism.searchview.Search
 import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.util.toast
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.tool_bar_search.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 class AssetsFragment : Fragment() {
@@ -92,7 +93,7 @@ class AssetsFragment : Fragment() {
         when (state) {
             is AssetsState.Loading -> { swipe_refresh_layout.isRefreshing = true }
             is AssetsState.ShowAssets -> showOwnedAssets(state.assets)
-            is AssetsState.Error -> {}
+            is AssetsState.Error -> { toast("There was an error!") }
         }
     }
 

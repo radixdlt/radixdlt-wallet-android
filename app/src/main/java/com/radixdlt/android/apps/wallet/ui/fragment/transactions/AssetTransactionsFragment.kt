@@ -13,10 +13,10 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
+import com.radixdlt.android.apps.wallet.util.toast
 import com.radixdlt.client.core.atoms.particles.RRI
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_asset_transactions.*
-import org.jetbrains.anko.toast
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
@@ -102,7 +102,7 @@ class AssetTransactionsFragment : Fragment() {
 
     private val click = fun(item: String, longClick: Boolean) {
         if (!longClick) {
-            activity?.toast(item)
+            toast(item)
         }
     }
 }

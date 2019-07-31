@@ -2,7 +2,10 @@ package com.radixdlt.android.apps.wallet.util
 
 import android.os.Build
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
+import org.jetbrains.anko.toast
 
 fun Number?.getOrdinal(): String? {
     if (this == null) {
@@ -48,3 +51,7 @@ fun View.setConstraintLayoutMargin(left: Int, top: Int, right: Int, bottom: Int)
         layoutParams = lp
     }
 }
+
+fun Fragment.toast(@StringRes message: Int) = view?.let { activity?.toast(message) }
+
+fun Fragment.toast(message: CharSequence) = view?.let { activity?.toast(message) }

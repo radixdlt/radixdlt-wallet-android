@@ -41,7 +41,10 @@ class AssetsViewModel @Inject constructor(
                 assets.clear()
                 numberOfAssets = it.size
                 getAllTransactionsFromEachAsset(it)
-            }, { Timber.e(it) })
+            }, {
+                setAssetsState(AssetsState.Error)
+                Timber.e(it)
+            })
             .addTo(compositeDisposable)
     }
 
