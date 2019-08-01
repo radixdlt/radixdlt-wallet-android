@@ -7,6 +7,7 @@
     <color name="green">#34af39</color>
     <color name="materialLightGrey">#9e9e9e</color>
     <color name="white">#FFFFFF</color>
+    <color name="whiteRipple">#32FFFFFF</color>
     <color name="notQuiteWhite">#FEFEFE</color>
     <color name="notQuiteWhiteAlpha">#a0fefefe</color>
     <color name="notVeryLightGray">#bfbfbf</color>

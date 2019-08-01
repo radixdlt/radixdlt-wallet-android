@@ -1,5 +1,7 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.assets
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +17,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lapism.searchview.Search
 import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
+import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
+import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.radixdlt.android.apps.wallet.util.toast
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_wallet.*
+import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.tool_bar_search.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.toast
 import java.util.Locale
 import javax.inject.Inject
 
@@ -55,6 +62,12 @@ class AssetsFragment : Fragment() {
         initialiseViewModels()
         initialiseSearchView()
         initialiseLoadingState()
+        setOnClickListeners()
+    }
+
+    private fun setOnClickListeners() {
+        payButtonClickListener()
+        receiveButtonClickListener()
     }
 
     private fun initialiseSearchView() {
@@ -95,11 +108,32 @@ class AssetsFragment : Fragment() {
         assetsViewModel.assetsState.observe(this, Observer(::assetsStateChanged))
     }
 
+    private fun payButtonClickListener() {
+        payButton.setOnClickListener {
+            SendRadixActivity.newIntent(activity!!)
+        }
+    }
+
+    private fun receiveButtonClickListener() {
+        receiveButton.setOnClickListener {
+            val receiveRadixDialog = ReceiveRadixDialog.newInstance()
+            receiveRadixDialog.setTargetFragment(
+                this@AssetsFragment,
+                REQUEST_CODE_RECEIVE_RADIX
+            )
+            receiveRadixDialog.show(fragmentManager!!, null)
+        }
+    }
+
     private fun assetsStateChanged(state: AssetsState) {
         when (state) {
-            is AssetsState.Loading -> { swipe_refresh_layout.isRefreshing = true }
+            is AssetsState.Loading -> {
+                swipe_refresh_layout.isRefreshing = true
+            }
             is AssetsState.ShowAssets -> showOwnedAssets(state.assets)
-            is AssetsState.Error -> { toast("There was an error!") }
+            is AssetsState.Error -> {
+                toast("There was an error!")
+            }
         }
     }
 
@@ -116,15 +150,16 @@ class AssetsFragment : Fragment() {
             searchView.text?.clear()
             this.assetSearched = assetSearched
             searchView.setText(assetSearched)
-            searchView.findViewById<EditText>(R.id.search_searchEditText).setSelection(assetSearched.length)
+            searchView.findViewById<EditText>(R.id.search_searchEditText)
+                .setSelection(assetSearched.length)
         }
         checkAssetWasSearchedAndFilter()
     }
 
     private fun initialiseRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        assetsRecyclerView.layoutManager = LinearLayoutManager(activity)
         assetsAdapter = AssetsAdapter(itemClick)
-        recyclerView.adapter = assetsAdapter
+        assetsRecyclerView.adapter = assetsAdapter
     }
 
     private fun initialiseLoadingState() {
@@ -171,9 +206,33 @@ class AssetsFragment : Fragment() {
         findNavController().navigate(action)
     }
 
+    private fun copyAddressToClipBoard(address: String) {
+        copyToClipboard(activity!!, address)
+
+        val addressToShow = if (address == QueryPreferences.getPrefAddress(activity!!)) {
+            "Address"
+        } else {
+            address
+        }
+
+        activity?.toast("$addressToShow ${activity!!.getString(R.string.toast_copied_clipboard)}")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) return
+
+        if (requestCode == REQUEST_CODE_RECEIVE_RADIX) {
+            copyAddressToClipBoard(QueryPreferences.getPrefAddress(activity!!))
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+    }
+
+    companion object {
+        private const val REQUEST_CODE_RECEIVE_RADIX = 0
     }
 }

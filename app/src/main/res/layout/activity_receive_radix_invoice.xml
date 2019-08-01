@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/transactionAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,12 +70,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputMessageTIL"
+                style="@style/MaterialTextLayoutOutlinedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
-                android:theme="@style/ThemeTextInputEditText"
+                android:theme="@style/MaterialTextLayoutOutlinedTheme"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -85,6 +86,7 @@
                     android:id="@+id/inputMessageTIET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
                     android:hint="@string/send_activity_xml_message_hint"
                     android:inputType="textCapSentences"
                     android:maxLength="128"
@@ -136,8 +138,9 @@
                 app:layout_constraintVertical_bias="0.0"
                 tools:text="JGSf1gnBJ7SXcRvhVCy8512ZuqDi4SKfKA3Yt45JdkU6X44XGMh" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/copyAddressButton"
+                style="@style/MaterialButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -147,13 +150,14 @@
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:theme="@style/AccentButton"
+                app:backgroundTint="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addressTextView"
-                tools:backgroundTint="@color/colorAccent" />
+                app:layout_constraintTop_toBottomOf="@+id/addressTextView" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/copyInvoiceButton"
+                style="@style/MaterialButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -163,14 +167,15 @@
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:theme="@style/AccentButton"
+                app:backgroundTint="@color/colorAccent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/copyAddressButton"
-                tools:backgroundTint="@color/colorAccent" />
+                app:layout_constraintTop_toBottomOf="@+id/copyAddressButton" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/shareInvoiceButton"
+                style="@style/MaterialButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -180,14 +185,13 @@
                 android:text="@string/receive_radix_activity_share_invoice_button"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
-                android:theme="@style/AccentButton"
+                app:backgroundTint="@color/colorAccent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/copyAddressButton"
-                app:layout_constraintVertical_bias="0.0"
-                tools:backgroundTint="@color/colorAccent" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"

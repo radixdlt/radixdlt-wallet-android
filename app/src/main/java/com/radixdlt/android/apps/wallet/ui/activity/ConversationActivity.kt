@@ -90,10 +90,10 @@ class ConversationActivity : BaseActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         layoutManager.stackFromEnd = true // This makes recycler stick at the bottom
-        recyclerView.layoutManager = layoutManager
+        conversationRecyclerView.layoutManager = layoutManager
         conversationAdapter = ConversationAdapter(myAddress, listConvo)
 
-        recyclerView.adapter = conversationAdapter
+        conversationRecyclerView.adapter = conversationAdapter
 
         inputMsg.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
             override fun afterTextChanged(text: Editable?) {
@@ -142,7 +142,7 @@ class ConversationActivity : BaseActivity() {
                 conversationAdapter.notifyDataSetChanged()
                 // for some reason we need toAddress help totally scroll to bottom as on some occasions it doesn't
                 Handler().postDelayed({
-                    recyclerView.scrollToPosition(conversationAdapter.itemCount - 1)
+                    conversationRecyclerView.scrollToPosition(conversationAdapter.itemCount - 1)
                 }, 20)
             }
         })

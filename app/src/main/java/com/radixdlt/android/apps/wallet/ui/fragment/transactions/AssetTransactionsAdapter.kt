@@ -128,7 +128,7 @@ class AssetTransactionsAdapter(
             textView.text = transactionEntity2.accountName
         }
 
-        // Set correct resources and colors depending if sent or received
+        // Set correct resources and color depending if sent or received
         private fun setResources(
             circle: CircleImageView,
             transactionView: TextView,

@@ -174,7 +174,7 @@ class ContactsFragment : Fragment() {
     private fun setLayoutResourcesWithMessages() {
         contactsBackGroundImageView.visibility = View.GONE
         swipe_refresh_layout.setBackgroundColor(
-            ContextCompat.getColor(activity!!, R.color.mainBackground)
+            ContextCompat.getColor(activity!!, R.color.white)
         )
     }
 

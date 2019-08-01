@@ -122,7 +122,7 @@ class AssetsAdapter(
             itemView.addressTextView.text = name
         }
 
-        // Set correct resources and colors depending if sent or received
+        // Set correct resources and color depending if sent or received
         fun setIcon(item: Asset) {
             val urlIcon = item.urlIcon
             Glide.with(ctx)

@@ -1,5 +1,7 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.transactions
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +15,15 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
+import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
+import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
+import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.radixdlt.android.apps.wallet.util.toast
 import com.radixdlt.client.core.atoms.particles.RRI
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_asset_transactions.*
+import org.jetbrains.anko.toast
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
@@ -54,6 +61,29 @@ class AssetTransactionsFragment : Fragment() {
         assetSymbolTextView.text = RRI.fromString(rri).name
         initialiseRecyclerView()
         initialiseViewModels(rri)
+        setOnClickListeners()
+    }
+
+    private fun setOnClickListeners() {
+        payButtonClickListener()
+        receiveButtonClickListener()
+    }
+
+    private fun payButtonClickListener() {
+        payButton.setOnClickListener {
+            SendRadixActivity.newIntent(activity!!)
+        }
+    }
+
+    private fun receiveButtonClickListener() {
+        receiveButton.setOnClickListener {
+            val receiveRadixDialog = ReceiveRadixDialog.newInstance()
+            receiveRadixDialog.setTargetFragment(
+                this@AssetTransactionsFragment,
+                REQUEST_CODE_RECEIVE_RADIX
+            )
+            receiveRadixDialog.show(fragmentManager!!, null)
+        }
     }
 
     private fun initialiseRecyclerView() {
@@ -67,13 +97,18 @@ class AssetTransactionsFragment : Fragment() {
             .get(AssetTransactionsViewModel::class.java)
 
         assetTransactionsViewModel.getAllTransactionsAsset(asset)
-        assetTransactionsViewModel.assetTransactionsState.observe(this, Observer(::showAssetTransactions))
+        assetTransactionsViewModel.assetTransactionsState.observe(
+            this,
+            Observer(::showAssetTransactions)
+        )
         assetTransactionsViewModel.assetBalance.observe(this, Observer(::showAssetBalance))
     }
 
     private fun showAssetTransactions(assetTransactionsState: AssetTransactionsState) {
         when (assetTransactionsState) {
-            is AssetTransactionsState.ShowAssetTransactions -> showAssetTransactions(assetTransactionsState.assets)
+            is AssetTransactionsState.ShowAssetTransactions -> showAssetTransactions(
+                assetTransactionsState.assets
+            )
         }
     }
 
@@ -92,5 +127,29 @@ class AssetTransactionsFragment : Fragment() {
         if (!longClick) {
             toast(item)
         }
+    }
+
+    private fun copyAddressToClipBoard(address: String) {
+        copyToClipboard(activity!!, address)
+
+        val addressToShow = if (address == QueryPreferences.getPrefAddress(activity!!)) {
+            "Address"
+        } else {
+            address
+        }
+
+        activity?.toast("$addressToShow ${activity!!.getString(R.string.toast_copied_clipboard)}")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) return
+
+        if (requestCode == REQUEST_CODE_RECEIVE_RADIX) {
+            copyAddressToClipBoard(QueryPreferences.getPrefAddress(activity!!))
+        }
+    }
+
+    companion object {
+        private const val REQUEST_CODE_RECEIVE_RADIX = 0
     }
 }
