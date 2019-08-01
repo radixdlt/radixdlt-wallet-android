@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.tool_bar_search.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.toast
 import java.util.Locale
 import javax.inject.Inject
 
@@ -215,7 +214,7 @@ class AssetsFragment : Fragment() {
             address
         }
 
-        activity?.toast("$addressToShow ${activity!!.getString(R.string.toast_copied_clipboard)}")
+        toast("$addressToShow ${activity!!.getString(R.string.toast_copied_clipboard)}")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

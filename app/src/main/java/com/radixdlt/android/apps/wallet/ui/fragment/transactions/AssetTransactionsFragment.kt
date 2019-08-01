@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
+import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
@@ -23,7 +24,6 @@ import com.radixdlt.android.apps.wallet.util.toast
 import com.radixdlt.client.core.atoms.particles.RRI
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_asset_transactions.*
-import org.jetbrains.anko.toast
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
@@ -123,10 +123,16 @@ class AssetTransactionsFragment : Fragment() {
         assetTransactionsAdapter.replace(transactions)
     }
 
-    private val click = fun(item: String, longClick: Boolean) {
+    private val click = fun(transactionEntity2: TransactionEntity2, longClick: Boolean) {
         if (!longClick) {
-            toast(item)
+            navigateToDetails(transactionEntity2)
+        } else {
+            toast(transactionEntity2.address)
         }
+    }
+
+    private fun navigateToDetails(transactionEntity: TransactionEntity2) {
+        TransactionDetailsActivity.newIntent(activity!!, transactionEntity)
     }
 
     private fun copyAddressToClipBoard(address: String) {
@@ -138,7 +144,7 @@ class AssetTransactionsFragment : Fragment() {
             address
         }
 
-        activity?.toast("$addressToShow ${activity!!.getString(R.string.toast_copied_clipboard)}")
+        toast("$addressToShow ${activity!!.getString(R.string.toast_copied_clipboard)}")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

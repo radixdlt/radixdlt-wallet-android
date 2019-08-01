@@ -235,6 +235,7 @@ class MainActivity : BaseActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         navigation.menu.findItem(R.id.menu_bottom_assets).isChecked = true
+        supportActionBar?.elevation = px2dip(0)
     }
 
     override fun onStop() {

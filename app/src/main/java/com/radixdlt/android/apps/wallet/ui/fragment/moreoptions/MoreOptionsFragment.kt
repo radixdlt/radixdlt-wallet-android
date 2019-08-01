@@ -73,8 +73,7 @@ class MoreOptionsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_more_options, container, false
-    )
+    ): View? = inflater.inflate(R.layout.fragment_more_options, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

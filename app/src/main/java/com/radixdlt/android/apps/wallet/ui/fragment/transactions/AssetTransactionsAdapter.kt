@@ -25,7 +25,7 @@ import java.util.Locale
 
 class AssetTransactionsAdapter(
     private val items: MutableList<TransactionEntity2> = mutableListOf(),
-    private val itemClick: (String, Boolean) -> Unit
+    private val itemClick: (TransactionEntity2, Boolean) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var ctx: Context
@@ -80,7 +80,7 @@ class AssetTransactionsAdapter(
 
     inner class TransactionsViewHolder(
         itemView: View,
-        private val itemClick: (String, Boolean) -> Unit
+        private val itemClick: (TransactionEntity2, Boolean) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
         private val transactionView: View = itemView.find(R.id.transactionConstraintLayout)
@@ -178,7 +178,12 @@ class AssetTransactionsAdapter(
 
         private fun setClickListener(transactionEntity: TransactionEntity2, view: View) {
             view.setOnClickListener {
-                itemClick(transactionEntity.address, false)
+                itemClick(transactionEntity, false)
+            }
+
+            view.setOnLongClickListener {
+                itemClick(transactionEntity, true)
+                return@setOnLongClickListener true
             }
         }
     }

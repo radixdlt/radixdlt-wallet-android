@@ -1,6 +1,8 @@
 package com.radixdlt.android.apps.wallet.data.model.transaction
 
 import androidx.lifecycle.LiveData
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -9,7 +11,7 @@ import java.math.RoundingMode
 import javax.inject.Inject
 
 class TransactionDetailsLiveData @Inject constructor(
-    private val transactionsDao: TransactionsDao
+    private val transactionsDao: TransactionsDao2
 ) : LiveData<TransactionDetails>() {
 
     lateinit var address: String
@@ -39,24 +41,24 @@ class TransactionDetailsLiveData @Inject constructor(
     }
 
     private fun calculateTotalSent(
-        transactions: MutableList<TransactionEntity>
+        transactions: MutableList<TransactionEntity2>
     ): Pair<Int, String> {
         val sentTransactionEntities = transactions.filter {
             it.sent
         }
 
         val total = sentTransactionEntities.map {
-            it.formattedAmount.toBigDecimal()
+            it.amount
         }.fold(BigDecimal.ZERO, BigDecimal::add)
 
         return Pair(
             sentTransactionEntities.size,
-            total.setScale(5, RoundingMode.HALF_UP).toPlainString()
+            total.setScale(2, RoundingMode.HALF_UP).toPlainString()
         )
     }
 
     private fun calculateTotalReceived(
-        transactions: MutableList<TransactionEntity>
+        transactions: MutableList<TransactionEntity2>
     ): Pair<Int, String> {
 
         val receivedTransactionEntities = transactions.filterNot {
@@ -64,12 +66,12 @@ class TransactionDetailsLiveData @Inject constructor(
         }
 
         val total = receivedTransactionEntities.map {
-            it.formattedAmount.substring(1).toBigDecimal()
+            it.amount
         }.fold(BigDecimal.ZERO, BigDecimal::add)
 
         return Pair(
             receivedTransactionEntities.size,
-            total.setScale(5, RoundingMode.HALF_UP).toPlainString()
+            total.setScale(2, RoundingMode.HALF_UP).toPlainString()
         )
     }
 

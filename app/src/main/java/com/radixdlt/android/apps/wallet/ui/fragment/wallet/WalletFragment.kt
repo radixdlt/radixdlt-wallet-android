@@ -315,7 +315,7 @@ class WalletFragment : Fragment() {
     }
 
     private fun navigateToDetails(transactionEntity: TransactionEntity) {
-        TransactionDetailsActivity.newIntent(activity!!, transactionEntity)
+//        TransactionDetailsActivity.newIntent(activity!!, transactionEntity)
     }
 
     private fun copyAddressToClipBoard(address: String) {
