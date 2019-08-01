@@ -15,7 +15,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonsView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_search">
@@ -26,7 +26,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:contentDescription="@string/wallet_fragment_xml_empty_transactions_background_description"
-            android:src="@drawable/ic_new_wallet"
+            android:src="@drawable/ic_assets_24"
             android:tint="@color/veryLightGray" />
 
     </FrameLayout>
@@ -65,7 +65,7 @@
         android:layout_height="56dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Receive"
+        android:text="@string/assets_fragment_xml_receive_button"
         android:textColor="@color/white"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,7 +80,7 @@
         android:layout_height="56dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Pay"
+        android:text="@string/assets_fragment_xml_pay_button"
         android:textColor="@color/white"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"

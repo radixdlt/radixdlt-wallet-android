@@ -67,7 +67,7 @@
         tools:text="XRD" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/assetTransactionsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"

@@ -67,7 +67,7 @@
         tools:text="XRD" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/assetTransactionsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
@@ -101,7 +101,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/assetTransactionsRecyclerView" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/payButton"
@@ -116,7 +116,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/buttonsView"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/assetTransactionsRecyclerView" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

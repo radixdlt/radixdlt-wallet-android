@@ -87,9 +87,9 @@ class AssetTransactionsFragment : Fragment() {
     }
 
     private fun initialiseRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        assetTransactionsRecyclerView.layoutManager = LinearLayoutManager(activity)
         assetTransactionsAdapter = AssetTransactionsAdapter(itemClick = click)
-        recyclerView.adapter = assetTransactionsAdapter
+        assetTransactionsRecyclerView.adapter = assetTransactionsAdapter
     }
 
     private fun initialiseViewModels(asset: String) {
