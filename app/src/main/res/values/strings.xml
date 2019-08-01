@@ -130,6 +130,8 @@
 
   <!-- Asset Transactions Fragment -->
   <string name="asset_transactions_fragment_xml_your_balance_title">YOUR BALANCE</string>
+  <string name="asset_transactions_fragment_xml_receive_button">RECEIVE</string>
+  <string name="asset_transactions_fragment_xml_pay_button">PAY</string>
 
   <!-- Contacts Fragment -->
   <string name="contacts_fragment_user_faucet">Faucet</string>

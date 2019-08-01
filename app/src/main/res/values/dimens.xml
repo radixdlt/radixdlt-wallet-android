@@ -31,4 +31,5 @@
     <dimen name="list_item_avatar_size">40dp</dimen>
 
     <dimen name="ceter_icon_default_drawable_padding">4dp</dimen>
+    <dimen name="asset_balance_dimen">340dp</dimen>
 </resources>

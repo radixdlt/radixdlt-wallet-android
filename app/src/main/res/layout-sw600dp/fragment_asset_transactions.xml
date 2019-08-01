@@ -37,7 +37,7 @@
         android:layout_marginEnd="0dp"
         android:gravity="bottom|center"
         android:lines="1"
-        android:maxWidth="340dp"
+        android:maxWidth="@dimen/asset_balance_dimen"
         android:text="@string/wallet_fragment_xml_default_zero"
         android:textColor="@color/white"
         android:textSize="38sp"
@@ -49,7 +49,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/balanceTitleTextView"
-        tools:text="10000" />
+        tools:text="1000" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/assetSymbolTextView"
