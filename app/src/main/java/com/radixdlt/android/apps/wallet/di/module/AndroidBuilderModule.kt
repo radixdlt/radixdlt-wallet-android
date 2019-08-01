@@ -5,6 +5,7 @@ import com.radixdlt.android.apps.wallet.ui.activity.EnterPasswordActivity
 import com.radixdlt.android.apps.wallet.ui.activity.ReceiveRadixInvoiceActivity
 import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
 import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
+import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsFragment
 import com.radixdlt.android.apps.wallet.ui.fragment.ContactsFragment
 import com.radixdlt.android.apps.wallet.ui.fragment.MoreOptionsFragment
 import com.radixdlt.android.apps.wallet.ui.fragment.WalletFragment
@@ -16,6 +17,9 @@ abstract class AndroidBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun bindWalletFragment(): WalletFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindAssetsFragment(): AssetsFragment
 
     @ContributesAndroidInjector
     abstract fun bindContactsFragment(): ContactsFragment

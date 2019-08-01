@@ -1,39 +1,47 @@
 package com.radixdlt.android.apps.wallet.data.mapper
 
-import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionEntity
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
-import com.radixdlt.client.application.translate.tokens.TokenUnitConversions
+import java.math.BigDecimal
 import java.math.RoundingMode
 
-object TokenTransferDataMapper {
+object TokenTransferDataMapper2 {
 
     /**
-     * Transform a [TokenTransfer] into an [TransactionEntity].
+     * Transform a [TokenTransfer] into an [TransactionEntity2].
      *
      * @param tokenTransfer Object to be transformed.
      * @param myAddress String used to deduce the correct data to display
-     * @return [TransactionEntity]
+     * @return [TransactionEntity2]
      */
-    fun transform(tokenTransfer: TokenTransfer, myAddress: String): TransactionEntity {
+    fun transform(tokenTransfer: TokenTransfer, myAddress: String): TransactionEntity2 {
 
+        val account: String = myAddress
         val address: String = getAddress(tokenTransfer, myAddress)
-        val subUnitAmount: Long = tokenTransfer.amount.toLong()
-        val formattedAmount: String = getAmount(tokenTransfer, myAddress)
+        val amount: BigDecimal = tokenTransfer.amount
         val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
-        val dateUnix: Long = tokenTransfer.timestamp
+        val timestamp: Long = tokenTransfer.timestamp
         val rri: String = tokenTransfer.tokenClass.toString()
-        val tokenClassSubUnits = TokenUnitConversions.getSubunits()
+        val tokenName: String? = null
+        val tokenDescription: String? = null
+        val tokenIconUrl: String? = null
+        val tokenTotalSupply: BigDecimal? = null
+        val tokenSupplyType: String? = null
 
-        return TransactionEntity(
+        return TransactionEntity2(
+            account,
             address,
-            subUnitAmount,
-            formattedAmount,
+            amount,
             message,
             sent,
-            dateUnix,
+            timestamp,
             rri,
-            tokenClassSubUnits
+            tokenName,
+            tokenDescription,
+            tokenIconUrl,
+            tokenTotalSupply,
+            tokenSupplyType
         )
     }
 

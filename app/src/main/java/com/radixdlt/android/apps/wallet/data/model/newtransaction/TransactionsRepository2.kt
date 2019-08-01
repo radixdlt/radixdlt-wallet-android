@@ -1,8 +1,8 @@
-package com.radixdlt.android.apps.wallet.data.model.transaction
+package com.radixdlt.android.apps.wallet.data.model.newtransaction
 
 import android.content.Context
 import androidx.lifecycle.MediatorLiveData
-import com.radixdlt.android.apps.wallet.data.mapper.TokenTransferDataMapper
+import com.radixdlt.android.apps.wallet.data.mapper.TokenTransferDataMapper2
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_HOSTED
 import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_SINGLE
@@ -19,10 +19,10 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class TransactionsRepository(
+class TransactionsRepository2(
     val context: Context,
-    private val transactionsDao: TransactionsDao
-) : MediatorLiveData<MutableList<TransactionEntity>>() {
+    private val transactionsDao2: TransactionsDao2
+) : MediatorLiveData<MutableList<TransactionEntity2>>() {
 
     private val compositeDisposable = CompositeDisposable()
     private val myAddress: String by lazy { QueryPreferences.getPrefAddress(context) }
@@ -62,11 +62,11 @@ class TransactionsRepository(
             }
         }.flatMapMaybe { it }
             .map {
-                mutableListOf(TokenTransferDataMapper.transform(it, myAddress))
+                mutableListOf(TokenTransferDataMapper2.transform(it, myAddress))
             }
             .subscribeOn(Schedulers.io())
             .subscribe({
-                transactionsDao.insertTransaction(it.first()) // insert in DB
+                transactionsDao2.insertTransaction(it.first()) // insert in DB
                 postValue(it)
             }, Throwable::printStackTrace)
             .addTo(compositeDisposable)
@@ -92,12 +92,12 @@ class TransactionsRepository(
             .toObservable()
             .flatMapIterable { list -> list }
             .map {
-                TokenTransferDataMapper.transform(it, myAddress)
+                TokenTransferDataMapper2.transform(it, myAddress)
             }
             .toList()
             .subscribeOn(Schedulers.io())
             .subscribe({
-                transactionsDao.insertTransactions(it) // insert in DB
+                transactionsDao2.insertTransactions(it) // insert in DB
                 getStoredTransactions()
             }, Throwable::printStackTrace)
             .addTo(compositeDisposable)
@@ -106,7 +106,7 @@ class TransactionsRepository(
     }
 
     private fun getStoredTransactions() {
-        transactionsDao.getAllTransactions()
+        transactionsDao2.getAllTransactions()
             .subscribeOn(Schedulers.io())
             .subscribe {
                 Timber.tag("TransactionsLooking").d(it.toString())

@@ -90,7 +90,7 @@ class WalletAdapter(
 
         private fun setTokenType(transactionEntity: TransactionEntity) {
 //            if (transactionEntity.tokenClassISO != GENESIS_XRD) {
-                itemView.testTokensTextView.text = transactionEntity.tokenClassISO.split("/")[2]
+                itemView.testTokensTextView.text = transactionEntity.rri.split("/")[2]
                 itemView.testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 //            } else {
 //                itemView.testTokensTextView.text = ctx.getString(R.string.wallet_fragment_item_xml_test_tokens)

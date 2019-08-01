@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.ContextCompat
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessagesDao
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.identity.AndroidRadixIdentity
@@ -46,6 +47,9 @@ class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWall
 
     @Inject
     lateinit var transactionsDao: TransactionsDao
+
+    @Inject
+    lateinit var transactionsDao2: TransactionsDao2
 
     @Inject
     lateinit var messagesDao: MessagesDao
@@ -289,6 +293,7 @@ class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWall
     private fun deleteTables() {
         Completable.fromAction {
             transactionsDao.deleteTable()
+            transactionsDao2.deleteTable()
             messagesDao.deleteTable()
         }
             .subscribeOn(Schedulers.io())

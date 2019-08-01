@@ -17,6 +17,7 @@ import com.jakewharton.processphoenix.ProcessPhoenix
 import com.radixdlt.android.BuildConfig
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessagesDao
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
 import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper
 import com.radixdlt.android.apps.wallet.helper.WebviewFallback
@@ -47,6 +48,9 @@ class MoreOptionsFragment : Fragment() {
 
     @Inject
     lateinit var transactionsDao: TransactionsDao
+
+    @Inject
+    lateinit var transactionsDao2: TransactionsDao2
 
     @Inject
     lateinit var messagesDao: MessagesDao
@@ -330,6 +334,7 @@ class MoreOptionsFragment : Fragment() {
     private fun deleteTables() {
         Completable.fromAction {
             transactionsDao.deleteTable()
+            transactionsDao2.deleteTable()
             messagesDao.deleteTable()
         }
             .subscribeOn(Schedulers.io())

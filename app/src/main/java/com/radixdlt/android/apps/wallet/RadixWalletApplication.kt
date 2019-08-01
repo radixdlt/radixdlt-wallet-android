@@ -41,7 +41,7 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
         radixWalletComponent.inject(this)
 
         // Choose what Radix network to bootstrap
-        val bootstrapConfig = BootStrapConfigAndroidImpl.radixBetanetNode(this)
+        val bootstrapConfig = BootStrapConfigAndroidImpl.macAndroidEmulator(this)
         Identity.init(bootstrapConfig)
 
         Timber.plant(Timber.DebugTree())
