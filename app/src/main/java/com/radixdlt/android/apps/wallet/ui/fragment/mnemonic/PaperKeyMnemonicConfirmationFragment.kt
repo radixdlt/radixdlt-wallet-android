@@ -41,9 +41,9 @@ class PaperKeyMnemonicConfirmationFragment : Fragment() {
     private lateinit var mnemonicStringArray: Array<String>
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_paper_key_mnemonic_confirmation, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,7 +52,7 @@ class PaperKeyMnemonicConfirmationFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.title = "Paper Key"
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(
-                ContextCompat.getDrawable(activity!!, R.drawable.ic_close)
+            ContextCompat.getDrawable(activity!!, R.drawable.ic_close)
         )
         setHasOptionsMenu(true)
 
@@ -76,25 +76,47 @@ class PaperKeyMnemonicConfirmationFragment : Fragment() {
 
         mnemonicFirstWordEditView.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
             override fun afterTextChanged(firstRandomWord: Editable?) {
-                firstRandomWordVerified = if (firstRandomWord.toString() == mnemonicStringArray[firstRandomWordPosition]) {
-                    mnemonicFirstWordEditView.setTextColor(ContextCompat.getColor(activity!!, R.color.green))
-                    true
-                } else {
-                    mnemonicFirstWordEditView.setTextColor(ContextCompat.getColor(activity!!, R.color.materialDarkGrey))
-                    false
-                }
+                firstRandomWordVerified =
+                    if (firstRandomWord.toString() == mnemonicStringArray[firstRandomWordPosition]) {
+                        mnemonicFirstWordEditView.setTextColor(
+                            ContextCompat.getColor(
+                                activity!!,
+                                R.color.green
+                            )
+                        )
+                        true
+                    } else {
+                        mnemonicFirstWordEditView.setTextColor(
+                            ContextCompat.getColor(
+                                activity!!,
+                                R.color.materialDarkGrey
+                            )
+                        )
+                        false
+                    }
             }
         })
 
         mnemonicSecondWordEditView.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
             override fun afterTextChanged(secondRandomWord: Editable?) {
-                secondRandomWordVerified = if (secondRandomWord.toString() == mnemonicStringArray[secondRandomWordPosition]) {
-                    mnemonicSecondWordEditView.setTextColor(ContextCompat.getColor(activity!!, R.color.green))
-                    true
-                } else {
-                    mnemonicSecondWordEditView.setTextColor(ContextCompat.getColor(activity!!, R.color.materialDarkGrey))
-                    false
-                }
+                secondRandomWordVerified =
+                    if (secondRandomWord.toString() == mnemonicStringArray[secondRandomWordPosition]) {
+                        mnemonicSecondWordEditView.setTextColor(
+                            ContextCompat.getColor(
+                                activity!!,
+                                R.color.green
+                            )
+                        )
+                        true
+                    } else {
+                        mnemonicSecondWordEditView.setTextColor(
+                            ContextCompat.getColor(
+                                activity!!,
+                                R.color.materialDarkGrey
+                            )
+                        )
+                        false
+                    }
             }
         })
     }
@@ -109,9 +131,9 @@ class PaperKeyMnemonicConfirmationFragment : Fragment() {
         Timber.tag("MNEMONIC").d(mnemonicString)
 
         val privateKey = RadixECKeyPairs
-                .newInstance()
-                .generateKeyPairFromSeed(SeedCalculator().calculateSeed(mnemonicString, ""))
-                .privateKey
+            .newInstance()
+            .generateKeyPairFromSeed(SeedCalculator().calculateSeed(mnemonicString, ""))
+            .privateKey
 
         val privateKeyHex: String = ByteString.of(*privateKey).hex() // Note the spread operator
         saveKey(privateKeyHex)
@@ -122,7 +144,7 @@ class PaperKeyMnemonicConfirmationFragment : Fragment() {
         val address = Identity.api!!.address.toString()
 
         QueryPreferences.setPrefAddress(activity!!, address)
-        QueryPreferences.setPrefPasswordEnabled(activity!!, false)  // set to false
+        QueryPreferences.setPrefPasswordEnabled(activity!!, false) // set to false
         File(activity!!.filesDir, "keystore.key").createNewFile()
         openWallet()
     }

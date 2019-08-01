@@ -14,10 +14,11 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import org.jetbrains.anko.dip
 import timber.log.Timber
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 import javax.inject.Inject
 
-class RadixWalletApplication : Application(), HasAndroidInjector{
+class RadixWalletApplication : Application(), HasAndroidInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>

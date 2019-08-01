@@ -68,7 +68,7 @@ class MainViewModel @Inject constructor(
             .subscribe({ lastTransactionForAsset ->
                 checkForExistingTokenDefinitionData(lastTransactionForAsset, transactionEntitiy2)
             }, {
-                insertTransactionIntoDB(transactionEntitiy2)  // insert in DB since token type isn't owned
+                insertTransactionIntoDB(transactionEntitiy2) // insert in DB since token type isn't owned
             })
             .addTo(compositeDisposable)
     }
@@ -76,8 +76,7 @@ class MainViewModel @Inject constructor(
     private fun checkForExistingTokenDefinitionData(
         lastExistingTransaction: TransactionEntity2,
         transactionEntitiy2: TransactionEntity2
-    )
-    {
+    ) {
         if (lastExistingTransaction.tokenName != null) {
             val transaction = TransactionEntity2(
                 transactionEntitiy2.accountAddress,
@@ -94,10 +93,9 @@ class MainViewModel @Inject constructor(
                 lastExistingTransaction.tokenTotalSupply,
                 lastExistingTransaction.tokenSupplyType
             )
-
-            insertTransactionIntoDB(transaction)   // insert in DB with all info
+            insertTransactionIntoDB(transaction) // insert in DB with all info
         } else {
-            insertTransactionIntoDB(transactionEntitiy2)  // insert in DB with what we have
+            insertTransactionIntoDB(transactionEntitiy2) // insert in DB with what we have
         }
     }
 
@@ -147,5 +145,4 @@ class MainViewModel @Inject constructor(
             }
             .addTo(compositeDisposable)
     }
-
 }

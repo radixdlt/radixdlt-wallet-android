@@ -140,18 +140,18 @@ tasks {
         group = "verification"
         description = "Check Kotlin code style."
         classpath = ktlint
-        main = "com.github.shyiko.ktlint.Main"
+        main = "com.pinterest.ktlint.Main"
         args("src/**/*.kt")
         // to generate report in checkstyle format prepend following args:
         // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
-        // see https://github.com/shyiko/ktlint#usage for more
+        // see https://github.com/pinterest/ktlint#usage for more
     }
 
     create("ktlintFormat", JavaExec::class) {
         group = "formatting"
         description = "Fix Kotlin code style deviations."
         classpath = ktlint
-        main = "com.github.shyiko.ktlint.Main"
+        main = "com.pinterest.ktlint.Main"
         args("-F", "src/**/*.kt")
     }
 }

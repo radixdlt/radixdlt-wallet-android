@@ -17,7 +17,7 @@ object TokenTransferDataMapper2 {
     fun transform(tokenTransfer: TokenTransfer, myAddress: String): TransactionEntity2 {
 
         val accountAddress: String = myAddress
-        val accountName = "Personal"  // Temporary until we allow multiple accounts
+        val accountName = "Personal" // Temporary until we allow multiple accounts
         val address: String = getAddress(tokenTransfer, myAddress)
         val amount: BigDecimal = tokenTransfer.amount
         val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null

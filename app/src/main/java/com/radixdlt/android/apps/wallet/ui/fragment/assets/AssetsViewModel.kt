@@ -99,7 +99,6 @@ class AssetsViewModel @Inject constructor(
                             setAssetsState(AssetsState.ShowAssets(this.assets.sortedBy(Asset::name)))
                         }
                     }
-
                 }, {
                     Timber.e(it)
                 })

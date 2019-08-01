@@ -20,9 +20,9 @@ import java.security.SecureRandom
 class PaperKeyMnemonicDisplayedFragment : Fragment() {
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_paper_key_mnemonic_displayed, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,10 +37,11 @@ class PaperKeyMnemonicDisplayedFragment : Fragment() {
         val mnemonicStringArray = mnemonic.split(" ").toTypedArray()
 
         nextButton.setOnClickListener {
-            val bundle = Bundle().also { it.putStringArray("mnemonicStringArray", mnemonicStringArray) }
+            val bundle =
+                Bundle().also { it.putStringArray("mnemonicStringArray", mnemonicStringArray) }
             findNavController().navigate(
-                    R.id.action_navigation_paper_key_mnemonic_displayed_to_navigation_paper_key_mnemonic_confirmation,
-                    bundle
+                R.id.action_navigation_paper_key_mnemonic_displayed_to_navigation_paper_key_mnemonic_confirmation,
+                bundle
             )
         }
     }
@@ -50,7 +51,7 @@ class PaperKeyMnemonicDisplayedFragment : Fragment() {
         val entropy = ByteArray(Words.TWELVE.byteLength())
         SecureRandom().nextBytes(entropy)
         MnemonicGenerator(English.INSTANCE)
-                .createMnemonic(entropy) { sb.append(it) }
+            .createMnemonic(entropy) { sb.append(it) }
 
         return sb.toString()
     }
@@ -61,7 +62,7 @@ class PaperKeyMnemonicDisplayedFragment : Fragment() {
 
     fun generatePrivateKey(seed: ByteArray): ByteArray {
         return RadixECKeyPairs
-                .newInstance()
-                .generateKeyPairFromSeed(seed).privateKey
+            .newInstance()
+            .generateKeyPairFromSeed(seed).privateKey
     }
 }

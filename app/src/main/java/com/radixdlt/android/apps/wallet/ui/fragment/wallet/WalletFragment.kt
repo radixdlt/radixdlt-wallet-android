@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionEntity
 import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
-import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.apps.wallet.ui.adapter.WalletAdapter
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
 import com.radixdlt.android.apps.wallet.util.QueryPreferences

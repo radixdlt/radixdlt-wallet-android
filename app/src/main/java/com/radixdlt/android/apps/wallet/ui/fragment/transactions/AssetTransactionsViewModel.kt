@@ -43,7 +43,6 @@ class AssetTransactionsViewModel @Inject constructor(
                         it.sortedByDescending(TransactionEntity2::timestamp)
                     )
                 )
-
             }, {
                 Timber.e(it)
             })
