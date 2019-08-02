@@ -125,7 +125,7 @@
                     android:id="@+id/inputMessageTIET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/send_activity_enter_address_hint"
+                    android:hint="@string/send_activity_xml_message_hint"
                     android:inputType="textCapWords"
                     android:maxLength="128"
                     android:maxLines="1" />
