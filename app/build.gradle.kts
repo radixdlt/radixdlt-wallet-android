@@ -1,10 +1,9 @@
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
-
 plugins {
     id(BuildPlugins.androidApplication)
-    id(BuildPlugins.kotlinAndroid)
-    id(BuildPlugins.kotlinAndroidExtensions)
-    id(BuildPlugins.kotlinKapt)
+    kotlin(BuildPlugins.android)
+    kotlin(BuildPlugins.androidExtensions)
+    kotlin(BuildPlugins.kapt)
+    id(BuildPlugins.safeArgs)
     id(BuildPlugins.androidJunit5)
 }
 
@@ -116,7 +115,11 @@ android {
     }
 }
 
-val ktlint by configurations.creating
+androidExtensions {
+    isExperimental = true
+}
+
+val ktlint: Configuration by configurations.creating
 
 tasks {
 
@@ -124,7 +127,12 @@ tasks {
         dependsOn(ktlint)
     }
 
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
     withType(Test::class) {
+        @Suppress("UnstableApiUsage")
         useJUnitPlatform()
     }
 
@@ -132,26 +140,20 @@ tasks {
         group = "verification"
         description = "Check Kotlin code style."
         classpath = ktlint
-        main = "com.github.shyiko.ktlint.Main"
+        main = "com.pinterest.ktlint.Main"
         args("src/**/*.kt")
         // to generate report in checkstyle format prepend following args:
         // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
-        // see https://github.com/shyiko/ktlint#usage for more
+        // see https://github.com/pinterest/ktlint#usage for more
     }
 
     create("ktlintFormat", JavaExec::class) {
         group = "formatting"
         description = "Fix Kotlin code style deviations."
         classpath = ktlint
-        main = "com.github.shyiko.ktlint.Main"
+        main = "com.pinterest.ktlint.Main"
         args("-F", "src/**/*.kt")
     }
-}
-
-androidExtensions {
-    configure(delegateClosureOf<AndroidExtensionsExtension> {
-        isExperimental = true
-    })
 }
 
 configurations {
@@ -172,8 +174,8 @@ dependencies {
     implementation(Libraries.appCompat)
     implementation(Libraries.material)
     implementation(Libraries.cardView)
-    implementation(Libraries.fragment)
     implementation(Libraries.lifeCycleExtensions)
+    implementation(Libraries.lifeCycleRuntimeKtx)
     implementation(Libraries.constraintLayout)
     implementation(Libraries.ktxCore)
     implementation(Libraries.browser)

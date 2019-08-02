@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.fragment
+package com.radixdlt.android.apps.wallet.ui.fragment.wallet
 
 import android.app.Activity
 import android.content.Intent
@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionEntity
 import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
-import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.apps.wallet.ui.adapter.WalletAdapter
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
@@ -315,7 +314,7 @@ class WalletFragment : Fragment() {
     }
 
     private fun navigateToDetails(transactionEntity: TransactionEntity) {
-        TransactionDetailsActivity.newIntent(activity!!, transactionEntity)
+//        TransactionDetailsActivity.newIntent(activity!!, transactionEntity)
     }
 
     private fun copyAddressToClipBoard(address: String) {

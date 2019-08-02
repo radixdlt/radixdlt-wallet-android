@@ -22,7 +22,7 @@ import java.io.File
 open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (this !is NewWalletActivity) setTheme(R.style.AppTheme)
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
         // If launching from uri intent, for now make sure to finish all activities if the flow

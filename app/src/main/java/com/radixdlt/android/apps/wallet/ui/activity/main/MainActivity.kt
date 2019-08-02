@@ -1,35 +1,53 @@
-package com.radixdlt.android.apps.wallet.ui.activity
+package com.radixdlt.android.apps.wallet.ui.activity.main
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.children
+import androidx.core.view.get
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.barcode.Barcode
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.identity.Identity
+import com.radixdlt.android.apps.wallet.ui.activity.BarcodeCaptureActivity
+import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
+import com.radixdlt.android.apps.wallet.ui.activity.ConversationActivity
+import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.isRadixAddress
+import dagger.android.AndroidInjection
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.tool_bar.*
+import org.jetbrains.anko.px2dip
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import timber.log.Timber
+import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var options: NavOptions.Builder
     private var uri: Uri? = null
 
-
     private val compositeDisposable = CompositeDisposable()
+
+    val dimen: Int by lazy { resources.getDimension(R.dimen.toolbar_elevation).toInt() }
 
     companion object {
         private const val RC_BARCODE_CAPTURE = 9000
@@ -46,13 +64,16 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.title = getString(R.string.app_name)
+        supportActionBar?.elevation = px2dip(0)
 
         initialiseNavigation()
+        initialiseViewModel()
         detectIfConnectedToRadixNetwork()
 
         uri = intent.getParcelableExtra(EXTRA_URI)
@@ -67,6 +88,10 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    private fun initialiseViewModel() {
+        ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
+    }
+
     /**
      * Quick and dirty implementation which should be moved to ViewModel but
      * this wallet will become deprecated so good enough until v2 with new design
@@ -75,12 +100,13 @@ class MainActivity : BaseActivity() {
     private fun detectIfConnectedToRadixNetwork() {
         Identity.api!!.networkState
             .distinct { it.nodeStates.values.first().status.name }
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 when (it.nodeStates.values.first().status.name) {
                     "CONNECTING" -> setConnectionText("CONNECTING")
                     "CONNECTED" -> setConnectionText("CONNECTED")
                     "FAILED" -> {
-                        showToastOnMainThread("Unable to connect to the Radix network!")
+                        toast("Unable to connect to the Radix network!")
                         setConnectionText("DISCONNECTED")
                     }
                 }
@@ -88,16 +114,8 @@ class MainActivity : BaseActivity() {
             }.addTo(compositeDisposable)
     }
 
-    private fun showToastOnMainThread(text: String) {
-        runOnUiThread {
-            toast(text)
-        }
-    }
-
     private fun setConnectionText(text: String) {
-        runOnUiThread {
-            toolbarConnectionTextView.text = text
-        }
+        toolbarConnectionTextView.text = text
     }
 
     /**
@@ -114,46 +132,74 @@ class MainActivity : BaseActivity() {
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
 
         options = NavOptions.Builder()
-                        .setEnterAnim(R.anim.nav_default_enter_anim)
-                        .setExitAnim(R.anim.nav_default_exit_anim)
-                        .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-                        .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+            .setEnterAnim(R.anim.nav_default_enter_anim)
+            .setExitAnim(R.anim.nav_default_exit_anim)
+            .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+            .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+
+        disableBottomNavigationItemLongClickListeners()
+    }
+
+    /**
+     * Latest library shows a tooltip as toast when long clicking with the respective
+     * label text of the item. Since we are showing the labels there is no point
+     * showing this. This was the easiest way to disable!
+     * */
+    private fun disableBottomNavigationItemLongClickListeners() {
+        val bottomNavigationMenuView = navigation[0] as BottomNavigationMenuView
+        for (child in bottomNavigationMenuView.children) {
+            child.setOnLongClickListener {
+                true
+            }
+        }
     }
 
     private val onNavigationItemSelectedListener =
-            BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
-                if (item.itemId == navigation.selectedItemId) {
-                    return@OnNavigationItemSelectedListener false
-                }
-
-                val navController = Navigation
-                        .findNavController(this, R.id.my_nav_host_fragment)
-
-                when (item.itemId) {
-                    R.id.navigation_wallet -> {
-                        navController.navigate(R.id.navigation_wallet, null,
-                                options.setPopUpTo(R.id.navigation_wallet, true).build())
-                        return@OnNavigationItemSelectedListener true
-                    }
-                    R.id.navigation_contacts -> {
-                        navController.navigate(R.id.navigation_contacts, null,
-                                options.setPopUpTo(R.id.navigation_wallet, false).build())
-                        return@OnNavigationItemSelectedListener true
-                    }
-                    R.id.navigation_account -> {
-                        navController.navigate(R.id.navigation_account, null,
-                                options.setPopUpTo(R.id.navigation_wallet, false).build())
-                        return@OnNavigationItemSelectedListener true
-                    }
-                    R.id.navigation_more_options -> {
-                        navController.navigate(R.id.navigation_more_options, null,
-                                options.setPopUpTo(R.id.navigation_wallet, false).build())
-                        return@OnNavigationItemSelectedListener true
-                    }
-                }
-                false
+            if (item.itemId == navigation.selectedItemId) {
+                return@OnNavigationItemSelectedListener false
             }
+
+            val navController = Navigation
+                .findNavController(this, R.id.my_nav_host_fragment)
+
+            when (item.itemId) {
+                R.id.menu_bottom_assets -> {
+                    supportActionBar?.elevation = px2dip(0)
+                    navController.navigate(
+                        R.id.navigation_assets, null,
+                        options.setPopUpTo(R.id.navigation_assets, true).build()
+                    )
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.menu_bottom_contacts -> {
+                    supportActionBar?.elevation = px2dip(dimen)
+                    navController.navigate(
+                        R.id.navigation_contacts, null,
+                        options.setPopUpTo(R.id.navigation_assets, false).build()
+                    )
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.menu_bottom_learn -> {
+                    supportActionBar?.elevation = px2dip(dimen)
+                    navController.navigate(
+                        R.id.navigation_account, null,
+                        options.setPopUpTo(R.id.navigation_assets, false).build()
+                    )
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.menu_bottom_settings -> {
+                    supportActionBar?.elevation = px2dip(dimen)
+                    navController.navigate(
+                        R.id.navigation_more_options, null,
+                        options.setPopUpTo(R.id.navigation_assets, false).build()
+                    )
+                    return@OnNavigationItemSelectedListener true
+                }
+            }
+            false
+        }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_BARCODE_CAPTURE) {
@@ -176,7 +222,7 @@ class MainActivity : BaseActivity() {
                 }
             } else {
                 val failureString = this.getString(R.string.barcode_error) +
-                        CommonStatusCodes.getStatusCodeString(resultCode)
+                    CommonStatusCodes.getStatusCodeString(resultCode)
                 Timber.e(failureString)
             }
         } else {
@@ -184,9 +230,12 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    override fun onSupportNavigateUp() = findNavController(R.id.my_nav_host_fragment).navigateUp()
+
     override fun onBackPressed() {
         super.onBackPressed()
-        navigation.menu.findItem(R.id.navigation_wallet).isChecked = true
+        navigation.menu.findItem(R.id.menu_bottom_assets).isChecked = true
+        supportActionBar?.elevation = px2dip(0)
     }
 
     override fun onStop() {

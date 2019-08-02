@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.fragment
+package com.radixdlt.android.apps.wallet.ui.fragment.moreoptions
 
 import android.app.Activity
 import android.content.Context
@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -72,15 +73,14 @@ class MoreOptionsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(
-            R.layout.fragment_more_options, container, false
-        )
-    }
+    ): View? = inflater.inflate(R.layout.fragment_more_options, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
+
+        (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
 
         val isPasswordEnabled = initialisePasswordSwitch()
         passwordEnabledUI(isPasswordEnabled)

@@ -3,12 +3,12 @@
     android:opacity="opaque">
 
     <item
-        android:drawable="@color/colorPrimary"/>
+        android:drawable="@color/white"/>
 
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/radix_logo"/>
+            android:src="@drawable/radix_logo_light"/>
     </item>
 
 </layer-list>

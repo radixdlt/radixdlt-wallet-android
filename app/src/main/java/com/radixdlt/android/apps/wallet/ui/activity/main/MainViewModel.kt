@@ -1,14 +1,13 @@
-package com.radixdlt.android.apps.wallet.data.model.newtransaction
+package com.radixdlt.android.apps.wallet.ui.activity.main
 
-import android.content.Context
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.radixdlt.android.apps.wallet.data.mapper.TokenTransferDataMapper2
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import com.radixdlt.android.apps.wallet.identity.Identity
-import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_HOSTED
-import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_SINGLE
-import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
-import com.radixdlt.client.atommodel.accounts.RadixAddress
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -18,20 +17,22 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class TransactionsRepository2(
-    val context: Context,
+class MainViewModel @Inject constructor(
     private val transactionsDao2: TransactionsDao2
-) : MediatorLiveData<MutableList<TransactionEntity2>>() {
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    private val myAddress: String by lazy { QueryPreferences.getPrefAddress(context) }
-    private val faucetAddress: String by lazy {
-        if (QueryPreferences.isRemoteFaucet(context)) FAUCET_ADDRESS_HOSTED else FAUCET_ADDRESS_SINGLE
-    }
 
-    override fun onActive() {
-        super.onActive()
+    private val myAddress = Identity.api!!.address.toString()
+
+    private val _mainLoadingState: MutableLiveData<MainLoadingState> = MutableLiveData()
+
+    val mainLoadingState: LiveData<MainLoadingState>
+        get() = _mainLoadingState
+
+    init {
         retrieveAllTransactions()
     }
 
@@ -62,29 +63,65 @@ class TransactionsRepository2(
             }
         }.flatMapMaybe { it }
             .map {
-                mutableListOf(TokenTransferDataMapper2.transform(it, myAddress))
+                TokenTransferDataMapper2.transform(it, myAddress)
             }
             .subscribeOn(Schedulers.io())
-            .subscribe({
-                transactionsDao2.insertTransaction(it.first()) // insert in DB
-                postValue(it)
-            }, Throwable::printStackTrace)
+            .subscribe(::attemptToRetrieveLastTransactionForAsset, Throwable::printStackTrace)
             .addTo(compositeDisposable)
+    }
+
+    private fun attemptToRetrieveLastTransactionForAsset(transactionEntitiy2: TransactionEntity2) {
+        transactionsDao2.getLastTransactionByTokenType(transactionEntitiy2.rri)
+            .subscribe({ lastTransactionForAsset ->
+                checkForExistingTokenDefinitionData(lastTransactionForAsset, transactionEntitiy2)
+            }, {
+                insertTransactionIntoDB(transactionEntitiy2) // insert in DB since token type isn't owned
+            })
+            .addTo(compositeDisposable)
+    }
+
+    private fun checkForExistingTokenDefinitionData(
+        lastExistingTransaction: TransactionEntity2,
+        transactionEntitiy2: TransactionEntity2
+    ) {
+        if (lastExistingTransaction.tokenName != null) {
+            val transaction = TransactionEntity2(
+                transactionEntitiy2.accountAddress,
+                transactionEntitiy2.accountName,
+                transactionEntitiy2.address,
+                transactionEntitiy2.amount,
+                transactionEntitiy2.message,
+                transactionEntitiy2.sent,
+                transactionEntitiy2.timestamp,
+                transactionEntitiy2.rri,
+                lastExistingTransaction.tokenName,
+                lastExistingTransaction.tokenDescription,
+                lastExistingTransaction.tokenIconUrl,
+                lastExistingTransaction.tokenTotalSupply,
+                lastExistingTransaction.tokenSupplyType
+            )
+            insertTransactionIntoDB(transaction) // insert in DB with all info
+        } else {
+            insertTransactionIntoDB(transactionEntitiy2) // insert in DB with what we have
+        }
+    }
+
+    private fun insertTransactionIntoDB(transaction: TransactionEntity2) {
+        transactionsDao2.insertTransaction(transaction)
     }
 
     private fun retrieveListOfOldTransactions(
         allTransactions: Observable<TokenTransfer>
     ): Single<ArrayList<TokenTransfer>> {
 
-        // Retrieve existing transactions from DB first
-        getStoredTransactions()
+        _mainLoadingState.postValue(MainLoadingState.LOADING)
 
         val oldTransactionsList: Single<ArrayList<TokenTransfer>> = allTransactions
             .scan(ArrayList<TokenTransfer>()) { list, transaction ->
                 list.add(transaction)
                 return@scan list
             }
-            .debounce(3, TimeUnit.SECONDS)
+            .debounce(5, TimeUnit.SECONDS)
             .firstOrError()
             .cache()
 
@@ -98,44 +135,21 @@ class TransactionsRepository2(
             .subscribeOn(Schedulers.io())
             .subscribe({
                 transactionsDao2.insertTransactions(it) // insert in DB
-                getStoredTransactions()
+                _mainLoadingState.postValue(MainLoadingState.FINISHED)
             }, Throwable::printStackTrace)
             .addTo(compositeDisposable)
 
         return oldTransactionsList
     }
 
+    @Suppress("unused")
     private fun getStoredTransactions() {
         transactionsDao2.getAllTransactions()
             .subscribeOn(Schedulers.io())
             .subscribe {
                 Timber.tag("TransactionsLooking").d(it.toString())
-                postValue(it)
+                _mainLoadingState.postValue(MainLoadingState.FINISHED)
             }
             .addTo(compositeDisposable)
-    }
-
-    /**
-     * Temporary method toAddress request tokens from faucet which gets added to the common
-     * composite disposable which gets disposed when inactive.
-     * */
-    fun requestTestTokenFromFaucet() {
-        // Send a message!
-        Identity.api!!.sendMessage(
-            RadixAddress.from(faucetAddress),
-            "Give me some radix!!".toByteArray(),
-            true
-        )
-            .toCompletable()
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                Timber.d("Submitted")
-            }.addTo(compositeDisposable)
-    }
-
-    override fun onInactive() {
-        super.onInactive()
-        Timber.d("onInactive")
-        compositeDisposable.clear()
     }
 }

@@ -16,6 +16,7 @@ import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.identity.AndroidRadixIdentity
 import com.radixdlt.android.apps.wallet.identity.Identity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.ui.dialog.DeleteWalletDialog
 import com.radixdlt.android.apps.wallet.util.PREF_SECRET
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
@@ -190,7 +191,7 @@ class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWall
                 ContextCompat.getColor(this, R.color.white),
                 getString(R.string.enter_password_activity_xml_universe)
             ), TextFormatHelper.color(
-                ContextCompat.getColor(this, R.color.colorAccentSecondary),
+                ContextCompat.getColor(this, R.color.colorAccent),
                 QueryPreferences.getPrefNetwork(this)!!
             )
         )
@@ -206,7 +207,7 @@ class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWall
                     ContextCompat.getColor(this, R.color.white),
                     getString(R.string.enter_password_activity_xml_specific_node)
                 ), TextFormatHelper.color(
-                    ContextCompat.getColor(this, R.color.colorAccentSecondary),
+                    ContextCompat.getColor(this, R.color.colorAccent),
                     QueryPreferences.getPrefNodeIP(this)
                 )
             )

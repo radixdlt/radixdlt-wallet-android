@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.fragment
+package com.radixdlt.android.apps.wallet.ui.fragment.wallet
 
 import android.content.Context
 import androidx.lifecycle.MediatorLiveData

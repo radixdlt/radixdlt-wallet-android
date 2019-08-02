@@ -3,25 +3,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/navigation_wallet">
-  <fragment
-      android:id="@+id/navigation_wallet"
-      android:label="fragment_blank"
-      android:name="com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsFragment"
-      tools:layout="@layout/fragment_wallet"/>
-  <fragment
-      android:id="@+id/navigation_contacts"
-      android:label="fragment_contacts"
-      android:name="com.radixdlt.android.apps.wallet.ui.fragment.ContactsFragment"
-      tools:layout="@layout/fragment_contacts"/>
-  <fragment
-      android:id="@+id/navigation_account"
-      android:label="fragment_account"
-      android:name="com.radixdlt.android.apps.wallet.ui.fragment.AccountFragment"
-      tools:layout="@layout/fragment_account"/>
-  <fragment
-      android:id="@+id/navigation_more_options"
-      android:label="fragment_more_options"
-      android:name="com.radixdlt.android.apps.wallet.ui.fragment.MoreOptionsFragment"
-      tools:layout="@layout/fragment_more_options"/>
+    app:startDestination="@id/navigation_assets">
+    <fragment
+        android:id="@+id/navigation_assets"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsFragment"
+        android:label="fragment_assets"
+        tools:layout="@layout/fragment_assets">
+        <action
+            android:id="@+id/action_navigation_assets_to_navigation_asset_transactions"
+            app:destination="@id/navigation_asset_transactions">
+            <argument
+                android:name="rri"
+                app:argType="string"
+                app:nullable="false" />
+            <argument
+                android:name="name"
+                app:argType="string"
+                app:nullable="false" />
+            <argument
+                android:name="balance"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_asset_transactions"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsFragment"
+        android:label="fragment_asset_transactions"
+        tools:layout="@layout/fragment_asset_transactions">
+        <argument
+            android:name="rri"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="name"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="balance"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_contacts"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsFragment"
+        android:label="fragment_contacts"
+        tools:layout="@layout/fragment_contacts" />
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.account.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/navigation_more_options"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.moreoptions.MoreOptionsFragment"
+        android:label="fragment_more_options"
+        tools:layout="@layout/fragment_more_options" />
 </navigation>

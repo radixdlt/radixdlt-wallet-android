@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.fragment
+package com.radixdlt.android.apps.wallet.ui.fragment.contacts
 
 import android.app.Activity
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -42,6 +43,8 @@ class ContactsFragment : Fragment() {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
 
+        (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         initialiseViewModels()
     }
 
@@ -66,8 +69,12 @@ class ContactsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_contacts, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
+
         initialiseRecyclerView()
         initialiseSwipeRefreshLayout()
         initialiseLoadingState()
@@ -167,7 +174,7 @@ class ContactsFragment : Fragment() {
     private fun setLayoutResourcesWithMessages() {
         contactsBackGroundImageView.visibility = View.GONE
         swipe_refresh_layout.setBackgroundColor(
-            ContextCompat.getColor(activity!!, R.color.mainBackground)
+            ContextCompat.getColor(activity!!, R.color.white)
         )
     }
 

@@ -1,6 +1,8 @@
 package com.radixdlt.android.apps.wallet.data.model.transaction
 
 import androidx.lifecycle.LiveData
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -9,7 +11,7 @@ import java.math.BigDecimal
 import javax.inject.Inject
 
 class TokenTypesLiveData @Inject constructor(
-    private val transactionsDao: TransactionsDao
+    private val transactionsDao: TransactionsDao2
 ) : LiveData<List<String>>() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -23,7 +25,7 @@ class TokenTypesLiveData @Inject constructor(
     }
 
     private fun retrieveTokenTypes() {
-        transactionsDao.getAllTokenTypes()
+        transactionsDao.getAllAssets()
             .subscribeOn(Schedulers.io())
             .subscribe({
                 availableTokens.clear()
@@ -47,28 +49,22 @@ class TokenTypesLiveData @Inject constructor(
             }
         }
 
-
-//        availableTokens.clear()
-//        availableTokens.add("Rads")
-//        availableTokens.add("True USD")
-//        availableTokens.add("Paxos Standard")
-//        availableTokens.add("Bitcoin Rads")
         postValue(availableTokens)
     }
 
     private fun checkTokenIsPositiveBalance(
-        transactionEntity: List<TransactionEntity>
+        transactionEntity: List<TransactionEntity2>
     ): Boolean {
         val sumSent = transactionEntity.asSequence().filter {
             it.sent
         }.map {
-            BigDecimal(it.formattedAmount)
+            it.amount
         }.fold(BigDecimal.ZERO, BigDecimal::add)
 
         val sumReceived = transactionEntity.asSequence().filterNot {
             it.sent
         }.map {
-            BigDecimal(it.formattedAmount)
+            it.amount
         }.fold(BigDecimal.ZERO, BigDecimal::add)
 
         return ((sumReceived - sumSent) > BigDecimal.ZERO)

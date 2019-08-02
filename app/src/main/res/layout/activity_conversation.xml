@@ -1,115 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainBackground">
+    android:background="@color/basicallyWhite">
 
-  <androidx.appcompat.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="?attr/colorPrimary"
-      android:elevation="2dp"
-      app:contentInsetStartWithNavigation="0dp"
-      app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:popupTheme="@style/AppTheme.PopupOverlay"
-      app:theme="@style/AppTheme.AppBarOverlay">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/circleImageView"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@drawable/avatar"/>
-
-    <TextView
-        android:id="@+id/toolbarTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="middle"
-        android:paddingEnd="42dp"
-        android:paddingStart="8dp"
-        android:singleLine="true"
-        android:textColor="@color/white"
-        android:textSize="17sp"
-        tools:text="Joe Bloggs"/>
-  </androidx.appcompat.widget.Toolbar>
-
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recyclerView"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:layout_marginBottom="0dp"
-      android:layout_marginTop="0dp"
-      app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
-
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/constraintLayout"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@color/notQuiteWhite"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent">
-
-    <View
-        android:id="@+id/separatorView"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/materialLightGrey"
-        app:layout_constraintBottom_toTopOf="@+id/inputMsg"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="2dp"
+        app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"/>
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:theme="@style/AppTheme.AppBarOverlay">
 
-    <EditText
-        android:id="@+id/inputMsg"
-        android:layout_width="0dp"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleImageView"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/avatar" />
+
+        <TextView
+            android:id="@+id/toolbarTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:paddingStart="8dp"
+            android:paddingEnd="42dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            tools:text="Joe Bloggs" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/conversationRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/inputTextConstraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inputTextConstraintLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_weight="2"
-        android:background="@null"
-        android:hint="@string/conversation_activity_xml_write_message"
-        android:inputType="textCapSentences|textMultiLine"
-        android:maxHeight="125dp"
-        android:maxLength="256"
-        android:minHeight="50dp"
-        android:paddingEnd="4dp"
-        android:paddingStart="16dp"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical"
-        android:textColor="@color/materialGrey900"
-        android:verticalScrollbarPosition="defaultPosition"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="Autofill"/>
-
-    <ImageButton
-        android:id="@+id/sendButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/conversation_activity_xml_send_button_description"
-        android:src="@drawable/ic_send_icon"
-        android:tint="@color/colorAccent"
+        android:background="@color/notQuiteWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"/>
-  </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintStart_toStartOf="parent">
 
+        <View
+            android:id="@+id/separatorView"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/materialLightGrey"
+            app:layout_constraintBottom_toTopOf="@+id/inputMsg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <EditText
+            android:id="@+id/inputMsg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="2"
+            android:background="@null"
+            android:hint="@string/conversation_activity_xml_write_message"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxHeight="125dp"
+            android:maxLength="256"
+            android:minHeight="50dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="4dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"
+            android:textColor="@color/materialGrey900"
+            android:verticalScrollbarPosition="defaultPosition"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sendButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="Autofill" />
+
+        <ImageButton
+            android:id="@+id/sendButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="0dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/conversation_activity_xml_send_button_description"
+            android:src="@drawable/ic_send_icon"
+            android:tint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,8 +38,8 @@ class ForegroundRelativeLayout : RelativeLayout {
     constructor(context: Context) : super(context)
 
     @JvmOverloads
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int = 0)
-        : super(context, attrs, defStyle) {
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int = 0) :
+        super(context, attrs, defStyle) {
 
         val a =
             context.obtainStyledAttributes(attrs, R.styleable.ForegroundRelativeLayout, defStyle, 0)

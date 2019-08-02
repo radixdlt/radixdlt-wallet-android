@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#0D1D2A</color>
-    <color name="colorPrimaryDark">#00101C</color>
-    <color name="colorAccent">#6C42FB</color>
     <color name="colorAccentDisabled">#815dfd</color>
     <color name="colorAccentSecondary">#14E1DB</color>
     <color name="colorAccentSecondaryDark">#12ccc7</color>
@@ -10,10 +7,13 @@
     <color name="green">#34af39</color>
     <color name="materialLightGrey">#9e9e9e</color>
     <color name="white">#FFFFFF</color>
+    <color name="basicallyWhite">#F8F8F8</color>
+    <color name="whiteRipple">#32FFFFFF</color>
     <color name="notQuiteWhite">#FEFEFE</color>
     <color name="notQuiteWhiteAlpha">#a0fefefe</color>
     <color name="notVeryLightGray">#bfbfbf</color>
     <color name="veryLightGray">#dfdfdf</color>
+    <color name="extremelyLightGray">#F0F0F0</color>
     <color name="greyAlpha">#78bfbfbf</color>
     <color name="materialDarkGrey">#3B3B3B</color>
     <color name="materialGrey700">#616161</color>
@@ -26,4 +26,27 @@
     <!-- Testing -->
     <color name="immersive_background">#88000000</color>
     <color name="dialog_background">#fafafa</color>
+
+
+    <!-- New colors to replace above-->
+    <color name="colorPrimary">#565BB9</color>
+    <color name="colorPrimaryDark">#332C80</color>
+    <color name="colorAccent">#24B47E</color>
+
+    <color name="radixPurple2">#676ECC</color>
+    <color name="radixPurple3">#809EDC</color>
+
+    <color name="radixGreen2">#3ECF8E</color>
+    <color name="radixGreen3">#B9F4BC</color>
+
+    <color name="radixBlueGrey">#32364E</color>
+    <color name="radixBlueGrey2">#525F7F</color>
+    <color name="radixGrey">#A3ADB7</color>
+    <color name="radixGrey2">#DBDDE0</color>
+    <color name="radixGrey3">#F7F9FC</color>
+
+    <color name="radixRed">#FF5964</color>
+    <color name="radixMustard">#F4C13F</color>
+    <color name="radixMustardLighter">#F6D059</color>
+
 </resources>

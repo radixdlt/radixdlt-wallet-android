@@ -430,6 +430,8 @@
       android:focusable="true"
       android:src="@drawable/ic_chat"
       android:transitionGroup="true"
+      app:tint="@color/white"
+      app:backgroundTint="@color/colorAccent"
       app:layout_anchor="@id/appbar"
       app:layout_anchorGravity="bottom|right|end"/>
 

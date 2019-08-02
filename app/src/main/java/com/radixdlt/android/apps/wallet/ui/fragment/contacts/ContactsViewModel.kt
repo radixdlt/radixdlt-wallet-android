@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.fragment
+package com.radixdlt.android.apps.wallet.ui.fragment.contacts
 
 import androidx.lifecycle.ViewModel
 import com.radixdlt.android.apps.wallet.data.model.message.ContactsRepository

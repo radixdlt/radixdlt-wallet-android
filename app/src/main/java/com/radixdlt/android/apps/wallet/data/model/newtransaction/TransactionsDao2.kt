@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.reactivex.Flowable
 import io.reactivex.Maybe
+import io.reactivex.Single
 import java.math.BigDecimal
 
 @Dao
@@ -23,14 +24,17 @@ interface TransactionsDao2 {
     @Query("SELECT * FROM TransactionEntity2 WHERE rri = :tokenType")
     fun getAllTransactionsByTokenType(tokenType: String): Maybe<List<TransactionEntity2>>
 
-//    @Query("SELECT * FROM TransactionEntity2 ORDER BY timestamp DESC LIMIT 1")
-//    fun getLatestTransaction(): Flowable<TransactionEntity2>
-//
-//    @Query("SELECT * FROM TransactionEntity2 WHERE rriName = :tokenType ORDER BY timestamp DESC LIMIT 1")
-//    fun getLatestTransactionByTokenType(tokenType: String): Flowable<TransactionEntity2>
-//
-//    @Query("SELECT * FROM TransactionEntity2 WHERE address = :address AND rriName = :token ORDER BY timestamp DESC")
-//    fun getAllTransactionsByAddressAndToken(address: String, token: String): Maybe<MutableList<TransactionEntity2>>
+    @Query("SELECT * FROM TransactionEntity2 WHERE rri = :tokenType")
+    fun getAllTransactionsByTokenTypeFlowable(tokenType: String): Flowable<MutableList<TransactionEntity2>>
+
+    @Query("SELECT * FROM TransactionEntity2 WHERE rri = :rri ORDER BY timestamp DESC LIMIT 1")
+    fun getLastTransactionByTokenType(rri: String): Single<TransactionEntity2>
+
+    @Query("SELECT * FROM TransactionEntity2 WHERE rri = :rri ORDER BY timestamp DESC LIMIT 1")
+    fun getLatestTransactionByTokenType(rri: String): Flowable<TransactionEntity2>
+
+    @Query("SELECT * FROM TransactionEntity2 WHERE address = :address AND rri = :rri ORDER BY timestamp DESC")
+    fun getAllTransactionsByAddressAndToken(address: String, rri: String): Maybe<MutableList<TransactionEntity2>>
 
     @Query("SELECT DISTINCT rri FROM TransactionEntity2 ORDER BY rri")
     fun getAllAssets(): Flowable<MutableList<String>>

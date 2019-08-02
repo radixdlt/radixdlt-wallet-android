@@ -1,9 +1,7 @@
 package com.radixdlt.android.apps.wallet
 
-import android.app.Activity
 import android.app.Application
 import android.util.Base64
-import androidx.fragment.app.Fragment
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.radixdlt.android.apps.wallet.di.component.DaggerRadixWalletComponent
 import com.radixdlt.android.apps.wallet.di.component.RadixWalletComponent
@@ -13,22 +11,17 @@ import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.Vault
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import org.jetbrains.anko.dip
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
-
 import javax.inject.Inject
 
-class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFragmentInjector {
+class RadixWalletApplication : Application(), HasAndroidInjector {
 
     @Inject
-    lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
-
-    @Inject
-    lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
     private val radixWalletComponent: RadixWalletComponent by lazy {
         DaggerRadixWalletComponent.builder()
@@ -70,10 +63,7 @@ class RadixWalletApplication : Application(), HasActivityInjector, HasSupportFra
         }
     }
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> =
-        fragmentDispatchingAndroidInjector
-
-    override fun activityInjector(): AndroidInjector<Activity> = activityDispatchingAndroidInjector
+    override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector
 
     fun startActivityTransitionTimer() {
         activityTransitionTimer = Timer()

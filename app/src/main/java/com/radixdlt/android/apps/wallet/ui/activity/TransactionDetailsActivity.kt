@@ -12,8 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionDetails
-import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionEntity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.util.doOnLayout
 import com.radixdlt.android.apps.wallet.util.formatCharactersForAmount
 import com.radixdlt.android.apps.wallet.util.formatDateTime
@@ -23,6 +24,7 @@ import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_transaction_details.*
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.intentFor
+import java.math.RoundingMode
 import javax.inject.Inject
 
 class TransactionDetailsActivity : BaseActivity() {
@@ -33,9 +35,10 @@ class TransactionDetailsActivity : BaseActivity() {
     private lateinit var transactionsViewModel: TransactionDetailsViewModel
 
     companion object {
-        private const val EXTRA_TRANSACTION_DETAILS = "com.radixdlt.android.transaction_details"
+        private const val EXTRA_TRANSACTION_DETAILS =
+            "com.radixdlt.android.apps.wallet.ui.activity.transaction_details"
 
-        fun newIntent(ctx: Context, transactionEntityDetails: TransactionEntity) {
+        fun newIntent(ctx: Context, transactionEntityDetails: TransactionEntity2) {
             ctx.startActivity(
                 ctx.intentFor<TransactionDetailsActivity>(
                     EXTRA_TRANSACTION_DETAILS to transactionEntityDetails
@@ -52,7 +55,7 @@ class TransactionDetailsActivity : BaseActivity() {
         setContentView(R.layout.activity_transaction_details)
 
         val transactionDetailsExtra =
-            intent.getParcelableExtra<TransactionEntity>(EXTRA_TRANSACTION_DETAILS)
+            intent.getParcelableExtra<TransactionEntity2>(EXTRA_TRANSACTION_DETAILS)
 
         initialiseHeaderAnimation()
         initialiseToolbar()
@@ -61,7 +64,7 @@ class TransactionDetailsActivity : BaseActivity() {
         bindIndividualTransactionDetailsData(transactionDetailsExtra)
     }
 
-    private fun initialiseClickListeners(transactionDetailsExtra: TransactionEntity) {
+    private fun initialiseClickListeners(transactionDetailsExtra: TransactionEntity2) {
         transactionSendTokens.setOnClickListener {
             SendRadixActivity.newIntent(
                 this, transactionDetailsExtra.address, transactionDetailsExtra.rri
@@ -76,15 +79,19 @@ class TransactionDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun bindIndividualTransactionDetailsData(transactionDetailsExtra: TransactionEntity) {
-        transactionAddress.text =
-            setAddressWithColors(this, transactionDetailsExtra.address)
+    private fun bindIndividualTransactionDetailsData(transactionDetailsExtra: TransactionEntity2) {
+        transactionAddress.text = setAddressWithColors(this, transactionDetailsExtra.address)
+        var amount = transactionDetailsExtra.amount
+            .setScale(2, RoundingMode.HALF_UP)
+            .toPlainString()
+
+        amount = if (transactionDetailsExtra.sent) "-$amount" else "+$amount"
         transactionAmount.text = formatCharactersForAmount(
-            transactionDetailsExtra.formattedAmount.split(".")[0],
-            transactionDetailsExtra.formattedAmount.split(".")[1]
+            amount.toString().split(".")[0],
+            amount.toString().split(".")[1]
         )
 
-        setResources()
+        setResources(transactionDetailsExtra)
         setTokenType(transactionDetailsExtra)
 
         transactionDetailsExtra.message?.let {
@@ -97,17 +104,17 @@ class TransactionDetailsActivity : BaseActivity() {
             transactionDate.setConstraintLayoutMargin(0, dip(8), 0, 0)
         }
 
-        transactionDate.text = formatDateTime(transactionDetailsExtra.dateUnix)
+        transactionDate.text = formatDateTime(transactionDetailsExtra.timestamp)
     }
 
-    private fun setTokenType(transactionEntity: TransactionEntity) {
+    private fun setTokenType(transactionEntity: TransactionEntity2) {
 //        if (transactionEntity.tokenClassISO != GENESIS_XRD) {
-            testTokensTextView.text = transactionEntity.rri.split("/")[2]
-            testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+        testTokensTextView.text = transactionEntity.rri.split("/")[2]
+        testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 //        }
     }
 
-    private fun initialiseViewModel(transactionDetailsExtra: TransactionEntity) {
+    private fun initialiseViewModel(transactionDetailsExtra: TransactionEntity2) {
         transactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(TransactionDetailsViewModel::class.java)
 
@@ -117,8 +124,8 @@ class TransactionDetailsActivity : BaseActivity() {
         )
 
         transactionsViewModel.transactions.observe(this, Observer {
-                bindTransactionDetails(it)
-            }
+            bindTransactionDetails(it)
+        }
         )
     }
 
@@ -145,16 +152,16 @@ class TransactionDetailsActivity : BaseActivity() {
         anim.start()
     }
 
-    private fun setResources() {
-        if (transactionAmount.text.toString()[0] == "+".single()) {
-            addressTextView.text = getString(R.string.transaction_details_activity_received)
-            titleTransactionTextView.text = getString(R.string.transaction_details_activity_from)
-            transactionAmount.setTextColor(ContextCompat.getColor(this, R.color.green))
-            circleImageView.setImageResource(R.drawable.receive_image_item_wallet)
-        } else {
+    private fun setResources(transactionDetailsExtra: TransactionEntity2) {
+        if (transactionDetailsExtra.sent) {
             addressTextView.text = getString(R.string.transaction_details_activity_sent)
             titleTransactionTextView.text = getString(R.string.transaction_details_activity_to)
-            circleImageView.setImageResource(R.drawable.send_image_item_wallet)
+            circleImageView.setImageResource(R.drawable.new_send_image_item_wallet)
+        } else {
+            addressTextView.text = getString(R.string.transaction_details_activity_received)
+            titleTransactionTextView.text = getString(R.string.transaction_details_activity_from)
+            transactionAmount.setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+            circleImageView.setImageResource(R.drawable.new_receive_image_item_wallet)
         }
     }
 

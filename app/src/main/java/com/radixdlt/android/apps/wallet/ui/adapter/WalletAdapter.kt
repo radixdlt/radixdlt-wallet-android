@@ -63,7 +63,7 @@ class WalletAdapter(
             )
         }
 
-        // Set correct resources and colors depending if sent or received
+        // Set correct resources and color depending if sent or received
         private fun setResources(transactionEntity: TransactionEntity) {
             if (transactionEntity.sent) {
                 itemView.circleImageView.setImageResource(R.drawable.send_image_item_wallet)
