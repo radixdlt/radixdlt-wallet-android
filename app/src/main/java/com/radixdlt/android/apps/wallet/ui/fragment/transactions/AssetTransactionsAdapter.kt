@@ -11,22 +11,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
-import com.radixdlt.android.apps.wallet.util.getOrdinal
+import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
+import com.radixdlt.android.apps.wallet.util.formatDateYear
 import com.radixdlt.android.apps.wallet.util.getStartOfDay
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.find
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneId
-import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 import java.math.RoundingMode
-import java.util.Locale
 
 class AssetTransactionsAdapter(
     private val items: MutableList<TransactionEntity2> = mutableListOf(),
     private val itemClick: (TransactionEntity2, Boolean) -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyHeaderItemDecoration.StickyHeaderInterface {
 
     private lateinit var ctx: Context
 
@@ -78,6 +74,35 @@ class AssetTransactionsAdapter(
         return getStartOfDay((items[position - 1].timestamp))
     }
 
+    /**
+     * StickyHeader interface methods
+     * */
+    override fun getHeaderPositionForItem(itemPosition: Int): Int {
+        var itemPos = itemPosition
+        var headerPosition = 0
+        do {
+            if (this.isHeader(itemPos)) {
+                headerPosition = itemPos
+                break
+            }
+            itemPos -= 1
+        } while (itemPos >= 0)
+        return headerPosition
+    }
+
+    override fun getHeaderLayout(headerPosition: Int): Int {
+        return R.layout.item_asset_transaction_date
+    }
+
+    override fun bindHeaderData(header: View, headerPosition: Int) {
+        val date: TextView = header.find(R.id.assetTransactionsDateTextView)
+        date.text = formatDateYear(items[headerPosition].timestamp)
+    }
+
+    override fun isHeader(itemPosition: Int): Boolean {
+        return getItemViewType(itemPosition) == TYPE_DATE
+    }
+
     inner class TransactionsViewHolder(
         itemView: View,
         private val itemClick: (TransactionEntity2, Boolean) -> Unit
@@ -106,22 +131,6 @@ class AssetTransactionsAdapter(
             bindTransaction(transactionEntity)
             val date: TextView = itemView.find(R.id.assetTransactionsDateTextView)
             date.text = formatDateYear(transactionEntity.timestamp)
-        }
-
-        private fun formatDateYear(dateUnix: Long): String {
-            val localDateTime = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(dateUnix), ZoneId.systemDefault()
-            )
-            var displayValue = localDateTime.format(
-                DateTimeFormatter.ofPattern("EEEE, ? MMMM, yyyy", Locale.getDefault())
-            )
-            val day = localDateTime.format(
-                DateTimeFormatter.ofPattern("dd", Locale.getDefault())
-            )
-            val dayOrdinal = day.toInt().getOrdinal()
-            displayValue = displayValue.replace("?", dayOrdinal!!)
-
-            return displayValue
         }
 
         private fun setAccount(textView: TextView, transactionEntity2: TransactionEntity2) {

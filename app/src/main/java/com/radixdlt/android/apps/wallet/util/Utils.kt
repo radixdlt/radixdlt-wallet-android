@@ -234,7 +234,7 @@ fun formatDateYear(dateUnix: Long): String {
         Instant.ofEpochMilli(dateUnix), ZoneId.systemDefault()
     )
     var displayValue = localDateTime.format(
-        DateTimeFormatter.ofPattern("EEEE, ? MMM, yyyy", Locale.getDefault())
+        DateTimeFormatter.ofPattern("EEEE, ? MMMM, yyyy", Locale.getDefault())
     )
     val day = localDateTime.format(
         DateTimeFormatter.ofPattern("dd", Locale.getDefault())

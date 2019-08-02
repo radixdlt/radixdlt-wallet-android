@@ -17,6 +17,7 @@ import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
 import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
+import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
@@ -89,6 +90,8 @@ class AssetTransactionsFragment : Fragment() {
     private fun initialiseRecyclerView() {
         assetTransactionsRecyclerView.layoutManager = LinearLayoutManager(activity)
         assetTransactionsAdapter = AssetTransactionsAdapter(itemClick = click)
+        val stickHeaderDecoration = StickyHeaderItemDecoration(assetTransactionsAdapter)
+        assetTransactionsRecyclerView.addItemDecoration(stickHeaderDecoration)
         assetTransactionsRecyclerView.adapter = assetTransactionsAdapter
     }
 
