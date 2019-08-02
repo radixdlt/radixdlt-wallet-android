@@ -1,6 +1,7 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.assets
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.lapism.searchview.Search
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainLoadingState
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
@@ -35,11 +38,17 @@ class AssetsFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    private lateinit var mainViewModel: MainViewModel
+
     private lateinit var assetsViewModel: AssetsViewModel
 
     private lateinit var assetsAdapter: AssetsAdapter
 
+    private lateinit var ctx: Context
+
     private var refreshing = false
+
+    private var loadingAssets = false
 
     private var assetSearched: String? = null
 
@@ -56,6 +65,7 @@ class AssetsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ctx = view.context
         initialiseRecyclerView()
         initialiseSwipeRefreshLayout()
         initialiseViewModels()
@@ -93,7 +103,7 @@ class AssetsFragment : Fragment() {
     private fun checkAssetWasSearchedAndFilter() {
         if (!assetSearched.isNullOrEmpty()) {
             lifecycleScope.launch {
-                setLayoutResourcesWithTransactions()
+                setLayoutResourcesWithAssets()
                 delay(30)
                 assetsAdapter.filter.filter(assetSearched)
             }
@@ -101,6 +111,11 @@ class AssetsFragment : Fragment() {
     }
 
     private fun initialiseViewModels() {
+        mainViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(MainViewModel::class.java)
+
+        mainViewModel.mainLoadingState.observe(this, Observer(::loadingState))
+
         assetsViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(AssetsViewModel::class.java)
 
@@ -124,15 +139,28 @@ class AssetsFragment : Fragment() {
         }
     }
 
+    private fun loadingState(loading: MainLoadingState) {
+        when (loading) {
+            MainLoadingState.LOADING -> swipe_refresh_layout.isRefreshing = true
+            MainLoadingState.FINISHED -> {
+                lifecycleScope.launch {
+                    delay(500)
+                    if (!loadingAssets) {
+                        swipe_refresh_layout.isRefreshing = false
+                    }
+                }
+            }
+        }
+    }
+
     private fun assetsStateChanged(state: AssetsState) {
         when (state) {
             is AssetsState.Loading -> {
+                loadingAssets = true
                 swipe_refresh_layout.isRefreshing = true
             }
             is AssetsState.ShowAssets -> showOwnedAssets(state.assets)
-            is AssetsState.Error -> {
-                toast("There was an error!")
-            }
+            is AssetsState.Error -> toast("There was an error!")
         }
     }
 
@@ -183,20 +211,21 @@ class AssetsFragment : Fragment() {
 
     private fun setLayoutResources() {
         if (assetsAdapter.itemCount == 0 && assetSearched.isNullOrBlank()) {
-            setLayoutResourcesWithEmptyTransactions()
+            setLayoutResourcesWithEmptyAssets()
         } else {
-            setLayoutResourcesWithTransactions()
+            setLayoutResourcesWithAssets()
         }
     }
 
-    private fun setLayoutResourcesWithEmptyTransactions() {
+    private fun setLayoutResourcesWithEmptyAssets() {
         walletBackGroundFrameLayout.visibility = View.VISIBLE
     }
 
-    private fun setLayoutResourcesWithTransactions() {
+    private fun setLayoutResourcesWithAssets() {
         walletBackGroundFrameLayout.visibility = View.GONE
         swipe_refresh_layout.isRefreshing = false
         swipe_refresh_layout.isEnabled = false
+        loadingAssets = false
     }
 
     private val itemClick = fun(rri: String, name: String, balance: String) {
@@ -208,7 +237,7 @@ class AssetsFragment : Fragment() {
     private fun copyAddressToClipBoard(address: String) {
         copyToClipboard(activity!!, address)
 
-        val addressToShow = if (address == QueryPreferences.getPrefAddress(activity!!)) {
+        val addressToShow = if (address == QueryPreferences.getPrefAddress(ctx)) {
             "Address"
         } else {
             address
@@ -221,7 +250,7 @@ class AssetsFragment : Fragment() {
         if (resultCode != Activity.RESULT_OK) return
 
         if (requestCode == REQUEST_CODE_RECEIVE_RADIX) {
-            copyAddressToClipBoard(QueryPreferences.getPrefAddress(activity!!))
+            copyAddressToClipBoard(QueryPreferences.getPrefAddress(ctx))
         }
     }
 

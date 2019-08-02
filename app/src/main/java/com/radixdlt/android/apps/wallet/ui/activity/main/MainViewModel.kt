@@ -1,5 +1,7 @@
 package com.radixdlt.android.apps.wallet.ui.activity.main
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.radixdlt.android.apps.wallet.data.mapper.TokenTransferDataMapper2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
@@ -24,6 +26,11 @@ class MainViewModel @Inject constructor(
     private val compositeDisposable = CompositeDisposable()
 
     private val myAddress = Identity.api!!.address.toString()
+
+    private val _mainLoadingState: MutableLiveData<MainLoadingState> = MutableLiveData()
+
+    val mainLoadingState: LiveData<MainLoadingState>
+        get() = _mainLoadingState
 
     init {
         retrieveAllTransactions()
@@ -107,8 +114,7 @@ class MainViewModel @Inject constructor(
         allTransactions: Observable<TokenTransfer>
     ): Single<ArrayList<TokenTransfer>> {
 
-        // Retrieve existing transactions from DB first
-        getStoredTransactions()
+        _mainLoadingState.postValue(MainLoadingState.LOADING)
 
         val oldTransactionsList: Single<ArrayList<TokenTransfer>> = allTransactions
             .scan(ArrayList<TokenTransfer>()) { list, transaction ->
@@ -141,7 +147,7 @@ class MainViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .subscribe {
                 Timber.tag("TransactionsLooking").d(it.toString())
-//                postValue(it) TODO: MAYBE I DUNNO RIGHT NOW
+                _mainLoadingState.postValue(MainLoadingState.FINISHED)
             }
             .addTo(compositeDisposable)
     }
