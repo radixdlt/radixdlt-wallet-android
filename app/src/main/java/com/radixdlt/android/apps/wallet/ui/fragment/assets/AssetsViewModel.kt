@@ -53,6 +53,7 @@ class AssetsViewModel @Inject constructor(
         val addresses = assets.map { RRI.fromString(it).address }.distinct()
 
         addresses.forEach { address ->
+            if (Identity.api == null) return@forEach
             Identity.api!!
                 .pullOnce(address)
                 .subscribeOn(Schedulers.io())

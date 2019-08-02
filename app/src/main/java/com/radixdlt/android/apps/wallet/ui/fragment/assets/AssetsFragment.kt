@@ -39,18 +39,15 @@ class AssetsFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var mainViewModel: MainViewModel
-
     private lateinit var assetsViewModel: AssetsViewModel
 
     private lateinit var assetsAdapter: AssetsAdapter
 
     private lateinit var ctx: Context
 
-    private var refreshing = false
+    private var assetSearched: String? = null
 
     private var loadingAssets = false
-
-    private var assetSearched: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -68,15 +65,21 @@ class AssetsFragment : Fragment() {
         ctx = view.context
         initialiseRecyclerView()
         initialiseSwipeRefreshLayout()
-        initialiseViewModels()
         initialiseSearchView()
-        initialiseLoadingState()
+        initialiseViewModels()
         setOnClickListeners()
     }
 
     private fun setOnClickListeners() {
-        payButtonClickListener()
-        receiveButtonClickListener()
+        setPayButtonOnClickListener()
+        setReceiveButtonOnClickListener()
+    }
+
+    private fun initialiseViewModels() {
+        mainViewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
+        assetsViewModel = ViewModelProviders.of(this, viewModelFactory)[AssetsViewModel::class.java]
+        mainViewModel.mainLoadingState.observe(viewLifecycleOwner, Observer(::loadingState))
+        assetsViewModel.assetsState.observe(viewLifecycleOwner, Observer(::assetsStateChanged))
     }
 
     private fun initialiseSearchView() {
@@ -110,25 +113,13 @@ class AssetsFragment : Fragment() {
         }
     }
 
-    private fun initialiseViewModels() {
-        mainViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(MainViewModel::class.java)
-
-        mainViewModel.mainLoadingState.observe(this, Observer(::loadingState))
-
-        assetsViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(AssetsViewModel::class.java)
-
-        assetsViewModel.assetsState.observe(this, Observer(::assetsStateChanged))
-    }
-
-    private fun payButtonClickListener() {
+    private fun setPayButtonOnClickListener() {
         payButton.setOnClickListener {
             SendRadixActivity.newIntent(activity!!)
         }
     }
 
-    private fun receiveButtonClickListener() {
+    private fun setReceiveButtonOnClickListener() {
         receiveButton.setOnClickListener {
             val receiveRadixDialog = ReceiveRadixDialog.newInstance()
             receiveRadixDialog.setTargetFragment(
@@ -141,30 +132,26 @@ class AssetsFragment : Fragment() {
 
     private fun loadingState(loading: MainLoadingState) {
         when (loading) {
-            MainLoadingState.LOADING -> swipe_refresh_layout.isRefreshing = true
-            MainLoadingState.FINISHED -> {
-                lifecycleScope.launch {
-                    delay(500)
-                    if (!loadingAssets) {
-                        swipe_refresh_layout.isRefreshing = false
-                    }
-                }
-            }
+            MainLoadingState.LOADING -> setLayoutResourcesWithLoadingIndicator()
+            MainLoadingState.FINISHED -> setLayoutResourcesAfterDelay()
         }
     }
 
     private fun assetsStateChanged(state: AssetsState) {
         when (state) {
-            is AssetsState.Loading -> {
-                loadingAssets = true
-                swipe_refresh_layout.isRefreshing = true
-            }
+            is AssetsState.Loading -> setLoadingAssets()
             is AssetsState.ShowAssets -> showOwnedAssets(state.assets)
             is AssetsState.Error -> toast("There was an error!")
         }
     }
 
+    private fun setLoadingAssets() {
+        loadingAssets = true
+        setLayoutResources()
+    }
+
     private fun showOwnedAssets(tokenTypes: List<Asset>) {
+        loadingAssets = false
         checkAssetWasBeingSearched()
         assetsAdapter.originalList(tokenTypes)
         assetsAdapter.replace(tokenTypes)
@@ -189,43 +176,46 @@ class AssetsFragment : Fragment() {
         assetsRecyclerView.adapter = assetsAdapter
     }
 
-    private fun initialiseLoadingState() {
-        if (assetsAdapter.itemCount == 0 && assetSearched.isNullOrBlank()) {
-            swipe_refresh_layout.isRefreshing = true
-        }
-
-        setLayoutResources()
-    }
-
     private fun initialiseSwipeRefreshLayout() {
         swipe_refresh_layout.setColorSchemeResources(
             R.color.colorPrimary, R.color.colorAccent, R.color.colorAccentSecondary
         )
-        swipe_refresh_layout.setOnRefreshListener(::refreshTransactions)
-    }
-
-    private fun refreshTransactions() {
-        swipe_refresh_layout.isRefreshing = false
-        refreshing = false
     }
 
     private fun setLayoutResources() {
-        if (assetsAdapter.itemCount == 0 && assetSearched.isNullOrBlank()) {
+        if (loadingAssets) {
+            setLayoutResourcesWithLoadingIndicator()
+        } else if (assetsAdapter.itemCount == 0 && assetSearched.isNullOrBlank()) {
             setLayoutResourcesWithEmptyAssets()
         } else {
             setLayoutResourcesWithAssets()
         }
     }
 
+    private fun setLayoutResourcesAfterDelay() {
+        lifecycleScope.launch {
+            delay(500)
+            view?.let { setLayoutResources() }
+        }
+    }
+
+    private fun setLayoutResourcesWithLoadingIndicator() {
+        swipe_refresh_layout.isRefreshing = true
+        assetsMessageTextView.text = getString(R.string.assets_fragment_loading_assets_textview)
+    }
+
     private fun setLayoutResourcesWithEmptyAssets() {
-        walletBackGroundFrameLayout.visibility = View.VISIBLE
+        swipe_refresh_layout.isRefreshing = false
+        assetsImageView.visibility = View.VISIBLE
+        assetsMessageTextView.text = getString(R.string.assets_fragment_no_owned_assets_textview)
+        assetsMessageTextView.visibility = View.VISIBLE
     }
 
     private fun setLayoutResourcesWithAssets() {
-        walletBackGroundFrameLayout.visibility = View.GONE
+        assetsImageView.visibility = View.GONE
+        assetsMessageTextView.visibility = View.GONE
         swipe_refresh_layout.isRefreshing = false
         swipe_refresh_layout.isEnabled = false
-        loadingAssets = false
     }
 
     private val itemClick = fun(rri: String, name: String, balance: String) {
@@ -235,15 +225,15 @@ class AssetsFragment : Fragment() {
     }
 
     private fun copyAddressToClipBoard(address: String) {
-        copyToClipboard(activity!!, address)
+        copyToClipboard(ctx, address)
 
         val addressToShow = if (address == QueryPreferences.getPrefAddress(ctx)) {
-            "Address"
+            getString(R.string.common_address_text)
         } else {
             address
         }
 
-        toast("$addressToShow ${activity!!.getString(R.string.toast_copied_clipboard)}")
+        toast("$addressToShow ${getString(R.string.toast_copied_clipboard)}")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

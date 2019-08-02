@@ -58,11 +58,15 @@ class AssetTransactionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showAssetBalance(balance)
-        assetSymbolTextView.text = RRI.fromString(rri).name
+        showBalanceAndIso()
         initialiseRecyclerView()
         initialiseViewModels(rri)
         setOnClickListeners()
+    }
+
+    private fun showBalanceAndIso() {
+        showAssetBalance(balance)
+        assetSymbolTextView.text = RRI.fromString(rri).name
     }
 
     private fun setOnClickListeners() {
@@ -89,7 +93,7 @@ class AssetTransactionsFragment : Fragment() {
 
     private fun initialiseRecyclerView() {
         assetTransactionsRecyclerView.layoutManager = LinearLayoutManager(activity)
-        assetTransactionsAdapter = AssetTransactionsAdapter(itemClick = click)
+        assetTransactionsAdapter = AssetTransactionsAdapter(click)
         val stickHeaderDecoration = StickyHeaderItemDecoration(assetTransactionsAdapter)
         assetTransactionsRecyclerView.addItemDecoration(stickHeaderDecoration)
         assetTransactionsRecyclerView.adapter = assetTransactionsAdapter
@@ -99,12 +103,13 @@ class AssetTransactionsFragment : Fragment() {
         assetTransactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(AssetTransactionsViewModel::class.java)
 
-        assetTransactionsViewModel.getAllTransactionsAsset(asset)
         assetTransactionsViewModel.assetTransactionsState.observe(
-            this,
-            Observer(::showAssetTransactions)
+            viewLifecycleOwner, Observer(::showAssetTransactions)
         )
-        assetTransactionsViewModel.assetBalance.observe(this, Observer(::showAssetBalance))
+        assetTransactionsViewModel.assetBalance.observe(
+            viewLifecycleOwner, Observer(::showAssetBalance)
+        )
+        assetTransactionsViewModel.getAllTransactionsAsset(asset)
     }
 
     private fun showAssetTransactions(assetTransactionsState: AssetTransactionsState) {
@@ -142,7 +147,7 @@ class AssetTransactionsFragment : Fragment() {
         copyToClipboard(activity!!, address)
 
         val addressToShow = if (address == QueryPreferences.getPrefAddress(activity!!)) {
-            "Address"
+            getString(R.string.common_address_text)
         } else {
             address
         }

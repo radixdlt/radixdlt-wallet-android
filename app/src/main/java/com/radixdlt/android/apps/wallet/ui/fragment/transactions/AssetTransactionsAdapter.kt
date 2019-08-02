@@ -14,14 +14,15 @@ import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEnt
 import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
 import com.radixdlt.android.apps.wallet.util.formatDateYear
 import com.radixdlt.android.apps.wallet.util.getStartOfDay
+import com.radixdlt.client.core.atoms.particles.RRI
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.find
 import timber.log.Timber
 import java.math.RoundingMode
 
 class AssetTransactionsAdapter(
-    private val items: MutableList<TransactionEntity2> = mutableListOf(),
-    private val itemClick: (TransactionEntity2, Boolean) -> Unit
+    private val itemClick: (TransactionEntity2, Boolean) -> Unit,
+    private val items: MutableList<TransactionEntity2> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyHeaderItemDecoration.StickyHeaderInterface {
 
     private lateinit var ctx: Context
@@ -152,7 +153,6 @@ class AssetTransactionsAdapter(
             }
         }
 
-        // Detect if whole number or decimal to change character size
         private fun setTransactionAmount(
             transactionEntity: TransactionEntity2,
             textView: TextView
@@ -161,7 +161,9 @@ class AssetTransactionsAdapter(
                 .setScale(2, RoundingMode.HALF_UP)
                 .toPlainString()
 
-            amount = if (transactionEntity.sent) "-$amount" else "+$amount"
+            val iso = RRI.fromString(transactionEntity.rri).name
+
+            amount = if (transactionEntity.sent) "-$amount $iso" else "+$amount $iso"
 
             textView.text = amount
         }

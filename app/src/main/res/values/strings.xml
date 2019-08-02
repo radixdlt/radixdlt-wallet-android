@@ -129,13 +129,15 @@
   <string name="toast_request_tokens_faucet">Requested tokens from Faucet!</string>
 
   <!-- Assets Fragment -->
+  <string name="assets_fragment_no_owned_assets_textview">You don\'t own any assets!</string>
+  <string name="assets_fragment_loading_assets_textview">Loading assets…</string>
   <string name="assets_fragment_xml_receive_button">Receive</string>
   <string name="assets_fragment_xml_pay_button">Pay</string>
 
   <!-- Asset Transactions Fragment -->
   <string name="asset_transactions_fragment_xml_your_balance_title">YOUR BALANCE</string>
-  <string name="asset_transactions_fragment_xml_receive_button">RECEIVE</string>
-  <string name="asset_transactions_fragment_xml_pay_button">PAY</string>
+  <string name="asset_transactions_fragment_xml_receive_button">Receive</string>
+  <string name="asset_transactions_fragment_xml_pay_button">Pay</string>
 
   <!-- Contacts Fragment -->
   <string name="contacts_fragment_user_faucet">Faucet</string>
@@ -209,5 +211,7 @@
   <string name="receive_radix_dialog_intent_chooser_title">Share address</string>
   <string name="receive_radix_dialog_xml_qr_code_description">QR code</string>
   <string name="receive_radix_dialog_generate_invoice_button">Generate Invoice</string>
+
+  <string name="common_address_text">Address</string>
 
 </resources>

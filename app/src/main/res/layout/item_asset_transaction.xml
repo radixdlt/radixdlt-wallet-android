@@ -7,16 +7,6 @@
     android:layout_height="76dp"
     android:background="?selectableItemBackground">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/circleImageView"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/new_send_image_item_wallet" />
-
     <TextView
         android:id="@+id/accountTextView"
         android:layout_width="0dp"
@@ -43,7 +33,7 @@
         android:singleLine="true"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
-        app:layout_constraintEnd_toStartOf="@+id/transactionAmount"
+        app:layout_constraintEnd_toStartOf="@+id/fiatValueTextView"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/circleImageView"
         app:layout_constraintTop_toBottomOf="@+id/accountTextView"
@@ -62,7 +52,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/circleImageView"
-        tools:text="+55.00000" />
+        tools:text="+5555.00 HOLA" />
 
     <TextView
         android:id="@+id/fiatValueTextView"
@@ -84,6 +74,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.74" />
+        app:layout_constraintGuide_percent="0.55" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleImageView"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/new_send_image_item_wallet" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

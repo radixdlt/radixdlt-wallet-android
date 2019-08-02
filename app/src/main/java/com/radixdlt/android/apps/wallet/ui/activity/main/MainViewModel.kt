@@ -121,7 +121,7 @@ class MainViewModel @Inject constructor(
                 list.add(transaction)
                 return@scan list
             }
-            .debounce(3, TimeUnit.SECONDS)
+            .debounce(5, TimeUnit.SECONDS)
             .firstOrError()
             .cache()
 
@@ -135,13 +135,14 @@ class MainViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .subscribe({
                 transactionsDao2.insertTransactions(it) // insert in DB
-                getStoredTransactions()
+                _mainLoadingState.postValue(MainLoadingState.FINISHED)
             }, Throwable::printStackTrace)
             .addTo(compositeDisposable)
 
         return oldTransactionsList
     }
 
+    @Suppress("unused")
     private fun getStoredTransactions() {
         transactionsDao2.getAllTransactions()
             .subscribeOn(Schedulers.io())
