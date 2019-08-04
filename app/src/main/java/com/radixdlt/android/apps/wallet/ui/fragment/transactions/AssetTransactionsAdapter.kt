@@ -15,7 +15,9 @@ import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
 import com.radixdlt.android.apps.wallet.util.formatDateYear
 import com.radixdlt.android.apps.wallet.util.getStartOfDay
 import com.radixdlt.client.core.atoms.particles.RRI
-import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.item_asset_transaction.view.*
+import kotlinx.android.synthetic.main.item_asset_transaction.view.transactionConstraintLayout
+import kotlinx.android.synthetic.main.item_asset_transaction_date.view.*
 import org.jetbrains.anko.find
 import timber.log.Timber
 import java.math.RoundingMode
@@ -23,7 +25,8 @@ import java.math.RoundingMode
 class AssetTransactionsAdapter(
     private val itemClick: (TransactionEntity2, Boolean) -> Unit,
     private val items: MutableList<TransactionEntity2> = mutableListOf()
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyHeaderItemDecoration.StickyHeaderInterface {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+    StickyHeaderItemDecoration.StickyHeaderInterface {
 
     private lateinit var ctx: Context
 
@@ -96,8 +99,10 @@ class AssetTransactionsAdapter(
     }
 
     override fun bindHeaderData(header: View, headerPosition: Int) {
-        val date: TextView = header.find(R.id.assetTransactionsDateTextView)
-        date.text = formatDateYear(items[headerPosition].timestamp)
+        header.assetTransactionsDateTextView.text = formatDateYear(items[headerPosition].timestamp)
+        // Make this part of the layout invisible since even though no data
+        // is being displayed as this is the sticky which overlays the list.
+        header.transactionConstraintLayout.visibility = View.INVISIBLE
     }
 
     override fun isHeader(itemPosition: Int): Boolean {
@@ -109,23 +114,16 @@ class AssetTransactionsAdapter(
         private val itemClick: (TransactionEntity2, Boolean) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
-        private val transactionView: View = itemView.find(R.id.transactionConstraintLayout)
-        private val circleImageView: CircleImageView = itemView.find(R.id.circleImageView)
-        private val accountTextView: TextView = itemView.find(R.id.accountTextView)
-        private val addressTextView: TextView = itemView.find(R.id.addressTextView)
-        private val transactionAmountTextView: TextView = itemView.find(R.id.transactionAmount)
-        private val fiatValueTextView: TextView = itemView.find(R.id.fiatValueTextView)
-
         fun bindTransaction(transactionEntity: TransactionEntity2) {
 
-            setAccount(accountTextView, transactionEntity)
-            setResources(circleImageView, transactionAmountTextView, transactionEntity)
-            setTransactionAmount(transactionEntity, transactionAmountTextView)
-            setTransactionFiatValue(transactionEntity, fiatValueTextView)
-            setAddress(transactionEntity, addressTextView)
+            setAccount(transactionEntity)
+            setResources(transactionEntity)
+            setTransactionAmount(transactionEntity)
+            setTransactionFiatValue(transactionEntity)
+            setAddress(transactionEntity)
 
             // Item click listeners
-            setClickListener(transactionEntity, transactionView)
+            setClickListener(transactionEntity)
         }
 
         fun bindTransactionAndDate(transactionEntity: TransactionEntity2) {
@@ -134,29 +132,26 @@ class AssetTransactionsAdapter(
             date.text = formatDateYear(transactionEntity.timestamp)
         }
 
-        private fun setAccount(textView: TextView, transactionEntity2: TransactionEntity2) {
-            textView.text = transactionEntity2.accountName
+        private fun setAccount(transactionEntity2: TransactionEntity2) {
+            itemView.accountTextView.text = transactionEntity2.accountName
         }
 
         // Set correct resources and color depending if sent or received
-        private fun setResources(
-            circle: CircleImageView,
-            transactionView: TextView,
-            transactionEntity: TransactionEntity2
-        ) {
+        private fun setResources(transactionEntity: TransactionEntity2) {
             if (transactionEntity.sent) {
-                circle.setImageResource(R.drawable.new_send_image_item_wallet)
-                transactionView.setTextColor(ContextCompat.getColor(ctx, R.color.radixRed))
+                itemView.circleImageView.setImageResource(R.drawable.new_send_image_item_wallet)
+                itemView.transactionAmount.setTextColor(
+                    ContextCompat.getColor(ctx, R.color.radixRed)
+                )
             } else {
-                circle.setImageResource(R.drawable.new_receive_image_item_wallet)
-                transactionView.setTextColor(ContextCompat.getColor(ctx, R.color.colorAccent))
+                itemView.circleImageView.setImageResource(R.drawable.new_receive_image_item_wallet)
+                itemView.transactionAmount.setTextColor(
+                    ContextCompat.getColor(ctx, R.color.colorAccent)
+                )
             }
         }
 
-        private fun setTransactionAmount(
-            transactionEntity: TransactionEntity2,
-            textView: TextView
-        ) {
+        private fun setTransactionAmount(transactionEntity: TransactionEntity2) {
             var amount = transactionEntity.amount
                 .setScale(2, RoundingMode.HALF_UP)
                 .toPlainString()
@@ -165,34 +160,31 @@ class AssetTransactionsAdapter(
 
             amount = if (transactionEntity.sent) "-$amount $iso" else "+$amount $iso"
 
-            textView.text = amount
+            itemView.transactionAmount.text = amount
         }
 
-        private fun setTransactionFiatValue(
-            transactionEntity: TransactionEntity2,
-            textView: TextView
-        ) {
+        private fun setTransactionFiatValue(transactionEntity: TransactionEntity2) {
             var amount = transactionEntity.amount
                 .setScale(2, RoundingMode.HALF_UP)
                 .toPlainString()
 
             amount = "$$amount"
 
-            textView.text = amount
+            itemView.fiatValueTextView.text = amount
         }
 
-        private fun setAddress(transactionEntity: TransactionEntity2, textView: TextView) {
+        private fun setAddress(transactionEntity: TransactionEntity2) {
             val address = transactionEntity.address
             val message = if (transactionEntity.sent) "To: $address" else "From: $address"
-            textView.text = message
+            itemView.addressTextView.text = message
         }
 
-        private fun setClickListener(transactionEntity: TransactionEntity2, view: View) {
-            view.setOnClickListener {
+        private fun setClickListener(transactionEntity: TransactionEntity2) {
+            itemView.transactionConstraintLayout.setOnClickListener {
                 itemClick(transactionEntity, false)
             }
 
-            view.setOnLongClickListener {
+            itemView.transactionConstraintLayout.setOnLongClickListener {
                 itemClick(transactionEntity, true)
                 return@setOnLongClickListener true
             }
