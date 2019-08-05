@@ -132,7 +132,7 @@ class AssetsAdapter(
 
         // Set correct resources and color depending if sent or received
         fun setIcon(item: Asset) {
-            val urlIcon = item.urlIcon
+            val urlIcon = if (item.urlIcon.isNullOrBlank()) null else item.urlIcon
             Glide.with(ctx)
                 .load(urlIcon)
                 .fallback(R.drawable.no_token_icon)

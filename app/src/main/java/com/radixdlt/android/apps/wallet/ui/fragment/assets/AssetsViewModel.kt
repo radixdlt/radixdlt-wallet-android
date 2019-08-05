@@ -119,12 +119,10 @@ class AssetsViewModel @Inject constructor(
                     tokenDefRequested.remove(rriString)
 
                     // Update entities in DB
-                    // FIXME: use urlIcon in next release of beta library for now use below to test
-                    val tokenIconUrl = "https://styles.redditmedia.com/t5_2qjzo/styles/communityIcon_o0xuar6bbpo21.png"
                     transactionsDao2.updateEntities(
                         tokenState.name,
                         tokenState.description,
-                        tokenIconUrl,
+                        tokenState.iconUrl ?: "",
                         rriString,
                         tokenState.totalSupply,
                         tokenState.tokenSupplyType.name
