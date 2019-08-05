@@ -38,9 +38,6 @@ class AssetsFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var mainViewModel: MainViewModel
-    private lateinit var assetsViewModel: AssetsViewModel
-
     private lateinit var assetsAdapter: AssetsAdapter
 
     private lateinit var ctx: Context
@@ -76,10 +73,14 @@ class AssetsFragment : Fragment() {
     }
 
     private fun initialiseViewModels() {
-        mainViewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
-        assetsViewModel = ViewModelProviders.of(this, viewModelFactory)[AssetsViewModel::class.java]
-        mainViewModel.mainLoadingState.observe(viewLifecycleOwner, Observer(::loadingState))
-        assetsViewModel.assetsState.observe(viewLifecycleOwner, Observer(::assetsStateChanged))
+        activity?.let {
+            ViewModelProviders.of(it, viewModelFactory)[MainViewModel::class.java].apply {
+                mainLoadingState.observe(viewLifecycleOwner, Observer(::loadingState))
+            }
+        }
+        ViewModelProviders.of(this, viewModelFactory)[AssetsViewModel::class.java].apply {
+            assetsState.observe(viewLifecycleOwner, Observer(::assetsStateChanged))
+        }
     }
 
     private fun initialiseSearchView() {
@@ -130,10 +131,10 @@ class AssetsFragment : Fragment() {
         }
     }
 
-    private fun loadingState(loading: MainLoadingState) {
-        when (loading) {
+    private fun loadingState(state: MainLoadingState) {
+        when (state) {
             MainLoadingState.LOADING -> setLayoutResourcesWithLoadingIndicator()
-            MainLoadingState.FINISHED -> setLayoutResourcesAfterDelay()
+            MainLoadingState.FINISHED -> setLayoutResources()
         }
     }
 
@@ -141,7 +142,7 @@ class AssetsFragment : Fragment() {
         when (state) {
             is AssetsState.Loading -> setLoadingAssets()
             is AssetsState.ShowAssets -> showOwnedAssets(state.assets)
-            is AssetsState.Error -> toast("There was an error!")
+            is AssetsState.Error -> toast(getString(R.string.assets_fragment_error_toast))
         }
     }
 
@@ -180,6 +181,11 @@ class AssetsFragment : Fragment() {
         swipe_refresh_layout.setColorSchemeResources(
             R.color.colorPrimary, R.color.colorAccent, R.color.colorAccentSecondary
         )
+        swipe_refresh_layout.setOnRefreshListener(::refreshTransactions)
+    }
+
+    private fun refreshTransactions() {
+        swipe_refresh_layout.isRefreshing = false
     }
 
     private fun setLayoutResources() {
@@ -192,23 +198,17 @@ class AssetsFragment : Fragment() {
         }
     }
 
-    private fun setLayoutResourcesAfterDelay() {
-        lifecycleScope.launch {
-            delay(500)
-            view?.let { setLayoutResources() }
-        }
-    }
-
     private fun setLayoutResourcesWithLoadingIndicator() {
         swipe_refresh_layout.isRefreshing = true
         assetsMessageTextView.text = getString(R.string.assets_fragment_loading_assets_textview)
     }
 
     private fun setLayoutResourcesWithEmptyAssets() {
-        swipe_refresh_layout.isRefreshing = false
-        assetsImageView.visibility = View.VISIBLE
         assetsMessageTextView.text = getString(R.string.assets_fragment_no_owned_assets_textview)
         assetsMessageTextView.visibility = View.VISIBLE
+        assetsImageView.visibility = View.VISIBLE
+        swipe_refresh_layout.isRefreshing = false
+        swipe_refresh_layout.isEnabled = false
     }
 
     private fun setLayoutResourcesWithAssets() {

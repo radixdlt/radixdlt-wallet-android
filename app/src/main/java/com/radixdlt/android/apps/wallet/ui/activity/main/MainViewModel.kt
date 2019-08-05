@@ -3,6 +3,7 @@ package com.radixdlt.android.apps.wallet.ui.activity.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.radixdlt.android.apps.wallet.data.mapper.TokenTransferDataMapper2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
@@ -15,6 +16,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -82,18 +85,18 @@ class MainViewModel @Inject constructor(
 
     private fun checkForExistingTokenDefinitionData(
         lastExistingTransaction: TransactionEntity2,
-        transactionEntitiy2: TransactionEntity2
+        transactionEntity2: TransactionEntity2
     ) {
         if (lastExistingTransaction.tokenName != null) {
             val transaction = TransactionEntity2(
-                transactionEntitiy2.accountAddress,
-                transactionEntitiy2.accountName,
-                transactionEntitiy2.address,
-                transactionEntitiy2.amount,
-                transactionEntitiy2.message,
-                transactionEntitiy2.sent,
-                transactionEntitiy2.timestamp,
-                transactionEntitiy2.rri,
+                transactionEntity2.accountAddress,
+                transactionEntity2.accountName,
+                transactionEntity2.address,
+                transactionEntity2.amount,
+                transactionEntity2.message,
+                transactionEntity2.sent,
+                transactionEntity2.timestamp,
+                transactionEntity2.rri,
                 lastExistingTransaction.tokenName,
                 lastExistingTransaction.tokenDescription,
                 lastExistingTransaction.tokenIconUrl,
@@ -102,7 +105,7 @@ class MainViewModel @Inject constructor(
             )
             insertTransactionIntoDB(transaction) // insert in DB with all info
         } else {
-            insertTransactionIntoDB(transactionEntitiy2) // insert in DB with what we have
+            insertTransactionIntoDB(transactionEntity2) // insert in DB with what we have
         }
     }
 
@@ -135,11 +138,23 @@ class MainViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .subscribe({
                 transactionsDao2.insertTransactions(it) // insert in DB
-                _mainLoadingState.postValue(MainLoadingState.FINISHED)
+                setFinishedStateAfterDelay()
             }, Throwable::printStackTrace)
             .addTo(compositeDisposable)
 
         return oldTransactionsList
+    }
+
+    /**
+     * Delay is added here before posting the finished state in
+     * the event that token definition loading is being done and
+     * hence avoids view flickering between states.
+     * */
+    private fun setFinishedStateAfterDelay() {
+        viewModelScope.launch {
+            delay(500)
+            _mainLoadingState.postValue(MainLoadingState.FINISHED)
+        }
     }
 
     @Suppress("unused")
