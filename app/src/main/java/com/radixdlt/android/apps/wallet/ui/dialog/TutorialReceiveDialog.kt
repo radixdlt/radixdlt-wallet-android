@@ -10,6 +10,11 @@ import kotlinx.android.synthetic.main.dialog_tutorial_receive.*
 
 class TutorialReceiveDialog : FullScreenDialog() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -20,6 +25,7 @@ class TutorialReceiveDialog : FullScreenDialog() {
         super.onViewCreated(view, savedInstanceState)
         QueryPreferences.setPrefTutorialReceiveShown(view.context, true)
         toolbarDialog.setNavigationIcon(R.drawable.ic_close)
+        toolbarDialog.setNavigationContentDescription(R.string.tutorial_receive_dialog_content_description_close_button)
         toolbarDialog.setNavigationOnClickListener { dismiss() }
         setReceiveButtonOnClickListener()
     }

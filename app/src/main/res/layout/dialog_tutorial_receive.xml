@@ -8,6 +8,7 @@
         android:id="@+id/arrowImageView"
         android:layout_width="60dp"
         android:layout_height="100dp"
+        android:layout_marginTop="56dp"
         android:contentDescription="@string/tutorial_receive_dialog_arrow_xml_content_description"
         android:src="@drawable/ic_arrow_tutorial"
         android:tint="@color/materialGrey900"
@@ -15,7 +16,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialTextView2" />
+        app:layout_constraintTop_toBottomOf="@+id/dialogTutorialReceiveSubTitleTextView"
+        app:layout_constraintVertical_bias="0.80"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarDialog"
@@ -50,7 +53,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/materialTextView"
+        android:id="@+id/dialogTutorialReceiveTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -59,15 +62,16 @@
         android:textColor="@color/materialGrey900"
         android:textSize="26sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/materialTextView2"
-        app:layout_constraintEnd_toEndOf="@+id/toolbarDialog"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/toolbarDialog"
+        app:layout_constraintBottom_toTopOf="@+id/dialogTutorialReceiveSubTitleTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarDialog"
+        app:layout_constraintVertical_bias="0.80"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/materialTextView2"
+        android:id="@+id/dialogTutorialReceiveSubTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -76,12 +80,12 @@
         android:textAlignment="center"
         android:textColor="@color/materialGrey900"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/receiveButton"
-        app:layout_constraintEnd_toEndOf="@+id/toolbarDialog"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/toolbarDialog"
-        app:layout_constraintTop_toBottomOf="@+id/materialTextView"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintBottom_toTopOf="@+id/arrowImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialogTutorialReceiveTitleTextView"
+        app:layout_constraintVertical_bias="0.80"
         app:layout_constraintVertical_chainStyle="packed" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

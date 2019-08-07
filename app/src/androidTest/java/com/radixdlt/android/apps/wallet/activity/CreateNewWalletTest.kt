@@ -69,7 +69,7 @@ class CreateNewWalletTest {
             DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(8))
 
             // Check MainFragment has loaded by checking account balance title
-            assertDisplayed(R.string.wallet_fragment_xml_account_balance_title)
+            assertDisplayed(R.string.tutorial_receive_dialog_title_xml_text_view)
 
             // Clean up
             IdlingRegistry.getInstance().unregister(idlingResource)

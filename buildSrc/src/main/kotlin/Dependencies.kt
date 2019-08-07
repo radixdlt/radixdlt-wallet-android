@@ -51,6 +51,7 @@ object Libraries {
         const val timber = "4.7.1"
         const val processPhoenix = "2.0.0"
         const val novaCryptoBIP39 = "2019.01.27"
+        const val searchView = "28.0.0"
     }
 
     const val ktlint = "com.pinterest:ktlint:${Versions.ktlint}"
@@ -104,6 +105,8 @@ object Libraries {
     const val daggerAndroidCompiler = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
 
     const val novaCryptoBIP39 = "io.github.novacrypto:BIP39:${Versions.novaCryptoBIP39}"
+
+    const val searchView = "com.lapism:searchview:${Versions.searchView}"
 }
 
 object TestLibraries {

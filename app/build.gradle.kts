@@ -207,7 +207,7 @@ dependencies {
     implementation(Libraries.vault)
     implementation(Libraries.novaCryptoBIP39)
 
-    implementation("com.lapism:searchview:28.0.0")
+    implementation(Libraries.searchView)
 
     testImplementation(TestLibraries.mockitoKotlin)
     testImplementation(TestLibraries.mockk)
@@ -218,6 +218,7 @@ dependencies {
     testImplementation(TestLibraries.junit4)
     testRuntimeOnly(TestLibraries.junitVintageEngine)
 
+    androidTestImplementation(TestLibraries.junit4)
     androidTestImplementation(TestLibraries.junitJupiterApi)
     androidTestImplementation(TestLibraries.androidInstrumentationTest)
 

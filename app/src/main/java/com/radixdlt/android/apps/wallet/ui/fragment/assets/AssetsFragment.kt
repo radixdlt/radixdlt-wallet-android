@@ -67,7 +67,12 @@ class AssetsFragment : Fragment() {
 
     private fun checkReceiveTutorialShown() {
         if (QueryPreferences.isTutorialReceiveShown(ctx)) return
-        findNavController().navigate(R.id.navigation_tutorial_receive)
+        // Android requires that extra tick to position items
+        // in dialog layout so we do the workaround below
+        lifecycleScope.launch {
+            delay(1)
+            findNavController().navigate(R.id.navigation_tutorial_receive)
+        }
     }
 
     private fun setOnClickListeners() {

@@ -1,18 +1,12 @@
-package com.radixdlt.android.apps.wallet.fragment
+package com.radixdlt.android.apps.wallet.dialog
 
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import androidx.test.uiautomator.UiDevice
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
-import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
@@ -30,7 +24,7 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 @MediumTest
-class MoreOptionsFragmentTest {
+class TutorialReceiveDialogTest {
 
     /**
      * [ActivityTestRule] is a JUnit [@Rule][Rule] to launch your activity under test.
@@ -54,11 +48,18 @@ class MoreOptionsFragmentTest {
     @get:Rule
     var clearFilesRule = ClearFilesRule()
 
-    @get:Rule
-    val intentsTestRule = IntentsTestRule(MainActivity::class.java)
+    @Test
+    fun testTutorialRecieveDialogIsShown() {
+        clickOn(R.id.importWalletFromMnemonicButton)
+        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtesting")
+        clickOn(R.id.createWalletFromMnemonicButton)
+
+        // Check MainFragment has loaded by checking account balance title
+        assertDisplayed(R.string.tutorial_receive_dialog_title_xml_text_view)
+    }
 
     @Test
-    fun testOpenReportIssueWebView() {
+    fun testTutorialRecieveDialogCloseButtonDismissesDialog() {
         clickOn(R.id.importWalletFromMnemonicButton)
         writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtesting")
         clickOn(R.id.createWalletFromMnemonicButton)
@@ -66,15 +67,17 @@ class MoreOptionsFragmentTest {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
 
-        clickOn(R.id.menu_bottom_settings)
-        assertDisplayed(R.string.more_options_fragment_xml_report_an_issue)
+        assertDisplayed(R.id.toolbar_search)
+    }
 
-        clickOn(R.id.reportAnIssueTextView)
+    @Test
+    fun testTutorialReceiveDialogClickOnReceiveOpensReceiveScreen() {
+        clickOn(R.id.importWalletFromMnemonicButton)
+        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtesting")
+        clickOn(R.id.createWalletFromMnemonicButton)
 
-        intended(toPackage("com.android.chrome"))
+        clickOn(R.id.receiveButton)
 
-        // Press the back button to exit app
-        val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        mDevice.pressBack()
+        assertDisplayed(R.string.receive_radix_dialog_title)
     }
 }
