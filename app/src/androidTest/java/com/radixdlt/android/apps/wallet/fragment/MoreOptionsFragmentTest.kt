@@ -12,7 +12,6 @@ import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
-import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
@@ -39,8 +38,7 @@ class MoreOptionsFragmentTest {
      * blocks of Junit tests.
      */
     @get:Rule
-    var newWalletActivityTestRule: ActivityTestRule<NewWalletActivity> =
-        ActivityTestRule(NewWalletActivity::class.java)
+    var newWalletActivityTestRule = IntentsTestRule(NewWalletActivity::class.java)
 
     // Clear all app's SharedPreferences
     @get:Rule
@@ -53,9 +51,6 @@ class MoreOptionsFragmentTest {
     // Delete all files in getFilesDir() and getCacheDir()
     @get:Rule
     var clearFilesRule = ClearFilesRule()
-
-    @get:Rule
-    val intentsTestRule = IntentsTestRule(MainActivity::class.java)
 
     @Test
     fun testOpenReportIssueWebView() {
