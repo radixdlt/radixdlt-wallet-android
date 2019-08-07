@@ -89,7 +89,7 @@ class AssetsViewModel @Inject constructor(
                     this.assets.add(Asset(tokenName, rri.name, rri.address.toString(), tokenUrlIcon, total))
 
                     // POST only when we have processed all tokens
-                    if (this.assets.size == numberOfAssets) {
+                    if (this.assets.isNotEmpty() && this.assets.size == numberOfAssets) {
 
                         if (tokenDefRequired.isNotEmpty()) {
                             setAssetsState(AssetsState.Loading)

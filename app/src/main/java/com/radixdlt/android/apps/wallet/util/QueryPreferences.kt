@@ -13,6 +13,7 @@ object QueryPreferences {
     private const val PREF_NODE_IP = "node_ip"
     private const val PREF_MNEMONIC_SEED = "mnemonic_seed"
     private const val PREF_FAUCET = "faucet"
+    private const val PREF_TUTORIAL_RECEIVE = "tutorial_receive"
 
     fun getPrefAddress(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -137,5 +138,17 @@ object QueryPreferences {
     fun isRemoteFaucet(context: Context): Boolean {
         return PreferenceManager.getDefaultSharedPreferences(context)
             .getBoolean(PREF_FAUCET, true)
+    }
+
+    fun isTutorialReceiveShown(context: Context): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean(PREF_TUTORIAL_RECEIVE, false)
+    }
+
+    fun setPrefTutorialReceiveShown(context: Context, shown: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putBoolean(PREF_TUTORIAL_RECEIVE, shown)
+            .apply()
     }
 }

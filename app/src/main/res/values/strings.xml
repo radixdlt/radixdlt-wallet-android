@@ -152,8 +152,6 @@
     <string name="account_fragment_xml_radix_address">RADIX ADDRESS</string>
     <string name="account_fragment_xml_tap_qr_instructions">Tap QR code to copy address or hold to share</string>
     <string name="account_fragment_xml_generated_qr_code_description">Generated QR code</string>
-    <!-- toast -->
-    <string name="toast_address_copied_clipboard">Address copied to clipboard</string>
 
     <!-- More Options Fragment -->
     <string name="more_options_fragment_export_intent_chooser_title">Export or backup wallet</string>
@@ -213,6 +211,13 @@
     <string name="receive_radix_dialog_xml_qr_code_description">QR code</string>
     <string name="receive_radix_dialog_generate_invoice_button">Generate Invoice</string>
 
+    <!-- Common strings-->
     <string name="common_address_text">Address</string>
+    <string name="common_toast_address_copied_clipboard">Address copied to clipboard</string>
+
+    <!-- TutorialReceiveDialog -->
+    <string name="tutorial_receive_dialog_arrow_xml_content_description">Arrow pointing to receive button</string>
+    <string name="tutorial_receive_dialog_title_xml_text_view">Do the first step in Radix!\nClick on Receive button!</string>
+    <string name="tutorial_receive_dialog_subtitle_xml_text_view">When you click on receive, you\nwill be able to copy, share your\naddress and request funds!</string>
 
 </resources>

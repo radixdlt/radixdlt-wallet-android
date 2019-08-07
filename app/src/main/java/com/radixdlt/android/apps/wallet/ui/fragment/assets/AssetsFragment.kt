@@ -1,8 +1,6 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.assets
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +21,6 @@ import com.radixdlt.android.apps.wallet.ui.activity.main.MainLoadingState
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
-import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.radixdlt.android.apps.wallet.util.toast
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_assets.*
@@ -65,6 +62,12 @@ class AssetsFragment : Fragment() {
         initialiseSearchView()
         initialiseViewModels()
         setOnClickListeners()
+        checkReceiveTutorialShown()
+    }
+
+    private fun checkReceiveTutorialShown() {
+        if (QueryPreferences.isTutorialReceiveShown(ctx)) return
+        findNavController().navigate(R.id.navigation_tutorial_receive)
     }
 
     private fun setOnClickListeners() {
@@ -123,11 +126,9 @@ class AssetsFragment : Fragment() {
     private fun setReceiveButtonOnClickListener() {
         receiveButton.setOnClickListener {
             val receiveRadixDialog = ReceiveRadixDialog.newInstance()
-            receiveRadixDialog.setTargetFragment(
-                this@AssetsFragment,
-                REQUEST_CODE_RECEIVE_RADIX
-            )
-            receiveRadixDialog.show(fragmentManager!!, null)
+            fragmentManager?.apply {
+                receiveRadixDialog.show(this, null)
+            }
         }
     }
 
@@ -224,33 +225,9 @@ class AssetsFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun copyAddressToClipBoard(address: String) {
-        copyToClipboard(ctx, address)
-
-        val addressToShow = if (address == QueryPreferences.getPrefAddress(ctx)) {
-            getString(R.string.common_address_text)
-        } else {
-            address
-        }
-
-        toast("$addressToShow ${getString(R.string.toast_copied_clipboard)}")
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK) return
-
-        if (requestCode == REQUEST_CODE_RECEIVE_RADIX) {
-            copyAddressToClipBoard(QueryPreferences.getPrefAddress(ctx))
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-    }
-
-    companion object {
-        private const val REQUEST_CODE_RECEIVE_RADIX = 0
     }
 }
