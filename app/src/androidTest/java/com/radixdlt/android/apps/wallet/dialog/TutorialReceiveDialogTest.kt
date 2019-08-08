@@ -9,6 +9,7 @@ import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
+import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
@@ -48,11 +49,15 @@ class TutorialReceiveDialogTest {
     @get:Rule
     var clearFilesRule = ClearFilesRule()
 
-    @Test
-    fun testTutorialRecieveDialogIsShown() {
+    private fun createWallet() {
         clickOn(R.id.importWalletFromMnemonicButton)
         writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtesting")
         clickOn(R.id.createWalletFromMnemonicButton)
+    }
+
+    @Test
+    fun testTutorialRecieveDialogIsShown() {
+        createWallet()
 
         // Check MainFragment has loaded by checking account balance title
         assertDisplayed(R.string.tutorial_receive_dialog_title_xml_text_view)
@@ -60,9 +65,7 @@ class TutorialReceiveDialogTest {
 
     @Test
     fun testTutorialRecieveDialogCloseButtonDismissesDialog() {
-        clickOn(R.id.importWalletFromMnemonicButton)
-        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtesting")
-        clickOn(R.id.createWalletFromMnemonicButton)
+        createWallet()
 
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
@@ -72,12 +75,32 @@ class TutorialReceiveDialogTest {
 
     @Test
     fun testTutorialReceiveDialogClickOnReceiveOpensReceiveScreen() {
-        clickOn(R.id.importWalletFromMnemonicButton)
-        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtesting")
-        clickOn(R.id.createWalletFromMnemonicButton)
+        createWallet()
 
         clickOn(R.id.receiveButton)
 
         assertDisplayed(R.string.receive_radix_dialog_title)
+    }
+
+    @Test
+    fun testTutorialReceiveDialogDoesNotOpenAfterDeletingWalletAndCreatingNewOne() {
+        createWallet()
+
+        // Click on x on the toolbar to dismiss
+        clickOn(navigationIconMatcher())
+
+        clickOn(R.id.menu_bottom_settings)
+
+        assertDisplayed(R.string.more_options_fragment_xml_delete_wallet)
+
+        clickOn(R.id.deleteWalletTextView)
+
+        clickDialogPositiveButton()
+
+        createWallet()
+
+        // Toolbar with search should be visible and tutorial dialog
+        // should not have shown
+        assertDisplayed(R.id.toolbar_search)
     }
 }
