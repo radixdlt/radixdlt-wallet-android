@@ -11,6 +11,16 @@ The App is a work in progress and will soon be migrated to use the new version o
 <img src="art/transactions_screen.jpg" width="250">&nbsp;
 <img  src="art/contacts_screen.jpg" width="250">
 
+## Table of contents
+
+- [Changelog](CHANGELOG.md)
+- [Android development](#android-development)
+- [Development setup](#development-setup)
+- [Code style](#code-style)
+- [Contribute](#contribute)
+- [Links](#links)
+- [License](#license)
+
 ## Android development
 
  * Mostly written in [Kotlin](https://kotlinlang.org/) (A few classes are in Java but will be converted to keep it 100% Kotlin)
