@@ -221,4 +221,7 @@
     <string name="tutorial_receive_dialog_subtitle_xml_text_view">When you click on receive, you\nwill be able to copy, share your\naddress and request funds!</string>
     <string name="tutorial_receive_dialog_content_description_close_button">Closes the tutorial for receiving funds.</string>
 
+    <string name="common_rri_address_string">/%1$s/%2$s</string>
+    <string name="common_rri_name_string">%1$s</string>
+
 </resources>

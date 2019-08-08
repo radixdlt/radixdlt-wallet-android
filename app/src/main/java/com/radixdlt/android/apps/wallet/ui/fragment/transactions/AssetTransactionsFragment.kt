@@ -1,11 +1,10 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.transactions
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,8 +18,6 @@ import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
 import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
-import com.radixdlt.android.apps.wallet.util.QueryPreferences
-import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.radixdlt.android.apps.wallet.util.toast
 import com.radixdlt.client.core.atoms.particles.RRI
 import dagger.android.support.AndroidSupportInjection
@@ -58,6 +55,7 @@ class AssetTransactionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        assetTransactionsAppBarLayout.setExpanded(false)
         showBalanceAndIso()
         initialiseRecyclerView()
         initialiseViewModels(rri)
@@ -66,7 +64,12 @@ class AssetTransactionsFragment : Fragment() {
 
     private fun showBalanceAndIso() {
         showAssetBalance(balance)
-        assetSymbolTextView.text = RRI.fromString(rri).name
+        val rri = RRI.fromString(rri)
+        assetSymbolTextView.text = rri.name
+        assetTransactionsRRITextView.setText(
+            getString(R.string.common_rri_address_string, rri.address, rri.name),
+            TextView.BufferType.EDITABLE
+        )
     }
 
     private fun setOnClickListeners() {
@@ -83,11 +86,9 @@ class AssetTransactionsFragment : Fragment() {
     private fun receiveButtonClickListener() {
         receiveButton.setOnClickListener {
             val receiveRadixDialog = ReceiveRadixDialog.newInstance()
-            receiveRadixDialog.setTargetFragment(
-                this@AssetTransactionsFragment,
-                REQUEST_CODE_RECEIVE_RADIX
-            )
-            receiveRadixDialog.show(fragmentManager!!, null)
+            fragmentManager?.apply {
+                receiveRadixDialog.show(this, null)
+            }
         }
     }
 
@@ -128,6 +129,13 @@ class AssetTransactionsFragment : Fragment() {
     }
 
     private fun showAssetTransactions(transactions: List<TransactionEntity2>) {
+        val transaction = transactions.first()
+        val totalSupply = transaction.tokenTotalSupply?.let {
+            it.setScale(2, RoundingMode.HALF_UP).toPlainString()
+        } ?: ""
+        assetTransactionsTotalSupplyTextView.text = totalSupply
+        assetTransactionsSupplyTypeTextView.text = transaction.tokenSupplyType
+        assetTransactionsDescriptionTextView.text = transaction.tokenDescription
         assetTransactionsAdapter.replace(transactions)
     }
 
@@ -141,29 +149,5 @@ class AssetTransactionsFragment : Fragment() {
 
     private fun navigateToDetails(transactionEntity: TransactionEntity2) {
         TransactionDetailsActivity.newIntent(activity!!, transactionEntity)
-    }
-
-    private fun copyAddressToClipBoard(address: String) {
-        copyToClipboard(activity!!, address)
-
-        val addressToShow = if (address == QueryPreferences.getPrefAddress(activity!!)) {
-            getString(R.string.common_address_text)
-        } else {
-            address
-        }
-
-        toast("$addressToShow ${activity!!.getString(R.string.toast_copied_clipboard)}")
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK) return
-
-        if (requestCode == REQUEST_CODE_RECEIVE_RADIX) {
-            copyAddressToClipBoard(QueryPreferences.getPrefAddress(activity!!))
-        }
-    }
-
-    companion object {
-        private const val REQUEST_CODE_RECEIVE_RADIX = 0
     }
 }
