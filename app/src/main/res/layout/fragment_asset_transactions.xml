@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- IMPORTANT NOTE -->
+<!-- DO NOT USE AUTO REFORMAT CODE  -->
+<!-- IT WILL REORDER THE VIEWS AND WILL AFFECT BEHAVIOUR -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,6 +18,7 @@
         android:stateListAnimator="@animator/view_elevation"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:transitionGroup="true"
+        app:expanded="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -275,7 +279,7 @@
             android:layout_height="12dp"
             android:layout_gravity="center"
             android:contentDescription="@string/asset_transactions_fragment_xml_arrow_content_description"
-            android:src="@drawable/ic_pull_down_drop_arrow"
+            android:src="@drawable/animated_drop_arrow_down"
             android:tint="@color/white" />
     </FrameLayout>
 

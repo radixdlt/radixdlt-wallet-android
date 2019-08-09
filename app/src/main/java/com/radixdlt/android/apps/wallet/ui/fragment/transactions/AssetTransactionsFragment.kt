@@ -1,9 +1,12 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.transactions
 
+import android.graphics.drawable.Animatable2
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -64,27 +67,52 @@ class AssetTransactionsFragment : Fragment() {
 
     private fun initialiseCollapsingToolbar() {
         showBalanceAndIso()
-
-        assetTransactionsAppBarLayout.setExpanded(false)
+        // Selected used to trigger state for elevation of view and other state checks
+        pullDownDropFrameLayout.isSelected = true
+        assetTransactionsAppBarLayout.isSelected = true
 
         assetTransactionsAppBarLayout.addOnOffsetChangedListener(
             AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-                if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
+
+                if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0 &&
+                    !pullDownDropFrameLayout.isSelected
+                ) {
                     // Collapsed
                     pullDownDropFrameLayout.isSelected = true
                     assetTransactionsAppBarLayout.isSelected = true
-                    pullDownDropArrowImageView.rotation = 0F
-                } else if (verticalOffset == 0) {
+                    startAnimation(pullDownDropArrowImageView, false)
+                } else if (verticalOffset == 0 && pullDownDropFrameLayout.isSelected) {
                     // Expanded
                     pullDownDropFrameLayout.isSelected = false
                     assetTransactionsAppBarLayout.isSelected = false
-                    pullDownDropArrowImageView.rotation = 180F
+                    startAnimation(pullDownDropArrowImageView, true)
                 }
             })
 
         pullDownDropFrameLayout.setOnClickListener {
             val isSelected = assetTransactionsAppBarLayout.isSelected
             assetTransactionsAppBarLayout.setExpanded(isSelected, true)
+        }
+    }
+
+    private fun startAnimation(imageView: ImageView, expanded: Boolean) {
+        val drawable = imageView.drawable
+        if (drawable != null && drawable is Animatable2) {
+            (drawable as Animatable2).start()
+            (drawable as Animatable2).registerAnimationCallback(object :
+                Animatable2.AnimationCallback() {
+                override fun onAnimationEnd(drawable: Drawable?) {
+                    if (expanded) {
+                        pullDownDropArrowImageView.setImageResource(
+                            R.drawable.animated_drop_arrow_up
+                        )
+                    } else {
+                        pullDownDropArrowImageView.setImageResource(
+                            R.drawable.animated_drop_arrow_down
+                        )
+                    }
+                }
+            })
         }
     }
 
