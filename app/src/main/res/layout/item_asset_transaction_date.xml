@@ -6,8 +6,8 @@
     android:layout_height="106dp">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/assetTransactionsDateTextView"
-        android:layout_width="match_parent"
+        android:id="@+id/assetTransactionsDateDayTextView"
+        android:layout_width="0dp"
         android:layout_height="30dp"
         android:background="@color/extremelyLightGray"
         android:paddingStart="16dp"
@@ -16,10 +16,27 @@
         android:paddingBottom="5dp"
         android:textAllCaps="true"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/assetTransactionsDateMonthYearTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="TUESDAY, 30th JULY, 2019" />
+        tools:text="TUESDAY, 30th" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/assetTransactionsDateMonthYearTextView"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:background="@color/extremelyLightGray"
+        android:paddingStart="16dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="5dp"
+        android:textAlignment="textEnd"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/assetTransactionsDateDayTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="JULY, 2019" />
 
     <include
         android:id="@+id/transactionConstraintLayout"
@@ -29,6 +46,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/assetTransactionsDateTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/assetTransactionsDateDayTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

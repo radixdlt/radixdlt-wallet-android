@@ -7,13 +7,100 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="false">
 
+    <FrameLayout
+        android:id="@+id/pullDownDropFrameLayout"
+        android:layout_width="150dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_horizontal|top"
+        android:background="@drawable/ic_pull_down_drop"
+        android:backgroundTint="@color/colorPrimary"
+        android:elevation="6dp"
+        android:stateListAnimator="@animator/view_elevation"
+        android:transitionGroup="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ImageView
+            android:id="@+id/pullDownDropArrowImageView"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/assets_transactions_fragment_xml_arrow_content_description"
+            android:src="@drawable/ic_pull_down_drop_arrow"
+            android:tint="@color/white" />
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_gravity="bottom">
+
+        <View
+            android:id="@+id/buttonsView"
+            android:layout_width="0dp"
+            android:layout_height="72dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/receiveButton"
+            style="@style/MaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/asset_transactions_fragment_xml_receive_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/buttonsView" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/payButton"
+            style="@style/MaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/asset_transactions_fragment_xml_pay_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/buttonsView"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/buttonsView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/assetTransactionsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="72dp"
+        android:background="@color/white"
+        android:transitionGroup="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_asset_transaction" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/assetTransactionsAppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="236dp"
+        android:orientation="vertical"
+        android:stateListAnimator="@animator/view_elevation"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:transitionGroup="true"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -28,143 +115,15 @@
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_marginTop="76dp"
-                app:layout_collapseMode="pin">
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/assetTransactionsDetailsGuideline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.5" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/assetTransactionsDescriptionLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    app:layout_collapseMode="pin"
-                    android:layout_marginTop="0dp"
-                    android:text="DESCRIPTION"
-                    android:textColor="@color/notQuiteWhiteAlpha"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/assetTransactionsDescriptionTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="This is the description for this token which could be quite lengthy."
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/assetTransactionsDescriptionLabelTextView" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/assetTransactionsSupplyTypeLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="SUPPLY TYPE"
-                    android:textColor="@color/notQuiteWhiteAlpha"
-                    app:layout_constraintEnd_toStartOf="@+id/assetTransactionsDetailsGuideline"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsDescriptionTextView" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/assetTransactionsSupplyTypeTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="Fixed"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toStartOf="@+id/assetTransactionsDetailsGuideline"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsSupplyTypeLabelTextView" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/assetTransactionsTotalSupplyLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="TOTAL SUPPLY"
-                    android:textColor="@color/notQuiteWhiteAlpha"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/assetTransactionsDetailsGuideline"
-                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsDescriptionTextView" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/assetTransactionsTotalSupplyTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="12.000.00"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/assetTransactionsTotalSupplyLabelTextView"
-                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsTotalSupplyLabelTextView" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/assetTransactionsRRILabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="RRI"
-                    android:textColor="@color/notQuiteWhiteAlpha"
-                    app:layout_constraintEnd_toStartOf="@+id/assetTransactionsDetailsGuideline"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsSupplyTypeTextView" />
-
-                <com.radixdlt.android.apps.wallet.ui.layout.NonBreakingForwardSlashTextView
-                    android:id="@+id/assetTransactionsRRITextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="/JdafkdjfalkdsjhfldkadsfdsfSfsfsFDjhfakljdhf/XRD"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsRRILabelTextView" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="76dp"
+                android:background="@color/colorPrimary"
                 android:contentInsetStart="0dp"
                 android:contentInsetLeft="0dp"
                 android:contentInsetEnd="0dp"
                 android:contentInsetRight="0dp"
-                android:background="@color/colorPrimary"
                 app:contentInsetEnd="0dp"
                 app:contentInsetLeft="0dp"
                 app:contentInsetRight="0dp"
@@ -240,78 +199,138 @@
 
             </androidx.appcompat.widget.Toolbar>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="76dp"
+                app:layout_collapseMode="pin">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/assetTransactionsDetailsGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/assetTransactionsDescriptionLabelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/assets_transactions_fragment_xml_asset_description"
+                    android:textColor="@color/notQuiteWhiteAlpha"
+                    app:layout_collapseMode="pin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/assetTransactionsDescriptionTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/assetTransactionsDescriptionLabelTextView"
+                    tools:text="This is the description for this token which could be quite lengthy." />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/assetTransactionsSupplyTypeLabelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/assets_transactions_fragment_xml_asset_supply_type"
+                    android:textColor="@color/notQuiteWhiteAlpha"
+                    app:layout_constraintEnd_toStartOf="@+id/assetTransactionsDetailsGuideline"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsDescriptionTextView" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/assetTransactionsSupplyTypeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toStartOf="@+id/assetTransactionsDetailsGuideline"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsSupplyTypeLabelTextView"
+                    tools:text="Fixed" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/assetTransactionsTotalSupplyLabelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/assets_transactions_fragment_xml_asset_total_supply"
+                    android:textColor="@color/notQuiteWhiteAlpha"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/assetTransactionsDetailsGuideline"
+                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsDescriptionTextView" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/assetTransactionsTotalSupplyTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/assetTransactionsTotalSupplyLabelTextView"
+                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsTotalSupplyLabelTextView"
+                    tools:text="12.000.00" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/assetTransactionsRRILabelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/assets_transactions_fragment_xml_asset_rri"
+                    android:textColor="@color/notQuiteWhiteAlpha"
+                    app:layout_constraintEnd_toStartOf="@+id/assetTransactionsDetailsGuideline"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsSupplyTypeTextView" />
+
+                <com.radixdlt.android.apps.wallet.ui.layout.NonBreakingForwardSlashTextView
+                    android:id="@+id/assetTransactionsRRITextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:ellipsize="none"
+                    android:singleLine="false"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/assetTransactionsRRILabelTextView"
+                    tools:text="9gAyDHC8EgYrph36j4zz4Ebty7JwZ66u4PDnfTWmRDhYJzHUmYM/XRD" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/assetTransactionsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:transitionGroup="true"
-        android:layout_marginBottom="72dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toTopOf="@+id/buttonsView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/item_asset_transaction" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_gravity="bottom">
-
-        <View
-            android:id="@+id/buttonsView"
-            android:layout_width="0dp"
-            android:layout_height="72dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/receiveButton"
-            style="@style/MaterialButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/asset_transactions_fragment_xml_receive_button"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:backgroundTint="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/buttonsView" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/payButton"
-            style="@style/MaterialButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/asset_transactions_fragment_xml_pay_button"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:backgroundTint="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/buttonsView"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="@+id/buttonsView" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

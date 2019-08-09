@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessageEntity
-import com.radixdlt.android.apps.wallet.util.formatDateYear
+import com.radixdlt.android.apps.wallet.util.formatDateDayMonthYear
 import com.radixdlt.android.apps.wallet.util.getStartOfDay
 import com.radixdlt.android.apps.wallet.util.isYesterday
 import org.jetbrains.anko.find
@@ -129,7 +129,7 @@ class ConversationAdapter(
                 lblDate.text = if (isYesterday) {
                     ctx.getString(R.string.conversation_activity_yesterday_label)
                 } else {
-                    formatDateYear(conversation.timestamp)
+                    formatDateDayMonthYear(conversation.timestamp)
                 }
             }
 

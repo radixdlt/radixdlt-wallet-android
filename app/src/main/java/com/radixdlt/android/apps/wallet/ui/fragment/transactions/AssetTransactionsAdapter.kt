@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.MainThread
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -12,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
-import com.radixdlt.android.apps.wallet.util.formatDateYear
+import com.radixdlt.android.apps.wallet.util.formatDateDay
+import com.radixdlt.android.apps.wallet.util.formatDateMonthYear
 import com.radixdlt.android.apps.wallet.util.getStartOfDay
 import com.radixdlt.client.core.atoms.particles.RRI
 import kotlinx.android.synthetic.main.item_asset_transaction.view.*
 import kotlinx.android.synthetic.main.item_asset_transaction.view.transactionConstraintLayout
 import kotlinx.android.synthetic.main.item_asset_transaction_date.view.*
-import org.jetbrains.anko.find
 import timber.log.Timber
 import java.math.RoundingMode
 
@@ -99,7 +98,9 @@ class AssetTransactionsAdapter(
     }
 
     override fun bindHeaderData(header: View, headerPosition: Int) {
-        header.assetTransactionsDateTextView.text = formatDateYear(items[headerPosition].timestamp)
+        val timestamp = items[headerPosition].timestamp
+        header.assetTransactionsDateDayTextView.text = formatDateDay(timestamp)
+        header.assetTransactionsDateMonthYearTextView.text = formatDateMonthYear(timestamp)
         // Make this part of the layout invisible since even though no data
         // is being displayed as this is the sticky which overlays the list.
         header.transactionConstraintLayout.visibility = View.INVISIBLE
@@ -128,8 +129,9 @@ class AssetTransactionsAdapter(
 
         fun bindTransactionAndDate(transactionEntity: TransactionEntity2) {
             bindTransaction(transactionEntity)
-            val date: TextView = itemView.find(R.id.assetTransactionsDateTextView)
-            date.text = formatDateYear(transactionEntity.timestamp)
+            val timestamp = transactionEntity.timestamp
+            itemView.assetTransactionsDateDayTextView.text = formatDateDay(timestamp)
+            itemView.assetTransactionsDateMonthYearTextView.text = formatDateMonthYear(timestamp)
         }
 
         private fun setAccount(transactionEntity2: TransactionEntity2) {

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.appbar.AppBarLayout
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
@@ -25,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_asset_transactions.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
+import kotlin.math.abs
 
 class AssetTransactionsFragment : Fragment() {
 
@@ -32,13 +34,12 @@ class AssetTransactionsFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var assetTransactionsViewModel: AssetTransactionsViewModel
+    private lateinit var assetTransactionsAdapter: AssetTransactionsAdapter
 
     private val args: AssetTransactionsFragmentArgs by navArgs()
     private val rri: String by lazy { args.rri }
     private val name: String by lazy { args.name }
     private val balance: String by lazy { args.balance }
-
-    private lateinit var assetTransactionsAdapter: AssetTransactionsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -55,11 +56,36 @@ class AssetTransactionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        assetTransactionsAppBarLayout.setExpanded(false)
-        showBalanceAndIso()
+        initialiseCollapsingToolbar()
         initialiseRecyclerView()
         initialiseViewModels(rri)
         setOnClickListeners()
+    }
+
+    private fun initialiseCollapsingToolbar() {
+        showBalanceAndIso()
+
+        assetTransactionsAppBarLayout.setExpanded(false)
+
+        assetTransactionsAppBarLayout.addOnOffsetChangedListener(
+            AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+                if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
+                    // Collapsed
+                    pullDownDropFrameLayout.isSelected = true
+                    assetTransactionsAppBarLayout.isSelected = true
+                    pullDownDropArrowImageView.rotation = 0F
+                } else if (verticalOffset == 0) {
+                    // Expanded
+                    pullDownDropFrameLayout.isSelected = false
+                    assetTransactionsAppBarLayout.isSelected = false
+                    pullDownDropArrowImageView.rotation = 180F
+                }
+            })
+
+        pullDownDropFrameLayout.setOnClickListener {
+            val isSelected = assetTransactionsAppBarLayout.isSelected
+            assetTransactionsAppBarLayout.setExpanded(isSelected, true)
+        }
     }
 
     private fun showBalanceAndIso() {
@@ -130,9 +156,9 @@ class AssetTransactionsFragment : Fragment() {
 
     private fun showAssetTransactions(transactions: List<TransactionEntity2>) {
         val transaction = transactions.first()
-        val totalSupply = transaction.tokenTotalSupply?.let {
-            it.setScale(2, RoundingMode.HALF_UP).toPlainString()
-        } ?: ""
+        val totalSupply = transaction.tokenTotalSupply
+            ?.setScale(2, RoundingMode.HALF_UP)?.toPlainString()
+            ?: ""
         assetTransactionsTotalSupplyTextView.text = totalSupply
         assetTransactionsSupplyTypeTextView.text = transaction.tokenSupplyType
         assetTransactionsDescriptionTextView.text = transaction.tokenDescription
