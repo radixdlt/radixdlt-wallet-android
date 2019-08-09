@@ -15,8 +15,7 @@ object DelayHelper {
         IdlingPolicies.setIdlingResourceTimeout(waitingTime * 2, TimeUnit.MILLISECONDS)
 
         // Now we wait
-        idlingResource =
-            ElapsedTimeIdlingResource(waitingTime)
+        idlingResource = ElapsedTimeIdlingResource(waitingTime)
         IdlingRegistry.getInstance().register(idlingResource)
     }
 }
