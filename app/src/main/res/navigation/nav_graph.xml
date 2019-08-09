@@ -59,4 +59,8 @@
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.moreoptions.MoreOptionsFragment"
         android:label="fragment_more_options"
         tools:layout="@layout/fragment_more_options" />
+    <dialog
+        android:id="@+id/navigation_tutorial_receive"
+        android:name="com.radixdlt.android.apps.wallet.ui.dialog.TutorialReceiveDialog"
+        android:label="navigation_tutorial_receive" />
 </navigation>

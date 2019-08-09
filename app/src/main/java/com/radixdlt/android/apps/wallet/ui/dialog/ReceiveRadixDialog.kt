@@ -1,7 +1,7 @@
 package com.radixdlt.android.apps.wallet.ui.dialog
 
-import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -14,9 +14,11 @@ import com.radixdlt.android.apps.wallet.RadixWalletApplication
 import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
 import com.radixdlt.android.apps.wallet.ui.activity.ReceiveRadixInvoiceActivity
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.radixdlt.android.apps.wallet.util.setAddressWithColors
 import kotlinx.android.synthetic.main.dialog_receive_radix.view.*
 import net.glxn.qrgen.android.QRCode
+import org.jetbrains.anko.toast
 
 open class ReceiveRadixDialog : AppCompatDialogFragment() {
 
@@ -24,8 +26,11 @@ open class ReceiveRadixDialog : AppCompatDialogFragment() {
 
     private lateinit var myAddress: String
 
+    private lateinit var ctx: Context
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val v = View.inflate(context, R.layout.dialog_receive_radix, null)
+        ctx = v.context
 
         showAddress(v)
 
@@ -34,7 +39,7 @@ open class ReceiveRadixDialog : AppCompatDialogFragment() {
             .withHint(EncodeHintType.MARGIN, 1)
             .bitmap()
 
-        Glide.with(activity!!).load(qrCode).into(v.imageView)
+        Glide.with(this).load(qrCode).into(v.imageView)
 
         v.generateInvoiceButton.setOnClickListener {
             dismiss()
@@ -45,14 +50,14 @@ open class ReceiveRadixDialog : AppCompatDialogFragment() {
             .setTitle(getString(R.string.receive_radix_dialog_title))
             .setView(v)
             .setPositiveButton(getString(R.string.receive_radix_dialog_copy)) { _, _ ->
-                sendResult(Activity.RESULT_OK)
+                copyAddressToClipBoard(QueryPreferences.getPrefAddress(ctx))
             }
             .setNeutralButton(getString(R.string.receive_radix_dialog_share)) { _, _ ->
                 BaseActivity.openedShareDialog = true
 
                 val sharingIntent = Intent(Intent.ACTION_SEND)
                 sharingIntent.type = "text/plain"
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, myAddress)
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, myAddress)
                 startActivity(
                     Intent.createChooser(
                         sharingIntent,
@@ -67,10 +72,9 @@ open class ReceiveRadixDialog : AppCompatDialogFragment() {
             .create()
     }
 
-    private fun sendResult(resultCode: Int) {
-        if (targetFragment == null) return
-
-        targetFragment!!.onActivityResult(targetRequestCode, resultCode, null)
+    private fun copyAddressToClipBoard(address: String) {
+        copyToClipboard(ctx, address)
+        activity?.toast(getString(R.string.common_toast_address_copied_clipboard))
     }
 
     companion object {

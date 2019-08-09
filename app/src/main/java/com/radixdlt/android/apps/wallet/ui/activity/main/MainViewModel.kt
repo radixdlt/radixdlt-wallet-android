@@ -36,10 +36,12 @@ class MainViewModel @Inject constructor(
         get() = _mainLoadingState
 
     init {
+        _mainLoadingState.value = MainLoadingState.LOADING
         retrieveAllTransactions()
     }
 
     private fun retrieveAllTransactions() {
+
         val radixWalletTransactionsObservable = Identity.api!!.observeTokenTransfers()
 
         val allTransactions: Observable<TokenTransfer> = radixWalletTransactionsObservable
@@ -116,8 +118,6 @@ class MainViewModel @Inject constructor(
     private fun retrieveListOfOldTransactions(
         allTransactions: Observable<TokenTransfer>
     ): Single<ArrayList<TokenTransfer>> {
-
-        _mainLoadingState.postValue(MainLoadingState.LOADING)
 
         val oldTransactionsList: Single<ArrayList<TokenTransfer>> = allTransactions
             .scan(ArrayList<TokenTransfer>()) { list, transaction ->

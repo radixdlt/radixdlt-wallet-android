@@ -1,19 +1,15 @@
-package com.radixdlt.android.apps.wallet.fragment
+package com.radixdlt.android.apps.wallet.dialog
 
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import androidx.test.uiautomator.UiDevice
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
+import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
@@ -29,7 +25,7 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 @MediumTest
-class MoreOptionsFragmentTest {
+class TutorialReceiveDialogTest {
 
     /**
      * [ActivityTestRule] is a JUnit [@Rule][Rule] to launch your activity under test.
@@ -38,7 +34,8 @@ class MoreOptionsFragmentTest {
      * blocks of Junit tests.
      */
     @get:Rule
-    var newWalletActivityTestRule = IntentsTestRule(NewWalletActivity::class.java)
+    var newWalletActivityTestRule: ActivityTestRule<NewWalletActivity> =
+        ActivityTestRule(NewWalletActivity::class.java)
 
     // Clear all app's SharedPreferences
     @get:Rule
@@ -52,24 +49,58 @@ class MoreOptionsFragmentTest {
     @get:Rule
     var clearFilesRule = ClearFilesRule()
 
-    @Test
-    fun testOpenReportIssueWebView() {
+    private fun createWallet() {
         clickOn(R.id.importWalletFromMnemonicButton)
         writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtesting")
         clickOn(R.id.createWalletFromMnemonicButton)
+    }
+
+    @Test
+    fun testTutorialRecieveDialogIsShown() {
+        createWallet()
+
+        // Check MainFragment has loaded by checking account balance title
+        assertDisplayed(R.string.tutorial_receive_dialog_title_xml_text_view)
+    }
+
+    @Test
+    fun testTutorialRecieveDialogCloseButtonDismissesDialog() {
+        createWallet()
+
+        // Click on x on the toolbar to dismiss
+        clickOn(navigationIconMatcher())
+
+        assertDisplayed(R.id.toolbar_search)
+    }
+
+    @Test
+    fun testTutorialReceiveDialogClickOnReceiveOpensReceiveScreen() {
+        createWallet()
+
+        clickOn(R.id.receiveButton)
+
+        assertDisplayed(R.string.receive_radix_dialog_title)
+    }
+
+    @Test
+    fun testTutorialReceiveDialogDoesNotOpenAfterDeletingWalletAndCreatingNewOne() {
+        createWallet()
 
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
 
         clickOn(R.id.menu_bottom_settings)
-        assertDisplayed(R.string.more_options_fragment_xml_report_an_issue)
 
-        clickOn(R.id.reportAnIssueTextView)
+        assertDisplayed(R.string.more_options_fragment_xml_delete_wallet)
 
-        intended(toPackage("com.android.chrome"))
+        clickOn(R.id.deleteWalletTextView)
 
-        // Press the back button to exit app
-        val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        mDevice.pressBack()
+        clickDialogPositiveButton()
+
+        createWallet()
+
+        // Toolbar with search should be visible and tutorial dialog
+        // should not have shown
+        assertDisplayed(R.id.toolbar_search)
     }
 }

@@ -67,7 +67,7 @@ class AccountFragment : Fragment() {
         imageViewFrameLayout.setOnClickListener {
             copyToClipboard(activity!!, myAddress)
 
-            activity?.toast(activity!!.getString(R.string.toast_address_copied_clipboard))
+            activity?.toast(activity!!.getString(R.string.common_toast_address_copied_clipboard))
         }
     }
 

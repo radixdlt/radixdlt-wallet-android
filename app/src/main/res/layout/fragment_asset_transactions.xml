@@ -15,6 +15,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/balanceTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/asset_transactions_fragment_xml_your_balance_title"
+        android:textColor="@color/notQuiteWhiteAlpha"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/assetBalanceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="0dp"
+        android:gravity="bottom|center"
+        android:lines="1"
+        android:maxWidth="340dp"
+        android:text="@string/wallet_fragment_xml_default_zero"
+        android:textColor="@color/white"
+        android:textSize="38sp"
+        android:textStyle="bold"
+        app:autoSizeMaxTextSize="38sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/guideline10"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/balanceTitleTextView"
+        tools:text="10000" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/assetSymbolTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/assetBalanceTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/assetBalanceTextView"
+        tools:text="XRD" />
+
     <View
         android:id="@+id/buttonsView"
         android:layout_width="0dp"
@@ -82,56 +133,5 @@
         app:layout_constraintEnd_toEndOf="@+id/buttonsView"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/assetTransactionsRecyclerView" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/balanceTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/asset_transactions_fragment_xml_your_balance_title"
-        android:textColor="@color/notQuiteWhiteAlpha"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/assetBalanceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="0dp"
-        android:gravity="bottom|center"
-        android:lines="1"
-        android:maxWidth="340dp"
-        android:text="@string/wallet_fragment_xml_default_zero"
-        android:textColor="@color/white"
-        android:textSize="38sp"
-        android:textStyle="bold"
-        app:autoSizeMaxTextSize="38sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@+id/guideline10"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/balanceTitleTextView"
-        tools:text="10000" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/assetSymbolTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/assetBalanceTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/assetBalanceTextView"
-        tools:text="XRD" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
