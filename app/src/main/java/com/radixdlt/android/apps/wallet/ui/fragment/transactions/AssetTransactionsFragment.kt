@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -66,6 +67,7 @@ class AssetTransactionsFragment : Fragment() {
     }
 
     private fun initialiseCollapsingToolbar() {
+        setAppBarAlwaysDraggable()
         showBalanceAndIso()
         // Selected used to trigger state for elevation of view and other state checks
         pullDownDropFrameLayout.isSelected = true
@@ -124,6 +126,17 @@ class AssetTransactionsFragment : Fragment() {
             getString(R.string.common_rri_address_string, rri.address, rri.name),
             TextView.BufferType.EDITABLE
         )
+    }
+
+    private fun setAppBarAlwaysDraggable() {
+        val params = assetTransactionsAppBarLayout.layoutParams as CoordinatorLayout.LayoutParams
+        val behavior = AppBarLayout.Behavior()
+        behavior.setDragCallback(object : AppBarLayout.Behavior.DragCallback() {
+            override fun canDrag(appBarLayout: AppBarLayout): Boolean {
+                return true
+            }
+        })
+        params.behavior = behavior
     }
 
     private fun setOnClickListeners() {
