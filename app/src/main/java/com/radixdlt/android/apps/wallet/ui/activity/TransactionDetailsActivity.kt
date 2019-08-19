@@ -132,7 +132,7 @@ class TransactionDetailsActivity : BaseActivity() {
     private fun initialiseToolbar() {
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        collapsing_toolbar.title = getString(R.string.transaction_details_activity_title)
+        assetTransactionsDetailsCollapsingToolbar.title = getString(R.string.transaction_details_activity_title)
     }
 
     private fun initialiseHeaderAnimation() {

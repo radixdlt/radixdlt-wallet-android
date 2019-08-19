@@ -71,7 +71,7 @@ class AssetTransactionsFragment : Fragment() {
         showBalanceAndIso()
         // Selected used to trigger state for elevation of view and other state checks
         pullDownDropFrameLayout.isSelected = true
-        assetTransactionsAppBarLayout.isSelected = true
+        assetTransactionsDetailsCollapsingToolbar.isSelected = true
 
         assetTransactionsAppBarLayout.addOnOffsetChangedListener(
             AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
@@ -81,18 +81,18 @@ class AssetTransactionsFragment : Fragment() {
                 ) {
                     // Collapsed
                     pullDownDropFrameLayout.isSelected = true
-                    assetTransactionsAppBarLayout.isSelected = true
+                    assetTransactionsDetailsCollapsingToolbar.isSelected = true
                     startAnimation(pullDownDropArrowImageView, false)
                 } else if (verticalOffset == 0 && pullDownDropFrameLayout.isSelected) {
                     // Expanded
                     pullDownDropFrameLayout.isSelected = false
-                    assetTransactionsAppBarLayout.isSelected = false
+                    assetTransactionsDetailsCollapsingToolbar.isSelected = false
                     startAnimation(pullDownDropArrowImageView, true)
                 }
             })
 
         pullDownDropFrameLayout.setOnClickListener {
-            val isSelected = assetTransactionsAppBarLayout.isSelected
+            val isSelected = assetTransactionsDetailsCollapsingToolbar.isSelected
             assetTransactionsAppBarLayout.setExpanded(isSelected, true)
         }
     }

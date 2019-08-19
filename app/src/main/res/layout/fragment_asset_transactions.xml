@@ -10,24 +10,37 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="false">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/assetTransactionsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-24dp"
+        android:layout_marginBottom="76dp"
+        android:background="@color/white"
+        android:transitionGroup="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_asset_transaction" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/assetTransactionsAppBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="236dp"
+        android:layout_height="260dp"
         android:orientation="vertical"
-        android:stateListAnimator="@animator/view_elevation"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:stateListAnimator="@null"
         android:transitionGroup="true"
+        android:backgroundTint="@android:color/transparent"
         app:expanded="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+            android:id="@+id/assetTransactionsDetailsCollapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="236dp"
             android:fitsSystemWindows="true"
+            android:background="@color/colorPrimary"
+            android:stateListAnimator="@animator/view_elevation"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
@@ -249,39 +262,30 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
+        <FrameLayout
+            android:id="@+id/pullDownDropFrameLayout"
+            android:layout_width="150dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="@drawable/ic_pull_down_drop"
+            android:backgroundTint="@color/colorPrimary"
+            android:elevation="6dp"
+            android:stateListAnimator="@animator/view_elevation"
+            android:transitionGroup="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <ImageView
+                android:id="@+id/pullDownDropArrowImageView"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/asset_transactions_fragment_xml_arrow_content_description"
+                android:src="@drawable/animated_drop_arrow_down"
+                android:tint="@color/white" />
+        </FrameLayout>
+
+
     </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/assetTransactionsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="72dp"
-        android:background="@color/white"
-        android:transitionGroup="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/item_asset_transaction" />
-
-    <FrameLayout
-        android:id="@+id/pullDownDropFrameLayout"
-        android:layout_width="150dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center_horizontal|top"
-        android:background="@drawable/ic_pull_down_drop"
-        android:backgroundTint="@color/colorPrimary"
-        android:elevation="6dp"
-        android:stateListAnimator="@animator/view_elevation"
-        android:transitionGroup="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <ImageView
-            android:id="@+id/pullDownDropArrowImageView"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/asset_transactions_fragment_xml_arrow_content_description"
-            android:src="@drawable/animated_drop_arrow_down"
-            android:tint="@color/white" />
-    </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
