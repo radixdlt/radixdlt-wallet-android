@@ -49,7 +49,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:layout_marginTop="76dp"
+                android:layout_marginTop="72dp"
                 app:layout_collapseMode="pin">
 
                 <androidx.constraintlayout.widget.Guideline
