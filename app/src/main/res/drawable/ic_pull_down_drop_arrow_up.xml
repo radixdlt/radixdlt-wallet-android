@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="22dp"
+    android:height="14dp"
+    android:viewportWidth="22"
+    android:viewportHeight="14">
+  <path
+      android:name="ic_pull_down_drop_arrow_up"
+      android:fillColor="#FF000000"
+      android:pathData="M11,0.2l-11,11.6l2.1,2l8.9,-9.4l8.9,9.4l2.1,-2z"/>
+</vector>

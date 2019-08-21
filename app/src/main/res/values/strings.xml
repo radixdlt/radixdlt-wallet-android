@@ -139,6 +139,11 @@
     <string name="asset_transactions_fragment_xml_your_balance_title">YOUR BALANCE</string>
     <string name="asset_transactions_fragment_xml_receive_button">Receive</string>
     <string name="asset_transactions_fragment_xml_pay_button">Pay</string>
+    <string name="asset_transactions_fragment_xml_asset_description">DESCRIPTION</string>
+    <string name="asset_transactions_fragment_xml_asset_supply_type">SUPPLY TYPE</string>
+    <string name="asset_transactions_fragment_xml_asset_total_supply">TOTAL SUPPLY</string>
+    <string name="asset_transactions_fragment_xml_asset_rri">RRI</string>
+    <string name="asset_transactions_fragment_xml_arrow_content_description">Arrow direction showing if to expand or collapse toolbar</string>
 
     <!-- Contacts Fragment -->
     <string name="contacts_fragment_user_faucet">Faucet</string>
@@ -221,4 +226,6 @@
     <string name="tutorial_receive_dialog_subtitle_xml_text_view">When you click on receive, you\nwill be able to copy, share your\naddress and request funds!</string>
     <string name="tutorial_receive_dialog_content_description_close_button">Closes the tutorial for receiving funds.</string>
 
+    <string name="common_rri_address_string">/%1$s/%2$s</string>
+    <string name="common_rri_name_string">%1$s</string>
 </resources>

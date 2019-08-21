@@ -229,7 +229,7 @@ fun formatDateTime(dateUnix: Long): String {
     return displayValue
 }
 
-fun formatDateYear(dateUnix: Long): String {
+fun formatDateDayMonthYear(dateUnix: Long): String {
     val localDateTime = LocalDateTime.ofInstant(
         Instant.ofEpochMilli(dateUnix), ZoneId.systemDefault()
     )
@@ -243,6 +243,32 @@ fun formatDateYear(dateUnix: Long): String {
     displayValue = displayValue.replace("?", dayOrdinal!!)
 
     return displayValue
+}
+
+fun formatDateDay(dateUnix: Long): String {
+    val localDateTime = LocalDateTime.ofInstant(
+        Instant.ofEpochMilli(dateUnix), ZoneId.systemDefault()
+    )
+    var displayValue = localDateTime.format(
+        DateTimeFormatter.ofPattern("EEEE, ?", Locale.getDefault())
+    )
+    val day = localDateTime.format(
+        DateTimeFormatter.ofPattern("dd", Locale.getDefault())
+    )
+    val dayOrdinal = day.toInt().getOrdinal()
+    displayValue = displayValue.replace("?", dayOrdinal!!)
+
+    return displayValue
+}
+
+fun formatDateMonthYear(dateUnix: Long): String {
+    val localDateTime = LocalDateTime.ofInstant(
+        Instant.ofEpochMilli(dateUnix), ZoneId.systemDefault()
+    )
+
+    return localDateTime.format(
+        DateTimeFormatter.ofPattern("MMMM, yyyy", Locale.getDefault())
+    )
 }
 
 fun copyToClipboard(context: Context, myAddress: String) {

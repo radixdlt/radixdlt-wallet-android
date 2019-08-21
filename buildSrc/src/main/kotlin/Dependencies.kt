@@ -2,7 +2,7 @@ const val kotlinVersion = "1.3.41"
 
 object BuildPlugins {
     object Versions {
-        const val gradlePluginVersion = "3.5.0-rc02"
+        const val gradlePluginVersion = "3.5.0"
         const val safeArgs = "2.1.0-beta02"
     }
 
