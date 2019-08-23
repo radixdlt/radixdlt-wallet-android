@@ -11,6 +11,16 @@ The App is a work in progress and will soon be migrated to use the new version o
 <img src="art/transactions_screen.jpg" width="250">&nbsp;
 <img  src="art/contacts_screen.jpg" width="250">
 
+## Table of contents
+
+- [Changelog](CHANGELOG.md)
+- [Android development](#android-development)
+- [Development setup](#development-setup)
+- [Code style](#code-style)
+- [Contribute](#contribute)
+- [Links](#links)
+- [License](#license)
+
 ## Android development
 
  * Mostly written in [Kotlin](https://kotlinlang.org/) (A few classes are in Java but will be converted to keep it 100% Kotlin)
@@ -47,8 +57,7 @@ Contributions are welcome, we simply ask to:
 * Make changes
 * Submit a pull request for review
 
-When contributing to this repository, we recommend to discuss the change you wish to make via issue,
-email, or any other method with the owners of this repository before making a change. 
+When contributing to this repository, we recommend discussing with the development team the change you wish to make using a [GitHub issue](https://github.com/radixdlt/radixdlt-wallet-android/issues) before making changes.
 
 Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) in all your interactions with the project.
 
