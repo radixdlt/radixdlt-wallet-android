@@ -14,6 +14,7 @@ object QueryPreferences {
     private const val PREF_MNEMONIC_SEED = "mnemonic_seed"
     private const val PREF_FAUCET = "faucet"
     private const val PREF_TUTORIAL_RECEIVE = "tutorial_receive"
+    private const val PREF_TERMS_ACCEPTED = "terms_accepted"
 
     fun getPrefAddress(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -149,6 +150,18 @@ object QueryPreferences {
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()
             .putBoolean(PREF_TUTORIAL_RECEIVE, shown)
+            .apply()
+    }
+
+    fun isTermsAccepted(context: Context): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean(PREF_TERMS_ACCEPTED, false)
+    }
+
+    fun setPrefTermsAccepted(context: Context, accepted: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putBoolean(PREF_TERMS_ACCEPTED, accepted)
             .apply()
     }
 }

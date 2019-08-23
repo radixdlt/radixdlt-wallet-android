@@ -44,7 +44,8 @@
         android:text="@string/greeting_fragment_get_started_xml_button"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        app:backgroundTint="@color/colorAccent"
+        android:enabled="false"
+        app:backgroundTint="@color/color_states_materialbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

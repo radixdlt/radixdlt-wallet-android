@@ -14,7 +14,6 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.browser.customtabs.CustomTabsIntent
@@ -27,9 +26,12 @@ import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.helper.WebviewFallback
 import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
+import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.TAG_TERMS_AND_CONDITIONS
 import com.radixdlt.android.apps.wallet.util.URL_PRIVACY_POLICY
 import com.radixdlt.android.apps.wallet.util.URL_TERMS_AND_CONDITIONS
+import com.radixdlt.android.apps.wallet.util.getNavigationBarHeight
+import com.radixdlt.android.apps.wallet.util.getStatusBarHeight
 import kotlinx.android.synthetic.main.fragment_greeting.*
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.startActivity
@@ -42,10 +44,17 @@ class GreetingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.window?.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
+        activity?.apply {
+            if (QueryPreferences.isTermsAccepted(this)) {
+                startActivity<NewWalletActivity>()
+                finish()
+                return
+            }
+            window?.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }
     }
 
     override fun onCreateView(
@@ -62,12 +71,24 @@ class GreetingFragment : Fragment() {
         createCustomTabsBuilder()
         createTermsAndConditionsLink()
         createPrivacyPolicyLink()
+        setCheckBoxListeners()
         setGetStartedButtonClickListener()
     }
 
     private fun setGetStartedButtonClickListener() {
         greetingGetStartedButton.setOnClickListener {
+            QueryPreferences.setPrefTermsAccepted(ctx, true)
             activity?.startActivity<NewWalletActivity>()
+        }
+    }
+
+    private fun setCheckBoxListeners() {
+        greetingTermsAndConditionsCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            greetingGetStartedButton.isEnabled = isChecked && greetingPrivacyPolicyCheckBox.isChecked
+        }
+
+        greetingPrivacyPolicyCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            greetingGetStartedButton.isEnabled = isChecked && greetingTermsAndConditionsCheckBox.isChecked
         }
     }
 
@@ -172,21 +193,6 @@ class GreetingFragment : Fragment() {
         val paramsLogoImageView = greetingRadixLogo.layoutParams as ConstraintLayout.LayoutParams
         paramsLogoImageView.topMargin = getStatusBarHeight() + ctx.dip(16)
         greetingRadixLogo.layoutParams = paramsLogoImageView
-    }
-
-    private fun getStatusBarHeight(): Int {
-        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-        return if (resourceId > 0) {
-            resources.getDimensionPixelSize(resourceId)
-        } else 0
-    }
-
-    private fun getNavigationBarHeight(): Int {
-        val hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey()
-        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        return if (resourceId > 0 && !hasMenuKey) {
-            resources.getDimensionPixelSize(resourceId)
-        } else 0
     }
 
     private fun setGreetingMessage() {
