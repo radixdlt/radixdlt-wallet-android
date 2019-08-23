@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_paper_key_wallet"
+    app:startDestination="@id/navigation_greeting">
+    <fragment
+        android:id="@+id/navigation_greeting"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.greeting.GreetingFragment"
+        android:label="fragment_greeting"
+        tools:layout="@layout/fragment_greeting">
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_greeting_to_navigation_create_wallet"-->
+<!--            app:destination="@id/navigation_create_wallet"-->
+<!--            app:enterAnim="@anim/slide_in_from_right"-->
+<!--            app:exitAnim="@anim/slide_out_from_right"-->
+<!--            app:popEnterAnim="@anim/slide_in_from_left"-->
+<!--            app:popExitAnim="@anim/slide_out_from_left" />-->
+    </fragment>
+</navigation>

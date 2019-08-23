@@ -174,9 +174,7 @@ fun setAddressWithColors(
     return TextFormatHelper.normal(
         TextFormatHelper.color(ContextCompat.getColor(ctx, R.color.radixBlue), firstFive),
         TextFormatHelper.color(ContextCompat.getColor(ctx, middleColorId), middle),
-        TextFormatHelper.color(
-            ContextCompat.getColor(ctx, R.color.colorAccentSecondary), lastFive
-        )
+        TextFormatHelper.color(ContextCompat.getColor(ctx, R.color.colorAccentSecondary), lastFive)
     )
 }
 

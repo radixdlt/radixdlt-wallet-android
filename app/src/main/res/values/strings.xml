@@ -173,6 +173,17 @@
     <string name="more_options_fragment_xml_autolock_timeout">Autolock timeout</string>
     <string name="more_options_fragment_xml_random_node">Random</string>
 
+    <!-- Greeting Fragment -->
+    <string name="greeting_fragment_woman_looking_at_phone">Background image of woman looking at phone</string>
+    <string name="greeting_fragment_send_instant">SEND\nINSTANT\n</string>
+    <string name="greeting_fragment_messages_money">MESSAGES,\nMONEY\n</string>
+    <string name="greeting_fragment_and">&amp;</string>
+    <string name="greeting_fragment_tokens">&#160;TOKENS</string>
+    <string name="greeting_fragment_agree_to_the">I agree to the</string>
+    <string name="greeting_fragment_terms_and_conditions">Terms and Conditions</string>
+    <string name="greeting_fragment_privacy_policy">Privacy Policy</string>
+    <string name="greeting_fragment_get_started_xml_button">Get Started</string>
+
     <!-- FRAGMENT DIALOGS -->
     <!-- Delete Wallet Dialog -->
     <string name="delete_wallet_dialog_title">Delete Existing Wallet?</string>

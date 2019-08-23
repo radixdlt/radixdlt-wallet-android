@@ -185,7 +185,7 @@ class AssetsFragment : Fragment() {
 
     private fun initialiseSwipeRefreshLayout() {
         swipe_refresh_layout.setColorSchemeResources(
-            R.color.colorPrimary, R.color.colorAccent, R.color.colorAccentSecondary
+            R.color.colorPrimary, R.color.colorAccent, R.color.radixGreen3
         )
         swipe_refresh_layout.setOnRefreshListener(::refreshTransactions)
     }

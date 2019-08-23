@@ -21,13 +21,13 @@
             android:name="com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-                <!-- for Pheonix -->
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--                &lt;!&ndash; for Phoenix &ndash;&gt;-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--            </intent-filter>-->
             <intent-filter
                 android:autoVerify="true"
                 tools:targetApi="m">
@@ -55,6 +55,21 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
+
+
+        <activity android:name=".apps.wallet.ui.activity.StartActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <!-- for Phoenix -->
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+
         <activity
             android:name="com.radixdlt.android.apps.wallet.ui.activity.EnterPasswordActivity"
             android:screenOrientation="portrait" />
@@ -116,6 +131,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
