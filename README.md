@@ -3,7 +3,7 @@
 # Note:
 
 Master branch currently works with the old ALPHANET soon to be deprecated.  
-Current recommended branch to work which works with BETANET hosted node is [release/1.0.0-beta](https://github.com/radixdlt/radixdlt-wallet-android/tree/release/1.0.0-beta)
+Current recommended branch to work with which works with BETANET hosted node is [release/1.0.0-beta](https://github.com/radixdlt/radixdlt-wallet-android/tree/release/1.0.0-beta)
 
 # Radix DLT Android Wallet
 
