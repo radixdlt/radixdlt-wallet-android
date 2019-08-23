@@ -1,5 +1,9 @@
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+# Note:
+
+For the time being please use branch [release/1.0.0-beta](https://github.com/radixdlt/radixdlt-wallet-android/tree/release/1.0.0-beta) to build the project. Work is being done in this and other branches where v2 of the wallet is being built.
+
 # Radix DLT Android Wallet
 
 This branch of the Radix Android Wallet `release/1.0.0-beta` is the start of what is to come from our future public _BETANET_ release.
