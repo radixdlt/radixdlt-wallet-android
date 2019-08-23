@@ -299,6 +299,7 @@ fun resetData(context: Context) {
     QueryPreferences.setPrefAddress(context, "")
     QueryPreferences.setPrefPasswordEnabled(context, true)
     QueryPreferences.setPrefAutoLockTimeOut(context, 2000)
+    QueryPreferences.setPrefCreatedByMnemonicOrSeed(context, false)
     Identity.clear()
 }
 
