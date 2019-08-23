@@ -1,5 +1,10 @@
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+# Note:
+
+Master branch currently works with the old ALPHANET soon to be deprecated.  
+Current recommended branch to work which works with BETANET hosted node is [release/1.0.0-beta](https://github.com/radixdlt/radixdlt-wallet-android/tree/release/1.0.0-beta)
+
 # Radix DLT Android Wallet
 
 The Radix DLT Android Wallet currently works with the live _ALPHANET_ universe and interacts with it
