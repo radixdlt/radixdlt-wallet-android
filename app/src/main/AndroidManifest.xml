@@ -10,9 +10,9 @@
     <application
         android:name=".apps.wallet.RadixWalletApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher_alpha_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_alpha_round"
+        android:icon="@mipmap/ic_launcher_beta"
+        android:roundIcon="@mipmap/ic_launcher_beta_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
