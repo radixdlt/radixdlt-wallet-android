@@ -14,7 +14,7 @@
         android:id="@+id/assetTransactionsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-24dp"
+        android:layout_marginTop="-28dp"
         android:layout_marginBottom="72dp"
         android:background="@color/white"
         android:transitionGroup="true"
@@ -37,13 +37,11 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/assetTransactionsDetailsCollapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="236dp"
+            android:layout_height="232dp"
             android:fitsSystemWindows="true"
             android:background="@color/colorPrimary"
             android:stateListAnimator="@animator/view_elevation"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.constraintlayout.widget.ConstraintLayout
