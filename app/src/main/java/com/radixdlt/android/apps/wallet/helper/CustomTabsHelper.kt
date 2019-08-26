@@ -22,6 +22,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.text.TextUtils
+import androidx.browser.customtabs.CustomTabsIntent
 import timber.log.Timber
 import java.util.ArrayList
 
@@ -132,6 +133,32 @@ object CustomTabsHelper {
         }
 
         return false
+    }
+
+    /**
+     * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
+     *
+     * @param activity The host activity.
+     * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
+     * @param uri the Uri to be opened.
+     * @param fallback a CustomTabFallback to be used if Custom Tabs is not available.
+     */
+    fun openCustomTab(
+        activity: Activity,
+        customTabsIntent: CustomTabsIntent,
+        uri: Uri,
+        fallback: CustomTabFallback?
+    ) {
+        val packageName = getPackageNameToUse(activity)
+
+        // If we cant find a package name, it means theres no browser that supports
+        // Chrome Custom Tabs installed. So, we fallback to the webview
+        if (packageName == null) {
+            fallback?.openUri(activity, uri)
+        } else {
+            customTabsIntent.intent.setPackage(packageName)
+            customTabsIntent.launchUrl(activity, uri)
+        }
     }
 
     /**

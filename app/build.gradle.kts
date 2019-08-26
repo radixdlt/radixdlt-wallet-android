@@ -113,6 +113,10 @@ android {
     lintOptions {
         isCheckReleaseBuilds = false
     }
+
+    dataBinding {
+        isEnabled = true
+    }
 }
 
 androidExtensions {

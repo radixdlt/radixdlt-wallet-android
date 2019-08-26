@@ -19,9 +19,11 @@ import android.view.WindowManager
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.radixdlt.android.R
-import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper
+import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper.openCustomTab
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.helper.WebviewFallback
 import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
@@ -32,6 +34,7 @@ import com.radixdlt.android.apps.wallet.util.URL_PRIVACY_POLICY
 import com.radixdlt.android.apps.wallet.util.URL_TERMS_AND_CONDITIONS
 import com.radixdlt.android.apps.wallet.util.getNavigationBarHeight
 import com.radixdlt.android.apps.wallet.util.getStatusBarHeight
+import com.radixdlt.android.databinding.FragmentGreetingBinding
 import kotlinx.android.synthetic.main.fragment_greeting.*
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.startActivity
@@ -41,6 +44,8 @@ class GreetingFragment : Fragment() {
     private lateinit var ctx: Context
 
     private lateinit var customTabsIntent: CustomTabsIntent
+
+    private val greetingViewModel: GreetingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +66,16 @@ class GreetingFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_greeting, container, false)
+    ): View? = initialiseDataBinding(inflater, container)
+
+    private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
+        val binding: FragmentGreetingBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_greeting, container, false)
+        binding.viewmodel = greetingViewModel
+        binding.lifecycleOwner = this
+
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,7 +85,6 @@ class GreetingFragment : Fragment() {
         createCustomTabsBuilder()
         createTermsAndConditionsLink()
         createPrivacyPolicyLink()
-        setCheckBoxListeners()
         setGetStartedButtonClickListener()
     }
 
@@ -79,16 +92,6 @@ class GreetingFragment : Fragment() {
         greetingGetStartedButton.setOnClickListener {
             QueryPreferences.setPrefTermsAccepted(ctx, true)
             activity?.startActivity<NewWalletActivity>()
-        }
-    }
-
-    private fun setCheckBoxListeners() {
-        greetingTermsAndConditionsCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            greetingGetStartedButton.isEnabled = isChecked && greetingPrivacyPolicyCheckBox.isChecked
-        }
-
-        greetingPrivacyPolicyCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            greetingGetStartedButton.isEnabled = isChecked && greetingTermsAndConditionsCheckBox.isChecked
         }
     }
 
@@ -118,11 +121,7 @@ class GreetingFragment : Fragment() {
                     URL_PRIVACY_POLICY
                 }
 
-                openCustomTab(
-                    ctx as Activity, customTabsIntent,
-                    Uri.parse(url),
-                    WebviewFallback()
-                )
+                openCustomTab(ctx as Activity, customTabsIntent, Uri.parse(url), WebviewFallback())
             }
 
             override fun updateDrawState(ds: TextPaint) {
@@ -150,32 +149,6 @@ class GreetingFragment : Fragment() {
         )
     }
 
-    /**
-     * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
-     *
-     * @param activity The host activity.
-     * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
-     * @param uri the Uri to be opened.
-     * @param fallback a CustomTabFallback to be used if Custom Tabs is not available.
-     */
-    private fun openCustomTab(
-        activity: Activity,
-        customTabsIntent: CustomTabsIntent,
-        uri: Uri,
-        fallback: CustomTabsHelper.CustomTabFallback?
-    ) {
-        val packageName = CustomTabsHelper.getPackageNameToUse(activity)
-
-        // If we cant find a package name, it means theres no browser that supports
-        // Chrome Custom Tabs installed. So, we fallback to the webview
-        if (packageName == null) {
-            fallback?.openUri(activity, uri)
-        } else {
-            customTabsIntent.intent.setPackage(packageName)
-            customTabsIntent.launchUrl(activity, uri)
-        }
-    }
-
     private fun createCustomTabsBuilder() {
         customTabsIntent = CustomTabsIntent.Builder()
             .setToolbarColor(ContextCompat.getColor(ctx, R.color.colorPrimary))
@@ -185,6 +158,11 @@ class GreetingFragment : Fragment() {
             .build()
     }
 
+    /**
+     * View Margins for getStartedButton and radixLogo are set dynamically due to displaying this
+     * view in full screen including the status bar. Different phones have different size status
+     * bars which need to be accounted for.
+     * */
     private fun setViewMargins() {
         val paramsButton = greetingGetStartedButton.layoutParams as ConstraintLayout.LayoutParams
         paramsButton.bottomMargin = getNavigationBarHeight() + ctx.dip(16)
