@@ -91,7 +91,10 @@ class GreetingFragment : Fragment() {
     private fun setGetStartedButtonClickListener() {
         greetingGetStartedButton.setOnClickListener {
             QueryPreferences.setPrefTermsAccepted(ctx, true)
-            activity?.startActivity<NewWalletActivity>()
+            activity?.apply {
+                startActivity<NewWalletActivity>()
+                finish()
+            }
         }
     }
 
