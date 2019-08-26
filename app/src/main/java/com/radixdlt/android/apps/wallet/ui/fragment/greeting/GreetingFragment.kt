@@ -178,10 +178,10 @@ class GreetingFragment : Fragment() {
 
     private fun setGreetingMessage() {
         val termsAndConditions = TextFormatHelper.normal(
-            getString(R.string.greeting_fragment_send_instant),
+            getString(R.string.greeting_fragment_send),
             TextFormatHelper.color(
                 ContextCompat.getColor(ctx, R.color.radixGreen2),
-                getString(R.string.greeting_fragment_messages_money)
+                getString(R.string.greeting_fragment_money)
             ),
             getString(R.string.greeting_fragment_and),
             TextFormatHelper.color(
