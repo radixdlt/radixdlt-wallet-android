@@ -183,6 +183,7 @@ dependencies {
     implementation(Libraries.roomRuntime)
     implementation(Libraries.roomRxJava)
     kapt(Libraries.roomCompiler)
+    implementation(Libraries.roomKtx)
     implementation(Libraries.navigationFragmentKtx)
     implementation(Libraries.navigationUiKtx)
     implementation(Libraries.playServicesVision)

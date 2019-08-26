@@ -21,7 +21,7 @@ interface TransactionsDao2 {
     @Query("SELECT * FROM TransactionEntity2")
     fun getAllTransactions(): Maybe<MutableList<TransactionEntity2>>
 
-    @Query("SELECT * FROM TransactionEntity2 WHERE rri = :tokenType")
+    @Query("SELECT * FROM TransactionEntity2 WHERE rri = :tokenType ORDER BY timestamp DESC")
     fun getAllTransactionsByTokenType(tokenType: String): Maybe<List<TransactionEntity2>>
 
     @Query("SELECT * FROM TransactionEntity2 WHERE rri = :tokenType")
@@ -41,6 +41,9 @@ interface TransactionsDao2 {
 
     @Query("DELETE FROM TransactionEntity2")
     fun deleteTable()
+
+    @Query("SELECT COUNT(accountAddress) FROM TransactionEntity2")
+    suspend fun transactionsCount(): Int
 
     @Query("UPDATE TransactionEntity2 SET tokenName = :tokenName, tokenDescription = :tokenDescription, tokenIconUrl = :tokenUrlIcon, tokenTotalSupply = :tokenTotalSupply, tokenSupplyType = :tokenSupplyType WHERE rri = :rri")
     fun updateEntities(tokenName: String, tokenDescription: String, tokenUrlIcon: String, rri: String, tokenTotalSupply: BigDecimal, tokenSupplyType: String)

@@ -139,6 +139,7 @@ class AssetsFragment : Fragment() {
 
     private fun loadingState(state: MainLoadingState) {
         when (state) {
+            MainLoadingState.EXISTING -> {}
             MainLoadingState.LOADING -> setLayoutResourcesWithLoadingIndicator()
             MainLoadingState.FINISHED -> setLayoutResources()
         }
