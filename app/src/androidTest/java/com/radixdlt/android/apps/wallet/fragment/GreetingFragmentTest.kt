@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.fragment.greeting
+package com.radixdlt.android.apps.wallet.fragment
 
 import android.view.InputDevice
 import android.view.MotionEvent
@@ -19,12 +19,16 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.helper.clickOn
+import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
 import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions.assertDisabled
 import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions.assertEnabled
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickBack
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
+import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
+import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
@@ -55,6 +59,11 @@ class GreetingFragmentTest {
     // Delete all files in getFilesDir() and getCacheDir()
     @get:Rule
     var clearFilesRule = ClearFilesRule()
+
+    @Test
+    fun testGreetingScreenIsShownWhenOpeningAppFirstTime() {
+        assertDisplayed(R.id.greetingBackground)
+    }
 
     @Test
     fun testButtonEnabledAfterBothCheckBoxesHaveBeenChecked() {
@@ -118,7 +127,7 @@ class GreetingFragmentTest {
     }
 
     @Test
-    fun testGetStartedDoesNotShowAfterTermsHaveBeenAccepted() {
+    fun testGreetingFragmentDoesNotShowAfterTermsHaveBeenAccepted() {
         assertDisabled(R.id.greetingGetStartedButton)
 
         onView(withId(R.id.greetingTermsAndConditionsCheckBox)).perform(clickIn(0, 0))
@@ -129,6 +138,51 @@ class GreetingFragmentTest {
         clickOn(R.id.greetingGetStartedButton)
 
         assertDisplayed(R.string.new_wallet_activity_xml_welcome_title)
+
+        try {
+            clickBack()
+            fail("Should have thrown NoActivityResumedException")
+        } catch (e: NoActivityResumedException) {
+            // This is necessary in order to relaunch activity
+            Intents.release()
+        }
+
+        // Start the app again
+        newWalletActivityTestRule.launchActivity(null)
+
+        // Greeting screen should not be displayed and create a wallet screen is now shown at start
+        assertDisplayed(R.string.new_wallet_activity_xml_welcome_title)
+    }
+
+    @Test
+    fun testGreetingFragmentDoesNotShowAfterDeletingWallet() {
+        assertDisabled(R.id.greetingGetStartedButton)
+
+        onView(withId(R.id.greetingTermsAndConditionsCheckBox)).perform(clickIn(0, 0))
+        onView(withId(R.id.greetingPrivacyPolicyCheckBox)).perform(clickIn(0, 0))
+
+        assertEnabled(R.id.greetingGetStartedButton)
+
+        clickOn(R.id.greetingGetStartedButton)
+
+        assertDisplayed(R.string.new_wallet_activity_xml_welcome_title)
+
+        clickOn(R.id.importWalletFromMnemonicButton)
+        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtesting")
+        clickOn(R.id.createWalletFromMnemonicButton)
+
+        // Click on x on the toolbar to dismiss
+        clickOn(navigationIconMatcher())
+
+        assertDisplayed(R.id.toolbar_search)
+
+        clickOn(R.id.menu_bottom_settings)
+
+        assertDisplayed(R.string.more_options_fragment_xml_delete_wallet)
+
+        clickOn(R.id.deleteWalletTextView)
+
+        clickDialogPositiveButton()
 
         try {
             clickBack()
