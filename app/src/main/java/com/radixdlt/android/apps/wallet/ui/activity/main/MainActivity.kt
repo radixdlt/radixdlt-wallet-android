@@ -21,7 +21,7 @@ import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.activity.BarcodeCaptureActivity
 import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
 import com.radixdlt.android.apps.wallet.ui.activity.ConversationActivity
-import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
+import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.isRadixAddress
 import dagger.android.AndroidInjection
@@ -80,7 +80,7 @@ class MainActivity : BaseActivity() {
 
         uri?.let {
             if (it.path!!.contains("payment", true)) {
-                SendRadixActivity.newIntent(this, it)
+                PaymentActivity.newIntent(this, it)
             } else {
                 navigation.selectedItemId = R.id.navigation_contacts
                 ConversationActivity.newIntent(this, it)

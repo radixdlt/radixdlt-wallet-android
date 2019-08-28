@@ -66,7 +66,7 @@ class TransactionDetailsActivity : BaseActivity() {
 
     private fun initialiseClickListeners(transactionDetailsExtra: TransactionEntity2) {
         transactionSendTokens.setOnClickListener {
-            SendRadixActivity.newIntent(
+            PaymentActivity.newIntent(
                 this, transactionDetailsExtra.address, transactionDetailsExtra.rri
             )
         }

@@ -3,18 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_paper_key_wallet"
-    app:startDestination="@id/navigation_greeting">
+    app:startDestination="@id/navigation_payment_input">
     <fragment
-        android:id="@+id/navigation_greeting"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.greeting.GreetingFragment"
-        android:label="fragment_greeting"
-        tools:layout="@layout/fragment_greeting">
-<!--        <action-->
-<!--            android:id="@+id/action_navigation_greeting_to_navigation_create_wallet"-->
-<!--            app:destination="@id/navigation_create_wallet"-->
-<!--            app:enterAnim="@anim/slide_in_from_right"-->
-<!--            app:exitAnim="@anim/slide_out_from_right"-->
-<!--            app:popEnterAnim="@anim/slide_in_from_left"-->
-<!--            app:popExitAnim="@anim/slide_out_from_left" />-->
+        android:id="@+id/navigation_payment_input"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.input.PaymentInputFragment"
+        android:label="fragment_payment_input"
+        tools:layout="@layout/fragment_payment_input">
+        <argument
+            android:name="address"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="token"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="uri"
+            android:defaultValue="@null"
+            app:argType="android.net.Uri"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_payment_summary"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.summary.PaymentSummaryFragment"
+        android:label="fragment_payment_summary"
+        tools:layout="@layout/fragment_payment_summary">
     </fragment>
 </navigation>

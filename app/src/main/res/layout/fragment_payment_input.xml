@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackground"
+    tools:context="com.radixdlt.android.apps.wallet.ui.fragment.payment.input.PaymentInputFragment">
+
+    <ScrollView
+        android:id="@+id/sendRadixScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/amountEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/send_activity_xml_amount_hint"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:textSize="38sp"
+                app:layout_constraintEnd_toStartOf="@+id/tokenTypeSpinner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/transactionAmount"
+                tools:ignore="Autofill" />
+
+            <TextView
+                android:id="@+id/transactionAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/send_activity_xml_amount"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputAddressTIL" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/sendButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/send_activity_xml_send_button"
+                android:textColor="@android:color/white"
+                android:theme="@style/AccentButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputMessageTIL"
+                app:layout_constraintVertical_bias="1.0"
+                tools:backgroundTint="@color/colorAccent" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/qrScanButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rounded_button"
+                android:elevation="3dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:src="@drawable/ic_qr_code_white"
+                android:stateListAnimator="@animator/button_elevation"
+                app:layout_constraintBottom_toBottomOf="@+id/inputAddressTIL"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/inputAddressTIL" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/tokenTypeSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="52dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="0.5"
+                android:popupBackground="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/amountEditText"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/amountEditText" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputMessageTIL"
+                style="@style/MaterialTextLayoutOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:theme="@style/MaterialTextLayoutOutlinedTheme"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/amountEditText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputMessageTIET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/send_activity_xml_message_hint"
+                    android:inputType="textCapWords"
+                    android:maxLength="128"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputAddressTIL"
+                style="@style/MaterialTextLayoutOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:theme="@style/MaterialTextLayoutOutlinedTheme"
+                app:layout_constraintEnd_toStartOf="@+id/qrScanButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputAddressTIET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/send_activity_enter_address_hint"
+                    android:inputType="textCapWords"
+                    android:maxLength="128"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lapism.searchview.Search
 import com.radixdlt.android.R
-import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
+import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainLoadingState
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
@@ -124,7 +124,8 @@ class AssetsFragment : Fragment() {
 
     private fun setPayButtonOnClickListener() {
         payButton.setOnClickListener {
-            SendRadixActivity.newIntent(activity!!)
+//            SendRadixActivity.newIntent(activity!!)
+            PaymentActivity.newIntent(activity!!)
         }
     }
 
