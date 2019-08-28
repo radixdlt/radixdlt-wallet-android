@@ -178,7 +178,8 @@
     <string name="greeting_fragment_send">SEND\n</string>
     <string name="greeting_fragment_money">MONEY\n</string>
     <string name="greeting_fragment_and">&amp;</string>
-    <string name="greeting_fragment_tokens">&#160;TOKENS</string>
+    <string name="greeting_fragment_tokens">&#160;TOKENS\n</string>
+    <string name="greeting_fragment_instantly">INSTANTLY</string>
     <string name="greeting_fragment_agree_to_the">I agree to the</string>
     <string name="greeting_fragment_terms_and_conditions">Terms and Conditions</string>
     <string name="greeting_fragment_privacy_policy">Privacy Policy</string>

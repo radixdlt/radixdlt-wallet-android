@@ -104,11 +104,12 @@
             android:layout_marginStart="16dp"
             android:fontFamily="@font/roboto_medium_radix"
             android:textColor="@color/white"
-            android:textSize="46sp"
+            android:textSize="56sp"
             app:layout_constraintBottom_toTopOf="@+id/greetingTermsAndConditionsCheckBox"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/greetingRadixLogo"
-            tools:text="SEND\nINSTANT\nMESSAGES,\nMONEY\n&amp; TOKENS" />
+            app:layout_constraintVertical_bias="0.9"
+            tools:text="SEND\nMONEY\n&amp; TOKENS\nINSTANTLY" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

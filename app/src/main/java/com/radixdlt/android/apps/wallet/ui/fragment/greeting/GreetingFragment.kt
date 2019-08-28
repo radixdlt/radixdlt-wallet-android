@@ -190,7 +190,9 @@ class GreetingFragment : Fragment() {
             TextFormatHelper.color(
                 ContextCompat.getColor(ctx, R.color.radixGreen2),
                 getString(R.string.greeting_fragment_tokens)
-            )
+            ),
+            getString(R.string.greeting_fragment_instantly)
+
         )
         greetingMessageTextView.text = termsAndConditions
     }
