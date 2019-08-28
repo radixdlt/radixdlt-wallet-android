@@ -36,7 +36,6 @@ import com.radixdlt.android.apps.wallet.util.getNavigationBarHeight
 import com.radixdlt.android.apps.wallet.util.getStatusBarHeight
 import com.radixdlt.android.databinding.FragmentGreetingBinding
 import kotlinx.android.synthetic.main.fragment_greeting.*
-import org.jetbrains.anko.dip
 import org.jetbrains.anko.startActivity
 
 class GreetingFragment : Fragment() {
@@ -46,6 +45,10 @@ class GreetingFragment : Fragment() {
     private lateinit var customTabsIntent: CustomTabsIntent
 
     private val greetingViewModel: GreetingViewModel by viewModels()
+
+    private val marginDimen: Int by lazy {
+        resources.getDimension(R.dimen.activity_vertical_margin).toInt()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -168,11 +171,11 @@ class GreetingFragment : Fragment() {
      * */
     private fun setViewMargins() {
         val paramsButton = greetingGetStartedButton.layoutParams as ConstraintLayout.LayoutParams
-        paramsButton.bottomMargin = getNavigationBarHeight() + ctx.dip(16)
+        paramsButton.bottomMargin = getNavigationBarHeight() + marginDimen
         greetingGetStartedButton.layoutParams = paramsButton
 
         val paramsLogoImageView = greetingRadixLogo.layoutParams as ConstraintLayout.LayoutParams
-        paramsLogoImageView.topMargin = getStatusBarHeight() + ctx.dip(16)
+        paramsLogoImageView.topMargin = getStatusBarHeight() + marginDimen
         greetingRadixLogo.layoutParams = paramsLogoImageView
     }
 
