@@ -19,6 +19,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.helper.DelayHelper
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
@@ -36,6 +37,7 @@ import junit.framework.TestCase.fail
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.TimeUnit
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -97,12 +99,18 @@ class GreetingFragmentTest {
 
         clickOn(R.id.greetingTermsAndConditionsCheckBox)
 
+        // Slight delay allowing customTabs to load
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
+
         intended(IntentMatchers.toPackage("com.android.chrome"))
 
         // Press the back button to exit custom tabs
         device.pressBack()
 
         clickOn(R.id.greetingPrivacyPolicyCheckBox)
+
+        // Slight delay allowing customTabs to load
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
 
         intended(IntentMatchers.toPackage("com.android.chrome"), times(2))
 
