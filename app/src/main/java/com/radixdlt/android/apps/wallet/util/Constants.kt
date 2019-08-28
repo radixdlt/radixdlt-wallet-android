@@ -8,7 +8,12 @@ const val FAUCET_ADDRESS_SINGLE = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6uf
 const val GENESIS_XRD = "/JHuDLpGefPssAY3v1pTXTQWHGv1tkTCEdq7RQYPnLuin1cfoath/XRD"
 const val TOTAL = "TOTAL"
 const val URL_REPORT_ISSUE = "https://radixdlt.typeform.com/to/kPFmVy"
+const val URL_TERMS_AND_CONDITIONS = "https://www.radixdlt.com/privacy-policy/"
+const val URL_PRIVACY_POLICY = "https://www.radixdlt.com/privacy-policy/"
 const val KEYSTORE_FILE = "keystore.key"
+
+// view tags
+const val TAG_TERMS_AND_CONDITIONS = "TAC"
 
 @Retention(AnnotationRetention.SOURCE)
 @StringDef(ALPHANET, ALPHANET2, BETANET)

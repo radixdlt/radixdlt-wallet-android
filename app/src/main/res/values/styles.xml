@@ -14,6 +14,8 @@
         </item>
         <item name="android:windowReturnTransition">@transition/details_window_return_transition
         </item>
+
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light">
@@ -101,6 +103,11 @@
 
     <style name="Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
         <item name="tint">@color/colorPrimary</item>
+    </style>
+
+    <style name="MyCheckBox" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@color/whiteTransparent</item>
     </style>
 
 </resources>

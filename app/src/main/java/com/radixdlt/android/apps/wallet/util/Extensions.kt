@@ -2,6 +2,7 @@ package com.radixdlt.android.apps.wallet.util
 
 import android.os.Build
 import android.view.View
+import android.view.ViewConfiguration
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -55,3 +56,18 @@ fun View.setConstraintLayoutMargin(left: Int, top: Int, right: Int, bottom: Int)
 fun Fragment.toast(@StringRes message: Int) = view?.let { activity?.toast(message) }
 
 fun Fragment.toast(message: CharSequence) = view?.let { activity?.toast(message) }
+
+fun Fragment.getStatusBarHeight(): Int {
+    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    return if (resourceId > 0) {
+        resources.getDimensionPixelSize(resourceId)
+    } else 0
+}
+
+fun Fragment.getNavigationBarHeight(): Int {
+    val hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey()
+    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    return if (resourceId > 0 && !hasMenuKey) {
+        resources.getDimensionPixelSize(resourceId)
+    } else 0
+}

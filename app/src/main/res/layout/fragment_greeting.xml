@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.radixdlt.android.apps.wallet.ui.fragment.greeting.GreetingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/greetingConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/greetingBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/greeting_fragment_woman_looking_at_phone"
+            android:scaleType="centerCrop"
+            android:src="@drawable/welcome_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/greetingRadixLogo"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/greeting_fragment_woman_looking_at_phone"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_radix_logo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/greetingGetStartedButton"
+            style="@style/MaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/greeting_fragment_get_started_xml_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:enabled="@{viewmodel.enableGetStartedButton}"
+            app:backgroundTint="@color/color_states_materialbutton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/greetingTermsAndConditionsCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/roboto"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:tag="TAC"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:theme="@style/MyCheckBox"
+            android:onCheckedChanged="@{(compoundButton, checked) -> viewmodel.onTermsAndConditionsCheckedChange(checked)}"
+            app:layout_constraintBottom_toTopOf="@+id/greetingPrivacyPolicyCheckBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="I agree to the Terms and Conditions" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/greetingPrivacyPolicyCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/roboto"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:theme="@style/MyCheckBox"
+            android:onCheckedChanged="@{(compoundButton, checked) -> viewmodel.onPrivacyPolicyCheckedChange(checked)}"
+            app:layout_constraintBottom_toTopOf="@+id/greetingGetStartedButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="I agree to the Privacy Policy" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/greetingMessageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/roboto_medium_radix"
+            android:textColor="@color/white"
+            android:textSize="56sp"
+            app:layout_constraintBottom_toTopOf="@+id/greetingTermsAndConditionsCheckBox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/greetingRadixLogo"
+            app:layout_constraintVertical_bias="0.9"
+            tools:text="SEND\nMONEY\n&amp; TOKENS\nINSTANTLY" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

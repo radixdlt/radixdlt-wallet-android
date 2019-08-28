@@ -20,7 +20,7 @@ import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessagesDao
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
-import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper
+import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper.openCustomTab
 import com.radixdlt.android.apps.wallet.helper.WebviewFallback
 import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
@@ -88,7 +88,8 @@ class MoreOptionsFragment : Fragment() {
         networkSelectedTextView.text = QueryPreferences.getPrefNetwork(activity!!)
 
         if (QueryPreferences.getPrefIsRandomNodeSelection(activity!!)) {
-            inputNodeSelectedTextView.text = getString(R.string.more_options_fragment_xml_random_node)
+            inputNodeSelectedTextView.text =
+                getString(R.string.more_options_fragment_xml_random_node)
         } else {
             inputNodeSelectedTextView.text = QueryPreferences.getPrefNodeIP(activity!!)
         }
@@ -214,32 +215,6 @@ class MoreOptionsFragment : Fragment() {
         }
     }
 
-    /**
-     * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
-     *
-     * @param activity The host activity.
-     * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
-     * @param uri the Uri to be opened.
-     * @param fallback a CustomTabFallback to be used if Custom Tabs is not available.
-     */
-    private fun openCustomTab(
-        activity: Activity,
-        customTabsIntent: CustomTabsIntent,
-        uri: Uri,
-        fallback: CustomTabsHelper.CustomTabFallback?
-    ) {
-        val packageName = CustomTabsHelper.getPackageNameToUse(activity)
-
-        // If we cant find a package name, it means theres no browser that supports
-        // Chrome Custom Tabs installed. So, we fallback to the webview
-        if (packageName == null) {
-            fallback?.openUri(activity, uri)
-        } else {
-            customTabsIntent.intent.setPackage(packageName)
-            customTabsIntent.launchUrl(activity, uri)
-        }
-    }
-
     private fun passwordEnabledUI(isPasswordEnabled: Boolean) {
         autoLockTimeOutLayout.isClickable = isPasswordEnabled
         autoLockTimeOutLayout.isEnabled = isPasswordEnabled
@@ -286,7 +261,8 @@ class MoreOptionsFragment : Fragment() {
             }
             REQUEST_CODE_SELECT_NODE -> {
                 ipAddress = data!!.getStringExtra(InputNodeIPAddressDialog.EXTRA_ADDRESS)
-                randomSelection = data.getBooleanExtra(InputNodeIPAddressDialog.EXTRA_RANDOM_SELECTION, false)
+                randomSelection =
+                    data.getBooleanExtra(InputNodeIPAddressDialog.EXTRA_RANDOM_SELECTION, false)
                 val warningDialog = WarningDialog.newInstance(true, randomSelection)
                 warningDialog.setTargetFragment(
                     this@MoreOptionsFragment,
@@ -301,13 +277,15 @@ class MoreOptionsFragment : Fragment() {
                     ProcessPhoenix.triggerRebirth(activity)
                 } else {
                     if (universe == 0) {
-                        QueryPreferences.setPrefNetwork(activity!!,
+                        QueryPreferences.setPrefNetwork(
+                            activity!!,
                             ALPHANET
                         )
                         QueryPreferences.setPrefRandomNodeSelection(activity!!, true)
                         QueryPreferences.setPrefNodeIP(activity!!, "")
                     } else {
-                        QueryPreferences.setPrefNetwork(activity!!,
+                        QueryPreferences.setPrefNetwork(
+                            activity!!,
                             ALPHANET2
                         )
                         QueryPreferences.setPrefRandomNodeSelection(activity!!, true)

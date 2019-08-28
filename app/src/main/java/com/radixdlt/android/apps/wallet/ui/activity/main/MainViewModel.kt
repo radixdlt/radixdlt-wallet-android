@@ -37,6 +37,7 @@ class MainViewModel @Inject constructor(
 
     init {
         _mainLoadingState.value = MainLoadingState.LOADING
+        checkTransactionsTable()
         retrieveAllTransactions()
     }
 
@@ -166,5 +167,15 @@ class MainViewModel @Inject constructor(
                 _mainLoadingState.postValue(MainLoadingState.FINISHED)
             }
             .addTo(compositeDisposable)
+    }
+
+    private fun checkTransactionsTable() {
+        viewModelScope.launch {
+            // Check to see if there are existing transactions and make
+            // loading state to finish as soon as possible.
+            if (transactionsDao2.transactionsCount() != 0) {
+                _mainLoadingState.postValue(MainLoadingState.EXISTING)
+            }
+        }
     }
 }

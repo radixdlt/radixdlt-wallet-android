@@ -88,9 +88,13 @@ class ConversationActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbarTextView.text = setAddressWithColors(this, addressTo)
 
-        val layoutManager = LinearLayoutManager(this)
+        val layoutManager = object : LinearLayoutManager(this) {
+            override fun isAutoMeasureEnabled(): Boolean = false
+        }
+
         layoutManager.stackFromEnd = true // This makes recycler stick at the bottom
         conversationRecyclerView.layoutManager = layoutManager
+
         conversationAdapter = ConversationAdapter(myAddress, listConvo)
 
         conversationRecyclerView.adapter = conversationAdapter

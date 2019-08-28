@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_greeting"
+    app:startDestination="@id/navigation_greeting">
+    <fragment
+        android:id="@+id/navigation_greeting"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.greeting.GreetingFragment"
+        android:label="fragment_greeting"
+        tools:layout="@layout/fragment_greeting">
+    </fragment>
+</navigation>

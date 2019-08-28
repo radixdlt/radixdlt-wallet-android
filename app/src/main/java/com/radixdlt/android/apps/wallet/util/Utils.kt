@@ -174,9 +174,7 @@ fun setAddressWithColors(
     return TextFormatHelper.normal(
         TextFormatHelper.color(ContextCompat.getColor(ctx, R.color.radixBlue), firstFive),
         TextFormatHelper.color(ContextCompat.getColor(ctx, middleColorId), middle),
-        TextFormatHelper.color(
-            ContextCompat.getColor(ctx, R.color.colorAccentSecondary), lastFive
-        )
+        TextFormatHelper.color(ContextCompat.getColor(ctx, R.color.colorAccentSecondary), lastFive)
     )
 }
 
@@ -301,6 +299,7 @@ fun resetData(context: Context) {
     QueryPreferences.setPrefAddress(context, "")
     QueryPreferences.setPrefPasswordEnabled(context, true)
     QueryPreferences.setPrefAutoLockTimeOut(context, 2000)
+    QueryPreferences.setPrefCreatedByMnemonicOrSeed(context, false)
     Identity.clear()
 }
 

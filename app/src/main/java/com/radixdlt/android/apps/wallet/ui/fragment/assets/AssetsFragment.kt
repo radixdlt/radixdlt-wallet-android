@@ -139,6 +139,7 @@ class AssetsFragment : Fragment() {
 
     private fun loadingState(state: MainLoadingState) {
         when (state) {
+            MainLoadingState.EXISTING -> {}
             MainLoadingState.LOADING -> setLayoutResourcesWithLoadingIndicator()
             MainLoadingState.FINISHED -> setLayoutResources()
         }
@@ -185,7 +186,7 @@ class AssetsFragment : Fragment() {
 
     private fun initialiseSwipeRefreshLayout() {
         swipe_refresh_layout.setColorSchemeResources(
-            R.color.colorPrimary, R.color.colorAccent, R.color.colorAccentSecondary
+            R.color.colorPrimary, R.color.colorAccent, R.color.radixGreen3
         )
         swipe_refresh_layout.setOnRefreshListener(::refreshTransactions)
     }
