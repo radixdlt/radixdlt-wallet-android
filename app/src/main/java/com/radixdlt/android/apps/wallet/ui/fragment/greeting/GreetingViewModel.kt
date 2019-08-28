@@ -9,6 +9,9 @@ class GreetingViewModel : ViewModel() {
     private var termsAndConditionsAccepted = false
     private var privacyPolicyAccepted = false
 
+    private val isTermsAndConditionsAndPrivacyPolicyAccepted
+        get() = termsAndConditionsAccepted && privacyPolicyAccepted
+
     private val _enableGetStartedButton = MutableLiveData<Boolean>()
     val enableGetStartedButton: LiveData<Boolean> get() = _enableGetStartedButton
 
@@ -18,11 +21,11 @@ class GreetingViewModel : ViewModel() {
 
     fun onTermsAndConditionsCheckedChange(isChecked: Boolean) {
         termsAndConditionsAccepted = isChecked
-        _enableGetStartedButton.value = termsAndConditionsAccepted && privacyPolicyAccepted
+        _enableGetStartedButton.value = isTermsAndConditionsAndPrivacyPolicyAccepted
     }
 
     fun onPrivacyPolicyCheckedChange(isChecked: Boolean) {
         privacyPolicyAccepted = isChecked
-        _enableGetStartedButton.value = privacyPolicyAccepted && termsAndConditionsAccepted
+        _enableGetStartedButton.value = isTermsAndConditionsAndPrivacyPolicyAccepted
     }
 }
