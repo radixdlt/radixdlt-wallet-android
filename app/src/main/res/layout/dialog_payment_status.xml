@@ -203,7 +203,7 @@
             app:layout_constraintGuide_percent="0.5" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/paymentSummaryActionButton"
+            android:id="@+id/paymentStatusActionButton"
             style="@style/MaterialButton"
             android:layout_width="0dp"
             android:layout_height="56dp"
@@ -221,7 +221,7 @@
             tools:text="Action" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/paymentSummaryCloseButton"
+            android:id="@+id/paymentStatusCloseButton"
             style="@style/MaterialButton"
             android:layout_width="0dp"
             android:layout_height="56dp"
@@ -243,7 +243,7 @@
             android:layout_height="0dp"
             android:visibility="visible"
             app:visibleGone="@{ !viewmodel.paymentStatusState.name().equals(`LOADING`) }"
-            app:constraint_referenced_ids="paymentSummaryActionButton, paymentSummaryCloseButton" />
+            app:constraint_referenced_ids="paymentStatusActionButton, paymentStatusCloseButton" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/paymentSummarySuccessGroup"

@@ -191,7 +191,7 @@
     <string name="payment_summary_fragment_from_label_xml">From:</string>
     <string name="payment_summary_fragment_note_label_xml">Note:</string>
     <string name="payment_summary_fragment_fee_label_xml">Fee:</string>
-    <string name="payment_summary_fragment_xrd_fee">0,001 XRD</string>
+    <string name="payment_summary_fragment_xrd_fee">0.001 XRD</string>
     <string name="payment_summary_fragment_confirm_and_send_xml_button">Confirm and Send</string>
 
     <!-- FRAGMENT DIALOGS -->
