@@ -20,8 +20,6 @@ class PaymentActivity : BaseActivity() {
         setContentView(R.layout.activity_payment)
 
         setSupportActionBar(toolbar as Toolbar)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
-        supportActionBar?.title = "WTF"
 
         addressExtra = intent.getStringExtra(EXTRA_TRANSACTION_ADDRESS)
         tokenTypeExtra = intent.getStringExtra(EXTRA_TRANSACTION_TOKEN_TYPE)

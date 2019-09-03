@@ -24,11 +24,93 @@
             android:defaultValue="@null"
             app:argType="android.net.Uri"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_navigation_payment_input_to_navigation_payment_summary"
+            app:destination="@id/navigation_payment_summary">
+            <argument
+                android:name="addressFrom"
+                app:argType="string" />
+            <argument
+                android:name="addressTo"
+                app:argType="string" />
+            <argument
+                android:name="nameTo"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+            <argument
+                android:name="amount"
+                app:argType="string" />
+            <argument
+                android:name="rri"
+                app:argType="string" />
+            <argument
+                android:name="note"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/navigation_payment_summary"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.summary.PaymentSummaryFragment"
         android:label="fragment_payment_summary"
         tools:layout="@layout/fragment_payment_summary">
+        <argument
+            android:name="addressFrom"
+            app:argType="string" />
+        <argument
+            android:name="addressTo"
+            app:argType="string" />
+        <argument
+            android:name="amount"
+            app:argType="string" />
+        <argument
+            android:name="rri"
+            app:argType="string" />
+        <argument
+            android:name="note"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_navigation_payment_summary_to_navigation_payment_status"
+            app:destination="@id/navigation_payment_status">
+            <argument
+                android:name="addressTo"
+                app:argType="string" />
+            <argument
+                android:name="amount"
+                app:argType="string" />
+            <argument
+                android:name="rri"
+                app:argType="string" />
+            <argument
+                android:name="note"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+        </action>
     </fragment>
+    <dialog
+        android:id="@+id/navigation_payment_status"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusDialog"
+        android:label="fragment_payment_status"
+        tools:layout="@layout/dialog_payment_status">
+        <argument
+            android:name="addressTo"
+            app:argType="string" />
+        <argument
+            android:name="amount"
+            app:argType="string" />
+        <argument
+            android:name="rri"
+            app:argType="string" />
+        <argument
+            android:name="note"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
+
 </navigation>

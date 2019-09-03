@@ -52,6 +52,7 @@ object Libraries {
         const val processPhoenix = "2.0.0"
         const val novaCryptoBIP39 = "2019.01.27"
         const val searchView = "28.0.0"
+        const val lottie = "3.0.3"
     }
 
     const val ktlint = "com.pinterest:ktlint:${Versions.ktlint}"
@@ -88,6 +89,8 @@ object Libraries {
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
+
+    const val lottie = "com.airbnb.android:lottie:${Versions.lottie}"
 
     // Rx
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"

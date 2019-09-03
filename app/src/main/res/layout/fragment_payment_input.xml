@@ -138,7 +138,8 @@
                     android:hint="@string/send_activity_enter_address_hint"
                     android:inputType="textCapWords"
                     android:maxLength="128"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:textIsSelectable="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

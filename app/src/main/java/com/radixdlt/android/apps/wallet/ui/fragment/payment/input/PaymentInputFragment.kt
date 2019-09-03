@@ -23,6 +23,8 @@ import com.radixdlt.android.apps.wallet.ui.activity.BarcodeCaptureActivity
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
 import com.radixdlt.android.apps.wallet.ui.activity.SendTokensViewModel
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.isRadixAddress
+import com.radixdlt.android.apps.wallet.util.longToast
 import com.radixdlt.android.apps.wallet.util.toast
 import com.radixdlt.client.application.RadixApplicationAPI
 import dagger.android.support.AndroidSupportInjection
@@ -124,16 +126,58 @@ class PaymentInputFragment : Fragment() {
 
     private fun setListeners() {
         sendButton.setOnClickListener {
-            findNavController().navigate(R.id.navigation_payment_summary)
+            val addressFrom = Identity.api?.address.toString()
+            val addressTo = inputAddressTIET.text.toString().trim()
+            val amountText = amountEditText.text?.toString()
+            val note =
+                if (inputMessageTIET.text.isNullOrBlank()) null else inputMessageTIET.text.toString()
+
+            if (!isRadixAddress(addressTo)) {
+                toast("Please enter valid radix address")
+                return@setOnClickListener
+            }
+
+            val amount = if (amountText.isNullOrEmpty()) {
+                toast(getString(R.string.toast_enter_valid_amount_error))
+                return@setOnClickListener
+            } else {
+                amountText.toBigDecimal()
+            }
+
+            if (amount < minimumSendAmount) {
+                longToast(getString(R.string.toast_amount_too_small_error))
+                return@setOnClickListener
+            }
+
+            if (inputAddressTIET.text.toString() == myAddress) {
+                toast(getString(R.string.toast_entered_own_address_error))
+                return@setOnClickListener
+            }
+
+            val selectedToken = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
+
+            if (selectedToken == getString(R.string.send_activity_token_type_spinner)) {
+                toast("Please select type of token to send")
+                return@setOnClickListener
+            }
+
+            val action = PaymentInputFragmentDirections
+                .actionNavigationPaymentInputToNavigationPaymentSummary(
+                    addressFrom,
+                    addressTo,
+                    null,
+                    amountText,
+                    selectedToken,
+                    note
+                )
+            findNavController().navigate(action)
         }
 
         qrScanButton.setOnClickListener {
-            activity?.apply {
-                startActivityForResult(
-                    Intent(this, BarcodeCaptureActivity::class.java),
-                    RC_BARCODE_CAPTURE
-                )
-            }
+            startActivityForResult(
+                Intent(activity, BarcodeCaptureActivity::class.java),
+                RC_BARCODE_CAPTURE
+            )
         }
 
         inputMessageTIET.setOnFocusChangeListener { _, hasFocus ->
@@ -198,6 +242,7 @@ class PaymentInputFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Timber.d("onActivityResult")
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {

@@ -213,6 +213,7 @@ dependencies {
     implementation(Libraries.novaCryptoBIP39)
 
     implementation(Libraries.searchView)
+    implementation(Libraries.lottie)
 
     testImplementation(TestLibraries.mockitoKotlin)
     testImplementation(TestLibraries.mockk)

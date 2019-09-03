@@ -178,6 +178,21 @@ fun setAddressWithColors(
     )
 }
 
+fun setLastSevenCharactersGreen(
+    ctx: Context,
+    myAddress: String,
+    @ColorRes firstPartDefaultColor: Int = R.color.radixBlueGrey2
+): CharSequence {
+
+    val firstPart = myAddress.substring(0, myAddress.length - 7)
+    val lastSeven = myAddress.substring(myAddress.length - 7, myAddress.length)
+
+    return TextFormatHelper.normal(
+        TextFormatHelper.color(ContextCompat.getColor(ctx, firstPartDefaultColor), firstPart),
+        TextFormatHelper.color(ContextCompat.getColor(ctx, R.color.colorAccentSecondary), lastSeven)
+    )
+}
+
 fun formatCharactersForAmount(string: CharSequence, string2: CharSequence): SpannableStringBuilder {
     val spanTxt = SpannableStringBuilder(string)
     spanTxt.append(".$string2")
