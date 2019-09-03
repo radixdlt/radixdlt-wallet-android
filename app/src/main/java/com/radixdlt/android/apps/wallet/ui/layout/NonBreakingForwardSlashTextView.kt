@@ -22,7 +22,7 @@ class NonBreakingForwardSlashTextView : AppCompatTextView {
         // Can't break with a width of 0.
         if (width == 0) return text
         val editable = SpannableStringBuilder(text)
-        //creates an array with the width of each character
+        // creates an array with the width of each character
         val widths = FloatArray(editable.length)
         val p = paint
         p.getTextWidths(editable.toString(), widths)

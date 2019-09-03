@@ -50,7 +50,7 @@ fun TextView.bindColorLastChars(address: String) {
     val firstPart = address.substring(0, address.length - 7)
     val lastSeven = address.substring(address.length - 7, address.length)
 
-    text =  TextFormatHelper.normal(
+    text = TextFormatHelper.normal(
         TextFormatHelper.color(ContextCompat.getColor(context, R.color.radixBlueGrey2), firstPart),
         TextFormatHelper.color(ContextCompat.getColor(context, R.color.colorAccent), lastSeven)
     )
