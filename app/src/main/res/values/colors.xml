@@ -47,6 +47,8 @@
     <color name="radixGrey2">#DBDDE0</color>
     <color name="radixGrey3">#F7F9FC</color>
 
+    <color name="radixGreyTransparent3">#80E8EAEE</color>
+
     <color name="radixRed">#FF5964</color>
     <color name="radixMustard">#F4C13F</color>
     <color name="radixMustardLighter">#F6D059</color>

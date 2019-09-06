@@ -1,5 +1,7 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.payment.input
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -7,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,23 +16,25 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.barcode.Barcode
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.activity.BarcodeCaptureActivity
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
-import com.radixdlt.android.apps.wallet.ui.activity.SendTokensViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.assets.Asset
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.isRadixAddress
 import com.radixdlt.android.apps.wallet.util.longToast
 import com.radixdlt.android.apps.wallet.util.toast
 import com.radixdlt.client.application.RadixApplicationAPI
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.activity_send_radix.*
+import kotlinx.android.synthetic.main.fragment_payment_input.*
 import org.jetbrains.anko.px2dip
 import org.jetbrains.anko.startActivity
 import timber.log.Timber
+import java.math.RoundingMode
 import javax.inject.Inject
 
 class PaymentInputFragment : Fragment() {
@@ -48,7 +51,7 @@ class PaymentInputFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var sendTokensViewModel: SendTokensViewModel
+    private lateinit var paymentInputViewModel: PaymentInputViewModel
 
     private lateinit var api: RadixApplicationAPI
 
@@ -57,6 +60,8 @@ class PaymentInputFragment : Fragment() {
     private val minimumSendAmount = 0.00001.toBigDecimal()
 
     private lateinit var myAddress: String
+
+    private lateinit var maxValue: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -71,10 +76,63 @@ class PaymentInputFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkForIdentity()
+
         myAddress = QueryPreferences.getPrefAddress(view.context)
+        initialiseToolbar(view)
 
-        (activity as AppCompatActivity).supportActionBar?.elevation = view.context.px2dip(dimen)
+        initiliaseUri()
+        initialiseAddress()
 
+        if (uri == null && addressArg == null) {
+            inputAddressTIET.requestFocus()
+        }
+
+
+        setListeners()
+        initialiseViewModels()
+
+
+        linLayout.setOnClickListener {
+            val action = PaymentInputFragmentDirections
+                .actionNavigationPaymentInputToNavigationPaymentAssetSelection()
+
+            findNavController().navigate(action)
+        }
+
+        paymentInputMaxValue.setOnClickListener {
+            amountEditText.setText(maxValue)
+        }
+
+        paymentInputAddNote.setOnClickListener {
+            if (inputMessageTIL.visibility == View.GONE) {
+                inputMessageTIL.visibility = View.VISIBLE
+                paymentInputAddNote.text = "Delete note"
+            } else {
+                inputMessageTIL.visibility = View.GONE
+                paymentInputAddNote.text = "Add note (Optional)"
+            }
+        }
+    }
+
+    private fun checkForIdentity() {
+        Identity.api?.let {
+            api = it
+        } ?: run {
+            activity?.startActivity<NewWalletActivity>()
+            activity?.finishAffinity()
+            return
+        }
+    }
+
+    private fun initialiseAddress() {
+        addressArg?.let {
+            inputAddressTIET.setText(it)
+            amountEditText.requestFocus()
+        }
+    }
+
+    private fun initiliaseUri() {
         uri?.let {
             inputAddressTIET.setText(it.getQueryParameter("to"))
             amountEditText.setText(it.getQueryParameter("amount"))
@@ -84,44 +142,51 @@ class PaymentInputFragment : Fragment() {
                 inputMessageTIET.setText(attachment)
             }
         }
+    }
 
-        addressArg?.let {
-            inputAddressTIET.setText(it)
-            amountEditText.requestFocus()
-        }
-
-        if (uri == null && addressArg == null) {
-            inputAddressTIET.requestFocus()
-        }
-
+    private fun initialiseToolbar(view: View) {
         setHasOptionsMenu(true)
+        (activity as AppCompatActivity).supportActionBar?.elevation = view.context.px2dip(dimen)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         (activity as AppCompatActivity).supportActionBar?.title = "Payment"
-
-        Identity.api?.let {
-            api = it
-        } ?: run {
-            activity?.startActivity<NewWalletActivity>()
-            activity?.finishAffinity()
-            return
-        }
-
-        setListeners()
-        initialiseViewModels()
     }
 
     private fun initialiseViewModels() {
-        sendTokensViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(SendTokensViewModel::class.java)
+        paymentInputViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(PaymentInputViewModel::class.java)
 
-        sendTokensViewModel.tokenTypesLiveData.sendingTokens = true
+//        paymentInputViewModel.assetTransactionsState.observe(
+//            viewLifecycleOwner, Observer(::showAssetTransactions)
+//        )
+//        paymentInputViewModel.assetBalance.observe(
+//            viewLifecycleOwner, Observer(::showAssetBalance)
+//        )
+//        paymentInputViewModel.getAllTransactionsAsset(asset)
 
-        sendTokensViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
-            tokenTypes?.apply {
-                setTokenTypeSpinner(tokenTypes)
+        paymentInputViewModel.asset.observe(viewLifecycleOwner, Observer {
+            it?.apply {
+                assetIso.text = iso
+                setIcon(it)
+
+                maxValue = total
+
+                val total = total.toBigDecimal()
+                    .setScale(2, RoundingMode.HALF_UP)
+                    .toPlainString()
+
+                paymentInputMaxValue.text =
+                    getString(R.string.payment_input_fragment_add_max_value, total, iso)
             }
         })
+    }
+
+    fun setIcon(asset: Asset) {
+        val urlIcon = if (asset.urlIcon.isNullOrBlank()) null else asset.urlIcon
+        Glide.with(view?.context!!)
+            .load(urlIcon)
+            .fallback(R.drawable.no_token_icon)
+            .into(assetIcon)
     }
 
     private fun setListeners() {
@@ -154,20 +219,20 @@ class PaymentInputFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val selectedToken = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
+//            val selectedToken = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
 
-            if (selectedToken == getString(R.string.send_activity_token_type_spinner)) {
-                toast("Please select type of token to send")
-                return@setOnClickListener
-            }
-
+//            if (selectedToken == getString(R.string.send_activity_token_type_spinner)) {
+//                toast("Please select type of token to send")
+//                return@setOnClickListener
+//            }
+//
             val action = PaymentInputFragmentDirections
                 .actionNavigationPaymentInputToNavigationPaymentSummary(
                     addressFrom,
                     addressTo,
                     null,
                     amountText,
-                    selectedToken,
+                    "",
                     note
                 )
             findNavController().navigate(action)
@@ -180,6 +245,16 @@ class PaymentInputFragment : Fragment() {
             )
         }
 
+        pasteButton.setOnClickListener {
+            val clipboard = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            clipboard.primaryClip?.getItemAt(0)?.let {
+                val radixAddressToPaste = it.text.toString()
+                if (isRadixAddress(radixAddressToPaste)) {
+                    inputAddressTIET.setText(radixAddressToPaste)
+                }
+            }
+        }
+
         inputMessageTIET.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 sendRadixScrollView.smoothScrollTo(0, sendRadixScrollView.bottom)
@@ -187,37 +262,37 @@ class PaymentInputFragment : Fragment() {
         }
     }
 
-    private fun setTokenTypeSpinner(tokenTypes: List<String>) {
-        tokenTypesList.clear()
-        when {
-            tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.send_activity_no_tokens_spinner))
-            tokenTypes.size == 1 -> tokenTypesList.add(tokenTypes.first())
-            else -> {
-                tokenTypesList.add(getString(R.string.send_activity_token_type_spinner))
-                tokenTypesList.addAll(tokenTypes)
-            }
-        }
-
-        val tokenTypesListSpinner = tokenTypesList.map {
-            removeTokenCreatorAddress(it)
-        }
-
-        val tokenTypesSpinner = ArrayAdapter(
-            activity!!, android.R.layout.simple_spinner_dropdown_item, tokenTypesListSpinner
-        )
-
-        tokenTypeSpinner.adapter = tokenTypesSpinner
-
-        // set spinner selection if token passed from transaction details
-        tokenArg?.let {
-            setTokenInSpinner(tokenTypes, it)
-        }
-
-        // set spinner selection if populating from a URI
-        uri?.let {
-            setTokenInSpinner(tokenTypes, token)
-        }
-    }
+//    private fun setTokenTypeSpinner(tokenTypes: List<String>) {
+//        tokenTypesList.clear()
+//        when {
+//            tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.send_activity_no_tokens_spinner))
+//            tokenTypes.size == 1 -> tokenTypesList.add(tokenTypes.first())
+//            else -> {
+//                tokenTypesList.add(getString(R.string.send_activity_token_type_spinner))
+//                tokenTypesList.addAll(tokenTypes)
+//            }
+//        }
+//
+//        val tokenTypesListSpinner = tokenTypesList.map {
+//            removeTokenCreatorAddress(it)
+//        }
+//
+//        val tokenTypesSpinner = ArrayAdapter(
+//            activity!!, android.R.layout.simple_spinner_dropdown_item, tokenTypesListSpinner
+//        )
+//
+//        tokenTypeSpinner.adapter = tokenTypesSpinner
+//
+//        // set spinner selection if token passed from transaction details
+//        tokenArg?.let {
+//            setTokenInSpinner(tokenTypes, it)
+//        }
+//
+//        // set spinner selection if populating from a URI
+//        uri?.let {
+//            setTokenInSpinner(tokenTypes, token)
+//        }
+//    }
 
     private fun removeTokenCreatorAddress(tokenType: String): String {
         return if (tokenType.contains("/")) {
@@ -234,11 +309,11 @@ class PaymentInputFragment : Fragment() {
             return
         }
 
-        if (tokenTypes.size > 1) {
-            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token) + 1)
-        } else {
-            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token))
-        }
+//        if (tokenTypes.size > 1) {
+//            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token) + 1)
+//        } else {
+//            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token))
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

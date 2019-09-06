@@ -194,6 +194,9 @@
     <string name="payment_summary_fragment_xrd_fee">0.001 XRD</string>
     <string name="payment_summary_fragment_confirm_and_send_xml_button">Confirm and Send</string>
 
+    <!-- Payment Input Fragment -->
+    <string name="payment_input_fragment_add_max_value">Add max value %1$s %2$s</string>
+
     <!-- FRAGMENT DIALOGS -->
     <!-- Delete Wallet Dialog -->
     <string name="delete_wallet_dialog_title">Delete Existing Wallet?</string>

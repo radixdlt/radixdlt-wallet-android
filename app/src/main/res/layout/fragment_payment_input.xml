@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainBackground"
     tools:context="com.radixdlt.android.apps.wallet.ui.fragment.payment.input.PaymentInputFragment">
 
     <ScrollView
@@ -20,33 +19,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/amountEditText"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputAmountTIL"
+                style="@style/MaterialTextLayoutOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="19dp"
-                android:layout_marginEnd="8dp"
-                android:background="@android:color/transparent"
-                android:hint="@string/send_activity_xml_amount_hint"
-                android:inputType="numberDecimal"
-                android:maxLines="1"
-                android:textSize="38sp"
-                app:layout_constraintEnd_toStartOf="@+id/tokenTypeSpinner"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/transactionAmount"
-                tools:ignore="Autofill" />
-
-            <TextView
-                android:id="@+id/transactionAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="19dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/send_activity_xml_amount"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputAddressTIL" />
+                android:layout_marginRight="16dp"
+                android:theme="@style/MaterialTextLayoutOutlinedTheme"
+                app:layout_constraintEnd_toStartOf="@+id/linLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputAddressTIL">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/amountEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/receive_radix_activity_amount_hint"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:maxLength="128"
+                    android:textIsSelectable="true"
+                    android:textAlignment="textStart" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/sendButton"
@@ -62,61 +59,75 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputMessageTIL"
+                app:layout_constraintTop_toBottomOf="@+id/paymentInputAddNote"
                 app:layout_constraintVertical_bias="1.0"
                 tools:backgroundTint="@color/colorAccent" />
 
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/qrScanButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:id="@+id/pasteButton"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/rounded_button"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/rounded_button_grey"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:padding="6dp"
+                android:src="@drawable/ic_paste"
+                android:stateListAnimator="@animator/button_elevation"
+                app:layout_constraintBottom_toTopOf="@+id/qrScanButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/inputAddressTIL"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/qrScanButton"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_button_grey"
                 android:elevation="3dp"
                 android:gravity="center"
-                android:padding="5dp"
-                android:src="@drawable/ic_qr_code_white"
+                android:padding="6dp"
+                android:src="@drawable/ic_qr"
                 android:stateListAnimator="@animator/button_elevation"
                 app:layout_constraintBottom_toBottomOf="@+id/inputAddressTIL"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/inputAddressTIL" />
+                app:layout_constraintTop_toBottomOf="@+id/pasteButton"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/tokenTypeSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="52dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="0.5"
-                android:popupBackground="@color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/amountEditText"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/amountEditText" />
+<!--            <androidx.appcompat.widget.AppCompatSpinner-->
+<!--                android:id="@+id/tokenTypeSpinner"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="52dp"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:layout_weight="0.5"-->
+<!--                android:popupBackground="@color/white"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/inputAmountTIL"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/inputAmountTIL" />-->
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputMessageTIL"
-                style="@style/MaterialTextLayoutOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="16dp"
-                android:theme="@style/MaterialTextLayoutOutlinedTheme"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/amountEditText">
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/tokenTypeSpinner"-->
+<!--                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="52dp"-->
+<!--                android:hint="Test"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:layout_weight="0.5"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/inputAmountTIL"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/inputAmountTIL">-->
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputMessageTIET"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/send_activity_xml_message_hint"
-                    android:inputType="textCapWords"
-                    android:maxLength="128"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
+<!--                <AutoCompleteTextView-->
+<!--                    android:id="@+id/exposedDropDown"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"/>-->
+
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputAddressTIL"
@@ -134,12 +145,100 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/inputAddressTIET"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="74dp"
                     android:hint="@string/send_activity_enter_address_hint"
-                    android:inputType="textCapWords"
+                    android:inputType="textCapWords|textMultiLine"
                     android:maxLength="128"
+                    android:maxLines="2"
+                    android:textIsSelectable="true"
+                    android:gravity="top"
+                    tools:text="JH1P8f3znbyrDj8F4RWpix7hRkxqHjdW2NnKpR3v6uXnknor"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/linLayout"
+                android:layout_width="110dp"
+                android:layout_height="54dp"
+                android:orientation="horizontal"
+                android:background="@drawable/rounded_button_grey"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/inputAmountTIL"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/inputAmountTIL">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/assetIcon"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_paste"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/assetIso"
+                    android:layout_width="66dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:drawableEnd="@drawable/ic_dropdown_green"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="4dp"
                     android:maxLines="1"
-                    android:textIsSelectable="true" />
+                    android:maxLength="4"
+                    android:text="XRD"/>
+            </LinearLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/paymentInputMaxValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputAmountTIL"
+                android:layout_marginTop="8dp"
+                android:text="Add max value 849 XRD"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:textColor="@color/color_states_payment_input_text_view"
+                app:fontFamily="@font/roboto_medium_radix"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/paymentInputAddNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputMessageTIL"
+                android:text="Add note (Optional)"
+                android:paddingStart="16dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:textColor="@color/color_states_payment_input_text_view"
+                app:fontFamily="@font/roboto_medium_radix"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputMessageTIL"
+                style="@style/MaterialTextLayoutOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:theme="@style/MaterialTextLayoutOutlinedTheme"
+                android:visibility="gone"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/paymentInputMaxValue">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputMessageTIET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Note"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLength="128" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
