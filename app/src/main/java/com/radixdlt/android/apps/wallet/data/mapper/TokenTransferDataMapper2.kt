@@ -28,6 +28,7 @@ object TokenTransferDataMapper2 {
         val tokenDescription: String? = null
         val tokenIconUrl: String? = null
         val tokenTotalSupply: BigDecimal? = null
+        val tokenGranularity: BigDecimal? = null
         val tokenSupplyType: String? = null
 
         return TransactionEntity2(
@@ -43,6 +44,7 @@ object TokenTransferDataMapper2 {
             tokenDescription,
             tokenIconUrl,
             tokenTotalSupply,
+            tokenGranularity,
             tokenSupplyType
         )
     }

@@ -104,6 +104,7 @@ class MainViewModel @Inject constructor(
                 lastExistingTransaction.tokenDescription,
                 lastExistingTransaction.tokenIconUrl,
                 lastExistingTransaction.tokenTotalSupply,
+                lastExistingTransaction.tokenGranularity,
                 lastExistingTransaction.tokenSupplyType
             )
             insertTransactionIntoDB(transaction) // insert in DB with all info

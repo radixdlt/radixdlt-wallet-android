@@ -16,10 +16,12 @@ import com.radixdlt.android.apps.wallet.ui.activity.ConversationViewModel
 import com.radixdlt.android.apps.wallet.ui.activity.SendTokensViewModel
 import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsViewModel
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
-import com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsViewModel
-import com.radixdlt.android.apps.wallet.ui.fragment.wallet.TransactionsViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.payment.assetselection.PaymentAssetSelectionViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.payment.input.PaymentInputViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.wallet.TransactionsViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -58,6 +60,16 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AssetTransactionsViewModel::class)
     abstract fun bindAssetTransactionsViewModel(viewModel: AssetTransactionsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PaymentInputViewModel::class)
+    abstract fun bindPaymentInputViewModel(viewModel: PaymentInputViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PaymentAssetSelectionViewModel::class)
+    abstract fun bindPaymentAssetSelectionViewModel(viewModel: PaymentAssetSelectionViewModel): ViewModel
 
     @Binds
     @Named("balance")

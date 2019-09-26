@@ -1,0 +1,13 @@
+<!--
+  Single Material Design Spinner (aka Exposed Dropdown Menu) item.
+  Follows Google's recommended approach
+-->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ExposedDropdownMenu.DropdownItem"
+    android:id="@+id/tv_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:textAppearance="?attr/textAppearanceSubtitle1"/>

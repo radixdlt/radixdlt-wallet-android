@@ -45,6 +45,6 @@ interface TransactionsDao2 {
     @Query("SELECT COUNT(accountAddress) FROM TransactionEntity2")
     suspend fun transactionsCount(): Int
 
-    @Query("UPDATE TransactionEntity2 SET tokenName = :tokenName, tokenDescription = :tokenDescription, tokenIconUrl = :tokenUrlIcon, tokenTotalSupply = :tokenTotalSupply, tokenSupplyType = :tokenSupplyType WHERE rri = :rri")
-    fun updateEntities(tokenName: String, tokenDescription: String, tokenUrlIcon: String, rri: String, tokenTotalSupply: BigDecimal, tokenSupplyType: String)
+    @Query("UPDATE TransactionEntity2 SET tokenName = :tokenName, tokenDescription = :tokenDescription, tokenIconUrl = :tokenUrlIcon, tokenTotalSupply = :tokenTotalSupply, tokenGranularity = :tokenGranularity, tokenSupplyType = :tokenSupplyType WHERE rri = :rri")
+    fun updateEntities(tokenName: String, tokenDescription: String, tokenUrlIcon: String, rri: String, tokenTotalSupply: BigDecimal, tokenGranularity: BigDecimal, tokenSupplyType: String)
 }

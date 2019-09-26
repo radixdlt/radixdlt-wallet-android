@@ -125,6 +125,7 @@ class AssetsViewModel @Inject constructor(
                         tokenState.iconUrl ?: "",
                         rriString,
                         tokenState.totalSupply,
+                        tokenState.granularity,
                         tokenState.tokenSupplyType.name
                     )
                 }, {

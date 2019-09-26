@@ -112,6 +112,10 @@
     <string name="receive_radix_activity_copy_invoice_button">Copy Invoice</string>
     <string name="receive_radix_activity_share_invoice_button">Share Invoice</string>
 
+    <!-- Barcode Capture Activity -->
+    <string name="barcode_capture_activity_title">QR Code Scanner</string>
+    <string name="barcode_capture_activity_dialog_negative">Settings</string>
+
     <!-- FRAGMENTS -->
     <!-- Wallet Fragment -->
     <string name="wallet_fragment_retrieving_transactions">Retrieving Transactions…</string>
@@ -132,13 +136,13 @@
     <string name="assets_fragment_no_owned_assets_textview">You don\'t own any assets!</string>
     <string name="assets_fragment_loading_assets_textview">Loading assets…</string>
     <string name="assets_fragment_xml_receive_button">Receive</string>
-    <string name="assets_fragment_xml_pay_button">Pay</string>
+    <string name="assets_fragment_xml_send_button">Send</string>
     <string name="assets_fragment_error_toast">There was an error!</string>
 
     <!-- Asset Transactions Fragment -->
     <string name="asset_transactions_fragment_xml_your_balance_title">YOUR BALANCE</string>
     <string name="asset_transactions_fragment_xml_receive_button">Receive</string>
-    <string name="asset_transactions_fragment_xml_pay_button">Pay</string>
+    <string name="asset_transactions_fragment_xml_send_button">Send</string>
     <string name="asset_transactions_fragment_xml_asset_description">DESCRIPTION</string>
     <string name="asset_transactions_fragment_xml_asset_supply_type">SUPPLY TYPE</string>
     <string name="asset_transactions_fragment_xml_asset_total_supply">TOTAL SUPPLY</string>
@@ -191,8 +195,24 @@
     <string name="payment_summary_fragment_from_label_xml">From:</string>
     <string name="payment_summary_fragment_note_label_xml">Note:</string>
     <string name="payment_summary_fragment_fee_label_xml">Fee:</string>
-    <string name="payment_summary_fragment_xrd_fee">0.001 XRD</string>
+    <string name="payment_summary_fragment_xrd_fee">$0.001</string>
     <string name="payment_summary_fragment_confirm_and_send_xml_button">Confirm and Send</string>
+
+    <!-- Payment Input Fragment -->
+    <string name="payment_input_fragment_add_max_value">Add max value %1$s %2$s</string>
+    <string name="payment_input_fragment_note_hint_xml">Note</string>
+    <string name="payment_input_fragment_note_optional">Add note (Optional)</string>
+    <string name="payment_input_fragment_note_delete">Delete note</string>
+    <string name="payment_input_fragment_address_error">Please input an address</string>
+    <string name="payment_input_fragment_amount_error">Please input an amount</string>
+    <string name="payment_input_fragment_enter_valid_address_error">Please enter valid radix address</string>
+    <string name="payment_input_fragment_not_enough_tokens_error">You don\'t have enough tokens!</string>
+    <string name="payment_input_fragment_granularity_error">Token only accepts %1$s decimals</string>
+    <string name="payment_input_fragment_title">Payment</string>
+
+
+    <!-- Payment Asset Selection Fragment -->
+    <string name="payment_asset_selection_fragment_title">Select Currency</string>
 
     <!-- FRAGMENT DIALOGS -->
     <!-- Delete Wallet Dialog -->

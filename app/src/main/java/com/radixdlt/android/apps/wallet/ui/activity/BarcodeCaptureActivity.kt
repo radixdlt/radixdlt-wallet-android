@@ -315,11 +315,13 @@ class BarcodeCaptureActivity : BaseActivity() {
         }
 
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("QR code scanner")
+        builder.setTitle(getString(R.string.barcode_capture_activity_title))
             .setMessage(R.string.no_camera_permission)
             .setPositiveButton(android.R.string.ok, listener)
-            .setNegativeButton("Settings", settingsListener)
-            .show()
+            .setNegativeButton(
+                getString(R.string.barcode_capture_activity_dialog_negative),
+                settingsListener
+            ).show()
     }
 
     /**

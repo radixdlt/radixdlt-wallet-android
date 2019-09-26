@@ -1,62 +1,78 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.payment.input
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.barcode.Barcode
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.activity.BarcodeCaptureActivity
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
-import com.radixdlt.android.apps.wallet.ui.activity.SendTokensViewModel
+import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetPayment
+import com.radixdlt.android.apps.wallet.util.EmptyTextWatcher
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.isRadixAddress
-import com.radixdlt.android.apps.wallet.util.longToast
 import com.radixdlt.android.apps.wallet.util.toast
 import com.radixdlt.client.application.RadixApplicationAPI
+import com.radixdlt.client.atommodel.accounts.RadixAddress
+import com.radixdlt.client.core.atoms.particles.RRI
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.activity_send_radix.*
+import kotlinx.android.synthetic.main.fragment_payment_input.*
 import org.jetbrains.anko.px2dip
 import org.jetbrains.anko.startActivity
 import timber.log.Timber
+import java.math.BigDecimal
+import java.math.RoundingMode
 import javax.inject.Inject
+import kotlin.math.max
 
 class PaymentInputFragment : Fragment() {
 
     private val args: PaymentInputFragmentArgs by navArgs()
     private val addressArg: String? by lazy { args.address }
-    private val tokenArg: String? by lazy { args.token }
     private val uri: Uri? by lazy { args.uri }
-
-    val dimen: Int by lazy { resources.getDimension(R.dimen.toolbar_elevation).toInt() }
-
-    private lateinit var token: String
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var sendTokensViewModel: SendTokensViewModel
+    private val dimen: Int by lazy { resources.getDimension(R.dimen.toolbar_elevation).toInt() }
+    private val myAddress: String by lazy { QueryPreferences.getPrefAddress(ctx) }
 
+    private val paymentViewModel: PaymentViewModel by activityViewModels()
+
+    private lateinit var paymentInputViewModel: PaymentInputViewModel
+    private lateinit var ctx: Context
+    private lateinit var token: String
     private lateinit var api: RadixApplicationAPI
+    private lateinit var maxValue: String
+    private lateinit var tokenGranularity: BigDecimal
 
-    private val tokenTypesList = arrayListOf<String>()
-
-    private val minimumSendAmount = 0.00001.toBigDecimal()
-
-    private lateinit var myAddress: String
+    private var noteEmpty = true
+    private var greenSpan = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -71,34 +87,60 @@ class PaymentInputFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        myAddress = QueryPreferences.getPrefAddress(view.context)
+        ctx = view.context
+        checkForIdentity()
 
-        (activity as AppCompatActivity).supportActionBar?.elevation = view.context.px2dip(dimen)
+        initialiseToolbar(view)
 
-        uri?.let {
-            inputAddressTIET.setText(it.getQueryParameter("to"))
-            amountEditText.setText(it.getQueryParameter("amount"))
-            val attachment = it.getQueryParameter("attachment")
-            token = it.getQueryParameter("token") ?: "XRD"
-            if (attachment != null && attachment.isNotBlank()) {
-                inputMessageTIET.setText(attachment)
-            }
+        initialiseUri()
+        initialiseAddress()
+        initialiseViewModels()
+        noteFieldVisibility()
+        setListeners()
+    }
+
+    private fun noteFieldVisibility() {
+        noteInputVisibility(paymentViewModel.noteInputShown)
+    }
+
+    private fun setColorForLastCharactersInAddress(s: Editable): SpannableStringBuilder {
+        val start = s.length - 7
+        val firstPart = s.toString().substring(0, s.length - 7)
+        val firstPartSpannableChar = SpannableString(firstPart)
+        val last6Chars = s.toString().substring(start)
+        val lastSpannableChar = SpannableString(last6Chars)
+
+        // Span to set char color
+        val fcs = ForegroundColorSpan(ContextCompat.getColor(activity!!, R.color.radixGreen2))
+        // Set the text color for the last 7 characters
+        lastSpannableChar.setSpan(fcs, 0, 7, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
+        return SpannableStringBuilder(firstPartSpannableChar).append(lastSpannableChar)
+    }
+
+    private fun setDefaultColorForAddress(before: String): SpannableString {
+        val textSpannableChar = SpannableString(before)
+
+        // Span to set char color
+        val fcs = ForegroundColorSpan(ContextCompat.getColor(activity!!, R.color.materialGrey900))
+        textSpannableChar.setSpan(fcs, 0, before.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
+        return textSpannableChar
+    }
+
+    private fun noteInputVisibility(visible: Boolean) {
+        if (visible) {
+            paymentInputMessageTIL.visibility = View.VISIBLE
+            paymentInputAddNote.text = getString(R.string.payment_input_fragment_note_delete)
+        } else {
+            paymentInputMessageTIET.text?.clear()
+            paymentInputMessageTIL.visibility = View.GONE
+            paymentInputAddNote.text = getString(R.string.payment_input_fragment_note_optional)
         }
+        paymentViewModel.noteInputShown = visible
+    }
 
-        addressArg?.let {
-            inputAddressTIET.setText(it)
-            amountEditText.requestFocus()
-        }
-
-        if (uri == null && addressArg == null) {
-            inputAddressTIET.requestFocus()
-        }
-
-        setHasOptionsMenu(true)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
-        (activity as AppCompatActivity).supportActionBar?.title = "Payment"
-
+    private fun checkForIdentity() {
         Identity.api?.let {
             api = it
         } ?: run {
@@ -106,60 +148,113 @@ class PaymentInputFragment : Fragment() {
             activity?.finishAffinity()
             return
         }
+    }
 
-        setListeners()
-        initialiseViewModels()
+    private fun initialiseAddress() {
+        addressArg?.let {
+            paymentInputAddressTIET.setText(it)
+            paymentInputAmountEditText.requestFocus()
+        }
+    }
+
+    private fun initialiseUri() {
+        uri?.let {
+            paymentInputAddressTIET.setText(it.getQueryParameter("to"))
+            paymentInputAmountEditText.setText(it.getQueryParameter("amount"))
+            val attachment = it.getQueryParameter("attachment")
+            token = it.getQueryParameter("token") ?: "XRD"
+            if (attachment != null && attachment.isNotBlank()) {
+                paymentInputMessageTIET.setText(attachment)
+            }
+        }
+    }
+
+    private fun initialiseToolbar(view: View) {
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).supportActionBar?.elevation = view.context.px2dip(dimen)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.payment_input_fragment_title)
     }
 
     private fun initialiseViewModels() {
-        sendTokensViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(SendTokensViewModel::class.java)
+        paymentInputViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(PaymentInputViewModel::class.java)
 
-        sendTokensViewModel.tokenTypesLiveData.sendingTokens = true
+        paymentInputViewModel.asset.observe(viewLifecycleOwner, Observer(::assetPayment))
 
-        sendTokensViewModel.tokenTypesLiveData.observe(this, Observer { tokenTypes ->
-            tokenTypes?.apply {
-                setTokenTypeSpinner(tokenTypes)
-            }
-        })
+        if (paymentViewModel.selectedAsset.isNotEmpty()) {
+            paymentInputViewModel.getTransactionsFromAsset(paymentViewModel.selectedAsset)
+        }
+    }
+
+    private fun assetPayment(asset: AssetPayment?) {
+        asset?.apply {
+            paymentInputAssetIso.text = iso
+            setIcon(asset)
+
+            maxValue = total.toBigDecimal().stripTrailingZeros().toPlainString()
+            tokenGranularity = granularity ?: 18.toBigDecimal()
+
+            val total = total.toBigDecimal()
+                .setScale(
+                    getScale(tokenGranularity), RoundingMode.HALF_UP
+                )
+                .stripTrailingZeros()
+                .toPlainString()
+
+            paymentInputMaxValue.text =
+                getString(R.string.payment_input_fragment_add_max_value, total, iso)
+
+            val rri = RRI.of(RadixAddress.from(address), iso).toString()
+            paymentViewModel.selectedAsset = rri
+
+            val amount = paymentInputAmountEditText.text?.toString()
+            validateAmount(amount)
+        }
+    }
+
+    private fun validateAmount(amount: String?) {
+        if (!amount.isNullOrEmpty() && amount.toBigDecimal() > maxValue.toBigDecimal()) {
+            paymentInputAmountTIL.error = getString(R.string.payment_input_fragment_not_enough_tokens_error)
+            paymentInputAmountTIL.errorIconDrawable = null
+        } else if (!amount.isNullOrEmpty() && getScale(amount.toBigDecimal()) > getScale(tokenGranularity)) {
+            paymentInputAmountTIL.error = getString(
+                R.string.payment_input_fragment_granularity_error,
+                getScale(tokenGranularity).toString()
+            )
+            paymentInputAmountTIL.errorIconDrawable = null
+        } else {
+            paymentInputAmountTIL.error = null
+            paymentInputAmountTIL.isErrorEnabled = false
+        }
+    }
+
+    private fun setIcon(asset: AssetPayment) {
+        val urlIcon = if (asset.urlIcon.isNullOrBlank()) null else asset.urlIcon
+        Glide.with(ctx)
+            .load(urlIcon)
+            .fallback(R.drawable.no_token_icon)
+            .into(paymentInputAssetIcon)
     }
 
     private fun setListeners() {
-        sendButton.setOnClickListener {
+        paymentInputSendButton.setOnClickListener {
             val addressFrom = Identity.api?.address.toString()
-            val addressTo = inputAddressTIET.text.toString().trim()
-            val amountText = amountEditText.text?.toString()
-            val note =
-                if (inputMessageTIET.text.isNullOrBlank()) null else inputMessageTIET.text.toString()
+            val addressTo = paymentInputAddressTIET.text.toString().trim()
+            val amountText = paymentInputAmountEditText.text.toString().trim()
+            val note = paymentInputMessageTIET.text.let {
+                if (it.isNullOrBlank()) null else it.toString()
+            }
 
-            if (!isRadixAddress(addressTo)) {
-                toast("Please enter valid radix address")
+            if (validateAddressAndAmount(addressTo, amountText)) return@setOnClickListener
+
+            if (!paymentInputAddressTIL.error.isNullOrEmpty() ||
+                !paymentInputAmountTIL.error.isNullOrEmpty()) {
                 return@setOnClickListener
             }
 
-            val amount = if (amountText.isNullOrEmpty()) {
-                toast(getString(R.string.toast_enter_valid_amount_error))
-                return@setOnClickListener
-            } else {
-                amountText.toBigDecimal()
-            }
-
-            if (amount < minimumSendAmount) {
-                longToast(getString(R.string.toast_amount_too_small_error))
-                return@setOnClickListener
-            }
-
-            if (inputAddressTIET.text.toString() == myAddress) {
-                toast(getString(R.string.toast_entered_own_address_error))
-                return@setOnClickListener
-            }
-
-            val selectedToken = tokenTypesList[tokenTypeSpinner.selectedItemPosition]
-
-            if (selectedToken == getString(R.string.send_activity_token_type_spinner)) {
-                toast("Please select type of token to send")
-                return@setOnClickListener
-            }
+            noteEmpty = paymentInputMessageTIET.text.isNullOrEmpty()
 
             val action = PaymentInputFragmentDirections
                 .actionNavigationPaymentInputToNavigationPaymentSummary(
@@ -167,92 +262,162 @@ class PaymentInputFragment : Fragment() {
                     addressTo,
                     null,
                     amountText,
-                    selectedToken,
+                    paymentViewModel.selectedAsset,
                     note
                 )
             findNavController().navigate(action)
         }
 
-        qrScanButton.setOnClickListener {
+        paymentInputQrScanButton.setOnClickListener {
             startActivityForResult(
                 Intent(activity, BarcodeCaptureActivity::class.java),
                 RC_BARCODE_CAPTURE
             )
         }
 
-        inputMessageTIET.setOnFocusChangeListener { _, hasFocus ->
+        paymentInputPasteButton.setOnClickListener {
+            val clipboard = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            clipboard.primaryClip?.getItemAt(0)?.let {
+                val radixAddressToPaste = it.text.toString()
+                paymentInputAddressTIET.setText(radixAddressToPaste)
+                if (isRadixAddress(radixAddressToPaste)) {
+                    paymentInputAddressTIET.clearFocus()
+
+                    if (radixAddressToPaste == myAddress) {
+                        paymentInputAddressTIL.error = getString(R.string.toast_entered_own_address_error)
+                        paymentInputAddressTIL.errorIconDrawable = null
+                        return@setOnClickListener
+                    }
+
+                    if (paymentInputAmountEditText.text.isNullOrEmpty()) {
+                        paymentInputAmountEditText.requestFocus()
+                    }
+                } else {
+                    paymentInputAddressTIL.error = getString(R.string.payment_input_fragment_enter_valid_address_error)
+                }
+            }
+        }
+
+        paymentInputMessageTIET.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                sendRadixScrollView.smoothScrollTo(0, sendRadixScrollView.bottom)
-            }
-        }
-    }
-
-    private fun setTokenTypeSpinner(tokenTypes: List<String>) {
-        tokenTypesList.clear()
-        when {
-            tokenTypes.isEmpty() -> tokenTypesList.add(getString(R.string.send_activity_no_tokens_spinner))
-            tokenTypes.size == 1 -> tokenTypesList.add(tokenTypes.first())
-            else -> {
-                tokenTypesList.add(getString(R.string.send_activity_token_type_spinner))
-                tokenTypesList.addAll(tokenTypes)
+                paymentInputScrollView.smoothScrollTo(0, paymentInputScrollView.bottom)
             }
         }
 
-        val tokenTypesListSpinner = tokenTypesList.map {
-            removeTokenCreatorAddress(it)
+        paymentInputLinearLayout.setOnClickListener {
+            val action = PaymentInputFragmentDirections
+                .actionNavigationPaymentInputToNavigationPaymentAssetSelection()
+
+            findNavController().navigate(action)
         }
 
-        val tokenTypesSpinner = ArrayAdapter(
-            activity!!, android.R.layout.simple_spinner_dropdown_item, tokenTypesListSpinner
-        )
-
-        tokenTypeSpinner.adapter = tokenTypesSpinner
-
-        // set spinner selection if token passed from transaction details
-        tokenArg?.let {
-            setTokenInSpinner(tokenTypes, it)
+        paymentInputMaxValue.setOnClickListener {
+            paymentInputAmountEditText.setText(maxValue)
+            paymentInputAmountTIL.isErrorEnabled = false
+            paymentInputAmountEditText.clearFocus()
         }
 
-        // set spinner selection if populating from a URI
-        uri?.let {
-            setTokenInSpinner(tokenTypes, token)
+        paymentInputAddNote.setOnClickListener {
+            noteInputVisibility(paymentInputMessageTIL.visibility == View.GONE)
         }
+
+        paymentInputAmountEditText.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val amount = s?.toString()
+                validateAmount(amount)
+            }
+        })
+
+        paymentInputAddressTIET.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // change colour of span to the default if it was changed previously
+                if (!isRadixAddress(s.toString()) && greenSpan) {
+                    greenSpan = false
+                    val spannableString = setDefaultColorForAddress(s.toString())
+                    paymentInputAddressTIET.setText(spannableString)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.isNullOrEmpty()) {
+                    paymentInputAddressTIL.error = null
+                    paymentInputAddressTIL.isErrorEnabled = false
+                } else if (!isRadixAddress(s.toString())) {
+
+                    paymentInputAddressTIL.error =
+                        getString(R.string.payment_input_fragment_enter_valid_address_error)
+                    paymentInputAddressTIL.errorIconDrawable = null
+
+                    if (greenSpan) {
+                        greenSpan = false
+
+                        paymentInputAddressTIET.removeTextChangedListener(this)
+
+                        val spannableString = setDefaultColorForAddress(s.toString())
+
+                        paymentInputAddressTIET.setText(spannableString)
+                        paymentInputAddressTIET.text?.let {
+                            paymentInputAddressTIET.setSelection(it.length)
+                        }
+                        paymentInputAddressTIET.addTextChangedListener(this)
+                    }
+                } else {
+                    greenSpan = true
+                    paymentInputAddressTIET.removeTextChangedListener(this)
+
+                    paymentInputAddressTIL.error = null
+                    paymentInputAddressTIL.isErrorEnabled = false
+
+                    val spannableStringBuilder = setColorForLastCharactersInAddress(s)
+
+                    paymentInputAddressTIET.text = spannableStringBuilder
+
+                    paymentInputAddressTIET.addTextChangedListener(this)
+
+                    paymentInputAddressTIET.clearFocus()
+
+                    if (paymentInputAmountEditText.text.isNullOrEmpty()) {
+                        paymentInputAmountEditText.requestFocus()
+                    }
+                }
+            }
+        })
     }
 
-    private fun removeTokenCreatorAddress(tokenType: String): String {
-        return if (tokenType.contains("/")) {
-            tokenType.split("/")[2]
-        } else {
-            tokenType
+    private fun validateAddressAndAmount(addressTo: String, amountText: String): Boolean {
+        if (addressTo.isEmpty() && amountText.isEmpty()) {
+            paymentInputAddressTIL.error = getString(R.string.payment_input_fragment_address_error)
+            paymentInputAddressTIL.errorIconDrawable = null
+            paymentInputAmountTIL.error = getString(R.string.payment_input_fragment_amount_error)
+            paymentInputAmountTIL.errorIconDrawable = null
+            return true
+        } else if (addressTo.isEmpty()) {
+            paymentInputAddressTIL.error = getString(R.string.payment_input_fragment_address_error)
+            paymentInputAddressTIL.errorIconDrawable = null
+            return true
+        } else if (amountText.isEmpty()) {
+            paymentInputAmountTIL.error = getString(R.string.payment_input_fragment_amount_error)
+            paymentInputAmountTIL.errorIconDrawable = null
+            return true
+        } else if (paymentInputAddressTIET.text.toString() == myAddress) {
+            paymentInputAddressTIL.error = getString(R.string.toast_entered_own_address_error)
+            paymentInputAddressTIL.errorIconDrawable = null
+            return true
         }
+        return false
     }
 
-    private fun setTokenInSpinner(tokenTypes: List<String>, token: String) {
-        val tokenTypeIndex = tokenTypes.indexOf(token)
-        if (tokenTypeIndex == -1) {
-            toast(getString(R.string.toast_token_not_owned))
-            return
-        }
-
-        if (tokenTypes.size > 1) {
-            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token) + 1)
-        } else {
-            tokenTypeSpinner.setSelection(tokenTypes.indexOf(token))
-        }
+    private fun getScale(bigDecimal: BigDecimal): Int {
+        return max(0, bigDecimal.stripTrailingZeros().scale())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Timber.d("onActivityResult")
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     val barcode: Barcode =
                         data.getParcelableExtra(BarcodeCaptureActivity.BARCODE_OBJECT)
-                    inputAddressTIET.setText(barcode.displayValue.trim())
-                    Timber.d("Barcode read: ${barcode.displayValue.trim()}")
-                } else {
-                    toast(getString(R.string.barcode_failure))
-                    Timber.d("No barcode captured, intent data is null")
+                    paymentInputAddressTIET.setText(barcode.displayValue.trim())
                 }
             } else {
                 val failureString = getString(R.string.barcode_error) +
