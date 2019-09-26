@@ -15,7 +15,6 @@ import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.schibsted.spain.barista.interaction.BaristaSpinnerInteractions.clickSpinnerItem
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
@@ -181,14 +180,13 @@ class PaymentStatusFragmentTest {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
         assertDisplayed(R.id.toolbar_search)
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(50))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(45))
         clickOn(R.id.payButton)
     }
 
     private fun inputPaymentDetails(amount: String) {
         writeTo(R.id.inputAddressTIET, ADDRESS_TO)
         writeTo(R.id.amountEditText, amount)
-        clickSpinnerItem(R.id.tokenTypeSpinner, 0)
     }
 
     private fun assertSummaryMatchesUserInput(amount: String) {

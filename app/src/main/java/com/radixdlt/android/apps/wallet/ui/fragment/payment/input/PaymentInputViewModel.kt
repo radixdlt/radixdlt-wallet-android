@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
-import com.radixdlt.android.apps.wallet.ui.fragment.assets.Asset
+import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetPayment
 import com.radixdlt.android.apps.wallet.util.GENESIS_XRD
 import com.radixdlt.android.apps.wallet.util.sumStoredTransactions
 import com.radixdlt.client.core.atoms.particles.RRI
@@ -21,10 +21,9 @@ class PaymentInputViewModel @Inject constructor(
     private val compositeDisposable = CompositeDisposable()
 
     private val availableTokens = mutableListOf<String>()
-    var sendingTokens: Boolean = false
 
-    private val _asset = MutableLiveData<Asset?>()
-    val asset: LiveData<Asset?> get() = _asset
+    private val _asset = MutableLiveData<AssetPayment?>()
+    val asset: LiveData<AssetPayment?> get() = _asset
 
     init {
         retrieveTokenTypes()
@@ -37,11 +36,12 @@ class PaymentInputViewModel @Inject constructor(
                 availableTokens.clear()
                 availableTokens.addAll(it)
 
-                getTransactionsFromAsset(GENESIS_XRD)
-//                if (it.size > 0) {
-//                }
-
-            }, { Timber.e(it) })
+                if (it.size > 0 && it.contains(GENESIS_XRD)) {
+                    getTransactionsFromAsset(GENESIS_XRD)
+                } else {
+                    getTransactionsFromAsset(it.first())
+                }
+            }, Timber::e)
             .addTo(compositeDisposable)
     }
 
@@ -55,9 +55,18 @@ class PaymentInputViewModel @Inject constructor(
 
                 val tokenName = it.first().tokenName
                 val tokenUrlIcon = it.first().tokenIconUrl
+                val tokenGranularity = it.first().tokenGranularity
                 val total = sumStoredTransactions(it).toPlainString()
 
-                val assetData = Asset(tokenName, rri.name, rri.address.toString(), tokenUrlIcon, total)
+                val assetData = AssetPayment(
+                    tokenName,
+                    rri.name,
+                    rri.address.toString(),
+                    tokenUrlIcon,
+                    total,
+                    tokenGranularity,
+                    false
+                )
 
                 _asset.postValue(assetData)
             }

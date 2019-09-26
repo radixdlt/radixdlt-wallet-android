@@ -6,11 +6,11 @@ import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.DelayHelper
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
+import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.schibsted.spain.barista.interaction.BaristaSpinnerInteractions.clickSpinnerItem
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
@@ -51,7 +51,7 @@ class PaymentSummaryFragmentTest {
         assertSummaryMatchesUserInput()
 
         clickOn(R.id.paymentSummaryFromImageButton)
-        assertDisplayed(ADDRESS_FROM)
+        assertDisplayed(Identity.api?.address.toString())
 
         clickOn(R.id.paymentSummaryToImageButton)
         assertDisplayed(ADDRESS_TO)
@@ -64,6 +64,7 @@ class PaymentSummaryFragmentTest {
         navigateToPayScreen()
         inputPaymentDetails()
 
+        clickOn(R.string.payment_input_fragment_note_optional)
         // Write message for transaction
         writeTo(R.id.inputMessageTIET, "Hello World")
 
@@ -93,7 +94,7 @@ class PaymentSummaryFragmentTest {
 
     private fun createWallet() {
         clickOn(R.id.importWalletFromMnemonicButton)
-        writeTo(R.id.inputMnemonicOrSeedTIET, "hosted")
+        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtest")
         clickOn(R.id.createWalletFromMnemonicButton)
     }
 
@@ -101,19 +102,18 @@ class PaymentSummaryFragmentTest {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
         assertDisplayed(R.id.toolbar_search)
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(50))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(40))
         clickOn(R.id.payButton)
     }
 
     private fun inputPaymentDetails() {
         writeTo(R.id.inputAddressTIET, ADDRESS_TO)
         writeTo(R.id.amountEditText, AMOUNT)
-        clickSpinnerItem(R.id.tokenTypeSpinner, 1)
     }
 
     private fun assertSummaryMatchesUserInput() {
         assertDisplayed(R.id.paymentSummaryToAddressTextView, ADDRESS_TO)
-        assertDisplayed(R.id.paymentSummaryFromAddressTextView, ADDRESS_FROM)
+        assertDisplayed(R.id.paymentSummaryFromAddressTextView, Identity.api?.address.toString())
         assertDisplayed(AMOUNT)
         assertDisplayed(ISO)
         assertDisplayed(R.string.payment_summary_fragment_xrd_fee)
@@ -121,7 +121,6 @@ class PaymentSummaryFragmentTest {
 
     companion object {
         const val ADDRESS_TO = "9iNGvjXbifbkpPy2252tv8w8QCWnTkixxB1YwrYz1c2AR5xG8VJ"
-        const val ADDRESS_FROM = "9gAyDHC8EgYrph36j4zz4Ebty7JwZ66u4PDnfTWmRDhYJzHUmYM"
         const val AMOUNT = "42.00"
         const val ISO = "XRD"
     }

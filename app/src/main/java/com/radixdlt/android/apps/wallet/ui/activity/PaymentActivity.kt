@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.radixdlt.android.R
 import kotlinx.android.synthetic.main.activity_payment.*
@@ -20,6 +21,7 @@ class PaymentActivity : BaseActivity() {
         setContentView(R.layout.activity_payment)
 
         setSupportActionBar(toolbar as Toolbar)
+        initialisePaymentViewModel()
 
         addressExtra = intent.getStringExtra(EXTRA_TRANSACTION_ADDRESS)
         tokenTypeExtra = intent.getStringExtra(EXTRA_TRANSACTION_TOKEN_TYPE)
@@ -30,6 +32,10 @@ class PaymentActivity : BaseActivity() {
             uri != null -> navigateToPaymentInputWithUriData()
             else -> navigateToPaymentInput()
         }
+    }
+
+    private fun initialisePaymentViewModel() {
+        ViewModelProviders.of(this)[PaymentViewModel::class.java]
     }
 
     private fun navigateToPaymentInput() {

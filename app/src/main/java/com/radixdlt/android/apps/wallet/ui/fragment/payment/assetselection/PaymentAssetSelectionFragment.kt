@@ -9,17 +9,24 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lapism.searchview.Search
 import com.radixdlt.android.R
-import com.radixdlt.android.apps.wallet.ui.fragment.assets.Asset
+import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetPayment
 import com.radixdlt.android.databinding.FragmentPaymentAssetSelectionBinding
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_payment_asset_selection.*
 import kotlinx.android.synthetic.main.tool_bar_search.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.jetbrains.anko.px2dip
 import java.util.Locale
 import javax.inject.Inject
 
@@ -30,7 +37,7 @@ class PaymentAssetSelectionFragment : Fragment() {
 
     private lateinit var paymentAssetSelectionViewModel: PaymentAssetSelectionViewModel
 
-//    private val viewModel: PaymentAssetSelectionViewModel by viewModels()
+    private val paymentViewModel: PaymentViewModel by activityViewModels()
 
     private lateinit var paymentSelectionAdapter: PaymentSelectionAdapter
 
@@ -43,28 +50,36 @@ class PaymentAssetSelectionFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = initialiseDataBinding(inflater, container)
-        initialiseToolBar()
-//        viewModel.showTransactionSummary(args)
+        initialiseToolBar(view)
 
         return view
     }
 
-    private fun initialiseToolBar() {
-        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
-        (activity as AppCompatActivity).supportActionBar?.title = "Select Currency"
+    private fun initialiseToolBar(view: View) {
+        val actionBar = (activity as AppCompatActivity).supportActionBar
+        actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
+        actionBar?.title = getString(R.string.payment_asset_selection_fragment_title)
+        actionBar?.elevation = view.context.px2dip(0)
     }
 
     private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
-        val binding: FragmentPaymentAssetSelectionBinding=
-            DataBindingUtil.inflate(inflater, R.layout.fragment_payment_asset_selection, container, false)
-        paymentAssetSelectionViewModel = ViewModelProviders.of(this, viewModelFactory)[PaymentAssetSelectionViewModel::class.java]
+        val binding: FragmentPaymentAssetSelectionBinding =
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_payment_asset_selection,
+                container,
+                false
+            )
+
+        paymentAssetSelectionViewModel = ViewModelProviders
+            .of(this, viewModelFactory)[PaymentAssetSelectionViewModel::class.java]
+
         binding.viewmodel = paymentAssetSelectionViewModel
         binding.lifecycleOwner = this
 
@@ -73,7 +88,6 @@ class PaymentAssetSelectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel.paymentSummaryAction.observe(viewLifecycleOwner, Observer(::action))
         ctx = view.context
         initialiseRecyclerView()
         initialiseSearchView()
@@ -86,8 +100,12 @@ class PaymentAssetSelectionFragment : Fragment() {
         assetSelectionRecyclerView.adapter = paymentSelectionAdapter
     }
 
-    private val itemClick = fun(rri: String, name: String, balance: String) {
-
+    private val itemClick = fun(rri: String) {
+        paymentViewModel.selectedAsset = rri
+        lifecycleScope.launch {
+            delay(500)
+            findNavController().navigateUp()
+        }
     }
 
     private fun initialiseSearchView() {
@@ -111,12 +129,15 @@ class PaymentAssetSelectionFragment : Fragment() {
 
     private fun initialiseViewModels() {
         paymentAssetSelectionViewModel = ViewModelProviders
-            .of(this, viewModelFactory)[PaymentAssetSelectionViewModel::class.java].apply {
-            assetsOwned.observe(viewLifecycleOwner, Observer(::showAssets))
-        }
+            .of(this, viewModelFactory)[PaymentAssetSelectionViewModel::class.java]
+            .apply {
+                assetsOwned.observe(viewLifecycleOwner, Observer(::showAssets))
+            }
+        paymentAssetSelectionViewModel.selectedAsset = paymentViewModel.selectedAsset
+        paymentAssetSelectionViewModel.retrieveAssets()
     }
 
-    private fun showAssets(assets: List<Asset>) {
+    private fun showAssets(assets: List<AssetPayment>) {
         paymentSelectionAdapter.originalList(assets)
         paymentSelectionAdapter.replace(assets)
     }

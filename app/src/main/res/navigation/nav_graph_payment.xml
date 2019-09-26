@@ -52,7 +52,11 @@
         </action>
         <action
             android:id="@+id/action_navigation_payment_input_to_navigation_payment_asset_selection"
-            app:destination="@id/navigation_payment_asset_selection">
+            app:destination="@id/navigation_payment_asset_selection"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
         </action>
     </fragment>
     <fragment
@@ -101,6 +105,13 @@
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.assetselection.PaymentAssetSelectionFragment"
         android:label="fragment_payment_asset_selection"
         tools:layout="@layout/fragment_payment_asset_selection">
+        <action
+            android:id="@+id/action_navigation_payment_asset_selection_to_navigation_payment_input"
+            app:destination="@id/navigation_payment_input"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <dialog
         android:id="@+id/navigation_payment_status"

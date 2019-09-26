@@ -62,7 +62,7 @@
         android:layout_height="56dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/assets_fragment_xml_pay_button"
+        android:text="@string/assets_fragment_xml_send_button"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:backgroundTint="@color/colorAccent"

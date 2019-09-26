@@ -7,7 +7,7 @@
     tools:context="com.radixdlt.android.apps.wallet.ui.fragment.payment.input.PaymentInputFragment">
 
     <ScrollView
-        android:id="@+id/sendRadixScrollView"
+        android:id="@+id/paymentInputScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputAmountTIL"
+                android:id="@+id/paymentInputAmountTIL"
                 style="@style/MaterialTextLayoutOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -28,12 +28,12 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
                 android:theme="@style/MaterialTextLayoutOutlinedTheme"
-                app:layout_constraintEnd_toStartOf="@+id/linLayout"
+                app:layout_constraintEnd_toStartOf="@+id/paymentInputLinearLayout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputAddressTIL">
+                app:layout_constraintTop_toBottomOf="@+id/paymentInputAddressTIL">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/amountEditText"
+                    android:id="@+id/paymentInputAmountEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/receive_radix_activity_amount_hint"
@@ -46,7 +46,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/sendButton"
+                android:id="@+id/paymentInputSendButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -64,28 +64,28 @@
                 tools:backgroundTint="@color/colorAccent" />
 
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/pasteButton"
+                android:id="@+id/paymentInputPasteButton"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/rounded_button_grey"
                 android:elevation="2dp"
                 android:gravity="center"
                 android:padding="6dp"
                 android:src="@drawable/ic_paste"
                 android:stateListAnimator="@animator/button_elevation"
-                app:layout_constraintBottom_toTopOf="@+id/qrScanButton"
+                app:layout_constraintBottom_toTopOf="@+id/paymentInputQrScanButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/inputAddressTIL"
+                app:layout_constraintTop_toTopOf="@+id/paymentInputAddressTIL"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/qrScanButton"
+                android:id="@+id/paymentInputQrScanButton"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rounded_button_grey"
                 android:elevation="3dp"
@@ -93,44 +93,12 @@
                 android:padding="6dp"
                 android:src="@drawable/ic_qr"
                 android:stateListAnimator="@animator/button_elevation"
-                app:layout_constraintBottom_toBottomOf="@+id/inputAddressTIL"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pasteButton"
+                app:layout_constraintTop_toBottomOf="@+id/paymentInputPasteButton"
                 app:layout_constraintVertical_chainStyle="packed" />
 
-<!--            <androidx.appcompat.widget.AppCompatSpinner-->
-<!--                android:id="@+id/tokenTypeSpinner"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="52dp"-->
-<!--                android:layout_marginEnd="16dp"-->
-<!--                android:layout_weight="0.5"-->
-<!--                android:popupBackground="@color/white"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/inputAmountTIL"-->
-<!--                app:layout_constraintRight_toRightOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/inputAmountTIL" />-->
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:id="@+id/tokenTypeSpinner"-->
-<!--                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="52dp"-->
-<!--                android:hint="Test"-->
-<!--                android:layout_marginEnd="16dp"-->
-<!--                android:layout_weight="0.5"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/inputAmountTIL"-->
-<!--                app:layout_constraintRight_toRightOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/inputAmountTIL">-->
-
-<!--                <AutoCompleteTextView-->
-<!--                    android:id="@+id/exposedDropDown"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"/>-->
-
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputAddressTIL"
+                android:id="@+id/paymentInputAddressTIL"
                 style="@style/MaterialTextLayoutOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -138,12 +106,12 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:theme="@style/MaterialTextLayoutOutlinedTheme"
-                app:layout_constraintEnd_toStartOf="@+id/qrScanButton"
+                app:layout_constraintEnd_toStartOf="@+id/paymentInputQrScanButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputAddressTIET"
+                    android:id="@+id/paymentInputAddressTIET"
                     android:layout_width="match_parent"
                     android:layout_height="74dp"
                     android:hint="@string/send_activity_enter_address_hint"
@@ -156,7 +124,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
-                android:id="@+id/linLayout"
+                android:id="@+id/paymentInputLinearLayout"
                 android:layout_width="110dp"
                 android:layout_height="54dp"
                 android:orientation="horizontal"
@@ -164,19 +132,18 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/inputAmountTIL"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/inputAmountTIL">
+                app:layout_constraintTop_toTopOf="@+id/paymentInputAmountTIL">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/assetIcon"
+                    android:id="@+id/paymentInputAssetIcon"
                     android:layout_width="44dp"
                     android:layout_height="44dp"
                     android:padding="6dp"
                     android:src="@drawable/ic_paste"/>
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/assetIso"
+                    android:id="@+id/paymentInputAssetIso"
                     android:layout_width="66dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -185,7 +152,7 @@
                     android:paddingStart="4dp"
                     android:maxLines="1"
                     android:maxLength="4"
-                    android:text="XRD"/>
+                    tools:text="XRD"/>
             </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -194,9 +161,9 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputAmountTIL"
+                app:layout_constraintTop_toBottomOf="@+id/paymentInputAmountTIL"
                 android:layout_marginTop="8dp"
-                android:text="Add max value 849 XRD"
+                tools:text="Add max value 849 XRD"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -210,15 +177,15 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputMessageTIL"
-                android:text="Add note (Optional)"
-                android:paddingStart="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/paymentInputMessageTIL"
+                tools:text="Add note (Optional)"
+                android:layout_marginStart="16dp"
                 app:layout_constraintHorizontal_bias="0.0"
                 android:textColor="@color/color_states_payment_input_text_view"
                 app:fontFamily="@font/roboto_medium_radix"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputMessageTIL"
+                android:id="@+id/paymentInputMessageTIL"
                 style="@style/MaterialTextLayoutOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -226,17 +193,17 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
                 android:theme="@style/MaterialTextLayoutOutlinedTheme"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/paymentInputMaxValue">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputMessageTIET"
+                    android:id="@+id/paymentInputMessageTIET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Note"
+                    android:hint="@string/payment_input_fragment_note_hint_xml"
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="128" />
             </com.google.android.material.textfield.TextInputLayout>

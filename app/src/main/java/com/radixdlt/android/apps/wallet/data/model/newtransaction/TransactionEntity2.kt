@@ -23,5 +23,6 @@ data class TransactionEntity2(
     val tokenDescription: String?,
     val tokenIconUrl: String?,
     val tokenTotalSupply: BigDecimal?,
+    val tokenGranularity: BigDecimal?,
     val tokenSupplyType: String?
 ) : Parcelable
