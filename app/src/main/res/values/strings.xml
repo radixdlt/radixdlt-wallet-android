@@ -185,6 +185,15 @@
     <string name="greeting_fragment_privacy_policy">Privacy Policy</string>
     <string name="greeting_fragment_get_started_xml_button">Get Started</string>
 
+    <!-- Payment Summary Fragment -->
+    <string name="payment_summary_fragment_toolbar_title">Summary</string>
+    <string name="payment_summary_fragment_to_label_xml">To:</string>
+    <string name="payment_summary_fragment_from_label_xml">From:</string>
+    <string name="payment_summary_fragment_note_label_xml">Note:</string>
+    <string name="payment_summary_fragment_fee_label_xml">Fee:</string>
+    <string name="payment_summary_fragment_xrd_fee">0.001 XRD</string>
+    <string name="payment_summary_fragment_confirm_and_send_xml_button">Confirm and Send</string>
+
     <!-- FRAGMENT DIALOGS -->
     <!-- Delete Wallet Dialog -->
     <string name="delete_wallet_dialog_title">Delete Existing Wallet?</string>
@@ -228,6 +237,20 @@
     <string name="receive_radix_dialog_xml_qr_code_description">QR code</string>
     <string name="receive_radix_dialog_generate_invoice_button">Generate Invoice</string>
 
+    <!-- Payment Status Dialog -->
+    <string name="payment_status_dialog_transaction_completed">Transaction Completed</string>
+    <string name="payment_status_dialog_transaction_failure">Transaction Failure</string>
+    <string name="payment_status_dialog_transaction_sending">Sending…</string>
+    <string name="payment_status_dialog_to_label_xml">To:</string>
+    <string name="payment_status_dialog_amount_label_xml">Amount:</string>
+    <string name="payment_status_dialog_fee_label_xml">Fee:</string>
+    <string name="payment_status_dialog_status_label_xml">Status:</string>
+    <string name="payment_status_dialog_fee_xrd">0.001 XRD</string>
+    <string name="payment_status_dialog_status_confirmed">Confirmed</string>
+    <string name="payment_status_dialog_close_xml_button">Close</string>
+    <string name="payment_status_dialog_insufficient_funds_message">You have insufficient funds</string>
+    <string name="payment_status_dialog_failure_message">There was an error trying to send the transaction, please try again!</string>
+
     <!-- Common strings-->
     <string name="common_address_text">Address</string>
     <string name="common_toast_address_copied_clipboard">Address copied to clipboard</string>
@@ -240,4 +263,5 @@
 
     <string name="common_rri_address_string">/%1$s/%2$s</string>
     <string name="common_rri_name_string">%1$s</string>
+
 </resources>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/paymentStatusAnimationView"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/paymentStatusLoadingMessageTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.50"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.40"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="false"
+            app:animation="@{ viewmodel.paymentStatusState }"
+            tools:src="@drawable/failed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentStatusLoadingMessageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            tools:text="Loading..."
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="24sp"
+            app:statusText="@{ viewmodel.paymentStatusState }"
+            app:fontFamily="@font/roboto_medium_radix"
+            app:layout_constraintBottom_toTopOf="@+id/paymentStatusToLabelTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/paymentStatusAnimationView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentStatusToLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/payment_status_dialog_to_label_xml"
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="16sp"
+            app:fontFamily="@font/roboto_medium_radix"
+            app:layout_constraintBottom_toTopOf="@+id/paymentStatusAmountLabelTextView"
+            app:layout_constraintEnd_toStartOf="@+id/paymentStatusToTextView"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/paymentStatusLoadingMessageTextView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentStatusToTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginBottom="16dp"
+            android:ellipsize="start"
+            android:maxWidth="265dp"
+            android:minWidth="0dp"
+            android:singleLine="true"
+            android:text="@{ viewmodel.toAddress }"
+            tools:text="9egHejbV2z1p1Luy2mER4BZaHzM67LdaLrUoJ9YSFRGCw1xPC"
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/paymentStatusToLabelTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/paymentStatusToLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/paymentStatusToLabelTextView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentStatusAmountLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/payment_status_dialog_amount_label_xml"
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="16sp"
+            app:fontFamily="@font/roboto_medium_radix"
+            app:layout_constraintBottom_toTopOf="@+id/paymentStatusFeeLabelTextView"
+            app:layout_constraintEnd_toStartOf="@+id/paymentStatusAmountTextView"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/paymentStatusToLabelTextView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentStatusAmountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginBottom="16dp"
+            android:text="@{ viewmodel.amount }"
+            tools:text="0.256 XRD"
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/paymentStatusAmountLabelTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/paymentStatusAmountLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/paymentStatusAmountLabelTextView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentStatusFeeLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/payment_status_dialog_fee_label_xml"
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="16sp"
+            app:fontFamily="@font/roboto_medium_radix"
+            app:layout_constraintBottom_toTopOf="@+id/paymentStatusStatusLabelTextView"
+            app:layout_constraintEnd_toStartOf="@+id/paymentStatusFeeTextView"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/paymentStatusAmountLabelTextView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentStatusFeeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/payment_status_dialog_fee_xrd"
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/paymentStatusFeeLabelTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/paymentStatusFeeLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/paymentStatusFeeLabelTextView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentStatusStatusLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/payment_status_dialog_status_label_xml"
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="16sp"
+            app:fontFamily="@font/roboto_medium_radix"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/paymentStatusStatusTextView"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/paymentStatusFeeLabelTextView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentStatusStatusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/payment_status_dialog_status_confirmed"
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/paymentStatusStatusLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/paymentStatusStatusLabelTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/paymentStatusStatusLabelTextView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/paymentStatusActionButton"
+            style="@style/MaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:text="@{ viewmodel.paymentStatusState.name().equals(`SUCCESS`) ? `Explorer` : `Try again` }"
+            android:onClick="@{ () -> viewmodel.paymentStatusState.name().equals(`SUCCESS`) ? viewmodel.onOpenExplorerClickListener() : viewmodel.onTryAgainClickListener() }"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Action" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/paymentStatusCloseButton"
+            style="@style/MaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/payment_status_dialog_close_xml_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:onClick="@{ () -> viewmodel.onCloseClickListener() }"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/paymentSummaryButtonsGroup"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:visibleGone="@{ !viewmodel.paymentStatusState.name().equals(`LOADING`) }"
+            app:constraint_referenced_ids="paymentStatusActionButton, paymentStatusCloseButton" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/paymentSummarySuccessGroup"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:visibleInvisible="@{ viewmodel.paymentStatusState.name().equals(`SUCCESS`) }"
+            app:constraint_referenced_ids="paymentStatusToLabelTextView, paymentStatusToTextView, paymentStatusAmountLabelTextView, paymentStatusAmountTextView, paymentStatusFeeLabelTextView, paymentStatusFeeTextView, paymentStatusStatusLabelTextView, paymentStatusStatusTextView" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentStatusFailureTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:maxWidth="200dp"
+            android:textAlignment="center"
+            android:text="@{ viewmodel.insufficientFunds ? @string/payment_status_dialog_insufficient_funds_message : @string/payment_status_dialog_failure_message }"
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            app:visibleInvisible="@{ viewmodel.paymentStatusState.name().equals(`FAILED`) }"
+            app:fontFamily="@font/roboto"
+            app:layout_constraintBottom_toTopOf="@+id/paymentStatusAmountLabelTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/paymentStatusLoadingMessageTextView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

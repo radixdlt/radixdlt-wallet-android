@@ -6,6 +6,7 @@ import android.view.ViewConfiguration
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 
 fun Number?.getOrdinal(): String? {
@@ -56,6 +57,10 @@ fun View.setConstraintLayoutMargin(left: Int, top: Int, right: Int, bottom: Int)
 fun Fragment.toast(@StringRes message: Int) = view?.let { activity?.toast(message) }
 
 fun Fragment.toast(message: CharSequence) = view?.let { activity?.toast(message) }
+
+fun Fragment.longToast(@StringRes message: Int) = view?.let { activity?.longToast(message) }
+
+fun Fragment.longToast(message: CharSequence) = view?.let { activity?.longToast(message) }
 
 fun Fragment.getStatusBarHeight(): Int {
     val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")

@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
-import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
+import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
@@ -146,7 +146,8 @@ class AssetTransactionsFragment : Fragment() {
 
     private fun payButtonClickListener() {
         payButton.setOnClickListener {
-            SendRadixActivity.newIntent(activity!!)
+//            SendRadixActivity.newIntent(activity!!)
+            PaymentActivity.newIntent(activity!!)
         }
     }
 
