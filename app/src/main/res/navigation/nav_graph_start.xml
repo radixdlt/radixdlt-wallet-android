@@ -9,5 +9,14 @@
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.greeting.GreetingFragment"
         android:label="fragment_greeting"
         tools:layout="@layout/fragment_greeting">
+        <action
+            android:id="@+id/action_navigation_greeting_to_navigation_create_wallet"
+            app:destination="@id/navigation_create_wallet" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_create_wallet"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.createwallet.CreateWalletFragment"
+        android:label="fragment_greeting"
+        tools:layout="@layout/fragment_create_wallet">
     </fragment>
 </navigation>

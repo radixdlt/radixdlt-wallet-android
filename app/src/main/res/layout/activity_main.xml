@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/tool_bar" />
+        layout="@layout/tool_bar_connection" />
 
     <fragment
         android:id="@+id/my_nav_host_fragment"

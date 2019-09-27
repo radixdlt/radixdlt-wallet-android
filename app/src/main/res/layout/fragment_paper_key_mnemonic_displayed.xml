@@ -8,7 +8,7 @@
     tools:context=".apps.wallet.ui.fragment.mnemonic.PaperKeyMnemonicDisplayedFragment">
 
     <include
-        layout="@layout/tool_bar"
+        layout="@layout/tool_bar_connection"
         android:id="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

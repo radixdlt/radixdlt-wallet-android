@@ -274,6 +274,7 @@
     <!-- Common strings-->
     <string name="common_address_text">Address</string>
     <string name="common_toast_address_copied_clipboard">Address copied to clipboard</string>
+    <string name="common_radix_logo_content_description">Radix Logo</string>
 
     <!-- TutorialReceiveDialog -->
     <string name="tutorial_receive_dialog_arrow_xml_content_description">Arrow pointing to receive button</string>
@@ -283,5 +284,15 @@
 
     <string name="common_rri_address_string">/%1$s/%2$s</string>
     <string name="common_rri_name_string">%1$s</string>
+
+    <!-- Create Wallet Fragment -->
+    <string name="create_wallet_fragment_welcome_title">Welcome to Radix App!</string>
+    <string name="create_wallet_fragment_message_xml">To continue, you will need to have access to a digital wallet to send &amp; receive funds.\n\nPlease import an existing wallet or create a new one.</string>
+    <string name="create_wallet_fragment_new_wallet_button_xml">Create a new wallet</string>
+    <string name="create_wallet_fragment_import_wallet_button_xml">Import an existing wallet</string>
+    <string name="create_wallet_fragment_disclaimer_message_xml">Radix DLT CANNOT ACCESS YOUR FUNDS in case you lose access to your account</string>
+    <string name="create_wallet_fragment_separator_or_xml">or</string>
+    <string name="create_wallet_fragment_create_wallet_icon_description">Create wallet icon</string>
+    <string name="create_wallet_fragment_import_wallet_icon_description">Import wallet icon</string>
 
 </resources>

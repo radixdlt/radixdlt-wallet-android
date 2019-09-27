@@ -30,7 +30,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
-import kotlinx.android.synthetic.main.tool_bar.*
+import kotlinx.android.synthetic.main.tool_bar_connection.*
 import org.jetbrains.anko.px2dip
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
