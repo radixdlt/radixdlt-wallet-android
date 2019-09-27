@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:textSize="22sp"
         android:text="@string/create_wallet_fragment_welcome_title"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:textColor="@color/radixBlueGrey"
@@ -34,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/create_wallet_fragment_message_xml"
         android:textSize="18sp"
@@ -45,27 +45,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createWalletWelcomeTitleTextView" />
 
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:id="@+id/createWalletCreateNewWalletButton"-->
-<!--        style="@style/MaterialButton"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="124dp"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:text="@string/create_wallet_fragment_new_wallet_button_xml"-->
-<!--        android:textSize="18sp"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textAlignment="viewStart"-->
-<!--        app:icon="@drawable/ic_create_wallet"-->
-<!--        app:iconPadding="0dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/createWalletWelcomeMessageTextView"-->
-<!--        app:layout_constraintVertical_bias="0.0" />-->
-
     <LinearLayout
         android:id="@+id/createWalletCreateNewWalletButton"
         android:layout_width="0dp"
@@ -74,7 +53,8 @@
         android:gravity="start|center"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:elevation="6dp"
+        android:elevation="3dp"
+        android:stateListAnimator="@animator/button_elevation"
         android:layout_marginTop="22dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/colorPrimary"
@@ -137,29 +117,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createWalletCreateNewWalletButton"/>
 
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:id="@+id/createWalletImportWalletButton"-->
-<!--        style="@style/MaterialButton"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="124dp"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:text="@string/create_wallet_fragment_import_wallet_button_xml"-->
-<!--        android:textSize="18sp"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:textColor="@color/radixBlueGrey2"-->
-<!--        app:backgroundTint="@color/white"-->
-<!--        app:icon="@drawable/ic_import_wallet"-->
-<!--        app:iconTint="@color/radixBlueGrey2"-->
-<!--        app:iconPadding="0dp"-->
-<!--        android:textAlignment="textStart"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/createWalletSeparation2View"-->
-<!--        app:layout_constraintVertical_bias="0.0" />-->
-
     <LinearLayout
         android:id="@+id/createWalletImportWalletButton"
         android:layout_width="0dp"
@@ -168,7 +125,8 @@
         android:gravity="start|center"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:elevation="6dp"
+        android:elevation="3dp"
+        android:stateListAnimator="@animator/button_elevation"
         android:layout_marginTop="22dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/white"
