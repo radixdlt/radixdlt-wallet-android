@@ -45,8 +45,9 @@ class BackPressedEditText : TextInputEditText {
                 val textEntered = text?.toString() ?: ""
 
                 if (textEntered.isNotEmpty() && textEntered.contains(" ")) {
-                    setText(textEntered.replace(" ", ""))
-                    setSelection(textEntered.length - 1)
+                    val replacedText = textEntered.replace(" ", "")
+                    setText(replacedText)
+                    setSelection(replacedText.length - 1)
                 }
             }
         })
