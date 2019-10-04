@@ -14,7 +14,6 @@
         </item>
         <item name="android:windowReturnTransition">@transition/details_window_return_transition
         </item>
-
 <!--        <item name="android:windowTranslucentStatus">true</item>-->
     </style>
 
@@ -73,7 +72,20 @@
         <item name="colorPrimary">@color/colorAccent</item>
     </style>
 
-    <style name="MaterialTextLayoutOutlinedStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+    <!-- Widget.MaterialComponents.TextInputLayout.OutlinedBox -->
+    <style name="MaterialTextLayoutOutlinedThemePrimary" parent="@style/MaterialTextLayoutOutlinedStylePrimary">
+        <item name="android:textViewStyle">@style/MaterialTextLayoutOutlinedStyle</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnSurface">@color/colorPrimary</item> <!--inputtext unfocused color-->
+    </style>
+
+    <style name="MaterialTextLayoutOutlinedStylePrimary" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/selector_text_input_layout_border_color</item>
+<!--        <item name="boxStrokeWidthFocused">2dp</item>-->
+<!--        <item name="boxStrokeWidth">0dp</item>-->
+    </style>
+
+    <style name="MaterialTextLayoutOutlinedStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense" />
 
     <!-- Widget.MaterialComponents.TextInputLayout.FilledBox -->
     <style name="MaterialTextLayoutFilledBoxTheme" parent="@style/MaterialTextLayoutFilledBoxStyle">

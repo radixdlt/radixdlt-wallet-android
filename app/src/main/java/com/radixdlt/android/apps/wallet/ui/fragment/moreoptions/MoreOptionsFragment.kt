@@ -23,7 +23,7 @@ import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
 import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper.openCustomTab
 import com.radixdlt.android.apps.wallet.helper.WebviewFallback
 import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
-import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
+import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
 import com.radixdlt.android.apps.wallet.ui.dialog.AutoLockTimeOutDialog
 import com.radixdlt.android.apps.wallet.ui.dialog.ChooseNetworkDialog
 import com.radixdlt.android.apps.wallet.ui.dialog.DeleteWalletDialog
@@ -246,7 +246,7 @@ class MoreOptionsFragment : Fragment() {
             REQUEST_CODE_DELETE_WALLET -> {
                 deleteWallet()
 
-                activity!!.startActivity<NewWalletActivity>()
+                activity!!.startActivity<StartActivity>()
                 activity!!.finish()
             }
             REQUEST_CODE_CHOOSE_NETWORK -> {

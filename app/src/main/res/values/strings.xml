@@ -286,7 +286,7 @@
     <string name="common_rri_name_string">%1$s</string>
 
     <!-- Create Wallet Fragment -->
-    <string name="create_wallet_fragment_welcome_title">Welcome to Radix App!</string>
+    <string name="create_wallet_fragment_welcome_title_xml">Welcome to Radix App!</string>
     <string name="create_wallet_fragment_message_xml">To continue, you will need access to a digital wallet to send &amp; receive funds.\n\nPlease import an existing wallet or create a new one.</string>
     <string name="create_wallet_fragment_new_wallet_button_xml">Create a new wallet</string>
     <string name="create_wallet_fragment_import_wallet_button_xml">Import an existing wallet</string>
@@ -294,5 +294,17 @@
     <string name="create_wallet_fragment_separator_or_xml">or</string>
     <string name="create_wallet_fragment_create_wallet_icon_description">Create wallet icon</string>
     <string name="create_wallet_fragment_import_wallet_icon_description">Import wallet icon</string>
+
+    <!-- Import Wallet Fragment -->
+    <string name="import_wallet_fragment_toolbar_title">Restore</string>
+    <string name="import_wallet_fragment_welcome_title_xml">Restore your Radix Account</string>
+    <string name="import_wallet_fragment_message_xml">With your back up phrase,\nyou\'re able to restore your wallet.</string>
+    <string name="import_wallet_fragment_mnemonic_error">Invalid mnemonic</string>
+
+    <!-- Dialog Invalid Checksum -->
+    <string name="invalid_checksum_dialog_xml_title">Mnemonic Warning</string>
+    <string name="invalid_checksum_dialog_xml_message">The mnemonic used cannot be properly validated due to using an incorrect specification.\n\nAlthough you may use it without issues it is strongly advised that you generate a new one which can be validated.</string>
+    <string name="invalid_checksum_dialog_xml_cancel_button">Cancel</string>
+    <string name="invalid_checksum_dialog_xml_continue_button">Continue</string>
 
 </resources>

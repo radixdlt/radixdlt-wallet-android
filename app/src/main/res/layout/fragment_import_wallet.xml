@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.radixdlt.android.apps.wallet.ui.fragment.importwallet.ImportWalletViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".apps.wallet.ui.fragment.importwallet.ImportWalletFragment">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/tool_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/importWalletConstraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/importWalletWelcomeTitleTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:text="@string/import_wallet_fragment_welcome_title_xml"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/radixBlueGrey"
+                    app:fontFamily="@font/roboto_medium_radix"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/importWalletWelcomeMessageTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/import_wallet_fragment_message_xml"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto"
+                    app:layout_constraintEnd_toStartOf="@+id/importWalletToImageButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletWelcomeTitleTextView" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/importWalletToImageButton"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/oval_green_copy_button"
+                    android:onClick="@{() -> viewmodel.pasteButtonClick(context)}"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_paste"
+                    app:layout_constraintBottom_toBottomOf="@+id/importWalletWelcomeMessageTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/importWalletWelcomeMessageTextView" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicOneTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="1"
+                    app:hint="@{ `1` }"
+                    app:focusBehaviour="@{ importWalletMnemonicOneTIET }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicTwoTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletWelcomeMessageTextView">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicOneTIET"
+                        android:tag="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicTwoTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="2"
+                    app:hint="@{ `2` }"
+                    app:focusBehaviour="@{ importWalletMnemonicTwoTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicOneTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicThreeTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletWelcomeMessageTextView">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicTwoTIET"
+                        android:tag="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicThreeTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="3"
+                    app:hint="@{ `3` }"
+                    app:focusBehaviour="@{ importWalletMnemonicThreeTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicTwoTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletWelcomeMessageTextView"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicThreeTIET"
+                        android:tag="3"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicFourTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="4"
+                    app:hint="@{ `4` }"
+                    app:focusBehaviour="@{ importWalletMnemonicFourTIET }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicFiveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicOneTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicFourTIET"
+                        android:tag="4"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicFiveTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="5"
+                    app:hint="@{ `5` }"
+                    app:focusBehaviour="@{ importWalletMnemonicFiveTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicFourTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicSixTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicOneTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicFiveTIET"
+                        android:tag="5"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicSixTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="6"
+                    app:hint="@{ `6` }"
+                    app:focusBehaviour="@{ importWalletMnemonicSixTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicFiveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicOneTIL"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicSixTIET"
+                        android:tag="6"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicSevenTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="7"
+                    app:hint="@{ `7` }"
+                    app:focusBehaviour="@{ importWalletMnemonicSevenTIET }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicEightTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicFourTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicSevenTIET"
+                        android:tag="7"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicEightTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="8"
+                    app:hint="@{ `8` }"
+                    app:focusBehaviour="@{ importWalletMnemonicEightTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicSevenTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicNineTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicFourTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicEightTIET"
+                        android:tag="8"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicNineTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="9"
+                    app:hint="@{ `9` }"
+                    app:focusBehaviour="@{ importWalletMnemonicNineTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicEightTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicFourTIL"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicNineTIET"
+                        android:tag="9"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicTenTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="10"
+                    app:hint="@{ `10` }"
+                    app:focusBehaviour="@{ importWalletMnemonicTenTIET }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicElevenTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicSevenTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicTenTIET"
+                        android:tag="10"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicElevenTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="11"
+                    app:hint="@{ `11` }"
+                    app:focusBehaviour="@{ importWalletMnemonicElevenTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicTenTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicTwelveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicSevenTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicElevenTIET"
+                        android:tag="11"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/importWalletMnemonicTwelveTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="12"
+                    app:hint="@{ `12` }"
+                    app:focusBehaviour="@{ importWalletMnemonicTwelveTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicElevenTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicSevenTIL"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicTwelveTIET"
+                        android:tag="12"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/paymentSummaryConfirmAndSendButton"
+                    style="@style/MaterialButton"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Confirm"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:onClick="@{ (view) -> viewmodel.confirmButtonClick(view, importWalletConstraintLayout)}"
+                    app:backgroundTint="@color/colorAccent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicTenTIL" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

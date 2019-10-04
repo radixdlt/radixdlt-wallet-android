@@ -16,7 +16,25 @@
     <fragment
         android:id="@+id/navigation_create_wallet"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.createwallet.CreateWalletFragment"
-        android:label="fragment_greeting"
+        android:label="fragment_create_wallet"
         tools:layout="@layout/fragment_create_wallet">
+        <action
+            android:id="@+id/action_navigation_create_wallet_to_navigation_import_wallet"
+            app:destination="@id/navigation_import_wallet" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_import_wallet"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.importwallet.ImportWalletFragment"
+        android:label="fragment_import_wallet"
+        tools:layout="@layout/fragment_import_wallet">
+        <action
+            android:id="@+id/navigation_import_wallet_to_navigation_import_wallet_invalid_checksum"
+            app:destination="@id/navigation_import_wallet_invalid_checksum" />
+    </fragment>
+    <dialog
+        android:id="@+id/navigation_import_wallet_invalid_checksum"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.importwallet.invalidchecksum.ImportWalletInvalidChecksumDialog"
+        android:label="dialog_import_wallet_invalid_checksum"
+        tools:layout="@layout/dialog_import_wallet_invalid_checksum">
+    </dialog>
 </navigation>

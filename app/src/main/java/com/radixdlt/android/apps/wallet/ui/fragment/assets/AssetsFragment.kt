@@ -207,11 +207,13 @@ class AssetsFragment : Fragment() {
     }
 
     private fun setLayoutResourcesWithLoadingIndicator() {
+        payButton.isEnabled = false
         swipe_refresh_layout.isRefreshing = true
         assetsMessageTextView.text = getString(R.string.assets_fragment_loading_assets_textview)
     }
 
     private fun setLayoutResourcesWithEmptyAssets() {
+        payButton.isEnabled = false
         assetsMessageTextView.text = getString(R.string.assets_fragment_no_owned_assets_textview)
         assetsMessageTextView.visibility = View.VISIBLE
         assetsImageView.visibility = View.VISIBLE
@@ -220,6 +222,7 @@ class AssetsFragment : Fragment() {
     }
 
     private fun setLayoutResourcesWithAssets() {
+        payButton.isEnabled = true
         assetsImageView.visibility = View.GONE
         assetsMessageTextView.visibility = View.GONE
         swipe_refresh_layout.isRefreshing = false

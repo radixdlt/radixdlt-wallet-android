@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
 import com.radixdlt.android.apps.wallet.util.toast
 import kotlinx.android.synthetic.main.fragment_create_wallet.*
+import org.jetbrains.anko.startActivity
 
 class CreateWalletFragment : Fragment() {
 
@@ -25,7 +28,16 @@ class CreateWalletFragment : Fragment() {
         }
 
         createWalletImportWalletButton.setOnClickListener {
-            toast("Imports a wallet")
+            val action = CreateWalletFragmentDirections
+                .actionNavigationCreateWalletToNavigationImportWallet()
+            findNavController().navigate(action)
+        }
+
+        createWalletDisclaimerTextView.setOnClickListener {
+            activity?.apply {
+                startActivity<NewWalletActivity>()
+                finish()
+            }
         }
     }
 }

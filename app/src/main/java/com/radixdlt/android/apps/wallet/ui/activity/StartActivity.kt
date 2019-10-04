@@ -14,4 +14,13 @@ class StartActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp() = findNavController(R.id.nav_host_start).navigateUp()
+
+    override fun onBackPressed() {
+        val createWallet = findNavController(R.id.nav_host_start).currentDestination?.id
+        if (createWallet == R.id.navigation_create_wallet) {
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+    }
 }

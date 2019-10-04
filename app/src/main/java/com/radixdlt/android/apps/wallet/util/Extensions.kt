@@ -1,11 +1,16 @@
 package com.radixdlt.android.apps.wallet.util
 
+import android.content.Context
 import android.os.Build
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
+import com.radixdlt.android.R
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 
@@ -76,3 +81,14 @@ fun Fragment.getNavigationBarHeight(): Int {
         resources.getDimensionPixelSize(resourceId)
     } else 0
 }
+
+fun Snackbar.config(context: Context){
+    val params = this.view.layoutParams as ViewGroup.MarginLayoutParams
+    params.setMargins(12, 12, 12, 12)
+    this.view.layoutParams = params
+
+    this.view.background = context.getDrawable(R.drawable.bg_snackbar)
+
+    ViewCompat.setElevation(this.view, 6f)
+}
+

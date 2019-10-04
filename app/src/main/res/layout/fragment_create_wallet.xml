@@ -18,7 +18,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="22sp"
-        android:text="@string/create_wallet_fragment_welcome_title"
+        android:text="@string/create_wallet_fragment_welcome_title_xml"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"

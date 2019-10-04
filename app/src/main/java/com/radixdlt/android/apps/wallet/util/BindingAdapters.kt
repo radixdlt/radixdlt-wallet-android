@@ -2,10 +2,12 @@ package com.radixdlt.android.apps.wallet.util
 
 import android.animation.ValueAnimator
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.textfield.TextInputLayout
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusState
@@ -54,4 +56,37 @@ fun TextView.bindColorLastChars(address: String) {
         TextFormatHelper.color(ContextCompat.getColor(context, R.color.radixBlueGrey2), firstPart),
         TextFormatHelper.color(ContextCompat.getColor(context, R.color.colorAccent), lastSeven)
     )
+}
+
+@BindingAdapter("focusBehaviour", "hint")
+fun TextInputLayout.bindFocusBehaviour(editText: EditText, hint: String) {
+    editText.setOnFocusChangeListener { v, hasFocus ->
+        if (hasFocus) {
+            if (!editText.text.isNullOrEmpty()) {
+                boxBackgroundColor = ContextCompat.getColor(context, android.R.color.transparent)
+                editText.setTextColor(ContextCompat.getColor(context, R.color.materialGrey900))
+                this.hint = hint
+            }
+        } else {
+            if (!editText.text.isNullOrEmpty()) {
+                boxBackgroundColor = ContextCompat.getColor(context, R.color.colorPrimary)
+                editText.setTextColor(ContextCompat.getColor(context, R.color.white))
+                // below is necessary due to text not changing colour
+                val text = editText.text
+                editText.setText("")
+                this.hint = ""
+                editText.text = text
+            }
+        }
+    }
+}
+
+@BindingAdapter("textWord")
+fun EditText.bindTextWord(mnemonic: Array<String>) {
+    if (mnemonic.isEmpty()) return
+    requestFocus()
+    setText(mnemonic[tag.toString().toInt() - 1])
+    clearFocus()
+
+    hideKeyboard(this)
 }
