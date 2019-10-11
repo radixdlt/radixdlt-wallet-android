@@ -1,105 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".apps.wallet.ui.fragment.assets.AssetsFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/assetsImageView"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/wallet_fragment_xml_empty_transactions_background_description"
-        android:src="@drawable/ic_assets_24"
-        android:tint="@color/veryLightGray"
-        app:layout_constraintBottom_toTopOf="@+id/buttonsView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_search"
-        app:layout_constraintVertical_bias="0.40" />
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsViewModel" />
+    </data>
 
-    <View
-        android:id="@+id/buttonsView"
-        android:layout_width="0dp"
-        android:layout_height="72dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".apps.wallet.ui.fragment.assets.AssetsFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        <ImageView
+            android:id="@+id/assetsImageView"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:contentDescription="@string/wallet_fragment_xml_empty_transactions_background_description"
+            android:src="@drawable/ic_assets_24"
+            android:tint="@color/veryLightGray"
+            app:layout_constraintBottom_toTopOf="@+id/buttonsView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.40"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_search"
+            />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonsView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_search">
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/assetsMessageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/assets_fragment_loading_assets_textview"
+            android:textColor="@color/radixGrey"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/assetsImageView" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/assetsRecyclerView"
+        <View
+            android:id="@+id/buttonsView"
             android:layout_width="0dp"
+            android:layout_height="72dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/assetsWarningSign"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/radixMustard"
+            android:onClick="@{ () -> viewmodel.navigateTo() }"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_search"
+            app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/assetsWarningSignTextView"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:drawableStart="@drawable/ic_info_24"
+                android:drawablePadding="12dp"
+                android:gravity="center_vertical"
+                android:paddingStart="13dp"
+                android:paddingEnd="10dp"
+                android:text="@string/assets_fragment_xml_back_up_message"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/assetsWarningSignCloseImageButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/assetsWarningSignCloseImageButton"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginEnd="4dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/assets_fragment_warning_sign_close_button_content_description"
+                android:onClick="@{ () -> viewmodel.closeBackUpMnemonicWarningSign() }"
+                android:padding="11dp"
+                android:src="@drawable/ic_close"
+                android:theme="@style/YellowBackgroundImageViewTheme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
-            tools:listitem="@layout/item_asset" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            app:layout_constraintBottom_toTopOf="@+id/buttonsView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/assetsWarningSign"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_goneMarginTop="0dp">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/payButton"
-        style="@style/MaterialButton"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/assets_fragment_xml_send_button"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        app:backgroundTint="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/buttonsView"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/swipe_refresh_layout" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/assetsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                tools:listitem="@layout/item_asset" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/receiveButton"
-        style="@style/MaterialButton"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/assets_fragment_xml_receive_button"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        app:backgroundTint="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/swipe_refresh_layout" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/payButton"
+            style="@style/MaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/assets_fragment_xml_send_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/color_states_materialbutton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/buttonsView"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/buttonsView" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/assetsMessageTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/assets_fragment_loading_assets_textview"
-        android:textColor="@color/radixGrey"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/assetsImageView" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/receiveButton"
+            style="@style/MaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/assets_fragment_xml_receive_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/buttonsView" />
 
-    <include
-        android:id="@+id/toolbar_search"
-        layout="@layout/tool_bar_search" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/toolbar_search"
+            layout="@layout/tool_bar_search" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

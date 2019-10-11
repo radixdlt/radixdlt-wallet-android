@@ -1,5 +1,6 @@
 package com.radixdlt.android.apps.wallet.ui.activity.main
 
+import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,10 +36,26 @@ class MainViewModel @Inject constructor(
     val mainLoadingState: LiveData<MainLoadingState>
         get() = _mainLoadingState
 
+    private val _navigationCheckedItem = MutableLiveData<Int>()
+    val navigationCheckedItem: LiveData<Int> get() = _navigationCheckedItem
+
+    private val _showBackUpWalletNotification = MutableLiveData<Boolean>()
+    val showBackUpWalletNotification: LiveData<Boolean>
+        get() = _showBackUpWalletNotification
+
     init {
+        _showBackUpWalletNotification.value = true
         _mainLoadingState.value = MainLoadingState.LOADING
         checkTransactionsTable()
         retrieveAllTransactions()
+    }
+
+    fun setBottomNavigationCheckedItem(@IdRes item: Int) {
+        _navigationCheckedItem.value = item
+    }
+
+    fun showBackUpWalletNotification(show: Boolean) {
+        _showBackUpWalletNotification.value = show
     }
 
     private fun retrieveAllTransactions() {

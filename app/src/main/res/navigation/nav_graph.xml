@@ -25,6 +25,9 @@
                 app:argType="string"
                 app:nullable="false" />
         </action>
+        <action
+            android:id="@+id/action_navigation_assets_to_navigation_backup_wallet"
+            app:destination="@id/navigation_backup_wallet" />
     </fragment>
     <fragment
         android:id="@+id/navigation_asset_transactions"
@@ -58,9 +61,35 @@
         android:id="@+id/navigation_more_options"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.moreoptions.MoreOptionsFragment"
         android:label="fragment_more_options"
-        tools:layout="@layout/fragment_more_options" />
+        tools:layout="@layout/fragment_more_options">
+        <action
+            android:id="@+id/navigation_more_options_to_navigation_backup_wallet"
+            app:destination="@id/navigation_backup_wallet" />
+    </fragment>
     <dialog
         android:id="@+id/navigation_tutorial_receive"
         android:name="com.radixdlt.android.apps.wallet.ui.dialog.TutorialReceiveDialog"
         android:label="navigation_tutorial_receive" />
+    <fragment
+        android:id="@+id/navigation_backup_wallet"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.backup.BackupWalletFragment"
+        android:label="fragment_backup_wallet"
+        tools:layout="@layout/fragment_backup_wallet">
+        <action
+            android:id="@+id/navigation_backup_wallet_to_navigation_confirm_backup_wallet"
+            app:destination="@id/navigation_confirm_backup_wallet">
+            <argument
+                android:name="mnemonic"
+                app:argType="string" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_confirm_backup_wallet"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.confirm.ConfirmBackupWalletFragment"
+        android:label="fragment_confirm_backup_wallet"
+        tools:layout="@layout/fragment_confirm_backup_wallet">
+        <argument
+            android:name="mnemonic"
+            app:argType="string" />
+    </fragment>
 </navigation>

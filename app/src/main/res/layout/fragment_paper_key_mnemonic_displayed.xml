@@ -8,7 +8,7 @@
     tools:context=".apps.wallet.ui.fragment.mnemonic.PaperKeyMnemonicDisplayedFragment">
 
     <include
-        layout="@layout/tool_bar"
+        layout="@layout/tool_bar_connection"
         android:id="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:text="minimum where edge win state antique cattle follow army life spoon gain" />
+        tools:text="minimum where edge win action antique cattle follow army life spoon gain" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/nextButton"

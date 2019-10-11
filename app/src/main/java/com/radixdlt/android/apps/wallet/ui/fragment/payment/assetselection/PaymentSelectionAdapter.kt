@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetPayment
+import com.radixdlt.android.apps.wallet.util.GENESIS_XRD
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.atoms.particles.RRI
 import kotlinx.android.synthetic.main.item_asset_selection.view.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.Locale
 
 class PaymentSelectionAdapter(
@@ -152,6 +154,15 @@ class PaymentSelectionAdapter(
                 .load(urlIcon)
                 .fallback(R.drawable.no_token_icon)
                 .into(itemView.assetSelectionCircleImageView)
+
+            val rri = RRI.of(RadixAddress.from(item.address), item.iso).toString()
+
+            Timber.tag("RRICheck").d(rri)
+            if (rri == GENESIS_XRD) {
+                itemView.assetSelectionRadixVerifiedCircleImageView.visibility = View.VISIBLE
+            } else {
+                itemView.assetSelectionRadixVerifiedCircleImageView.visibility = View.GONE
+            }
         }
 
         // Set checked and unchecked radio buttons

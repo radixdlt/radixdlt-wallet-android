@@ -22,13 +22,17 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper.openCustomTab
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.helper.WebviewFallback
 import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
-import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
-import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.Pref
+import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
+import com.radixdlt.android.apps.wallet.util.Pref.get
+import com.radixdlt.android.apps.wallet.util.Pref.set
 import com.radixdlt.android.apps.wallet.util.TAG_TERMS_AND_CONDITIONS
 import com.radixdlt.android.apps.wallet.util.URL_PRIVACY_POLICY
 import com.radixdlt.android.apps.wallet.util.URL_TERMS_AND_CONDITIONS
@@ -36,7 +40,6 @@ import com.radixdlt.android.apps.wallet.util.getNavigationBarHeight
 import com.radixdlt.android.apps.wallet.util.getStatusBarHeight
 import com.radixdlt.android.databinding.FragmentGreetingBinding
 import kotlinx.android.synthetic.main.fragment_greeting.*
-import org.jetbrains.anko.startActivity
 
 class GreetingFragment : Fragment() {
 
@@ -53,9 +56,8 @@ class GreetingFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.apply {
-            if (QueryPreferences.isTermsAccepted(this)) {
-                startActivity<NewWalletActivity>()
-                finish()
+            if (defaultPrefs()[Pref.TERMS_ACCEPTED, false]) {
+                navigateToCreateWallet()
                 return
             }
             window?.setFlags(
@@ -83,22 +85,37 @@ class GreetingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
+        observeFromViewModel()
         setGreetingMessage()
         setViewMargins()
         createCustomTabsBuilder()
         createTermsAndConditionsLink()
         createPrivacyPolicyLink()
-        setGetStartedButtonClickListener()
     }
 
-    private fun setGetStartedButtonClickListener() {
-        greetingGetStartedButton.setOnClickListener {
-            QueryPreferences.setPrefTermsAccepted(ctx, true)
-            activity?.apply {
-                startActivity<NewWalletActivity>()
-                finish()
+    private fun observeFromViewModel() {
+        greetingViewModel.greetingWalletAction.observe(viewLifecycleOwner, Observer(::action))
+    }
+
+    private fun action(action: GreetingAction?) {
+        when (action) {
+            GreetingAction.GetStarted -> {
+                setPrefTermsAccepted()
+                navigateToCreateWallet()
             }
         }
+    }
+
+    private fun setPrefTermsAccepted() {
+        activity?.apply {
+            defaultPrefs()[Pref.TERMS_ACCEPTED] = true
+        }
+    }
+
+    private fun navigateToCreateWallet() {
+        val action = GreetingFragmentDirections
+            .actionNavigationGreetingToNavigationCreateWallet()
+        findNavController().navigate(action)
     }
 
     private fun createTermsAndConditionsLink() {

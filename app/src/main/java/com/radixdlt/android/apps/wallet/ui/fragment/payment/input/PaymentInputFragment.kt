@@ -329,15 +329,6 @@ class PaymentInputFragment : Fragment() {
         })
 
         paymentInputAddressTIET.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // change colour of span to the default if it was changed previously
-                if (!isRadixAddress(s.toString()) && greenSpan) {
-                    greenSpan = false
-                    val spannableString = setDefaultColorForAddress(s.toString())
-                    paymentInputAddressTIET.setText(spannableString)
-                }
-            }
-
             override fun afterTextChanged(s: Editable?) {
                 if (s.isNullOrEmpty()) {
                     paymentInputAddressTIL.error = null

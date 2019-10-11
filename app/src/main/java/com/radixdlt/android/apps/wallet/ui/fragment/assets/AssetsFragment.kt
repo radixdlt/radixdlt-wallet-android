@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,13 +21,17 @@ import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainLoadingState
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
-import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.Pref
+import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
+import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.toast
+import com.radixdlt.android.databinding.FragmentAssetsBinding
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.tool_bar_search.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.dip
 import java.util.Locale
 import javax.inject.Inject
 
@@ -34,6 +39,10 @@ class AssetsFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var mainViewModel: MainViewModel
+
+    private lateinit var assetsViewModel: AssetsViewModel
 
     private lateinit var assetsAdapter: AssetsAdapter
 
@@ -52,7 +61,17 @@ class AssetsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_assets, container, false)
+    ): View? = initialiseDataBinding(inflater, container)
+
+    private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
+        val binding: FragmentAssetsBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_assets, container, false)
+        initialiseViewModels()
+        binding.viewmodel = assetsViewModel
+        binding.lifecycleOwner = this
+
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,17 +79,34 @@ class AssetsFragment : Fragment() {
         initialiseRecyclerView()
         initialiseSwipeRefreshLayout()
         initialiseSearchView()
-        initialiseViewModels()
         setOnClickListeners()
         checkReceiveTutorialShown()
     }
 
+    private fun dismissWarningSign() {
+        activity?.apply {
+            assetsWarningSign.animate().translationYBy(dip(-50).toFloat())
+                .setDuration(150)
+                .withEndAction {
+                    mainViewModel.showBackUpWalletNotification(false)
+                    assetsWarningSign.visibility = View.GONE
+                }
+                .start()
+        }
+    }
+
+    private fun navigateToBackUpWallet() {
+        val action = AssetsFragmentDirections
+            .actionNavigationAssetsToNavigationBackupWallet()
+        findNavController().navigate(action)
+    }
+
     private fun checkReceiveTutorialShown() {
-        if (QueryPreferences.isTutorialReceiveShown(ctx)) return
+        if (ctx.defaultPrefs()[Pref.TUTORIAL_RECEIVE, false]) return
         // Android requires that extra tick to position items
         // in dialog layout so we do the workaround below
         lifecycleScope.launch {
-            delay(1)
+            delay(5)
             findNavController().navigate(R.id.navigation_tutorial_receive)
         }
     }
@@ -82,13 +118,22 @@ class AssetsFragment : Fragment() {
 
     private fun initialiseViewModels() {
         activity?.let {
-            ViewModelProviders.of(it, viewModelFactory)[MainViewModel::class.java].apply {
-                mainLoadingState.observe(viewLifecycleOwner, Observer(::loadingState))
+            mainViewModel = ViewModelProviders.of(it, viewModelFactory)[MainViewModel::class.java]
+                .apply {
+                    mainLoadingState.observe(viewLifecycleOwner, Observer(::loadingState))
+                    setBottomNavigationCheckedItem(R.id.menu_bottom_assets)
+                    showBackUpWalletNotification.observe(viewLifecycleOwner, Observer { show ->
+                        if (show) {
+                            assetsWarningSign.visibility = View.VISIBLE
+                        } else {
+                            assetsWarningSign.visibility = View.GONE
+                        }
+                })
             }
         }
-        ViewModelProviders.of(this, viewModelFactory)[AssetsViewModel::class.java].apply {
-            assetsState.observe(viewLifecycleOwner, Observer(::assetsStateChanged))
-        }
+
+        assetsViewModel = ViewModelProviders.of(this, viewModelFactory)[AssetsViewModel::class.java]
+        assetsViewModel.assetsAction.observe(viewLifecycleOwner, Observer(::assetsAction))
     }
 
     private fun initialiseSearchView() {
@@ -124,8 +169,13 @@ class AssetsFragment : Fragment() {
 
     private fun setPayButtonOnClickListener() {
         payButton.setOnClickListener {
-//            SendRadixActivity.newIntent(activity!!)
-            PaymentActivity.newIntent(activity!!)
+            activity?.apply {
+                if (defaultPrefs()[Pref.WALLET_BACKED_UP, false]) {
+                    PaymentActivity.newIntent(this)
+                } else {
+                    navigateToBackUpWallet()
+                }
+            }
         }
     }
 
@@ -146,11 +196,13 @@ class AssetsFragment : Fragment() {
         }
     }
 
-    private fun assetsStateChanged(state: AssetsState) {
-        when (state) {
-            is AssetsState.Loading -> setLoadingAssets()
-            is AssetsState.ShowAssets -> showOwnedAssets(state.assets)
-            is AssetsState.Error -> toast(getString(R.string.assets_fragment_error_toast))
+    private fun assetsAction(action: AssetsAction?) {
+        when (action) {
+            is AssetsAction.ShowLoading -> setLoadingAssets()
+            is AssetsAction.ShowAssets -> showOwnedAssets(action.assets)
+            is AssetsAction.ShowError -> toast(getString(R.string.assets_fragment_error_toast))
+            AssetsAction.CloseBackUpMnemonicWarning -> dismissWarningSign()
+            AssetsAction.NavigateTo -> navigateToBackUpWallet()
         }
     }
 
@@ -207,11 +259,13 @@ class AssetsFragment : Fragment() {
     }
 
     private fun setLayoutResourcesWithLoadingIndicator() {
+        payButton.isEnabled = false
         swipe_refresh_layout.isRefreshing = true
         assetsMessageTextView.text = getString(R.string.assets_fragment_loading_assets_textview)
     }
 
     private fun setLayoutResourcesWithEmptyAssets() {
+        payButton.isEnabled = false
         assetsMessageTextView.text = getString(R.string.assets_fragment_no_owned_assets_textview)
         assetsMessageTextView.visibility = View.VISIBLE
         assetsImageView.visibility = View.VISIBLE
@@ -220,6 +274,7 @@ class AssetsFragment : Fragment() {
     }
 
     private fun setLayoutResourcesWithAssets() {
+        payButton.isEnabled = true
         assetsImageView.visibility = View.GONE
         assetsMessageTextView.visibility = View.GONE
         swipe_refresh_layout.isRefreshing = false

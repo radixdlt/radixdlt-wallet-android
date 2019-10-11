@@ -39,7 +39,7 @@ object Libraries {
         const val navigationVersion = "2.1.0-beta02"
         const val dagger = "2.24"
         const val glide = "4.9.0"
-        const val material = "1.1.0-alpha09"
+        const val material = "1.1.0-alpha10"
         const val playServicesVision = "18.0.0"
         const val icu = "64.2"
         const val circleImageView = "3.0.0"

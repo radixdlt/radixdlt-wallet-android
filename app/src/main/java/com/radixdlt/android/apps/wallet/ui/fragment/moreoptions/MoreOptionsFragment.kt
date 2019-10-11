@@ -12,10 +12,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.jakewharton.processphoenix.ProcessPhoenix
-import com.radixdlt.android.BuildConfig
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessagesDao
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
@@ -23,7 +22,7 @@ import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
 import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper.openCustomTab
 import com.radixdlt.android.apps.wallet.helper.WebviewFallback
 import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
-import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
+import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
 import com.radixdlt.android.apps.wallet.ui.dialog.AutoLockTimeOutDialog
 import com.radixdlt.android.apps.wallet.ui.dialog.ChooseNetworkDialog
 import com.radixdlt.android.apps.wallet.ui.dialog.DeleteWalletDialog
@@ -41,7 +40,6 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_more_options.*
 import org.jetbrains.anko.startActivity
-import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -151,23 +149,27 @@ class MoreOptionsFragment : Fragment() {
 
     private fun setExportWalletClickListener() {
         exportWalletTextView.setOnClickListener {
-            BaseActivity.openedShareDialog = true
+//            BaseActivity.openedShareDialog = true
+//
+//            val exportIntent = Intent(Intent.ACTION_SEND)
+//            exportIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+//            exportIntent.type = "text/plain"
+//
+//            val file = File(activity?.filesDir, "keystore.key")
+//            val apkURI = FileProvider.getUriForFile(
+//                activity!!, BuildConfig.APPLICATION_ID + ".provider", file
+//            )
+//            exportIntent.putExtra(Intent.EXTRA_STREAM, apkURI)
+//            startActivity(
+//                Intent.createChooser(
+//                    exportIntent,
+//                    activity!!.getString(R.string.more_options_fragment_export_intent_chooser_title)
+//                )
+//            )
 
-            val exportIntent = Intent(Intent.ACTION_SEND)
-            exportIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            exportIntent.type = "text/plain"
-
-            val file = File(activity?.filesDir, "keystore.key")
-            val apkURI = FileProvider.getUriForFile(
-                activity!!, BuildConfig.APPLICATION_ID + ".provider", file
-            )
-            exportIntent.putExtra(Intent.EXTRA_STREAM, apkURI)
-            startActivity(
-                Intent.createChooser(
-                    exportIntent,
-                    activity!!.getString(R.string.more_options_fragment_export_intent_chooser_title)
-                )
-            )
+            val action = MoreOptionsFragmentDirections
+                .navigationMoreOptionsToNavigationBackupWallet()
+            findNavController().navigate(action)
         }
     }
 
@@ -246,7 +248,7 @@ class MoreOptionsFragment : Fragment() {
             REQUEST_CODE_DELETE_WALLET -> {
                 deleteWallet()
 
-                activity!!.startActivity<NewWalletActivity>()
+                activity!!.startActivity<StartActivity>()
                 activity!!.finish()
             }
             REQUEST_CODE_CHOOSE_NETWORK -> {

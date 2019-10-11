@@ -15,6 +15,7 @@ object QueryPreferences {
     private const val PREF_FAUCET = "faucet"
     private const val PREF_TUTORIAL_RECEIVE = "tutorial_receive"
     private const val PREF_TERMS_ACCEPTED = "terms_accepted"
+    private const val PREF_WALLET_BACKED_UP = "wallet_backed_up"
 
     fun getPrefAddress(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -162,6 +163,18 @@ object QueryPreferences {
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()
             .putBoolean(PREF_TERMS_ACCEPTED, accepted)
+            .apply()
+    }
+
+    fun isWalletBackedUp(context: Context): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean(PREF_WALLET_BACKED_UP, false)
+    }
+
+    fun setPrefWalletBackedUp(context: Context, accepted: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putBoolean(PREF_WALLET_BACKED_UP, accepted)
             .apply()
     }
 }

@@ -70,7 +70,7 @@ class PaymentStatusViewModel : ViewModel() {
     }
 
     private fun sendError(t: Throwable? = null) {
-        Timber.e(t, "Error sending...")
+        Timber.e(t, "ShowError sending...")
         if (t is InsufficientFundsException) {
             _insufficientFunds.postValue(true)
             _paymentStatusState.postValue(PaymentStatusState.FAILED)

@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.backup.BackupWalletViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/backupWalletConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".apps.wallet.ui.fragment.restorewallet.restore.RestoreWalletFragment">
+
+        <ScrollView
+            android:id="@+id/backupWalletScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/backupWalletWelcomeTitleTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:text="@string/backup_wallet_fragment_welcome_title_xml"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/radixBlueGrey"
+                    app:fontFamily="@font/roboto_medium_radix"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/backupWalletWelcomeMessageTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/backup_wallet_fragment_message_xml"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto"
+                    app:layout_constraintEnd_toStartOf="@+id/backupWalletToImageButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletWelcomeTitleTextView" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/backupWalletToImageButton"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/oval_green_copy_button"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_copy_24"
+                    android:onClick="@{ () -> viewmodel.copyButtonClick(context) }"
+                    app:layout_constraintBottom_toBottomOf="@+id/backupWalletWelcomeMessageTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/backupWalletWelcomeMessageTextView" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicOneTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/backupWalletMnemonicTwoTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletWelcomeMessageTextView">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicOneTIET"
+                        android:tag="1"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="one"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicTwoTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toEndOf="@+id/backupWalletMnemonicOneTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/backupWalletMnemonicThreeTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletWelcomeMessageTextView">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicTwoTIET"
+                        android:tag="2"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="two"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicThreeTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toEndOf="@+id/backupWalletMnemonicTwoTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletWelcomeMessageTextView"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicThreeTIET"
+                        android:tag="3"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="three"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicFourTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/backupWalletMnemonicFiveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletMnemonicOneTIL">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicFourTIET"
+                        android:tag="4"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="four"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicFiveTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toEndOf="@+id/backupWalletMnemonicFourTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/backupWalletMnemonicSixTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletMnemonicOneTIL">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicFiveTIET"
+                        android:tag="5"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="five"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicSixTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toEndOf="@+id/backupWalletMnemonicFiveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletMnemonicOneTIL"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicSixTIET"
+                        android:tag="6"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="six"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicSevenTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/backupWalletMnemonicEightTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletMnemonicFourTIL">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicSevenTIET"
+                        android:tag="7"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="seven"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicEightTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toEndOf="@+id/backupWalletMnemonicSevenTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/backupWalletMnemonicNineTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletMnemonicFourTIL">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicEightTIET"
+                        android:tag="8"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="eight"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicNineTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toEndOf="@+id/backupWalletMnemonicEightTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletMnemonicFourTIL"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicNineTIET"
+                        android:tag="9"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="nine"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicTenTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/backupWalletMnemonicElevenTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletMnemonicSevenTIL">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicTenTIET"
+                        android:tag="10"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="ten"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicElevenTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toEndOf="@+id/backupWalletMnemonicTenTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/backupWalletMnemonicTwelveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletMnemonicSevenTIL">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicElevenTIET"
+                        android:tag="11"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="eleven"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/backupWalletMnemonicTwelveTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toEndOf="@+id/backupWalletMnemonicElevenTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletMnemonicSevenTIL"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/backupWalletMnemonicTwelveTIET"
+                        android:tag="12"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        tools:text="twelve"
+                        app:mnemonicWord="@{ viewmodel.mnemonicArray }" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/backupWalletNextButton"
+                    style="@style/MaterialButton"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/backup_wallet_fragment_xml_next_button"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:onClick="@{ () -> viewmodel.nextButtonClick() }"
+                    app:backgroundTint="@color/colorAccent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/backupWalletMnemonicTenTIL" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

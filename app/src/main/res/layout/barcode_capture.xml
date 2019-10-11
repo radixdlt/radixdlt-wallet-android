@@ -9,7 +9,7 @@
     tools:context=".apps.wallet.ui.activity.BarcodeCaptureActivity">
 
   <include
-      layout="@layout/tool_bar"
+      layout="@layout/tool_bar_connection"
       android:id="@+id/toolbar"/>
 
   <com.radixdlt.android.apps.wallet.ui.camera.CameraSourcePreview

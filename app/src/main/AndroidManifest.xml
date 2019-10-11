@@ -59,7 +59,8 @@
 
         <activity android:name=".apps.wallet.ui.activity.StartActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,7 +69,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
 
         <activity
             android:name="com.radixdlt.android.apps.wallet.ui.activity.EnterPasswordActivity"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-  <include layout="@layout/tool_bar"
+  <include layout="@layout/tool_bar_connection"
       android:id="@+id/toolbar"/>
 
   <WebView

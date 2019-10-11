@@ -1,11 +1,21 @@
 package com.radixdlt.android.apps.wallet.util
 
+import android.content.Context
 import android.os.Build
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
+import com.radixdlt.android.R
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 
@@ -75,4 +85,94 @@ fun Fragment.getNavigationBarHeight(): Int {
     return if (resourceId > 0 && !hasMenuKey) {
         resources.getDimensionPixelSize(resourceId)
     } else 0
+}
+
+fun Snackbar.config(context: Context) {
+    val params = this.view.layoutParams as ViewGroup.MarginLayoutParams
+    params.setMargins(12, 12, 12, 12)
+    this.view.layoutParams = params
+
+    this.view.background = context.getDrawable(R.drawable.bg_snackbar_error)
+
+    ViewCompat.setElevation(this.view, 6f)
+}
+
+fun Fragment.showErrorSnackbarAboveNavigationView(@StringRes text: Int) {
+    view?.let {
+        val sb = Snackbar.make(
+            it,
+            it.context.getString(text),
+            Snackbar.LENGTH_SHORT
+        )
+
+        sb.view.background = it.context.getDrawable(R.drawable.bg_snackbar_error)
+        sb.anchorView = it.rootView.findViewById(R.id.navigation) as BottomNavigationView
+        sb.show()
+    }
+}
+
+fun Fragment.showErrorSnackbar(@StringRes text: Int) {
+    view?.let {
+        val sb = Snackbar.make(
+            it,
+            it.context.getString(text),
+            Snackbar.LENGTH_SHORT
+        )
+        sb.view.background = it.context.getDrawable(R.drawable.bg_snackbar_error)
+        sb.show()
+    }
+}
+
+fun Fragment.showSnackbarAboveNavigationView(@StringRes text: Int) {
+    view?.let {
+        val sb = Snackbar.make(
+            it,
+            it.context.getString(text),
+            Snackbar.LENGTH_SHORT
+        )
+        sb.anchorView = it.rootView.findViewById(R.id.navigation) as BottomNavigationView
+        sb.show()
+    }
+}
+
+fun Fragment.showSuccessSnackbarAboveNavigationView(@StringRes text: Int) {
+    view?.let {
+        val sb = Snackbar.make(
+            it,
+            it.context.getString(text),
+            Snackbar.LENGTH_SHORT
+        )
+        sb.view.background = it.context.getDrawable(R.drawable.bg_snackbar_success)
+        sb.anchorView = it.rootView.findViewById(R.id.navigation) as BottomNavigationView
+        sb.show()
+    }
+}
+
+fun Fragment.initialiseToolbar(toolbar: View, @StringRes text: Int) {
+    view?.let {
+        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar as Toolbar)
+        setToolbarTitleAndUpEnabled(text)
+        (activity as? AppCompatActivity)?.supportActionBar
+            ?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
+    }
+}
+
+fun Fragment.initialiseToolbar(@StringRes text: Int) {
+    view?.let {
+        setToolbarTitleAndUpEnabled(text)
+    }
+}
+
+private fun Fragment.setToolbarTitleAndUpEnabled(text: Int) {
+    (activity as? AppCompatActivity)?.supportActionBar?.title = getString(text)
+    (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+}
+
+fun View.changeTILBackgroundColourToPurple(view: TextInputLayout, tagName: String) {
+    view.boxBackgroundColor = ContextCompat.getColor(context, R.color.colorPrimary)
+    view.editText?.setTextColor(ContextCompat.getColor(context, R.color.white))
+    // below is necessary due to text not changing colour
+    view.editText?.setText("")
+    view.hint = ""
+    view.editText?.setText(tagName)
 }

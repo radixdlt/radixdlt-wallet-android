@@ -16,6 +16,17 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/new_send_image_item_wallet" />
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/assetSelectionRadixVerifiedCircleImageView"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_verified_star"
+        android:scaleType="center"
+        app:layout_constraintBottom_toBottomOf="@+id/assetSelectionCircleImageView"
+        app:layout_constraintEnd_toEndOf="@+id/assetSelectionCircleImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/assetSelectionNameTextView"
         android:layout_width="wrap_content"
