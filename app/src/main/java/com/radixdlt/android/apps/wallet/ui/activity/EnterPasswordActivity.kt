@@ -126,7 +126,7 @@ class EnterPasswordActivity : AppCompatActivity(), DeleteWalletDialog.DeleteWall
                         retrieveRadixIdentity(myKeyFile)
                     } catch (e: Exception) {
                         exception = e
-                        Timber.e(e, "Error retrieving identity")
+                        Timber.e(e, "ShowError retrieving identity")
                     }
                     uiThread {
                         if (exception != null) {

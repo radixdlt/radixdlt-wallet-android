@@ -25,13 +25,26 @@ class AssetsViewModel @Inject constructor(
 
     private var numberOfAssets = 0
 
-    private val _assetsState: MutableLiveData<AssetsState> = MutableLiveData()
-
-    val assetsState: LiveData<AssetsState>
-        get() = _assetsState
+    private val _assetsAction: MutableLiveData<AssetsAction?> = MutableLiveData()
+    val assetsAction: LiveData<AssetsAction?>
+        get() = _assetsAction
 
     init {
         retrieveAssets()
+    }
+
+    fun navigateTo() {
+        _assetsAction.value = AssetsAction.NavigateTo
+        resetActionValue()
+    }
+
+    fun closeBackUpMnemonicWarningSign() {
+        _assetsAction.value = AssetsAction.CloseBackUpMnemonicWarning
+        resetActionValue()
+    }
+
+    private fun resetActionValue() {
+        _assetsAction.value = null
     }
 
     private fun retrieveAssets() {
@@ -42,7 +55,7 @@ class AssetsViewModel @Inject constructor(
                 numberOfAssets = it.size
                 getAllTransactionsFromEachAsset(it)
             }, {
-                setAssetsState(AssetsState.Error)
+                setAssetsState(AssetsAction.ShowError)
                 Timber.e(it)
             })
             .addTo(compositeDisposable)
@@ -92,12 +105,12 @@ class AssetsViewModel @Inject constructor(
                     if (this.assets.isNotEmpty() && this.assets.size == numberOfAssets) {
 
                         if (tokenDefRequired.isNotEmpty()) {
-                            setAssetsState(AssetsState.Loading)
+                            setAssetsState(AssetsAction.ShowLoading)
                             pullAtoms(tokenDefRequired)
                         }
 
                         if (tokenDefRequested.isEmpty()) {
-                            setAssetsState(AssetsState.ShowAssets(this.assets.sortedBy(Asset::name)))
+                            setAssetsState(AssetsAction.ShowAssets(this.assets.sortedBy(Asset::name)))
                         }
                     }
                 }, {
@@ -134,8 +147,8 @@ class AssetsViewModel @Inject constructor(
         }
     }
 
-    private fun setAssetsState(state: AssetsState) {
-        _assetsState.postValue(state)
+    private fun setAssetsState(action: AssetsAction) {
+        _assetsAction.postValue(action)
     }
 
     override fun onCleared() {

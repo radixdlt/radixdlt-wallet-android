@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.confirm.ConfirmBackupWalletViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".apps.wallet.ui.fragment.restorewallet.restore.RestoreWalletFragment">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/confirmBackupWalletConstraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/confirmBackupWalletWelcomeTitleTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:text="@string/confirm_backup_wallet_fragment_welcome_title_xml"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/radixBlueGrey"
+                    app:fontFamily="@font/roboto_medium_radix"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/confirmBackupWalletWelcomeMessageTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/confirm_backup_wallet_fragment_message_xml"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto"
+                    app:layout_constraintEnd_toStartOf="@+id/confirmBackupUndoImageButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletWelcomeTitleTextView" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/confirmBackupUndoImageButton"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/oval_green_copy_button"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_undo_24"
+                    android:onClick="@{ () -> viewmodel.undoButtonClick(confirmBackupWalletConstraintLayout) }"
+                    bind:undoLastWord="@{ viewmodel.undoLastWord }"
+                    bind:layout="@{ confirmBackupWalletConstraintLayout }"
+                    bind:chipGroup="@{ confirmBackupWalletChipGroup }"
+                    app:layout_constraintBottom_toBottomOf="@+id/confirmBackupWalletWelcomeMessageTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/confirmBackupWalletWelcomeMessageTextView" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicOneTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_1"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_1 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicOneTIET }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/confirmBackupWalletMnemonicTwoTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletWelcomeMessageTextView">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicOneTIET"
+                        android:tag="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicTwoTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_2"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_2 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicTwoTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/confirmBackupWalletMnemonicOneTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/confirmBackupWalletMnemonicThreeTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletWelcomeMessageTextView">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicTwoTIET"
+                        android:tag="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicThreeTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_3"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_3 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicThreeTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/confirmBackupWalletMnemonicTwoTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletWelcomeMessageTextView"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicThreeTIET"
+                        android:tag="3"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicFourTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_4"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_4 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicFourTIET }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/confirmBackupWalletMnemonicFiveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletMnemonicOneTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicFourTIET"
+                        android:tag="4"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicFiveTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_5"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_5 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicFiveTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/confirmBackupWalletMnemonicFourTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/confirmBackupWalletMnemonicSixTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletMnemonicOneTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicFiveTIET"
+                        android:tag="5"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicSixTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_6"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_6 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicSixTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/confirmBackupWalletMnemonicFiveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletMnemonicOneTIL"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicSixTIET"
+                        android:tag="6"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicSevenTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_7"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_7 }"
+                    bind:focusBehaviour="@{ importWalletMnemonicSevenTIET }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/confirmBackupWalletMnemonicEightTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletMnemonicFourTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/importWalletMnemonicSevenTIET"
+                        android:tag="7"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicEightTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_8"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_8 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicEightTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/confirmBackupWalletMnemonicSevenTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/confirmBackupWalletMnemonicNineTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletMnemonicFourTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicEightTIET"
+                        android:tag="8"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicNineTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_9"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_9 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicNineTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/confirmBackupWalletMnemonicEightTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletMnemonicFourTIL"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicNineTIET"
+                        android:tag="9"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicTenTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_10"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_10 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicTenTIET }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/confirmBackupWalletMnemonicElevenTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletMnemonicSevenTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicTenTIET"
+                        android:tag="10"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicElevenTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_11"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_11 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicElevenTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/confirmBackupWalletMnemonicTenTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/confirmBackupWalletMnemonicTwelveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletMnemonicSevenTIL">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicElevenTIET"
+                        android:tag="11"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirmBackupWalletMnemonicTwelveTIL"
+                    style="@style/MaterialTextLayoutOutlinedStylePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
+                    android:visibility="visible"
+                    android:hint="@string/common_mnemonic_xml_hint_12"
+                    bind:hint="@{ @string/common_mnemonic_xml_hint_12 }"
+                    bind:focusBehaviour="@{ confirmBackupWalletMnemonicTwelveTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/confirmBackupWalletMnemonicElevenTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletMnemonicSevenTIL"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
+                        android:id="@+id/confirmBackupWalletMnemonicTwelveTIET"
+                        android:tag="12"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:textAlignment="center"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:textIsSelectable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        bind:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/confirmBackupWalletConfirmButton"
+                    style="@style/MaterialButton"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/restore_wallet_fragment_xml_next_button"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:onClick="@{ () -> viewmodel.confirmMnemonicBackupButtonClick(confirmBackupWalletConstraintLayout) }"
+                    app:backgroundTint="@color/colorAccent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletMnemonicTenTIL" />
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/confirmBackupWalletConfirmButton">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/confirmBackupWalletChipGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:paddingTop="6dp"
+                        app:chipSpacingVertical="6dp"
+                        app:chosenMnemonicWord="@{ confirmBackupWalletConstraintLayout }"
+                        app:mnemonicList="@{ viewmodel.shuffledMnemonic }" />
+
+                </HorizontalScrollView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

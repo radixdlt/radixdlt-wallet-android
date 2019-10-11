@@ -7,6 +7,8 @@ import com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity
 import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsFragment
+import com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.backup.BackupWalletFragment
+import com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.confirm.ConfirmBackupWalletFragment
 import com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsFragment
 import com.radixdlt.android.apps.wallet.ui.fragment.moreoptions.MoreOptionsFragment
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.assetselection.PaymentAssetSelectionFragment
@@ -57,4 +59,10 @@ abstract class AndroidBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun bindReceiveRadixInvoiceActivity(): ReceiveRadixInvoiceActivity
+
+    @ContributesAndroidInjector
+    abstract fun bindBackupWalletFragment(): BackupWalletFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindConfirmBackupWalletFragment(): ConfirmBackupWalletFragment
 }

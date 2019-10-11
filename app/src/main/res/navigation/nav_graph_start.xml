@@ -21,20 +21,45 @@
         <action
             android:id="@+id/action_navigation_create_wallet_to_navigation_import_wallet"
             app:destination="@id/navigation_import_wallet" />
+        <action
+            android:id="@+id/action_navigation_create_wallet_to_navigation_backup_wallet"
+            app:destination="@id/navigation_backup_wallet" />
     </fragment>
     <fragment
         android:id="@+id/navigation_import_wallet"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.importwallet.ImportWalletFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.restore.RestoreWalletFragment"
         android:label="fragment_import_wallet"
-        tools:layout="@layout/fragment_import_wallet">
+        tools:layout="@layout/fragment_restore_wallet">
         <action
             android:id="@+id/navigation_import_wallet_to_navigation_import_wallet_invalid_checksum"
             app:destination="@id/navigation_import_wallet_invalid_checksum" />
     </fragment>
     <dialog
         android:id="@+id/navigation_import_wallet_invalid_checksum"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.importwallet.invalidchecksum.ImportWalletInvalidChecksumDialog"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.invalidchecksum.RestoreWalletInvalidChecksumDialog"
         android:label="dialog_import_wallet_invalid_checksum"
-        tools:layout="@layout/dialog_import_wallet_invalid_checksum">
+        tools:layout="@layout/dialog_restore_wallet_invalid_checksum">
     </dialog>
+    <fragment
+        android:id="@+id/navigation_backup_wallet"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.backup.BackupWalletFragment"
+        android:label="fragment_backup_wallet"
+        tools:layout="@layout/fragment_backup_wallet">
+        <action
+            android:id="@+id/navigation_backup_wallet_to_navigation_confirm_backup_wallet"
+            app:destination="@id/navigation_confirm_backup_wallet">
+            <argument
+                android:name="mnemonic"
+                app:argType="string" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_confirm_backup_wallet"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.confirm.ConfirmBackupWalletFragment"
+        android:label="fragment_confirm_backup_wallet"
+        tools:layout="@layout/fragment_confirm_backup_wallet">
+        <argument
+            android:name="mnemonic"
+            app:argType="string" />
+    </fragment>
 </navigation>

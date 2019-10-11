@@ -1,7 +1,5 @@
-package com.radixdlt.android.apps.wallet.ui.fragment.importwallet
+package com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.restore
 
-import android.content.ClipboardManager
-import android.content.Context
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
@@ -12,8 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputLayout
 import com.radixdlt.android.apps.wallet.identity.AndroidRadixIdentity
 import com.radixdlt.android.apps.wallet.identity.Identity
+import com.radixdlt.android.apps.wallet.util.PREF_MNEMONIC
 import com.radixdlt.android.apps.wallet.util.PREF_SECRET
-import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.Vault
 import com.radixdlt.client.core.crypto.ECKeyPair
 import com.radixdlt.client.core.crypto.RadixECKeyPairs
@@ -25,16 +23,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okio.ByteString
 import timber.log.Timber
-import java.io.File
 
-class ImportWalletViewModel : ViewModel() {
+class RestoreWalletViewModel : ViewModel() {
 
-    // Only used in the event that mnemonic has an invalid checksum and
-    // warning dialog is shown
-    private lateinit var context: Context
-
-    private val _importWalletAction = MutableLiveData<ImportWalletAction>()
-    val importWalletAction: LiveData<ImportWalletAction> get() = _importWalletAction
+    private val _restoreWalletAction = MutableLiveData<RestoreWalletAction>()
+    val restoreWalletAction: LiveData<RestoreWalletAction> get() = _restoreWalletAction
 
     private val _pastedMnemonic = MutableLiveData<Array<String>>()
     val pastedMnemonic: LiveData<Array<String>> get() = _pastedMnemonic
@@ -45,18 +38,14 @@ class ImportWalletViewModel : ViewModel() {
         _pastedMnemonic.value = emptyArray()
     }
 
-    fun pasteButtonClick(context: Context) {
+    fun setPastedMnemonic(mnemonicArray: Array<String>) {
+        _pastedMnemonic.value = mnemonicArray
+    }
+
+    fun pasteButtonClick() {
         viewModelScope.launch {
             delay(100)
-            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            clipboard.primaryClip?.getItemAt(0)?.let {
-                val mnemonicArray = it.text.trim().split(" ").toTypedArray()
-                if (mnemonicArray.size != 12) {
-                    showMnemonicError()
-                } else {
-                    _pastedMnemonic.value = mnemonicArray
-                }
-            }
+            _restoreWalletAction.value = RestoreWalletAction.PasteMnemonic
         }
     }
 
@@ -66,14 +55,14 @@ class ImportWalletViewModel : ViewModel() {
             button.isEnabled = false
             delay(125)
             buildMnemonicFromFields(view)
-            validateMnemonic(view.context, mnemonic)
+            validateMnemonic(mnemonic)
             button.isEnabled = true
         }
     }
 
-    private fun buildMnemonicFromFields(view: ConstraintLayout) {
+    private fun buildMnemonicFromFields(layout: ConstraintLayout) {
         mnemonic = ""
-        view.children.forEach {
+        layout.children.forEach {
             if (it is TextInputLayout && !it.editText?.text.isNullOrEmpty()) {
                 it.editText?.apply {
                     mnemonic += "$text"
@@ -87,11 +76,11 @@ class ImportWalletViewModel : ViewModel() {
     }
 
     fun importWallet() {
-        importWallet(context, mnemonic)
+        createWallet(mnemonic)
         openWallet()
     }
 
-    private fun importWallet(context: Context, mnemonic: String) {
+    private fun createWallet(mnemonic: String) {
         val seed: ByteArray = SeedCalculator().calculateSeed(mnemonic, "")
 
         val privateKey = RadixECKeyPairs
@@ -101,24 +90,17 @@ class ImportWalletViewModel : ViewModel() {
 
         val privateKeyHex: String = ByteString.of(*privateKey).hex() // Note the spread operator
         Vault.getVault().edit().putString(PREF_SECRET, privateKeyHex).apply()
+        Vault.getVault().edit().putString(PREF_MNEMONIC, mnemonic).apply()
 
         Identity.myIdentity = AndroidRadixIdentity(ECKeyPair(privateKey))
-
-        val address = Identity.api!!.address.toString()
-
-        QueryPreferences.setPrefAddress(context, address)
-        QueryPreferences.setPrefPasswordEnabled(context, false) // set to false
-        QueryPreferences.setPrefCreatedByMnemonicOrSeed(context, true)
-        File(context.filesDir, "keystore.key").createNewFile() // creating dummy file for now
     }
 
-    private fun validateMnemonic(context: Context, input: String) {
+    private fun validateMnemonic(input: String) {
         return try {
             MnemonicValidator.ofWordList(English.INSTANCE).validate(input)
-            importWallet(context, mnemonic)
+            createWallet(mnemonic)
             openWallet()
         } catch (e: InvalidChecksumException) {
-            this.context = context
             showWarningDialog()
         } catch (e: Exception) {
             Timber.e("Mnemonic Exception: $e")
@@ -127,14 +109,14 @@ class ImportWalletViewModel : ViewModel() {
     }
 
     private fun openWallet() {
-        _importWalletAction.value = ImportWalletAction.OpenWallet
+        _restoreWalletAction.value = RestoreWalletAction.OpenWallet(Identity.api!!.address.toString())
     }
 
     private fun showWarningDialog() {
-        _importWalletAction.value = ImportWalletAction.ShowDialog
+        _restoreWalletAction.value = RestoreWalletAction.ShowDialog
     }
 
     private fun showMnemonicError() {
-        _importWalletAction.value = ImportWalletAction.ShowMnemonicError
+        _restoreWalletAction.value = RestoreWalletAction.ShowMnemonicError
     }
 }

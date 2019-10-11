@@ -53,6 +53,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:enabled="@{viewmodel.enableGetStartedButton}"
+            android:onClick="@{ () -> viewmodel.getStartedButtonClick()  }"
             app:backgroundTint="@color/color_states_materialbutton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

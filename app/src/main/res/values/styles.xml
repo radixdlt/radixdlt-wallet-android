@@ -53,6 +53,10 @@
         <item name="colorControlHighlight">@color/greyAlpha</item>
     </style>
 
+    <style name="YellowBackgroundImageViewTheme" parent="Theme.MaterialComponents">
+        <item name="colorControlHighlight">@color/whiteRipple</item>
+    </style>
+
     <style name="Widget.CardContent" parent="android:Widget">
         <item name="android:paddingTop">24dp</item>
         <item name="android:orientation">vertical</item>

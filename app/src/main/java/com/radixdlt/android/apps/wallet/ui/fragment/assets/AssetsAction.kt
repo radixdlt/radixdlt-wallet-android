@@ -2,10 +2,12 @@ package com.radixdlt.android.apps.wallet.ui.fragment.assets
 
 import java.math.BigDecimal
 
-sealed class AssetsState {
-    object Loading : AssetsState()
-    object Error : AssetsState()
-    class ShowAssets(val assets: List<Asset>) : AssetsState()
+sealed class AssetsAction {
+    object CloseBackUpMnemonicWarning : AssetsAction()
+    object NavigateTo : AssetsAction()
+    object ShowLoading : AssetsAction()
+    object ShowError : AssetsAction()
+    class ShowAssets(val assets: List<Asset>) : AssetsAction()
 }
 
 data class Asset(

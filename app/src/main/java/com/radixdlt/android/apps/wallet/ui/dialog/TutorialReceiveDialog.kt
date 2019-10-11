@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.radixdlt.android.R
-import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.Pref
+import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
+import com.radixdlt.android.apps.wallet.util.Pref.set
 import kotlinx.android.synthetic.main.dialog_tutorial_receive.*
 
 class TutorialReceiveDialog : FullScreenDialog() {
@@ -23,7 +25,7 @@ class TutorialReceiveDialog : FullScreenDialog() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        QueryPreferences.setPrefTutorialReceiveShown(view.context, true)
+        activity?.apply { defaultPrefs()[Pref.TUTORIAL_RECEIVE] = true }
         toolbarDialog.setNavigationIcon(R.drawable.ic_close)
         toolbarDialog.setNavigationContentDescription(R.string.tutorial_receive_dialog_content_description_close_button)
         toolbarDialog.setNavigationOnClickListener { dismiss() }

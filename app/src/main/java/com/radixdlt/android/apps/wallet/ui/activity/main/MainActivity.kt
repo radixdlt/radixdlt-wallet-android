@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.annotation.IdRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.core.view.get
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
@@ -22,6 +24,9 @@ import com.radixdlt.android.apps.wallet.ui.activity.BarcodeCaptureActivity
 import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
 import com.radixdlt.android.apps.wallet.ui.activity.ConversationActivity
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
+import com.radixdlt.android.apps.wallet.util.Pref
+import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
+import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.isRadixAddress
 import dagger.android.AndroidInjection
@@ -89,7 +94,13 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initialiseViewModel() {
-        ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
+        val viewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
+        viewModel.navigationCheckedItem.observe(this, Observer(::setBottomNavigationSelectedItemId))
+        viewModel.showBackUpWalletNotification(!defaultPrefs()[Pref.WALLET_BACKED_UP, false])
+    }
+
+    private fun setBottomNavigationSelectedItemId(@IdRes item: Int) {
+        navigation.menu.findItem(item).isChecked = true
     }
 
     /**

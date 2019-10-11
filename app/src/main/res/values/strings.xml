@@ -138,6 +138,8 @@
     <string name="assets_fragment_xml_receive_button">Receive</string>
     <string name="assets_fragment_xml_send_button">Send</string>
     <string name="assets_fragment_error_toast">There was an error!</string>
+    <string name="assets_fragment_xml_back_up_message">Remember to backup your wallet</string>
+    <string name="assets_fragment_warning_sign_close_button_content_description">Warning sign close button</string>
 
     <!-- Asset Transactions Fragment -->
     <string name="asset_transactions_fragment_xml_your_balance_title">YOUR BALANCE</string>
@@ -275,6 +277,18 @@
     <string name="common_address_text">Address</string>
     <string name="common_toast_address_copied_clipboard">Address copied to clipboard</string>
     <string name="common_radix_logo_content_description">Radix Logo</string>
+    <string name="common_mnemonic_xml_hint_1">1</string>
+    <string name="common_mnemonic_xml_hint_2">2</string>
+    <string name="common_mnemonic_xml_hint_3">3</string>
+    <string name="common_mnemonic_xml_hint_4">4</string>
+    <string name="common_mnemonic_xml_hint_5">5</string>
+    <string name="common_mnemonic_xml_hint_6">6</string>
+    <string name="common_mnemonic_xml_hint_7">7</string>
+    <string name="common_mnemonic_xml_hint_8">8</string>
+    <string name="common_mnemonic_xml_hint_9">9</string>
+    <string name="common_mnemonic_xml_hint_10">10</string>
+    <string name="common_mnemonic_xml_hint_11">11</string>
+    <string name="common_mnemonic_xml_hint_12">12</string>
 
     <!-- TutorialReceiveDialog -->
     <string name="tutorial_receive_dialog_arrow_xml_content_description">Arrow pointing to receive button</string>
@@ -295,16 +309,32 @@
     <string name="create_wallet_fragment_create_wallet_icon_description">Create wallet icon</string>
     <string name="create_wallet_fragment_import_wallet_icon_description">Import wallet icon</string>
 
-    <!-- Import Wallet Fragment -->
-    <string name="import_wallet_fragment_toolbar_title">Restore</string>
-    <string name="import_wallet_fragment_welcome_title_xml">Restore your Radix Account</string>
-    <string name="import_wallet_fragment_message_xml">With your back up phrase,\nyou\'re able to restore your wallet.</string>
-    <string name="import_wallet_fragment_mnemonic_error">Invalid mnemonic</string>
+    <!-- Restore Wallet Fragment -->
+    <string name="restore_wallet_fragment_toolbar_title">Restore</string>
+    <string name="restore_wallet_fragment_welcome_title_xml">Restore your Radix Account</string>
+    <string name="restore_wallet_fragment_message_xml">With your back up phrase,\nyou\'re able to restore your wallet.</string>
+    <string name="restore_wallet_fragment_mnemonic_error">Invalid mnemonic</string>
+    <string name="restore_wallet_fragment_xml_next_button">Confirm</string>
 
     <!-- Dialog Invalid Checksum -->
     <string name="invalid_checksum_dialog_xml_title">Mnemonic Warning</string>
     <string name="invalid_checksum_dialog_xml_message">The mnemonic used cannot be properly validated due to using an incorrect specification.\n\nAlthough you may use it without issues it is strongly advised that you generate a new one which can be validated.</string>
     <string name="invalid_checksum_dialog_xml_cancel_button">Cancel</string>
     <string name="invalid_checksum_dialog_xml_continue_button">Continue</string>
+
+    <!-- Backup Wallet Fragment -->
+    <string name="backup_wallet_fragment_toolbar_title">Backup</string>
+    <string name="backup_wallet_fragment_welcome_title_xml">Backup your Radix Account</string>
+    <string name="backup_wallet_fragment_message_xml">With your back up phrase,\nyou\'re able to restore your wallet.</string>
+    <string name="backup_wallet_fragment_mnemonic_error">Invalid mnemonic</string>
+    <string name="backup_wallet_fragment_copied_mnemonic">Copied mnemonic to clipboard</string>
+    <string name="backup_wallet_fragment_xml_next_button">Next</string>
+
+    <!-- Confirm Backup Wallet Fragment -->
+    <string name="confirm_backup_wallet_fragment_toolbar_title">Confirm Backup</string>
+    <string name="confirm_backup_wallet_fragment_welcome_title_xml">Confirm backed up correctly</string>
+    <string name="confirm_backup_wallet_fragment_message_xml">Select the 12 word mnemonic in the correct order.</string>
+    <string name="confirm_backup_wallet_fragment_mnemonic_error">Mnemonic does not match! Please select in the correct order</string>
+    <string name="confirm_backup_wallet_fragment_mnemonic_success">Mnemonic selected correctly</string>
 
 </resources>

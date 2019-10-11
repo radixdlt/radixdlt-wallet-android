@@ -315,6 +315,7 @@ fun resetData(context: Context) {
     QueryPreferences.setPrefPasswordEnabled(context, true)
     QueryPreferences.setPrefAutoLockTimeOut(context, 2000)
     QueryPreferences.setPrefCreatedByMnemonicOrSeed(context, false)
+    QueryPreferences.setPrefWalletBackedUp(context, false)
     Identity.clear()
 }
 

@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.radixdlt.android.apps.wallet.ui.fragment.importwallet.ImportWalletViewModel" />
+            type="com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.restore.RestoreWalletViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".apps.wallet.ui.fragment.importwallet.ImportWalletFragment">
+        tools:context=".apps.wallet.ui.fragment.restorewallet.restore.RestoreWalletFragment">
 
         <include
             android:id="@+id/toolbar"
@@ -31,16 +31,16 @@
             app:layout_constraintVertical_bias="0.0">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/importWalletConstraintLayout"
+                android:id="@+id/restoreWalletConstraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/importWalletWelcomeTitleTextView"
+                    android:id="@+id/restoreWalletWelcomeTitleTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textSize="22sp"
-                    android:text="@string/import_wallet_fragment_welcome_title_xml"
+                    android:text="@string/restore_wallet_fragment_welcome_title_xml"
                     android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
@@ -52,36 +52,36 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/importWalletWelcomeMessageTextView"
+                    android:id="@+id/restoreWalletWelcomeMessageTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/import_wallet_fragment_message_xml"
+                    android:text="@string/restore_wallet_fragment_message_xml"
                     android:textColor="@color/radixBlueGrey2"
                     android:textSize="18sp"
                     app:fontFamily="@font/roboto"
-                    app:layout_constraintEnd_toStartOf="@+id/importWalletToImageButton"
+                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletToImageButton"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletWelcomeTitleTextView" />
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletWelcomeTitleTextView" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/importWalletToImageButton"
+                    android:id="@+id/restoreWalletToImageButton"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/oval_green_copy_button"
-                    android:onClick="@{() -> viewmodel.pasteButtonClick(context)}"
+                    android:onClick="@{() -> viewmodel.pasteButtonClick()}"
                     android:padding="8dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_paste"
-                    app:layout_constraintBottom_toBottomOf="@+id/importWalletWelcomeMessageTextView"
+                    app:layout_constraintBottom_toBottomOf="@+id/restoreWalletWelcomeMessageTextView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/importWalletWelcomeMessageTextView" />
+                    app:layout_constraintTop_toTopOf="@+id/restoreWalletWelcomeMessageTextView" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicOneTIL"
+                    android:id="@+id/restoreWalletMnemonicOneTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -90,26 +90,26 @@
                     android:layout_marginEnd="4dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="1"
-                    app:hint="@{ `1` }"
-                    app:focusBehaviour="@{ importWalletMnemonicOneTIET }"
+                    android:hint="@string/common_mnemonic_xml_hint_1"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_1 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicOneTIET }"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicTwoTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletWelcomeMessageTextView">
+                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletMnemonicTwoTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletWelcomeMessageTextView">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicOneTIET"
+                        android:id="@+id/restoreWalletMnemonicOneTIET"
                         android:tag="1"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicTwoTIL"
+                    android:id="@+id/restoreWalletMnemonicTwoTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -118,26 +118,26 @@
                     android:layout_marginEnd="4dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="2"
-                    app:hint="@{ `2` }"
-                    app:focusBehaviour="@{ importWalletMnemonicTwoTIET }"
-                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicOneTIL"
-                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicThreeTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletWelcomeMessageTextView">
+                    android:hint="@string/common_mnemonic_xml_hint_2"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_2 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicTwoTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/restoreWalletMnemonicOneTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletMnemonicThreeTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletWelcomeMessageTextView">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicTwoTIET"
+                        android:id="@+id/restoreWalletMnemonicTwoTIET"
                         android:tag="2"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicThreeTIL"
+                    android:id="@+id/restoreWalletMnemonicThreeTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -146,26 +146,26 @@
                     android:layout_marginEnd="16dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="3"
-                    app:hint="@{ `3` }"
-                    app:focusBehaviour="@{ importWalletMnemonicThreeTIET }"
-                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicTwoTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletWelcomeMessageTextView"
+                    android:hint="@string/common_mnemonic_xml_hint_3"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_3 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicThreeTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/restoreWalletMnemonicTwoTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletWelcomeMessageTextView"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicThreeTIET"
+                        android:id="@+id/restoreWalletMnemonicThreeTIET"
                         android:tag="3"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicFourTIL"
+                    android:id="@+id/restoreWalletMnemonicFourTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -174,26 +174,26 @@
                     android:layout_marginEnd="4dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="4"
-                    app:hint="@{ `4` }"
-                    app:focusBehaviour="@{ importWalletMnemonicFourTIET }"
+                    android:hint="@string/common_mnemonic_xml_hint_4"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_4 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicFourTIET }"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicFiveTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicOneTIL">
+                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletMnemonicFiveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletMnemonicOneTIL">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicFourTIET"
+                        android:id="@+id/restoreWalletMnemonicFourTIET"
                         android:tag="4"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicFiveTIL"
+                    android:id="@+id/restoreWalletMnemonicFiveTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -202,26 +202,26 @@
                     android:layout_marginEnd="4dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="5"
-                    app:hint="@{ `5` }"
-                    app:focusBehaviour="@{ importWalletMnemonicFiveTIET }"
-                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicFourTIL"
-                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicSixTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicOneTIL">
+                    android:hint="@string/common_mnemonic_xml_hint_5"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_5 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicFiveTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/restoreWalletMnemonicFourTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletMnemonicSixTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletMnemonicOneTIL">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicFiveTIET"
+                        android:id="@+id/restoreWalletMnemonicFiveTIET"
                         android:tag="5"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicSixTIL"
+                    android:id="@+id/restoreWalletMnemonicSixTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -230,26 +230,26 @@
                     android:layout_marginEnd="16dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="6"
-                    app:hint="@{ `6` }"
-                    app:focusBehaviour="@{ importWalletMnemonicSixTIET }"
-                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicFiveTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicOneTIL"
+                    android:hint="@string/common_mnemonic_xml_hint_6"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_6 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicSixTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/restoreWalletMnemonicFiveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletMnemonicOneTIL"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicSixTIET"
+                        android:id="@+id/restoreWalletMnemonicSixTIET"
                         android:tag="6"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicSevenTIL"
+                    android:id="@+id/restoreWalletMnemonicSevenTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -258,26 +258,26 @@
                     android:layout_marginEnd="4dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="7"
-                    app:hint="@{ `7` }"
-                    app:focusBehaviour="@{ importWalletMnemonicSevenTIET }"
+                    android:hint="@string/common_mnemonic_xml_hint_7"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_7 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicSevenTIET }"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicEightTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicFourTIL">
+                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletMnemonicEightTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletMnemonicFourTIL">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicSevenTIET"
+                        android:id="@+id/restoreWalletMnemonicSevenTIET"
                         android:tag="7"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicEightTIL"
+                    android:id="@+id/restoreWalletMnemonicEightTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -286,26 +286,26 @@
                     android:layout_marginEnd="4dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="8"
-                    app:hint="@{ `8` }"
-                    app:focusBehaviour="@{ importWalletMnemonicEightTIET }"
-                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicSevenTIL"
-                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicNineTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicFourTIL">
+                    android:hint="@string/common_mnemonic_xml_hint_8"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_8 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicEightTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/restoreWalletMnemonicSevenTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletMnemonicNineTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletMnemonicFourTIL">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicEightTIET"
+                        android:id="@+id/restoreWalletMnemonicEightTIET"
                         android:tag="8"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicNineTIL"
+                    android:id="@+id/restoreWalletMnemonicNineTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -314,26 +314,26 @@
                     android:layout_marginEnd="16dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="9"
-                    app:hint="@{ `9` }"
-                    app:focusBehaviour="@{ importWalletMnemonicNineTIET }"
-                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicEightTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicFourTIL"
+                    android:hint="@string/common_mnemonic_xml_hint_9"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_9 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicNineTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/restoreWalletMnemonicEightTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletMnemonicFourTIL"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicNineTIET"
+                        android:id="@+id/restoreWalletMnemonicNineTIET"
                         android:tag="9"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicTenTIL"
+                    android:id="@+id/restoreWalletMnemonicTenTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -342,26 +342,26 @@
                     android:layout_marginEnd="4dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="10"
-                    app:hint="@{ `10` }"
-                    app:focusBehaviour="@{ importWalletMnemonicTenTIET }"
+                    android:hint="@string/common_mnemonic_xml_hint_10"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_10 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicTenTIET }"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicElevenTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicSevenTIL">
+                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletMnemonicElevenTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletMnemonicSevenTIL">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicTenTIET"
+                        android:id="@+id/restoreWalletMnemonicTenTIET"
                         android:tag="10"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicElevenTIL"
+                    android:id="@+id/restoreWalletMnemonicElevenTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -370,26 +370,26 @@
                     android:layout_marginEnd="4dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="11"
-                    app:hint="@{ `11` }"
-                    app:focusBehaviour="@{ importWalletMnemonicElevenTIET }"
-                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicTenTIL"
-                    app:layout_constraintEnd_toStartOf="@+id/importWalletMnemonicTwelveTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicSevenTIL">
+                    android:hint="@string/common_mnemonic_xml_hint_11"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_11 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicElevenTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/restoreWalletMnemonicTenTIL"
+                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletMnemonicTwelveTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletMnemonicSevenTIL">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicElevenTIET"
+                        android:id="@+id/restoreWalletMnemonicElevenTIET"
                         android:tag="11"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/importWalletMnemonicTwelveTIL"
+                    android:id="@+id/restoreWalletMnemonicTwelveTIL"
                     style="@style/MaterialTextLayoutOutlinedStylePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -398,22 +398,22 @@
                     android:layout_marginEnd="16dp"
                     android:theme="@style/MaterialTextLayoutOutlinedThemePrimary"
                     android:visibility="visible"
-                    android:hint="12"
-                    app:hint="@{ `12` }"
-                    app:focusBehaviour="@{ importWalletMnemonicTwelveTIET }"
-                    app:layout_constraintStart_toEndOf="@+id/importWalletMnemonicElevenTIL"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicSevenTIL"
+                    android:hint="@string/common_mnemonic_xml_hint_12"
+                    app:hint="@{ @string/common_mnemonic_xml_hint_12 }"
+                    app:focusBehaviour="@{ restoreWalletMnemonicTwelveTIET }"
+                    app:layout_constraintStart_toEndOf="@+id/restoreWalletMnemonicElevenTIL"
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletMnemonicSevenTIL"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.radixdlt.android.apps.wallet.ui.layout.edittext.BackPressedEditText
-                        android:id="@+id/importWalletMnemonicTwelveTIET"
+                        android:id="@+id/restoreWalletMnemonicTwelveTIET"
                         android:tag="12"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:textAlignment="center"
                         android:imeOptions="actionDone"
                         android:inputType="text"
-                        app:textWord="@{ viewmodel.pastedMnemonic }"/>
+                        app:mnemonicWord="@{ viewmodel.pastedMnemonic }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
@@ -425,15 +425,15 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="Confirm"
+                    android:text="@string/restore_wallet_fragment_xml_next_button"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:onClick="@{ (view) -> viewmodel.confirmButtonClick(view, importWalletConstraintLayout)}"
+                    android:onClick="@{ (view) -> viewmodel.confirmButtonClick(view, restoreWalletConstraintLayout)}"
                     app:backgroundTint="@color/colorAccent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/importWalletMnemonicTenTIL" />
+                    app:layout_constraintTop_toBottomOf="@+id/restoreWalletMnemonicTenTIL" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

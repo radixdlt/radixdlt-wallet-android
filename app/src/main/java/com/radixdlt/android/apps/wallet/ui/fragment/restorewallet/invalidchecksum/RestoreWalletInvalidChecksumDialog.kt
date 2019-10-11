@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.fragment.importwallet.invalidchecksum
+package com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.invalidchecksum
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,16 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
-import com.radixdlt.android.apps.wallet.ui.fragment.importwallet.ImportWalletAction
-import com.radixdlt.android.apps.wallet.ui.fragment.importwallet.shared.ImportWalletSharedViewModel
-import com.radixdlt.android.databinding.DialogImportWalletInvalidChecksumBinding
+import com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.restore.RestoreWalletAction
+import com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.shared.RestoreWalletSharedViewModel
+import com.radixdlt.android.databinding.DialogRestoreWalletInvalidChecksumBinding
 
-class ImportWalletInvalidChecksumDialog : FullScreenDialog() {
+class RestoreWalletInvalidChecksumDialog : FullScreenDialog() {
 
-    private val viewModel: ImportWalletInvalidChecksumViewModel by viewModels()
-    private val sharedViewModel: ImportWalletSharedViewModel by activityViewModels()
-
-//    private lateinit var viewModel: ImportWalletSharedViewModel
+    private val viewModel: RestoreWalletInvalidChecksumViewModel by viewModels()
+    private val sharedViewModel: RestoreWalletSharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,13 +31,13 @@ class ImportWalletInvalidChecksumDialog : FullScreenDialog() {
     ): View? = initialiseDataBinding(inflater, container)
 
     private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
-        val binding: DialogImportWalletInvalidChecksumBinding = DataBindingUtil
+        val binding: DialogRestoreWalletInvalidChecksumBinding = DataBindingUtil
             .inflate(
                 inflater,
-                R.layout.dialog_import_wallet_invalid_checksum,
+                R.layout.dialog_restore_wallet_invalid_checksum,
                 container,
                 false
-        )
+            )
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
@@ -48,13 +46,13 @@ class ImportWalletInvalidChecksumDialog : FullScreenDialog() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.importWalletAction.observe(viewLifecycleOwner, Observer(::action))
+        viewModel.restoreWalletAction.observe(viewLifecycleOwner, Observer(::action))
     }
 
-    private fun action(action: ImportWalletAction) {
+    private fun action(action: RestoreWalletAction) {
         when (action) {
-            ImportWalletAction.OpenWallet -> continueOpening()
-            ImportWalletAction.CloseDialog -> dismiss()
+            is RestoreWalletAction.OpenWallet -> continueOpening()
+            RestoreWalletAction.CloseDialog -> dismiss()
         }
     }
 
