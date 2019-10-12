@@ -245,18 +245,19 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        navigation.menu.findItem(R.id.menu_bottom_assets).isChecked = true
-        supportActionBar?.elevation = px2dip(0)
+        val fragmentId = findNavController(R.id.my_nav_host_fragment).currentDestination?.id
+        if (fragmentId == R.id.navigation_assets) {
+            navigation.menu.findItem(R.id.menu_bottom_assets).isChecked = true
+            supportActionBar?.elevation = px2dip(0)
+        }
     }
 
     override fun onStop() {
         super.onStop()
         openedShareDialog = false
-        Timber.d("onStop")
     }
 
     override fun onDestroy() {
-        Timber.d("onDestroy")
         compositeDisposable.clear()
         if (QueryPreferences.getPrefPasswordEnabled(this)) {
             QueryPreferences.setPrefAddress(this, "")
