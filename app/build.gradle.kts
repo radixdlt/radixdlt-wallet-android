@@ -215,6 +215,10 @@ dependencies {
     implementation(Libraries.searchView)
     implementation(Libraries.lottie)
 
+    implementation(Libraries.bitcoinJ) {
+        exclude("org.bouncycastle.asn1", "bcprov-jdk15to18-1.63.jar")
+    }
+
     testImplementation(TestLibraries.mockitoKotlin)
     testImplementation(TestLibraries.mockk)
     testImplementation(TestLibraries.junitJupiterApi)

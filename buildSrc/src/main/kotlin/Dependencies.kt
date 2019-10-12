@@ -111,6 +111,8 @@ object Libraries {
     const val novaCryptoBIP39 = "io.github.novacrypto:BIP39:${Versions.novaCryptoBIP39}"
 
     const val searchView = "com.lapism:searchview:${Versions.searchView}"
+
+    const val bitcoinJ = "com.github.bitcoinj:bitcoinj:release-0.15-SNAPSHOT"
 }
 
 object TestLibraries {
