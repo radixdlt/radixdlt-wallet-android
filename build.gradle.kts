@@ -5,6 +5,7 @@ buildscript {
         google()
         jcenter()
         maven(url = "https://maven.fabric.io/public")
+        maven(url = "https://dl.bintray.com/novacrypto/BIP/")
     }
     dependencies {
         classpath(BuildPlugins.androidGradlePlugin)

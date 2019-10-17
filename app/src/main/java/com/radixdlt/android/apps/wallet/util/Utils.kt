@@ -21,8 +21,13 @@ import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.client.core.atoms.RadixHash
 import com.radixdlt.client.core.util.Base58
+import io.github.novacrypto.bip32.ExtendedPrivateKey
+import io.github.novacrypto.bip32.networks.Bitcoin
+import io.github.novacrypto.bip44.AddressIndex
+import io.github.novacrypto.bip44.BIP44
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import org.bouncycastle.util.encoders.Hex
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
@@ -353,4 +358,40 @@ fun sumStoredTransactions(transactionEntities: List<TransactionEntity2>): BigDec
     }.fold(BigDecimal.ZERO, BigDecimal::add)
 
     return sumReceived - sumSent
+}
+
+/**
+ * Generates a private key from a calculated seed derived from a mnemonic
+ *
+ * @param seed calculated seed derived from a mnemonic
+ * @param index address index
+ *
+ * @return private key as hex string
+ * */
+fun privateKeyFromSeedAtIndex(seed: ByteArray, index: Int): String {
+    // BIP32: Root Key
+    val rootKey = ExtendedPrivateKey.fromSeed(seed, Bitcoin.MAIN_NET)
+
+    // m/44'/0'/0'/0 /0
+    val addressIndex = BIP44
+        .m()
+        .purpose44()
+        .coinType(0)
+        .account(0)
+        .external()
+        .address(index)
+
+    // Derive BIP44 ExtendedPrivateKey at desired address index
+    val bip44ExtendedPrivateKeyAtAddressIndex =
+        rootKey.derive(addressIndex, AddressIndex.DERIVATION)
+    val bip44ExtendedPrivateKeyAtAddressIndexHex =
+        Hex.toHexString(bip44ExtendedPrivateKeyAtAddressIndex.extendedKeyByteArray())
+
+    // Extract PrivateKey from ExtendedPrivateKey
+    val privateKeyStartIndex = 92
+    val lengthOfPrivateKeyAsHex = 64
+    return bip44ExtendedPrivateKeyAtAddressIndexHex.substring(
+        privateKeyStartIndex,
+        privateKeyStartIndex + lengthOfPrivateKeyAsHex
+    )
 }

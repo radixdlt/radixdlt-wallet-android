@@ -50,7 +50,7 @@ object Libraries {
         const val threeTenABP = "1.2.1"
         const val timber = "4.7.1"
         const val processPhoenix = "2.0.0"
-        const val novaCryptoBIP39 = "2019.01.27"
+        const val novaCrypto = "2019.01.27"
         const val searchView = "28.0.0"
         const val lottie = "3.0.3"
     }
@@ -108,11 +108,11 @@ object Libraries {
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val daggerAndroidCompiler = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
 
-    const val novaCryptoBIP39 = "io.github.novacrypto:BIP39:${Versions.novaCryptoBIP39}"
-
     const val searchView = "com.lapism:searchview:${Versions.searchView}"
 
-    const val bitcoinJ = "com.github.bitcoinj:bitcoinj:release-0.15-SNAPSHOT"
+    const val novaCryptoBIP32 = "io.github.novacrypto:BIP32:${Versions.novaCrypto}"
+    const val novaCryptoBIP39 = "io.github.novacrypto:BIP39:${Versions.novaCrypto}"
+    const val novaCryptoBIP44 = "io.github.novacrypto:BIP44:${Versions.novaCrypto}"
 }
 
 object TestLibraries {

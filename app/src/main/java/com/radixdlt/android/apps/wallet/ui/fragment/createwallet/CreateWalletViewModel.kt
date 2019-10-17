@@ -8,13 +8,13 @@ import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.util.PREF_MNEMONIC
 import com.radixdlt.android.apps.wallet.util.PREF_SECRET
 import com.radixdlt.android.apps.wallet.util.Vault
+import com.radixdlt.android.apps.wallet.util.privateKeyFromSeedAtIndex
 import com.radixdlt.client.core.crypto.ECKeyPair
-import com.radixdlt.client.core.crypto.RadixECKeyPairs
 import io.github.novacrypto.bip39.MnemonicGenerator
 import io.github.novacrypto.bip39.SeedCalculator
 import io.github.novacrypto.bip39.Words
 import io.github.novacrypto.bip39.wordlists.English
-import okio.ByteString
+import org.bouncycastle.util.encoders.Hex
 import java.security.SecureRandom
 
 class CreateWalletViewModel : ViewModel() {
@@ -51,15 +51,11 @@ class CreateWalletViewModel : ViewModel() {
     private fun createWallet(mnemonic: String) {
         val seed: ByteArray = SeedCalculator().calculateSeed(mnemonic, "")
 
-        val privateKey = RadixECKeyPairs
-            .newInstance()
-            .generateKeyPairFromSeed(seed)
-            .privateKey
+        val privateKeyHex = privateKeyFromSeedAtIndex(seed, 0)
 
-        val privateKeyHex: String = ByteString.of(*privateKey).hex() // Note the spread operator
         Vault.getVault().edit().putString(PREF_SECRET, privateKeyHex).apply()
         Vault.getVault().edit().putString(PREF_MNEMONIC, mnemonic).apply()
 
-        Identity.myIdentity = AndroidRadixIdentity(ECKeyPair(privateKey))
+        Identity.myIdentity = AndroidRadixIdentity(ECKeyPair(Hex.decode(privateKeyHex)))
     }
 }

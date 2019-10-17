@@ -210,14 +210,14 @@ dependencies {
     implementation(Libraries.threeTenABP)
     implementation(Libraries.processPhoenix)
     implementation(Libraries.vault)
-    implementation(Libraries.novaCryptoBIP39)
 
     implementation(Libraries.searchView)
     implementation(Libraries.lottie)
 
-    implementation(Libraries.bitcoinJ) {
-        exclude("org.bouncycastle.asn1", "bcprov-jdk15to18-1.63.jar")
-    }
+    // nova crypto micro libraries
+    implementation(Libraries.novaCryptoBIP32)
+    implementation(Libraries.novaCryptoBIP39)
+    implementation(Libraries.novaCryptoBIP44)
 
     testImplementation(TestLibraries.mockitoKotlin)
     testImplementation(TestLibraries.mockk)
