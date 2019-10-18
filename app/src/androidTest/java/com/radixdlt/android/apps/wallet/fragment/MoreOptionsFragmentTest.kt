@@ -1,8 +1,10 @@
 package com.radixdlt.android.apps.wallet.fragment
 
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.espresso.intent.rule.IntentsTestRule
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
@@ -11,10 +13,10 @@ import androidx.test.uiautomator.UiDevice
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
-import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
+import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
+import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions.assertEnabled
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
-import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
@@ -38,7 +40,7 @@ class MoreOptionsFragmentTest {
      * blocks of Junit tests.
      */
     @get:Rule
-    var newWalletActivityTestRule = IntentsTestRule(NewWalletActivity::class.java)
+    var newWalletActivityTestRule = IntentsTestRule(StartActivity::class.java)
 
     // Clear all app's SharedPreferences
     @get:Rule
@@ -54,9 +56,7 @@ class MoreOptionsFragmentTest {
 
     @Test
     fun testOpenReportIssueWebView() {
-        clickOn(R.id.importWalletFromMnemonicButton)
-        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtesting")
-        clickOn(R.id.createWalletFromMnemonicButton)
+        createWallet()
 
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
@@ -71,5 +71,16 @@ class MoreOptionsFragmentTest {
         // Press the back button to exit app
         val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         mDevice.pressBack()
+    }
+
+    private fun createWallet() {
+        onView(ViewMatchers.withId(R.id.greetingTermsAndConditionsCheckBox))
+            .perform(GreetingFragmentTest.clickIn(0, 0))
+        onView(ViewMatchers.withId(R.id.greetingPrivacyPolicyCheckBox))
+            .perform(GreetingFragmentTest.clickIn(0, 0))
+        assertEnabled(R.id.greetingGetStartedButton)
+        clickOn(R.id.greetingGetStartedButton)
+        assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
+        clickOn(R.id.createWalletCreateNewWalletButton)
     }
 }

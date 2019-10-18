@@ -29,7 +29,6 @@ import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertD
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickBack
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
-import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
@@ -100,7 +99,7 @@ class GreetingFragmentTest {
         clickOn(R.id.greetingTermsAndConditionsCheckBox)
 
         // Slight delay allowing customTabs to load
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(7))
 
         intended(IntentMatchers.toPackage("com.android.chrome"))
 
@@ -110,7 +109,7 @@ class GreetingFragmentTest {
         clickOn(R.id.greetingPrivacyPolicyCheckBox)
 
         // Slight delay allowing customTabs to load
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(7))
 
         intended(IntentMatchers.toPackage("com.android.chrome"), times(2))
 
@@ -131,7 +130,7 @@ class GreetingFragmentTest {
 
         clickOn(R.id.greetingGetStartedButton)
 
-        assertDisplayed(R.string.new_wallet_activity_xml_welcome_title)
+        assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
     }
 
     @Test
@@ -145,7 +144,7 @@ class GreetingFragmentTest {
 
         clickOn(R.id.greetingGetStartedButton)
 
-        assertDisplayed(R.string.new_wallet_activity_xml_welcome_title)
+        assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
 
         try {
             clickBack()
@@ -159,7 +158,7 @@ class GreetingFragmentTest {
         newWalletActivityTestRule.launchActivity(null)
 
         // Greeting screen should not be displayed and create a wallet screen is now shown at start
-        assertDisplayed(R.string.new_wallet_activity_xml_welcome_title)
+        assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
     }
 
     @Test
@@ -173,11 +172,9 @@ class GreetingFragmentTest {
 
         clickOn(R.id.greetingGetStartedButton)
 
-        assertDisplayed(R.string.new_wallet_activity_xml_welcome_title)
+        assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
 
-        clickOn(R.id.importWalletFromMnemonicButton)
-        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtesting")
-        clickOn(R.id.createWalletFromMnemonicButton)
+        clickOn(R.id.createWalletCreateNewWalletButton)
 
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
@@ -204,7 +201,7 @@ class GreetingFragmentTest {
         newWalletActivityTestRule.launchActivity(null)
 
         // Greeting screen should not be displayed and create a wallet screen is now shown at start
-        assertDisplayed(R.string.new_wallet_activity_xml_welcome_title)
+        assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
     }
 
     companion object {

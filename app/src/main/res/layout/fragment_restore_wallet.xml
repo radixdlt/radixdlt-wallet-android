@@ -62,12 +62,12 @@
                     android:textColor="@color/radixBlueGrey2"
                     android:textSize="18sp"
                     app:fontFamily="@font/roboto"
-                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletToImageButton"
+                    app:layout_constraintEnd_toStartOf="@+id/restoreWalletPasteImageButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/restoreWalletWelcomeTitleTextView" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/restoreWalletToImageButton"
+                    android:id="@+id/restoreWalletPasteImageButton"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_marginEnd="16dp"
@@ -417,7 +417,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/paymentSummaryConfirmAndSendButton"
+                    android:id="@+id/restoreWalletConfirmButton"
                     style="@style/MaterialButton"
                     android:layout_width="0dp"
                     android:layout_height="56dp"

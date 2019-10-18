@@ -9,6 +9,7 @@ import com.radixdlt.android.apps.wallet.data.mapper.TokenTransferDataMapper2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import com.radixdlt.android.apps.wallet.identity.Identity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainLoadingState
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -45,7 +46,8 @@ class MainViewModel @Inject constructor(
 
     init {
         _showBackUpWalletNotification.value = true
-        _mainLoadingState.value = MainLoadingState.LOADING
+        _mainLoadingState.value =
+            MainLoadingState.LOADING
         checkTransactionsTable()
         retrieveAllTransactions()
     }

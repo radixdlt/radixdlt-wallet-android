@@ -98,7 +98,7 @@
                     app:layout_constraintTop_toTopOf="@+id/paymentSummaryFromNoteLabelTextView" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/paymentSummaryToImageButton"
+                    android:id="@+id/paymentSummaryCopyToImageButton"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_marginEnd="16dp"
@@ -112,7 +112,7 @@
                     app:layout_constraintTop_toTopOf="@+id/paymentSummaryToNameTextView" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/paymentSummaryFromImageButton"
+                    android:id="@+id/paymentSummaryCopyFromImageButton"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_marginEnd="16dp"
@@ -163,7 +163,7 @@
                     tools:text="9egHejbV2z1p1Luy2mER4BZaHzM67LdaLrUoJ9YSFRGCw1xPC"
                     android:textColor="@color/radixBlueGrey2"
                     android:textSize="16sp"
-                    app:layout_constraintEnd_toStartOf="@+id/paymentSummaryToImageButton"
+                    app:layout_constraintEnd_toStartOf="@+id/paymentSummaryCopyToImageButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/paymentSummaryToLabelTextView" />
 
@@ -205,7 +205,7 @@
                     android:textColor="@color/radixBlueGrey2"
                     android:textSize="16sp"
                     app:fontFamily="@font/roboto"
-                    app:layout_constraintEnd_toStartOf="@+id/paymentSummaryFromImageButton"
+                    app:layout_constraintEnd_toStartOf="@+id/paymentSummaryCopyFromImageButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/paymentSummaryFromLabelTextView"
                     tools:text="9egHejbV2z1p1Luy2mER4BZaHzM67LdaLrUoJ9YSFRGCw1xPC" />

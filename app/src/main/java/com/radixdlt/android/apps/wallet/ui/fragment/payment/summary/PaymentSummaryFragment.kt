@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
+import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.databinding.FragmentPaymentSummaryBinding
 import org.jetbrains.anko.px2dip
 
@@ -28,16 +29,17 @@ class PaymentSummaryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = initialiseDataBinding(inflater, container)
-        initialiseToolBar(view)
+        initialiseToolbar()
         viewModel.showTransactionSummary(args)
 
         return view
     }
 
-    private fun initialiseToolBar(view: View) {
-        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
-        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.payment_summary_fragment_toolbar_title)
-        (activity as AppCompatActivity).supportActionBar?.elevation = view.context.px2dip(0)
+    private fun initialiseToolbar() {
+        initialiseToolbar(R.string.payment_summary_fragment_toolbar_title)
+        activity?.apply {
+            (this as AppCompatActivity).supportActionBar?.elevation = px2dip(0)
+        }
     }
 
     private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
@@ -64,7 +66,7 @@ class PaymentSummaryFragment : Fragment() {
     private fun copyAndShowSnackbar(message: String) {
         view?.let {
             copyToClipboard(it.context, message)
-            Snackbar.make(it.rootView, message, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show()
         }
     }
 

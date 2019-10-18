@@ -138,7 +138,7 @@
     <string name="assets_fragment_xml_receive_button">Receive</string>
     <string name="assets_fragment_xml_send_button">Send</string>
     <string name="assets_fragment_error_toast">There was an error!</string>
-    <string name="assets_fragment_xml_back_up_message">Remember to backup your wallet</string>
+    <string name="assets_fragment_xml_warning_back_up_message">Remember to backup your wallet</string>
     <string name="assets_fragment_warning_sign_close_button_content_description">Warning sign close button</string>
 
     <!-- Asset Transactions Fragment -->
@@ -332,7 +332,7 @@
 
     <!-- Confirm Backup Wallet Fragment -->
     <string name="confirm_backup_wallet_fragment_toolbar_title">Confirm Backup</string>
-    <string name="confirm_backup_wallet_fragment_welcome_title_xml">Confirm backed up correctly</string>
+    <string name="confirm_backup_wallet_fragment_title_xml">Confirm backed up correctly</string>
     <string name="confirm_backup_wallet_fragment_message_xml">Select the 12 word mnemonic in the correct order.</string>
     <string name="confirm_backup_wallet_fragment_mnemonic_error">Mnemonic does not match! Please select in the correct order</string>
     <string name="confirm_backup_wallet_fragment_mnemonic_success">Mnemonic selected correctly</string>

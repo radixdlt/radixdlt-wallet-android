@@ -1,6 +1,8 @@
 package com.radixdlt.android.apps.wallet.fragment
 
 import android.Manifest
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
@@ -8,8 +10,9 @@ import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.DelayHelper
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
-import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
+import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
+import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions
 import com.schibsted.spain.barista.assertion.BaristaErrorAssertions.assertError
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
@@ -28,8 +31,8 @@ import java.util.concurrent.TimeUnit
 class PaymentInputFragmentTest {
 
     @get:Rule
-    var newWalletActivityTestRule: ActivityTestRule<NewWalletActivity> =
-        ActivityTestRule(NewWalletActivity::class.java)
+    var newWalletActivityTestRule: ActivityTestRule<StartActivity> =
+        ActivityTestRule(StartActivity::class.java)
 
     // Clear all app's SharedPreferences
     @get:Rule
@@ -45,7 +48,7 @@ class PaymentInputFragmentTest {
 
     @Test
     fun testNoteInputIsDisplayedWhenAddNoteIsClicked() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -57,7 +60,7 @@ class PaymentInputFragmentTest {
 
     @Test
     fun testNoteInputIsHiddenWhenDeleteNoteIsClicked() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -71,7 +74,7 @@ class PaymentInputFragmentTest {
 
     @Test
     fun testMaxValueButtonPopulatesInputField() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -82,7 +85,7 @@ class PaymentInputFragmentTest {
 
     @Test
     fun testAssetSelectionButtonOpensNewScreen() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -93,7 +96,7 @@ class PaymentInputFragmentTest {
 
     @Test
     fun testNotARadixAddressShowsError() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -104,18 +107,18 @@ class PaymentInputFragmentTest {
 
     @Test
     fun testMoreThanMaxValueShowsError() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails()
 
-        writeTo(R.id.paymentInputAmountEditText, "100")
+        writeTo(R.id.paymentInputAmountTIET, "100")
         assertError(R.id.paymentInputAmountTIL, R.string.payment_input_fragment_not_enough_tokens_error)
     }
 
     @Test
     fun testClickingSendWithEmptyFieldsShowErrors() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
 
@@ -127,7 +130,7 @@ class PaymentInputFragmentTest {
 
     @Test
     fun testPasteButtonAfterCopyingRadixAddressToClipBoard() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
 
@@ -145,7 +148,7 @@ class PaymentInputFragmentTest {
 
     @Test
     fun testPasteButtonAfterCopyingNotAnAddressToClipBoard() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
 
@@ -164,7 +167,7 @@ class PaymentInputFragmentTest {
 
     @Test
     fun testQrButtonOpensCamera() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
 
@@ -175,23 +178,40 @@ class PaymentInputFragmentTest {
         assertDisplayed(R.string.barcode_capture_activity_title)
     }
 
-    private fun createWallet() {
-        clickOn(R.id.importWalletFromMnemonicButton)
-        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtest")
-        clickOn(R.id.createWalletFromMnemonicButton)
-    }
-
     private fun navigateToPayScreen() {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
         assertDisplayed(R.id.toolbar_search)
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(30))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
         clickOn(R.id.payButton)
     }
 
     private fun inputPaymentDetails() {
         writeTo(R.id.paymentInputAddressTIET, ADDRESS_TO)
-        writeTo(R.id.paymentInputAmountEditText, AMOUNT)
+        writeTo(R.id.paymentInputAmountTIET, AMOUNT)
+    }
+
+    private fun importWallet() {
+        Espresso.onView(ViewMatchers.withId(R.id.greetingTermsAndConditionsCheckBox))
+            .perform(GreetingFragmentTest.clickIn(0, 0))
+        Espresso.onView(ViewMatchers.withId(R.id.greetingPrivacyPolicyCheckBox))
+            .perform(GreetingFragmentTest.clickIn(0, 0))
+        BaristaEnabledAssertions.assertEnabled(R.id.greetingGetStartedButton)
+        clickOn(R.id.greetingGetStartedButton)
+        assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
+        clickOn(R.id.createWalletImportWalletButton)
+
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val mnemonic = "dance taxi nature account nurse split picture wage frame promote fluid reason"
+
+        // Makes sure that copying happens on the correct thread when testing
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            copyToClipboard(context, mnemonic)
+        }
+
+        clickOn(R.id.restoreWalletPasteImageButton)
+
+        clickOn(R.id.restoreWalletConfirmButton)
     }
 
     companion object {

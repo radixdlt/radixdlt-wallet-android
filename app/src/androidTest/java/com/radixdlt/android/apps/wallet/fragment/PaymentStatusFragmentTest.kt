@@ -1,8 +1,10 @@
 package com.radixdlt.android.apps.wallet.fragment
 
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.espresso.intent.rule.IntentsTestRule
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -11,7 +13,9 @@ import com.radixdlt.android.apps.wallet.helper.DelayHelper
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.identity.Identity
-import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
+import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
+import com.radixdlt.android.apps.wallet.util.copyToClipboard
+import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
@@ -27,7 +31,7 @@ import java.util.concurrent.TimeUnit
 class PaymentStatusFragmentTest {
 
     @get:Rule
-    var newWalletActivityTestRule = IntentsTestRule(NewWalletActivity::class.java)
+    var newWalletActivityTestRule = IntentsTestRule(StartActivity::class.java)
 
     // Clear all app's SharedPreferences
     @get:Rule
@@ -43,17 +47,17 @@ class PaymentStatusFragmentTest {
 
     @Test
     fun testStatusDialogShowsTransactionInformationOnSuccess() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails(SUCCESS_AMOUNT)
-        clickOn(R.id.sendButton)
+        clickOn(R.id.paymentInputSendButton)
 
         assertSummaryMatchesUserInput(SUCCESS_AMOUNT)
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(5))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
 
         assertDisplayed(R.id.paymentStatusAmountTextView)
         assertDisplayed("$SUCCESS_AMOUNT $ISO")
@@ -63,18 +67,18 @@ class PaymentStatusFragmentTest {
     fun testExplorerButtonOpensCustomTabsOnSuccess() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails(SUCCESS_AMOUNT)
 
-        clickOn(R.id.sendButton)
+        clickOn(R.id.paymentInputSendButton)
 
         assertSummaryMatchesUserInput(SUCCESS_AMOUNT)
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(5))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
 
         assertDisplayed(R.id.paymentStatusAmountTextView)
         assertDisplayed("$SUCCESS_AMOUNT $ISO")
@@ -82,7 +86,7 @@ class PaymentStatusFragmentTest {
         clickOn(R.id.paymentStatusActionButton)
 
         // Slight delay allowing customTabs to load
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(4))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(7))
 
         intended(toPackage("com.android.chrome"))
 
@@ -94,17 +98,17 @@ class PaymentStatusFragmentTest {
 
     @Test
     fun testTryAgainButtonOnFailure() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails(FAILURE_AMOUNT)
-        clickOn(R.id.sendButton)
+        clickOn(R.id.paymentInputSendButton)
 
         assertSummaryMatchesUserInput(FAILURE_AMOUNT)
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(5))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
 
         assertDisplayed(R.id.paymentStatusFailureTextView)
 
@@ -113,17 +117,17 @@ class PaymentStatusFragmentTest {
 
     @Test
     fun testCloseButtonOnSuccess() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails(SUCCESS_AMOUNT)
-        clickOn(R.id.sendButton)
+        clickOn(R.id.paymentInputSendButton)
 
         assertSummaryMatchesUserInput(SUCCESS_AMOUNT)
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(5))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
 
         assertDisplayed(R.id.paymentStatusAmountTextView)
 
@@ -134,17 +138,17 @@ class PaymentStatusFragmentTest {
 
     @Test
     fun testCloseButtonOnFailure() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails(FAILURE_AMOUNT)
-        clickOn(R.id.sendButton)
+        clickOn(R.id.paymentInputSendButton)
 
         assertSummaryMatchesUserInput(FAILURE_AMOUNT)
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(5))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
 
         assertDisplayed(R.id.paymentStatusFailureTextView)
 
@@ -155,38 +159,32 @@ class PaymentStatusFragmentTest {
 
     @Test
     fun testStatusDialogShowsInformationMessageOnFailure() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails(FAILURE_AMOUNT)
-        clickOn(R.id.sendButton)
+        clickOn(R.id.paymentInputSendButton)
 
         assertSummaryMatchesUserInput(FAILURE_AMOUNT)
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(5))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
 
         assertDisplayed(R.id.paymentStatusFailureTextView)
-    }
-
-    private fun createWallet() {
-        clickOn(R.id.importWalletFromMnemonicButton)
-        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtest")
-        clickOn(R.id.createWalletFromMnemonicButton)
     }
 
     private fun navigateToPayScreen() {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
         assertDisplayed(R.id.toolbar_search)
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(45))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
         clickOn(R.id.payButton)
     }
 
     private fun inputPaymentDetails(amount: String) {
-        writeTo(R.id.inputAddressTIET, ADDRESS_TO)
-        writeTo(R.id.amountEditText, amount)
+        writeTo(R.id.paymentInputAddressTIET, ADDRESS_TO)
+        writeTo(R.id.paymentInputAmountTIET, amount)
     }
 
     private fun assertSummaryMatchesUserInput(amount: String) {
@@ -197,10 +195,35 @@ class PaymentStatusFragmentTest {
         assertDisplayed(R.string.payment_summary_fragment_xrd_fee)
     }
 
+    private fun importWallet() {
+        Espresso.onView(ViewMatchers.withId(R.id.greetingTermsAndConditionsCheckBox))
+            .perform(GreetingFragmentTest.clickIn(0, 0))
+        Espresso.onView(ViewMatchers.withId(R.id.greetingPrivacyPolicyCheckBox))
+            .perform(GreetingFragmentTest.clickIn(0, 0))
+        BaristaEnabledAssertions.assertEnabled(R.id.greetingGetStartedButton)
+        clickOn(R.id.greetingGetStartedButton)
+        assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
+        clickOn(R.id.createWalletImportWalletButton)
+
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val mnemonic = "dance taxi nature account nurse split picture wage frame promote fluid reason"
+
+        // Makes sure that copying happens on the correct thread when testing
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            copyToClipboard(context, mnemonic)
+        }
+
+        clickOn(R.id.restoreWalletPasteImageButton)
+
+        clickOn(R.id.restoreWalletConfirmButton)
+    }
+
     companion object {
         const val ADDRESS_TO = "9iNGvjXbifbkpPy2252tv8w8QCWnTkixxB1YwrYz1c2AR5xG8VJ"
         const val SUCCESS_AMOUNT = "0.01"
-        const val FAILURE_AMOUNT = "30"
+        const val FAILURE_AMOUNT = "1.00"
         const val ISO = "XRD"
+
+        const val DELAY_AFTER_CLICK = 3L
     }
 }

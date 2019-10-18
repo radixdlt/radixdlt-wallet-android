@@ -153,14 +153,14 @@ class PaymentInputFragment : Fragment() {
     private fun initialiseAddress() {
         addressArg?.let {
             paymentInputAddressTIET.setText(it)
-            paymentInputAmountEditText.requestFocus()
+            paymentInputAmountTIET.requestFocus()
         }
     }
 
     private fun initialiseUri() {
         uri?.let {
             paymentInputAddressTIET.setText(it.getQueryParameter("to"))
-            paymentInputAmountEditText.setText(it.getQueryParameter("amount"))
+            paymentInputAmountTIET.setText(it.getQueryParameter("amount"))
             val attachment = it.getQueryParameter("attachment")
             token = it.getQueryParameter("token") ?: "XRD"
             if (attachment != null && attachment.isNotBlank()) {
@@ -209,7 +209,7 @@ class PaymentInputFragment : Fragment() {
             val rri = RRI.of(RadixAddress.from(address), iso).toString()
             paymentViewModel.selectedAsset = rri
 
-            val amount = paymentInputAmountEditText.text?.toString()
+            val amount = paymentInputAmountTIET.text?.toString()
             validateAmount(amount)
         }
     }
@@ -242,7 +242,7 @@ class PaymentInputFragment : Fragment() {
         paymentInputSendButton.setOnClickListener {
             val addressFrom = Identity.api?.address.toString()
             val addressTo = paymentInputAddressTIET.text.toString().trim()
-            val amountText = paymentInputAmountEditText.text.toString().trim()
+            val amountText = paymentInputAmountTIET.text.toString().trim()
             val note = paymentInputMessageTIET.text.let {
                 if (it.isNullOrBlank()) null else it.toString()
             }
@@ -289,8 +289,8 @@ class PaymentInputFragment : Fragment() {
                         return@setOnClickListener
                     }
 
-                    if (paymentInputAmountEditText.text.isNullOrEmpty()) {
-                        paymentInputAmountEditText.requestFocus()
+                    if (paymentInputAmountTIET.text.isNullOrEmpty()) {
+                        paymentInputAmountTIET.requestFocus()
                     }
                 } else {
                     paymentInputAddressTIL.error = getString(R.string.payment_input_fragment_enter_valid_address_error)
@@ -312,16 +312,16 @@ class PaymentInputFragment : Fragment() {
         }
 
         paymentInputMaxValue.setOnClickListener {
-            paymentInputAmountEditText.setText(maxValue)
+            paymentInputAmountTIET.setText(maxValue)
             paymentInputAmountTIL.isErrorEnabled = false
-            paymentInputAmountEditText.clearFocus()
+            paymentInputAmountTIET.clearFocus()
         }
 
         paymentInputAddNote.setOnClickListener {
             noteInputVisibility(paymentInputMessageTIL.visibility == View.GONE)
         }
 
-        paymentInputAmountEditText.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
+        paymentInputAmountTIET.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val amount = s?.toString()
                 validateAmount(amount)
@@ -367,8 +367,8 @@ class PaymentInputFragment : Fragment() {
 
                     paymentInputAddressTIET.clearFocus()
 
-                    if (paymentInputAmountEditText.text.isNullOrEmpty()) {
-                        paymentInputAmountEditText.requestFocus()
+                    if (paymentInputAmountTIET.text.isNullOrEmpty()) {
+                        paymentInputAmountTIET.requestFocus()
                     }
                 }
             }

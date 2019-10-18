@@ -24,7 +24,7 @@
             app:layout_constraintBottom_toTopOf="@+id/buttonsView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.40"
+            app:layout_constraintVertical_bias="0.38"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_search"
             />
 
@@ -81,7 +81,7 @@
                 android:gravity="center_vertical"
                 android:paddingStart="13dp"
                 android:paddingEnd="10dp"
-                android:text="@string/assets_fragment_xml_back_up_message"
+                android:text="@string/assets_fragment_xml_warning_back_up_message"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/assetsWarningSignCloseImageButton"

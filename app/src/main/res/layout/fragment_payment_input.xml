@@ -33,7 +33,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/paymentInputAddressTIL">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/paymentInputAmountEditText"
+                    android:id="@+id/paymentInputAmountTIET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/receive_radix_activity_amount_hint"

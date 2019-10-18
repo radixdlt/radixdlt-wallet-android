@@ -34,7 +34,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textSize="22sp"
-                    android:text="@string/confirm_backup_wallet_fragment_welcome_title_xml"
+                    android:text="@string/confirm_backup_wallet_fragment_title_xml"
                     android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"

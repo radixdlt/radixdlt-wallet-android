@@ -5,25 +5,20 @@ import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.radixdlt.android.R
-import com.radixdlt.android.apps.wallet.helper.DelayHelper
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
-import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
-import com.schibsted.spain.barista.interaction.BaristaListInteractions.clickListItem
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.TimeUnit
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -32,7 +27,7 @@ import java.util.concurrent.TimeUnit
  */
 @RunWith(AndroidJUnit4::class)
 @MediumTest
-class AssetTransactionsFragmentTest {
+class BackupWalletFragmentTest {
 
     /**
      * [ActivityTestRule] is a JUnit [@Rule][Rule] to launch your activity under test.
@@ -56,47 +51,37 @@ class AssetTransactionsFragmentTest {
     var clearFilesRule = ClearFilesRule()
 
     @Test
-    fun testAssetTransactionsDetailsAreDisplayed() {
-        importWallet()
-
+    fun testClickingNextButtonNavigatesToConfirmBackup() {
+        clickPastGreetingScreen()
+        clickOn(R.id.createWalletCreateNewWalletButton)
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
-
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
-
-        clickListItem(R.id.assetsRecyclerView, 0)
-
-        clickOn(R.id.pullDownDropFrameLayout)
-
-        assertDisplayed(R.string.asset_transactions_fragment_xml_asset_rri)
-
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
-
-        clickOn(R.id.pullDownDropFrameLayout)
-
-        assertDisplayed(R.string.asset_transactions_fragment_xml_your_balance_title)
+        assertDisplayed(R.string.assets_fragment_xml_warning_back_up_message)
+        clickOn(R.id.assetsWarningSign)
+        assertDisplayed(R.string.backup_wallet_fragment_welcome_title_xml)
+        clickOn(R.id.backupWalletNextButton)
+        assertDisplayed(R.string.confirm_backup_wallet_fragment_title_xml)
     }
 
-    private fun importWallet() {
+    @Test
+    fun testClickingCopyMnemonicButtonShowsSnackbar() {
+        clickPastGreetingScreen()
+        clickOn(R.id.createWalletCreateNewWalletButton)
+        // Click on x on the toolbar to dismiss
+        clickOn(navigationIconMatcher())
+        assertDisplayed(R.string.assets_fragment_xml_warning_back_up_message)
+        clickOn(R.id.assetsWarningSign)
+        assertDisplayed(R.string.backup_wallet_fragment_welcome_title_xml)
+        clickOn(R.id.backupWalletCopyImageButton)
+        assertDisplayed(R.string.backup_wallet_fragment_copied_mnemonic)
+    }
+
+    private fun clickPastGreetingScreen(){
         Espresso.onView(ViewMatchers.withId(R.id.greetingTermsAndConditionsCheckBox))
             .perform(GreetingFragmentTest.clickIn(0, 0))
         Espresso.onView(ViewMatchers.withId(R.id.greetingPrivacyPolicyCheckBox))
             .perform(GreetingFragmentTest.clickIn(0, 0))
         BaristaEnabledAssertions.assertEnabled(R.id.greetingGetStartedButton)
-        clickOn(R.id.greetingGetStartedButton)
-        assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
-        clickOn(R.id.createWalletImportWalletButton)
-
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val mnemonic = "dance taxi nature account nurse split picture wage frame promote fluid reason"
-
-        // Makes sure that copying happens on the correct thread when testing
-        InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            copyToClipboard(context, mnemonic)
-        }
-
-        clickOn(R.id.restoreWalletPasteImageButton)
-
-        clickOn(R.id.restoreWalletConfirmButton)
+        clickOn((R.id.greetingGetStartedButton))
     }
 }

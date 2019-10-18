@@ -85,10 +85,10 @@ android {
 
     flavorDimensions("sdk")
     productFlavors {
-        create("normal") {
+        create("real") {
             setDimension("sdk")
         }
-        create("oreo") {
+        create("dummy") {
             setDimension("sdk")
             minSdkVersion(26)
         }
@@ -102,11 +102,11 @@ android {
 
     variantFilter {
         when {
-            (buildType.name == "release" && flavors[0].name == "oreo") ||
+            (buildType.name == "release" && flavors[0].name == "dummy") ||
             (buildType.name == "release" && flavors[0].name == "betanet") ||
-            (buildType.name == "dev" && flavors[0].name == "oreo") ||
+            (buildType.name == "dev" && flavors[0].name == "dummy") ||
             (buildType.name == "debug" && flavors[0].name == "betanet") ||
-            (buildType.name == "dev" && flavors[0].name == "normal") -> setIgnore(true)
+            (buildType.name == "dev" && flavors[0].name == "real") -> setIgnore(true)
         }
     }
 

@@ -1,13 +1,18 @@
 package com.radixdlt.android.apps.wallet.fragment
 
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.DelayHelper
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.identity.Identity
-import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
+import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
+import com.radixdlt.android.apps.wallet.util.copyToClipboard
+import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
@@ -23,8 +28,8 @@ import java.util.concurrent.TimeUnit
 class PaymentSummaryFragmentTest {
 
     @get:Rule
-    var newWalletActivityTestRule: ActivityTestRule<NewWalletActivity> =
-        ActivityTestRule(NewWalletActivity::class.java)
+    var newWalletActivityTestRule: ActivityTestRule<StartActivity> =
+        ActivityTestRule(StartActivity::class.java)
 
     // Clear all app's SharedPreferences
     @get:Rule
@@ -40,50 +45,50 @@ class PaymentSummaryFragmentTest {
 
     @Test
     fun testCopyAddressButtonCopiesCorrectAddress() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
 
         inputPaymentDetails()
 
-        clickOn(R.id.sendButton)
+        clickOn(R.id.paymentInputSendButton)
 
         assertSummaryMatchesUserInput()
 
-        clickOn(R.id.paymentSummaryFromImageButton)
+        clickOn(R.id.paymentSummaryCopyFromImageButton)
         assertDisplayed(Identity.api?.address.toString())
 
-        clickOn(R.id.paymentSummaryToImageButton)
+        clickOn(R.id.paymentSummaryCopyToImageButton)
         assertDisplayed(ADDRESS_TO)
     }
 
     @Test
     fun testNoteIsDisplayedWhenTransactionContainsMessage() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails()
 
         clickOn(R.string.payment_input_fragment_note_optional)
         // Write message for transaction
-        writeTo(R.id.inputMessageTIET, "Hello World")
+        writeTo(R.id.paymentInputMessageTIET, MESSAGE)
 
-        clickOn(R.id.sendButton)
+        clickOn(R.id.paymentInputSendButton)
 
         assertSummaryMatchesUserInput()
 
         assertDisplayed(R.id.paymentSummaryNoteConstraintLayout)
-        assertDisplayed(R.id.paymentSummaryFromNoteTextView, "Hello World")
+        assertDisplayed(R.id.paymentSummaryFromNoteTextView, MESSAGE)
     }
 
     @Test
     fun testConfirmAndSendButtonOpensPaymentStatusDialog() {
-        createWallet()
+        importWallet()
 
         navigateToPayScreen()
         inputPaymentDetails()
 
-        clickOn(R.id.sendButton)
+        clickOn(R.id.paymentInputSendButton)
 
         assertSummaryMatchesUserInput()
 
@@ -92,23 +97,40 @@ class PaymentSummaryFragmentTest {
         assertDisplayed(R.id.paymentStatusLoadingMessageTextView)
     }
 
-    private fun createWallet() {
-        clickOn(R.id.importWalletFromMnemonicButton)
-        writeTo(R.id.inputMnemonicOrSeedTIET, "instrumentationtest")
-        clickOn(R.id.createWalletFromMnemonicButton)
+    private fun importWallet() {
+        Espresso.onView(ViewMatchers.withId(R.id.greetingTermsAndConditionsCheckBox))
+            .perform(GreetingFragmentTest.clickIn(0, 0))
+        Espresso.onView(ViewMatchers.withId(R.id.greetingPrivacyPolicyCheckBox))
+            .perform(GreetingFragmentTest.clickIn(0, 0))
+        BaristaEnabledAssertions.assertEnabled(R.id.greetingGetStartedButton)
+        clickOn(R.id.greetingGetStartedButton)
+        assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
+        clickOn(R.id.createWalletImportWalletButton)
+
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val mnemonic = "dance taxi nature account nurse split picture wage frame promote fluid reason"
+
+        // Makes sure that copying happens on the correct thread when testing
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            copyToClipboard(context, mnemonic)
+        }
+
+        clickOn(R.id.restoreWalletPasteImageButton)
+
+        clickOn(R.id.restoreWalletConfirmButton)
     }
 
     private fun navigateToPayScreen() {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
         assertDisplayed(R.id.toolbar_search)
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(40))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
         clickOn(R.id.payButton)
     }
 
     private fun inputPaymentDetails() {
-        writeTo(R.id.inputAddressTIET, ADDRESS_TO)
-        writeTo(R.id.amountEditText, AMOUNT)
+        writeTo(R.id.paymentInputAddressTIET, ADDRESS_TO)
+        writeTo(R.id.paymentInputAmountTIET, AMOUNT)
     }
 
     private fun assertSummaryMatchesUserInput() {
@@ -123,5 +145,7 @@ class PaymentSummaryFragmentTest {
         const val ADDRESS_TO = "9iNGvjXbifbkpPy2252tv8w8QCWnTkixxB1YwrYz1c2AR5xG8VJ"
         const val AMOUNT = "42.00"
         const val ISO = "XRD"
+
+        const val MESSAGE = "Hello World"
     }
 }

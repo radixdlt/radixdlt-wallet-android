@@ -1,8 +1,12 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.assets
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.util.sumStoredTransactions
@@ -10,10 +14,14 @@ import com.radixdlt.client.core.atoms.particles.RRI
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.InputStreamReader
 import javax.inject.Inject
 
 class AssetsViewModel @Inject constructor(
+    private val context: Context,
     private val transactionsDao2: TransactionsDao2
 ) : ViewModel() {
 
@@ -30,6 +38,7 @@ class AssetsViewModel @Inject constructor(
         get() = _assetsAction
 
     init {
+        insertTransactionsIntoDB()
         retrieveAssets()
     }
 
@@ -87,6 +96,8 @@ class AssetsViewModel @Inject constructor(
             transactionsDao2.getAllTransactionsByTokenType(tokenType)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
+
+                    Timber.tag("TransactionsAssets").d(it.toString())
 
                     val tokenName = it.first().tokenName
                     val tokenUrlIcon = it.first().tokenIconUrl
@@ -155,5 +166,17 @@ class AssetsViewModel @Inject constructor(
         assets.clear()
         compositeDisposable.clear()
         super.onCleared()
+    }
+
+    private fun insertTransactionsIntoDB() {
+        val transactions = context.assets.open("dummy_transactions.json")
+        val transactionEntity2List = Gson().fromJson(
+            InputStreamReader(transactions),
+            Array<TransactionEntity2>::class.java
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            transactionsDao2.insertTransactions(transactionEntity2List.toList())
+        }
     }
 }
