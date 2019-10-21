@@ -4,6 +4,8 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        maven(url = "https://www.jitpack.io")
         maven(url = "https://maven.fabric.io/public")
         maven(url = "https://dl.bintray.com/novacrypto/BIP/")
     }
