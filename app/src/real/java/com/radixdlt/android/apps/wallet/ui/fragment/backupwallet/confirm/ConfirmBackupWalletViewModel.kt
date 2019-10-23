@@ -37,9 +37,9 @@ class ConfirmBackupWalletViewModel : ViewModel() {
         _shuffledMnemonic.value = mnemonic
             .split(" ")
             .toMutableList()
-//            .also {
-//                it.shuffle()
-//            }
+            .also {
+                it.shuffle()
+            }
     }
 
     private fun buildMnemonicFromFields(layout: ConstraintLayout): String {

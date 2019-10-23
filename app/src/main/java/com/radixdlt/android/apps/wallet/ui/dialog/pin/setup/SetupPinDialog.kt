@@ -18,9 +18,9 @@ import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.set
-import com.radixdlt.android.databinding.DialogPinBinding
+import com.radixdlt.android.databinding.DialogSetupPinBinding
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.dialog_pin.*
+import kotlinx.android.synthetic.main.dialog_setup_pin.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,8 +48,8 @@ class SetupPinDialog : FullScreenDialog() {
     ): View? = initialiseDataBinding(inflater, container)
 
     private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
-        val binding: DialogPinBinding =
-            DataBindingUtil.inflate(inflater, R.layout.dialog_pin, container, false)
+        val binding: DialogSetupPinBinding =
+            DataBindingUtil.inflate(inflater, R.layout.dialog_setup_pin, container, false)
         binding.viewmodel = viewModelSetup
         binding.lifecycleOwner = this
 
@@ -60,7 +60,7 @@ class SetupPinDialog : FullScreenDialog() {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
         toolbarDialog.setNavigationIcon(R.drawable.ic_arrow_back)
-        toolbarDialog.setNavigationContentDescription(R.string.pin_dialog_content_description_back_button)
+        toolbarDialog.setNavigationContentDescription(R.string.setup_pin_dialog_content_description_back_button)
         toolbarDialog.setNavigationOnClickListener { dismiss() }
         initialiseViewModels()
     }

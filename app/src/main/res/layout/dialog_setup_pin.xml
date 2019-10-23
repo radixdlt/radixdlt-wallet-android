@@ -29,7 +29,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:gravity="center"
-            android:text="@string/pin_dialog_set_pin_header"
+            android:text="@string/setup_pin_dialog_set_pin_header"
             android:textColor="@color/radixBlueGrey2"
             android:textSize="28sp"
             app:pinSetupState="@{ viewmodel.pinSetupState }"

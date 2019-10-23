@@ -274,11 +274,11 @@
     <string name="payment_status_dialog_failure_message">There was an error trying to send the transaction, please try again!</string>
 
     <!-- Pin Dialog -->
-    <string name="pin_dialog_enter_pin">Enter Pin to Confirm</string>
-    <string name="pin_dialog_content_description_back_button">Closes the pin dialog</string>
-    <string name="pin_dialog_set_pin_header">Create a pin</string>
-    <string name="pin_dialog_confirm_pin_header">Confirm your pin</string>
-    <string name="pin_dialog_pin_does_not_match">Pin does not match. Try again!</string>
+    <string name="setup_pin_dialog_enter_pin">Enter Pin to Confirm</string>
+    <string name="setup_pin_dialog_content_description_back_button">Closes the pin dialog</string>
+    <string name="setup_pin_dialog_set_pin_header">Create a pin</string>
+    <string name="setup_pin_dialog_confirm_pin_header">Confirm your pin</string>
+    <string name="setup_pin_dialog_pin_does_not_match">Pin does not match. Try again!</string>
 
     <!-- Common strings-->
     <string name="common_address_text">Address</string>

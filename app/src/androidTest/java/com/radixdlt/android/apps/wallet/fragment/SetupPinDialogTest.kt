@@ -30,7 +30,7 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 @MediumTest
-class ConfirmBackupWalletFragmentTest {
+class SetupPinDialogTest {
 
     /**
      * [ActivityTestRule] is a JUnit [@Rule][Rule] to launch your activity under test.
@@ -54,22 +54,63 @@ class ConfirmBackupWalletFragmentTest {
     var clearFilesRule = ClearFilesRule()
 
     @Test
-    fun testClickingConfirmButtonWithWrongMnemonicShowsError() {
-        clickPastGreetingScreen()
-        clickOn(R.id.createWalletCreateNewWalletButton)
-        // Click on x on the toolbar to dismiss
-        clickOn(navigationIconMatcher())
-        assertDisplayed(R.string.assets_fragment_xml_warning_back_up_message)
-        clickOn(R.id.assetsWarningSign)
-        assertDisplayed(R.string.backup_wallet_fragment_welcome_title_xml)
-        clickOn(R.id.backupWalletNextButton)
-        assertDisplayed(R.string.confirm_backup_wallet_fragment_title_xml)
-        clickOn(R.id.confirmBackupWalletConfirmButton)
-        assertDisplayed(R.string.confirm_backup_wallet_fragment_mnemonic_error)
+    fun testSetupPinAsksToConfirm() {
+        navigateToSetupPin()
+        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
     }
 
     @Test
-    fun testClickingConfirmButtonWithCorrectMnemonicShowsSuccessSnackbar() {
+    fun testConfirmPinSucceedsWhenSamePinIsEntered() {
+        navigateToSetupPin()
+        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        assertDisplayed(R.id.toolbar_search)
+    }
+
+    @Test
+    fun testConfirmPinSucceedsWhenDifferentPinIsEntered() {
+        navigateToSetupPin()
+        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.one)
+        clickOn(R.id.one)
+        clickOn(R.id.one)
+
+        assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
+    }
+
+    @Test
+    fun testClickingUpButtonDismissesSetupPinDialog() {
+        navigateToSetupPin()
+        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
+        // Click on up button on the toolbar to dismiss
+        clickOn(navigationIconMatcher())
+        assertDisplayed(R.string.confirm_backup_wallet_fragment_title_xml)
+    }
+
+    private fun navigateToSetupPin() {
         clickPastGreetingScreen()
         clickOn(R.id.createWalletCreateNewWalletButton)
         // Click on x on the toolbar to dismiss
@@ -84,7 +125,6 @@ class ConfirmBackupWalletFragmentTest {
         getMnemonicFromClipboard()
 
         clickOn(R.id.confirmBackupWalletConfirmButton)
-        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
     }
 
     private fun getMnemonicFromClipboard() {

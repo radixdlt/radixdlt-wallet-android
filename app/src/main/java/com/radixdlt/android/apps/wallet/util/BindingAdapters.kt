@@ -180,9 +180,9 @@ private fun addChip(layout: ConstraintLayout, chipGroup: ChipGroup, mnemonicWord
 @BindingAdapter("pinSetupState")
 fun TextView.bindPinSetupState(state: SetupPinViewModel.SetupPinState?) {
     if (state == SetupPinViewModel.SetupPinState.SET) {
-        text = context.getString(R.string.pin_dialog_set_pin_header)
+        text = context.getString(R.string.setup_pin_dialog_set_pin_header)
     } else if (state == SetupPinViewModel.SetupPinState.CONFIRM) {
-        text = context.getString(R.string.pin_dialog_confirm_pin_header)
+        text = context.getString(R.string.setup_pin_dialog_confirm_pin_header)
     }
 }
 
