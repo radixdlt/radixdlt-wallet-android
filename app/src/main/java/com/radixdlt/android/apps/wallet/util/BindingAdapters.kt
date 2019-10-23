@@ -23,7 +23,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputLayout
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
-import com.radixdlt.android.apps.wallet.ui.dialog.pin.PinViewModel
+import com.radixdlt.android.apps.wallet.ui.dialog.pin.setup.SetupPinViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusState
 import com.radixdlt.android.apps.wallet.ui.layout.KeyPadView
 
@@ -178,10 +178,10 @@ private fun addChip(layout: ConstraintLayout, chipGroup: ChipGroup, mnemonicWord
 }
 
 @BindingAdapter("pinSetupState")
-fun TextView.bindPinSetupState(state: PinViewModel.SetupPinState?) {
-    if (state == PinViewModel.SetupPinState.SET) {
+fun TextView.bindPinSetupState(state: SetupPinViewModel.SetupPinState?) {
+    if (state == SetupPinViewModel.SetupPinState.SET) {
         text = context.getString(R.string.pin_dialog_set_pin_header)
-    } else if (state == PinViewModel.SetupPinState.CONFIRM) {
+    } else if (state == SetupPinViewModel.SetupPinState.CONFIRM) {
         text = context.getString(R.string.pin_dialog_confirm_pin_header)
     }
 }
@@ -204,8 +204,8 @@ fun CheckBox.bindPinCheck(pinLength: Int) {
 }
 
 @BindingAdapter("pinError")
-fun LinearLayout.bindPinError(state: PinViewModel.SetupPinState?) {
-    if (state == PinViewModel.SetupPinState.ERROR) {
+fun LinearLayout.bindPinError(state: SetupPinViewModel.SetupPinState?) {
+    if (state == SetupPinViewModel.SetupPinState.ERROR) {
         val values = arrayOf(0f, 25f, -25f, 25f, -25f, 15f, -15f, 6f, -6f, 0f).toFloatArray()
         val oa1 = ObjectAnimator
             .ofFloat(this, "translationX", *values)

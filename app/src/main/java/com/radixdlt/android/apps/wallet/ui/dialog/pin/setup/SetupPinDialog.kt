@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.dialog.pin
+package com.radixdlt.android.apps.wallet.ui.dialog.pin.setup
 
 import android.content.Context
 import android.os.Bundle
@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.dialog_pin.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class PinDialog : FullScreenDialog() {
+class SetupPinDialog : FullScreenDialog() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -33,7 +33,7 @@ class PinDialog : FullScreenDialog() {
 
     private lateinit var ctx: Context
 
-    private val viewModel: PinViewModel by viewModels()
+    private val viewModelSetup: SetupPinViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -50,7 +50,7 @@ class PinDialog : FullScreenDialog() {
     private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         val binding: DialogPinBinding =
             DataBindingUtil.inflate(inflater, R.layout.dialog_pin, container, false)
-        binding.viewmodel = viewModel
+        binding.viewmodel = viewModelSetup
         binding.lifecycleOwner = this
 
         return binding.root
@@ -69,12 +69,12 @@ class PinDialog : FullScreenDialog() {
         activity?.apply {
             mainViewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
         }
-        viewModel.pinAction.observe(viewLifecycleOwner, Observer(::action))
+        viewModelSetup.setupPinAction.observe(viewLifecycleOwner, Observer(::action))
     }
 
-    private fun action(pinAction: PinAction?) {
-        when(pinAction) {
-            PinAction.NAVIGATE -> {
+    private fun action(setupPinAction: SetupPinAction?) {
+        when(setupPinAction) {
+            SetupPinAction.NAVIGATE -> {
                 savePrefWalletBackedUp()
                 returnToStart()
             }

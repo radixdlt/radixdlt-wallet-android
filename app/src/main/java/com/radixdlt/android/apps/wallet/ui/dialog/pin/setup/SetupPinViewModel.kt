@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.dialog.pin
+package com.radixdlt.android.apps.wallet.ui.dialog.pin.setup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,14 +9,14 @@ import com.radixdlt.android.apps.wallet.util.Vault
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PinViewModel : ViewModel() {
+class SetupPinViewModel : ViewModel() {
 
     enum class SetupPinState {
         SET, SETTING, CONFIRM, ERROR
     }
 
-    private val _pinAction = MutableLiveData<PinAction?>()
-    val pinAction: LiveData<PinAction?> get() = _pinAction
+    private val _pinAction = MutableLiveData<SetupPinAction?>()
+    val setupPinAction: LiveData<SetupPinAction?> get() = _pinAction
 
     private val _pinSetupState = MutableLiveData<SetupPinState>()
     val pinSetupState: LiveData<SetupPinState> get() = _pinSetupState
@@ -27,7 +27,8 @@ class PinViewModel : ViewModel() {
     private lateinit var pinSet: String
 
     init {
-        _pinSetupState.value = SetupPinState.SET
+        _pinSetupState.value =
+            SetupPinState.SET
     }
 
     fun pinChange(text: String) {
@@ -42,7 +43,8 @@ class PinViewModel : ViewModel() {
     private fun setPin(text: String) {
         _pinLength.value = text.length
         if (text.length == 4) {
-            _pinSetupState.value = SetupPinState.SETTING
+            _pinSetupState.value =
+                SetupPinState.SETTING
             delayLastCheckedCheckBoxStateChange(200)
             pinSet = text
         }
@@ -58,10 +60,12 @@ class PinViewModel : ViewModel() {
     private fun verifyConfirmationPinSameAsSetup(text: String) {
         if (text == pinSet) {
             Vault.getVault().edit().putString(VAULT_PIN, text).apply()
-            _pinAction.value = PinAction.NAVIGATE
+            _pinAction.value =
+                SetupPinAction.NAVIGATE
             _pinAction.value = null
         } else {
-            _pinSetupState.value = SetupPinState.ERROR
+            _pinSetupState.value =
+                SetupPinState.ERROR
             delayLastCheckedCheckBoxStateChange(600)
         }
     }
@@ -72,7 +76,8 @@ class PinViewModel : ViewModel() {
         viewModelScope.launch {
             delay(delayLength)
             _pinLength.value = 0
-            _pinSetupState.value = SetupPinState.CONFIRM
+            _pinSetupState.value =
+                SetupPinState.CONFIRM
         }
     }
 }
