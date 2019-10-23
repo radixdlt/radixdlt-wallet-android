@@ -10,8 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputLayout
 import com.radixdlt.android.apps.wallet.identity.AndroidRadixIdentity
 import com.radixdlt.android.apps.wallet.identity.Identity
-import com.radixdlt.android.apps.wallet.util.PREF_MNEMONIC
-import com.radixdlt.android.apps.wallet.util.PREF_SECRET
+import com.radixdlt.android.apps.wallet.util.VAULT_MNEMONIC
+import com.radixdlt.android.apps.wallet.util.VAULT_SECRET
 import com.radixdlt.android.apps.wallet.util.Vault
 import com.radixdlt.android.apps.wallet.util.privateKeyFromSeedAtIndex
 import com.radixdlt.client.core.crypto.ECKeyPair
@@ -84,8 +84,8 @@ class RestoreWalletViewModel : ViewModel() {
         val seed: ByteArray = SeedCalculator().calculateSeed(mnemonic, "")
 
         val privateKeyHex: String = privateKeyFromSeedAtIndex(seed, 0)
-        Vault.getVault().edit().putString(PREF_SECRET, privateKeyHex).apply()
-        Vault.getVault().edit().putString(PREF_MNEMONIC, mnemonic).apply()
+        Vault.getVault().edit().putString(VAULT_SECRET, privateKeyHex).apply()
+        Vault.getVault().edit().putString(VAULT_MNEMONIC, mnemonic).apply()
 
         Identity.myIdentity = AndroidRadixIdentity(ECKeyPair(Hex.decode(privateKeyHex)))
     }

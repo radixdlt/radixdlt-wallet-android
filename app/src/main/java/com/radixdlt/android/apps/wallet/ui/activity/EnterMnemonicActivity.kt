@@ -10,8 +10,8 @@ import com.radixdlt.android.apps.wallet.identity.AndroidRadixIdentity
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.util.EmptyTextWatcher
-import com.radixdlt.android.apps.wallet.util.PREF_SECRET
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.VAULT_SECRET
 import com.radixdlt.android.apps.wallet.util.Vault
 import com.radixdlt.android.apps.wallet.util.createProgressDialog
 import com.radixdlt.android.apps.wallet.util.setProgressDialogVisible
@@ -124,10 +124,10 @@ class EnterMnemonicActivity : AppCompatActivity() {
     }
 
     private fun saveKey(key: String) {
-        sharedPreferenceVault.edit().putString(PREF_SECRET, key).apply()
+        sharedPreferenceVault.edit().putString(VAULT_SECRET, key).apply()
     }
 
     private fun loadKey(): String? {
-        return sharedPreferenceVault.getString(PREF_SECRET, null)
+        return sharedPreferenceVault.getString(VAULT_SECRET, null)
     }
 }

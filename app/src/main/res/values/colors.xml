@@ -18,6 +18,7 @@
     <color name="extremelyLightGray">#F0F0F0</color>
     <color name="greyAlpha">#78bfbfbf</color>
     <color name="materialDarkGrey">#3B3B3B</color>
+    <color name="materialGrey500">#FF5B5D5D</color>
     <color name="materialGrey700">#616161</color>
     <color name="materialGrey900">#212121</color>
     <color name="turquoise">#4489A3</color>
@@ -28,6 +29,11 @@
     <!-- Testing -->
     <color name="immersive_background">#88000000</color>
     <color name="dialog_background">#fafafa</color>
+
+
+    <color name="white66KeyboardBorder">#A8A3ADB7</color>
+    <color name="disabledLightGray">#A3ADB7</color>
+    <color name="blue66KeyboardBorder">#A8525F7F</color>
 
 
     <!-- New colors to replace above-->

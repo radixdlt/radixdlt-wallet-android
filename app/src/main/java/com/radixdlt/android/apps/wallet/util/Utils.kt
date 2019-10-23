@@ -19,6 +19,8 @@ import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.identity.Identity
+import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
+import com.radixdlt.android.apps.wallet.util.Pref.set
 import com.radixdlt.client.core.atoms.RadixHash
 import com.radixdlt.client.core.util.Base58
 import io.github.novacrypto.bip32.ExtendedPrivateKey
@@ -320,7 +322,8 @@ fun resetData(context: Context) {
     QueryPreferences.setPrefPasswordEnabled(context, true)
     QueryPreferences.setPrefAutoLockTimeOut(context, 2000)
     QueryPreferences.setPrefCreatedByMnemonicOrSeed(context, false)
-    QueryPreferences.setPrefWalletBackedUp(context, false)
+    context.defaultPrefs()[Pref.WALLET_BACKED_UP] = false
+    context.defaultPrefs()[Pref.PIN_SET] = false
     Identity.clear()
 }
 

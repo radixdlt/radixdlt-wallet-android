@@ -37,9 +37,9 @@ class ConfirmBackupWalletViewModel : ViewModel() {
         _shuffledMnemonic.value = mnemonic
             .split(" ")
             .toMutableList()
-            .also {
-                it.shuffle()
-            }
+//            .also {
+//                it.shuffle()
+//            }
     }
 
     private fun buildMnemonicFromFields(layout: ConstraintLayout): String {
@@ -79,7 +79,7 @@ class ConfirmBackupWalletViewModel : ViewModel() {
     }
 
     private fun returnToInitialScreen() {
-        _confirmBackupWalletAction.value = ConfirmBackupWalletAction.Return
+        _confirmBackupWalletAction.value = ConfirmBackupWalletAction.Navigate
     }
 
     private fun showMnemonicError() {

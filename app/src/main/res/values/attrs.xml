@@ -13,4 +13,19 @@
     <attr name="drawableTint" format="color"/>
     <attr name="android:drawablePadding"/>
   </declare-styleable>
+
+  <declare-styleable name="KeyPadView">
+    <attr name="keypad_digits" format="string" />
+    <attr name="keypad_text_limit" format="integer" />
+    <attr name="keypad_text_size" format="dimension" />
+    <attr name="keypad_text_color" format="color" />
+    <attr name="keypad_background_resource" format="reference" />
+    <attr name="keypad_image_resource" format="reference" />
+    <attr name="keypad_clear_image_resource" format="reference" />
+    <attr name="keypad_grid_visible" format="boolean" />
+    <attr name="keypad_grid_background_color" format="color" />
+    <attr name="keypad_grid_line_thickness" format="dimension" />
+    <attr name="keypad_font_path" format="string" />
+    <attr name="keypad_decimal" format="string" />
+  </declare-styleable>
 </resources>
