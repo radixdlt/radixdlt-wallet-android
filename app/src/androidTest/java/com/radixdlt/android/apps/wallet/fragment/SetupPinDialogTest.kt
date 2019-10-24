@@ -84,7 +84,7 @@ class SetupPinDialogTest {
     }
 
     @Test
-    fun testConfirmPinSucceedsWhenDifferentPinIsEntered() {
+    fun testConfirmPinFailsAndShakesWhenDifferentPinIsEntered() {
         navigateToSetupPin()
         assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
         clickOn(R.id.one)
@@ -122,23 +122,23 @@ class SetupPinDialogTest {
         clickOn(R.id.backupWalletNextButton)
         assertDisplayed(R.string.confirm_backup_wallet_fragment_title_xml)
 
-        getMnemonicFromClipboard()
+        val mnemonicStringArray = getMnemonicFromClipboard()
+        clickMnemonicInCorrectOrder(mnemonicStringArray)
 
         clickOn(R.id.confirmBackupWalletConfirmButton)
     }
 
-    private fun getMnemonicFromClipboard() {
+    private fun getMnemonicFromClipboard(): Array<String> {
         lateinit var mnemonicStringArray: Array<String>
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        // Makes sure that copying happens on the correct thread when testing
+        // Makes sure that getting from clipboard happens on the correct thread when testing
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clipboard.primaryClip?.getItemAt(0)?.let {
                 mnemonicStringArray = it.text.trim().split(" ").toTypedArray()
-                println(mnemonicStringArray.contentToString())
             }
         }
-        clickMnemonicInCorrectOrder(mnemonicStringArray)
+        return mnemonicStringArray
     }
 
     private fun clickMnemonicInCorrectOrder(mnemonicStringArray: Array<String>) {
