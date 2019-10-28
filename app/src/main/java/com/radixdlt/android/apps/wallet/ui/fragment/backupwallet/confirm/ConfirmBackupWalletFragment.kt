@@ -18,13 +18,12 @@ import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
-import com.radixdlt.android.apps.wallet.util.Pref.set
+import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.apps.wallet.util.showErrorSnackbarAboveNavigationView
 import com.radixdlt.android.apps.wallet.util.showSuccessSnackbarAboveNavigationView
 import com.radixdlt.android.databinding.FragmentConfirmBackupWalletBinding
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -92,22 +91,22 @@ class ConfirmBackupWalletFragment : Fragment() {
         ConfirmBackupWalletAction.ShowMnemonicError -> {
             showErrorSnackbarAboveNavigationView(R.string.confirm_backup_wallet_fragment_mnemonic_error)
         }
-        ConfirmBackupWalletAction.Return -> {
-            savePrefWalletBackedUp()
-            returnToStart()
+        ConfirmBackupWalletAction.Navigate -> {
+            if (ctx.defaultPrefs()[Pref.PIN_SET, false]) {
+                navigateToStart()
+            } else {
+                navigateToSetupPin()
+            }
         }
     }
 
-    private fun savePrefWalletBackedUp() {
-        activity?.apply {
-            defaultPrefs()[Pref.WALLET_BACKED_UP] = true
-        }
+    private fun navigateToSetupPin() {
+        findNavController().navigate(R.id.navigation_pin)
     }
 
-    private fun returnToStart() {
+    private fun navigateToStart() {
         lifecycleScope.launch {
             showSuccessSnackbarAboveNavigationView(R.string.confirm_backup_wallet_fragment_mnemonic_success)
-            delay(1500)
             mainViewModel.showBackUpWalletNotification(false)
             findNavController().popBackStack(R.id.navigation_backup_wallet, true)
         }

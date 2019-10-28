@@ -10,7 +10,7 @@ import com.radixdlt.android.apps.wallet.identity.AndroidRadixIdentity
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.util.KEYSTORE_FILE
-import com.radixdlt.android.apps.wallet.util.PREF_SECRET
+import com.radixdlt.android.apps.wallet.util.VAULT_SECRET
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.Vault
 import com.radixdlt.client.core.crypto.ECKeyPair
@@ -50,7 +50,7 @@ class StartActivity : AppCompatActivity() {
     }
 
     private fun loadKey(): String? {
-        return Vault.getVault().getString(PREF_SECRET, null)
+        return Vault.getVault().getString(VAULT_SECRET, null)
     }
 
     private fun openWallet() {

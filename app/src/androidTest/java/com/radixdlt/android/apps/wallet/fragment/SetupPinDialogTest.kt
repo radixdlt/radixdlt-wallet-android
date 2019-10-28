@@ -30,7 +30,7 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 @MediumTest
-class ConfirmBackupWalletFragmentTest {
+class SetupPinDialogTest {
 
     /**
      * [ActivityTestRule] is a JUnit [@Rule][Rule] to launch your activity under test.
@@ -54,22 +54,63 @@ class ConfirmBackupWalletFragmentTest {
     var clearFilesRule = ClearFilesRule()
 
     @Test
-    fun testClickingConfirmButtonWithWrongMnemonicShowsError() {
-        clickPastGreetingScreen()
-        clickOn(R.id.createWalletCreateNewWalletButton)
-        // Click on x on the toolbar to dismiss
-        clickOn(navigationIconMatcher())
-        assertDisplayed(R.string.assets_fragment_xml_warning_back_up_message)
-        clickOn(R.id.assetsWarningSign)
-        assertDisplayed(R.string.backup_wallet_fragment_welcome_title_xml)
-        clickOn(R.id.backupWalletNextButton)
-        assertDisplayed(R.string.confirm_backup_wallet_fragment_title_xml)
-        clickOn(R.id.confirmBackupWalletConfirmButton)
-        assertDisplayed(R.string.confirm_backup_wallet_fragment_mnemonic_error)
+    fun testSetupPinAsksToConfirm() {
+        navigateToSetupPin()
+        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
     }
 
     @Test
-    fun testClickingConfirmButtonWithCorrectMnemonicShowsSuccessSnackbar() {
+    fun testConfirmPinSucceedsWhenSamePinIsEntered() {
+        navigateToSetupPin()
+        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        assertDisplayed(R.id.toolbar_search)
+    }
+
+    @Test
+    fun testConfirmPinFailsAndShakesWhenDifferentPinIsEntered() {
+        navigateToSetupPin()
+        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.one)
+        clickOn(R.id.one)
+        clickOn(R.id.one)
+
+        assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
+    }
+
+    @Test
+    fun testClickingUpButtonDismissesSetupPinDialog() {
+        navigateToSetupPin()
+        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
+        // Click on up button on the toolbar to dismiss
+        clickOn(navigationIconMatcher())
+        assertDisplayed(R.string.confirm_backup_wallet_fragment_title_xml)
+    }
+
+    private fun navigateToSetupPin() {
         clickPastGreetingScreen()
         clickOn(R.id.createWalletCreateNewWalletButton)
         // Click on x on the toolbar to dismiss
@@ -81,24 +122,23 @@ class ConfirmBackupWalletFragmentTest {
         clickOn(R.id.backupWalletNextButton)
         assertDisplayed(R.string.confirm_backup_wallet_fragment_title_xml)
 
-        getMnemonicFromClipboard()
+        val mnemonicStringArray = getMnemonicFromClipboard()
+        clickMnemonicInCorrectOrder(mnemonicStringArray)
 
         clickOn(R.id.confirmBackupWalletConfirmButton)
-        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
     }
 
-    private fun getMnemonicFromClipboard() {
+    private fun getMnemonicFromClipboard(): Array<String> {
         lateinit var mnemonicStringArray: Array<String>
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        // Makes sure that copying happens on the correct thread when testing
+        // Makes sure that getting from clipboard happens on the correct thread when testing
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clipboard.primaryClip?.getItemAt(0)?.let {
                 mnemonicStringArray = it.text.trim().split(" ").toTypedArray()
-                println(mnemonicStringArray.contentToString())
             }
         }
-        clickMnemonicInCorrectOrder(mnemonicStringArray)
+        return mnemonicStringArray
     }
 
     private fun clickMnemonicInCorrectOrder(mnemonicStringArray: Array<String>) {

@@ -79,7 +79,7 @@ class ConfirmBackupWalletViewModel : ViewModel() {
     }
 
     private fun returnToInitialScreen() {
-        _confirmBackupWalletAction.value = ConfirmBackupWalletAction.Return
+        _confirmBackupWalletAction.value = ConfirmBackupWalletAction.Navigate
     }
 
     private fun showMnemonicError() {

@@ -16,6 +16,7 @@ object Pref {
     const val TUTORIAL_RECEIVE = "tutorial_receive"
     const val TERMS_ACCEPTED = "terms_accepted"
     const val WALLET_BACKED_UP = "wallet_backed_up"
+    const val PIN_SET = "pin_set"
 
     fun Context.defaultPrefs(): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(this)

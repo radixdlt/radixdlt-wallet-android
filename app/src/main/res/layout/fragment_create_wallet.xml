@@ -11,160 +11,177 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".apps.wallet.ui.fragment.mnemonic.PaperKeyWelcomeFragment">
+        android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/tool_bar_logo"
-            app:layout_constraintEnd_toEndOf="parent"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/createWalletWelcomeTitleTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:text="@string/create_wallet_fragment_welcome_title_xml"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:textColor="@color/radixBlueGrey"
-            app:fontFamily="@font/roboto_medium_radix"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/createWalletWelcomeMessageTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/create_wallet_fragment_message_xml"
-            android:textSize="18sp"
-            android:textColor="@color/radixBlueGrey2"
-            app:fontFamily="@font/roboto"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createWalletWelcomeTitleTextView" />
-
-        <LinearLayout
-            android:id="@+id/createWalletCreateNewWalletButton"
-            android:layout_width="0dp"
-            android:layout_height="124dp"
-            android:orientation="horizontal"
-            android:gravity="start|center"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:elevation="3dp"
-            android:stateListAnimator="@animator/button_elevation"
-            android:layout_marginTop="22dp"
-            android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/colorPrimary"
-            android:onClick="@{ () -> viewmodel.openWallet() }"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createWalletWelcomeMessageTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="24dp"
-                android:src="@drawable/ic_create_wallet"
-                android:contentDescription="@string/create_wallet_fragment_create_wallet_icon_description" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textSize="18sp"
-                android:textAllCaps="false"
-                app:fontFamily="@font/roboto"
-                android:textColor="@color/white"
-                android:text="@string/create_wallet_fragment_new_wallet_button_xml" />
-        </LinearLayout>
+                tools:context=".apps.wallet.ui.fragment.mnemonic.PaperKeyWelcomeFragment">
 
-        <View
-            android:id="@+id/createWalletSeparation1View"
-            android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="22dp"
-            android:background="@color/radixGrey"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/createWalletOrTextView"
-            app:layout_constraintTop_toBottomOf="@+id/createWalletCreateNewWalletButton" />
+                <include
+                    android:id="@+id/toolbar"
+                    layout="@layout/tool_bar_logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/createWalletOrTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_wallet_fragment_separator_or_xml"
-            android:textColor="@color/radixGrey"
-            android:textSize="18sp"
-            app:fontFamily="@font/roboto"
-            android:layout_marginBottom="3dp"
-            app:layout_constraintBottom_toBottomOf="@+id/createWalletSeparation1View"
-            app:layout_constraintEnd_toStartOf="@+id/createWalletSeparation2View"
-            app:layout_constraintStart_toEndOf="@+id/createWalletSeparation1View"
-            app:layout_constraintTop_toTopOf="@+id/createWalletSeparation1View" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/createWalletWelcomeTitleTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:text="@string/create_wallet_fragment_welcome_title_xml"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/radixBlueGrey"
+                    app:fontFamily="@font/roboto_medium_radix"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-        <View
-            android:id="@+id/createWalletSeparation2View"
-            android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginStart="16dp"
-            android:background="@color/radixGrey"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintStart_toEndOf="@+id/createWalletOrTextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createWalletCreateNewWalletButton" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/createWalletWelcomeMessageTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/create_wallet_fragment_message_xml"
+                    android:textSize="18sp"
+                    android:textColor="@color/radixBlueGrey2"
+                    app:fontFamily="@font/roboto"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/createWalletWelcomeTitleTextView" />
 
-        <LinearLayout
-            android:id="@+id/createWalletImportWalletButton"
-            android:layout_width="0dp"
-            android:layout_height="124dp"
-            android:orientation="horizontal"
-            android:gravity="start|center"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:elevation="3dp"
-            android:stateListAnimator="@animator/button_elevation"
-            android:layout_marginTop="22dp"
-            android:background="@drawable/rounded_button_grey"
-            android:backgroundTint="@color/white"
-            android:onClick="@{ () -> viewmodel.importWallet() }"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createWalletSeparation2View"
-            app:layout_constraintVertical_bias="0.0">
+                <LinearLayout
+                    android:id="@+id/createWalletCreateNewWalletButton"
+                    android:layout_width="0dp"
+                    android:layout_height="124dp"
+                    android:orientation="horizontal"
+                    android:gravity="start|center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:elevation="3dp"
+                    android:stateListAnimator="@animator/button_elevation"
+                    android:layout_marginTop="22dp"
+                    android:background="@drawable/rounded_button"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:onClick="@{ () -> viewmodel.openWallet() }"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/createWalletWelcomeMessageTextView"
+                    app:layout_constraintVertical_bias="0.0">
 
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="24dp"
-                android:src="@drawable/ic_import_wallet"
-                android:contentDescription="@string/create_wallet_fragment_import_wallet_icon_description" />
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="24dp"
+                        android:src="@drawable/ic_create_wallet"
+                        android:contentDescription="@string/create_wallet_fragment_create_wallet_icon_description" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textSize="18sp"
-                android:textAllCaps="false"
-                app:fontFamily="@font/roboto"
-                android:textColor="@color/radixBlueGrey2"
-                android:text="@string/create_wallet_fragment_import_wallet_button_xml" />
-        </LinearLayout>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:textSize="18sp"
+                        android:textAllCaps="false"
+                        app:fontFamily="@font/roboto"
+                        android:textColor="@color/white"
+                        android:text="@string/create_wallet_fragment_new_wallet_button_xml" />
+                </LinearLayout>
 
+                <View
+                    android:id="@+id/createWalletSeparation1View"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="22dp"
+                    android:background="@color/radixGrey"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/createWalletOrTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/createWalletCreateNewWalletButton" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/createWalletOrTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_wallet_fragment_separator_or_xml"
+                    android:textColor="@color/radixGrey"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto"
+                    android:layout_marginBottom="3dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/createWalletSeparation1View"
+                    app:layout_constraintEnd_toStartOf="@+id/createWalletSeparation2View"
+                    app:layout_constraintStart_toEndOf="@+id/createWalletSeparation1View"
+                    app:layout_constraintTop_toTopOf="@+id/createWalletSeparation1View" />
+
+                <View
+                    android:id="@+id/createWalletSeparation2View"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/radixGrey"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintStart_toEndOf="@+id/createWalletOrTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/createWalletCreateNewWalletButton" />
+
+                <LinearLayout
+                    android:id="@+id/createWalletImportWalletButton"
+                    android:layout_width="0dp"
+                    android:layout_height="124dp"
+                    android:orientation="horizontal"
+                    android:gravity="start|center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:elevation="3dp"
+                    android:stateListAnimator="@animator/button_elevation"
+                    android:layout_marginTop="22dp"
+                    android:background="@drawable/rounded_button_grey"
+                    android:backgroundTint="@color/white"
+                    android:onClick="@{ () -> viewmodel.importWallet() }"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/createWalletSeparation2View"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="24dp"
+                        android:src="@drawable/ic_import_wallet"
+                        android:contentDescription="@string/create_wallet_fragment_import_wallet_icon_description" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:textSize="18sp"
+                        android:textAllCaps="false"
+                        app:fontFamily="@font/roboto"
+                        android:textColor="@color/radixBlueGrey2"
+                        android:text="@string/create_wallet_fragment_import_wallet_button_xml" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/createWalletDisclaimerTextView"
             android:layout_width="0dp"

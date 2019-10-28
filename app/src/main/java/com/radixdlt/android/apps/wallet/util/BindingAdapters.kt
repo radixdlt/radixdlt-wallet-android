@@ -1,9 +1,16 @@
 package com.radixdlt.android.apps.wallet.util
 
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.TypedValue
 import android.view.View
+import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +23,9 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputLayout
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
+import com.radixdlt.android.apps.wallet.ui.dialog.pin.setup.SetupPinViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusState
+import com.radixdlt.android.apps.wallet.ui.layout.KeyPadView
 
 @BindingAdapter("visibleGone")
 fun View.bindVisible(visible: Boolean?) {
@@ -166,4 +175,52 @@ private fun addChip(layout: ConstraintLayout, chipGroup: ChipGroup, mnemonicWord
     }
 
     chipGroup.addView(chip)
+}
+
+@BindingAdapter("pinSetupState")
+fun TextView.bindPinSetupState(state: SetupPinViewModel.SetupPinState?) {
+    if (state == SetupPinViewModel.SetupPinState.SET) {
+        text = context.getString(R.string.setup_pin_dialog_set_pin_header)
+    } else if (state == SetupPinViewModel.SetupPinState.CONFIRM) {
+        text = context.getString(R.string.setup_pin_dialog_confirm_pin_header)
+    }
+}
+
+@BindingAdapter("pinClear")
+fun KeyPadView.bindPinClear(pinLength: Int) {
+    if (pinLength == 0) clearDigits()
+}
+
+@BindingAdapter("pinCheck")
+fun CheckBox.bindPinCheck(pinLength: Int) {
+    val tagInt = (tag as String).toInt()
+    isChecked = when (pinLength) {
+        1 -> tagInt == 1
+        2 -> tagInt in 1..2
+        3 -> tagInt in 1..3
+        4 -> tagInt in 1..4
+        else -> false
+    }
+}
+
+@BindingAdapter("pinError")
+fun LinearLayout.bindPinError(state: SetupPinViewModel.SetupPinState?) {
+    if (state == SetupPinViewModel.SetupPinState.ERROR) {
+        val values = arrayOf(0f, 25f, -25f, 25f, -25f, 15f, -15f, 6f, -6f, 0f).toFloatArray()
+        val oa1 = ObjectAnimator
+            .ofFloat(this, "translationX", *values)
+            .setDuration(600)
+        oa1.start()
+        vibrate(context)
+    }
+}
+
+private fun vibrate(context: Context){
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        vibrator.vibrate(VibrationEffect.createOneShot(400, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
+        @Suppress("DEPRECATION")
+        vibrator.vibrate(400)
+    }
 }

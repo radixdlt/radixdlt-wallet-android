@@ -273,6 +273,13 @@
     <string name="payment_status_dialog_insufficient_funds_message">You have insufficient funds</string>
     <string name="payment_status_dialog_failure_message">There was an error trying to send the transaction, please try again!</string>
 
+    <!-- Pin Dialog -->
+    <string name="setup_pin_dialog_enter_pin">Enter Pin to Confirm</string>
+    <string name="setup_pin_dialog_content_description_back_button">Closes the pin dialog</string>
+    <string name="setup_pin_dialog_set_pin_header">Create a pin</string>
+    <string name="setup_pin_dialog_confirm_pin_header">Confirm your pin</string>
+    <string name="setup_pin_dialog_pin_does_not_match">Pin does not match. Try again!</string>
+
     <!-- Common strings-->
     <string name="common_address_text">Address</string>
     <string name="common_toast_address_copied_clipboard">Address copied to clipboard</string>
@@ -289,12 +296,16 @@
     <string name="common_mnemonic_xml_hint_10">10</string>
     <string name="common_mnemonic_xml_hint_11">11</string>
     <string name="common_mnemonic_xml_hint_12">12</string>
+    <string name="common_pin_one_asterisk">*</string>
+    <string name="common_pin_two_asterisk">**</string>
+    <string name="common_pin_three_asterisk">***</string>
+    <string name="common_pin_four_asterisk">****</string>
 
     <!-- TutorialReceiveDialog -->
     <string name="tutorial_receive_dialog_arrow_xml_content_description">Arrow pointing to receive button</string>
     <string name="tutorial_receive_dialog_title_xml_text_view">Do the first step in Radix!\nClick on Receive button!</string>
     <string name="tutorial_receive_dialog_subtitle_xml_text_view">When you click on receive, you\nwill be able to copy, share your\naddress and request funds!</string>
-    <string name="tutorial_receive_dialog_content_description_close_button">Closes the tutorial for receiving funds.</string>
+    <string name="tutorial_receive_dialog_content_description_close_button">Closes the tutorial for receiving funds</string>
 
     <string name="common_rri_address_string">/%1$s/%2$s</string>
     <string name="common_rri_name_string">%1$s</string>
