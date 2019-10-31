@@ -270,15 +270,20 @@
     <string name="payment_status_dialog_fee_xrd">0.001 XRD</string>
     <string name="payment_status_dialog_status_confirmed">Confirmed</string>
     <string name="payment_status_dialog_close_xml_button">Close</string>
+    <string name="payment_status_dialog_explorer_xml_button">Explorer</string>
+    <string name="payment_status_dialog_try_again_xml_button">Try again</string>
     <string name="payment_status_dialog_insufficient_funds_message">You have insufficient funds</string>
     <string name="payment_status_dialog_failure_message">There was an error trying to send the transaction, please try again!</string>
 
-    <!-- Pin Dialog -->
+    <!-- Setup Pin Dialog -->
     <string name="setup_pin_dialog_enter_pin">Enter Pin to Confirm</string>
     <string name="setup_pin_dialog_content_description_back_button">Closes the pin dialog</string>
     <string name="setup_pin_dialog_set_pin_header">Create a pin</string>
     <string name="setup_pin_dialog_confirm_pin_header">Confirm your pin</string>
     <string name="setup_pin_dialog_pin_does_not_match">Pin does not match. Try again!</string>
+
+    <!-- Payment Pin Dialog -->
+    <string name="payment_pin_dialog_pin_header">Enter pin</string>
 
     <!-- Common strings-->
     <string name="common_address_text">Address</string>

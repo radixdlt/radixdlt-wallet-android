@@ -60,8 +60,7 @@ class SetupPinViewModel : ViewModel() {
     private fun verifyConfirmationPinSameAsSetup(text: String) {
         if (text == pinSet) {
             Vault.getVault().edit().putString(VAULT_PIN, text).apply()
-            _pinAction.value =
-                SetupPinAction.NAVIGATE
+            _pinAction.value = SetupPinAction.NAVIGATE
             _pinAction.value = null
         } else {
             _pinSetupState.value =

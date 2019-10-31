@@ -82,6 +82,10 @@
             app:argType="string"
             app:nullable="true" />
         <action
+            android:id="@+id/action_navigation_payment_summary_to_navigation_payment_pin"
+            app:destination="@id/navigation_payment_pin">
+        </action>
+        <action
             android:id="@+id/action_navigation_payment_summary_to_navigation_payment_status"
             app:destination="@id/navigation_payment_status">
             <argument
@@ -113,6 +117,12 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+    <dialog
+        android:id="@+id/navigation_payment_pin"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.pin.PaymentPinDialog"
+        android:label="fragment_enter_pin"
+        tools:layout="@layout/dialog_payment_pin">
+    </dialog>
     <dialog
         android:id="@+id/navigation_payment_status"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusDialog"

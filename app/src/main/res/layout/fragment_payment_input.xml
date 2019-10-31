@@ -127,12 +127,12 @@
             <LinearLayout
                 android:id="@+id/paymentInputLinearLayout"
                 android:layout_width="110dp"
-                android:layout_height="54dp"
-                android:orientation="horizontal"
+                android:layout_height="50dp"
                 android:background="@drawable/rounded_button_grey"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/paymentInputAmountTIL">
 
@@ -141,19 +141,19 @@
                     android:layout_width="44dp"
                     android:layout_height="44dp"
                     android:padding="6dp"
-                    android:src="@drawable/ic_paste"/>
+                    android:src="@drawable/ic_paste" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/paymentInputAssetIso"
                     android:layout_width="66dp"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
                     android:drawableEnd="@drawable/ic_dropdown_green"
-                    android:paddingEnd="16dp"
-                    android:paddingStart="4dp"
-                    android:maxLines="1"
+                    android:gravity="center_vertical"
                     android:maxLength="4"
-                    tools:text="XRD"/>
+                    android:maxLines="1"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="16dp"
+                    tools:text="XRD" />
             </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView

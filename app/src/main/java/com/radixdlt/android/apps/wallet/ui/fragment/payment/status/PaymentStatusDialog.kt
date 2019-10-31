@@ -1,6 +1,7 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.payment.status
 
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -62,6 +63,11 @@ class PaymentStatusDialog : FullScreenDialog() {
         }
     }
 
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        closePayment()
+    }
+
     private fun createCustomTabsBuilder(context: Context) {
         customTabsIntent = CustomTabsIntent.Builder()
             .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
@@ -84,6 +90,7 @@ class PaymentStatusDialog : FullScreenDialog() {
     }
 
     private fun tryAgain() {
+        dismiss()
         findNavController().popBackStack(R.id.navigation_payment_input, false)
     }
 

@@ -36,6 +36,7 @@ import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetPayment
 import com.radixdlt.android.apps.wallet.util.EmptyTextWatcher
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.isRadixAddress
+import com.radixdlt.android.apps.wallet.util.showKeyboard
 import com.radixdlt.android.apps.wallet.util.toast
 import com.radixdlt.client.application.RadixApplicationAPI
 import com.radixdlt.client.atommodel.accounts.RadixAddress
@@ -291,6 +292,7 @@ class PaymentInputFragment : Fragment() {
 
                     if (paymentInputAmountTIET.text.isNullOrEmpty()) {
                         paymentInputAmountTIET.requestFocus()
+                        showKeyboard(paymentInputAmountTIET)
                     }
                 } else {
                     paymentInputAddressTIL.error = getString(R.string.payment_input_fragment_enter_valid_address_error)

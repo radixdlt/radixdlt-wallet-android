@@ -7,12 +7,16 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.ui.activity.PaymentAction
+import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.databinding.FragmentPaymentSummaryBinding
@@ -21,7 +25,8 @@ import org.jetbrains.anko.px2dip
 class PaymentSummaryFragment : Fragment() {
 
     private val args: PaymentSummaryFragmentArgs by navArgs()
-    private val viewModel: PaymentSummaryViewModel by viewModels()
+    private val paymentSummaryViewModel: PaymentSummaryViewModel by viewModels()
+    private val paymentViewModel: PaymentViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +35,7 @@ class PaymentSummaryFragment : Fragment() {
     ): View? {
         val view = initialiseDataBinding(inflater, container)
         initialiseToolbar()
-        viewModel.showTransactionSummary(args)
+        paymentSummaryViewModel.showTransactionSummary(args)
 
         return view
     }
@@ -45,7 +50,7 @@ class PaymentSummaryFragment : Fragment() {
     private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         val binding: FragmentPaymentSummaryBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_payment_summary, container, false)
-        binding.viewmodel = viewModel
+        binding.viewmodel = paymentSummaryViewModel
         binding.lifecycleOwner = this
 
         return binding.root
@@ -53,13 +58,20 @@ class PaymentSummaryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.paymentSummaryAction.observe(viewLifecycleOwner, Observer(::action))
+        activity?.apply { paymentViewModel.paymentAction.observe(this, Observer(::action)) }
+        paymentSummaryViewModel.paymentSummaryAction.observe(viewLifecycleOwner, Observer(::action))
+    }
+
+    private fun action(action: PaymentAction?) {
+        when (action) {
+            PaymentAction.PAY -> showPaymentStatusDialog()
+        }
     }
 
     private fun action(action: PaymentSummaryAction) {
         when (action) {
             is PaymentSummaryAction.CopyToClipboard -> copyAndShowSnackbar(action.message)
-            PaymentSummaryAction.ShowLoadingDialog -> showDialog()
+            PaymentSummaryAction.ShowLoadingDialog -> authenticate()
         }
     }
 
@@ -70,7 +82,7 @@ class PaymentSummaryFragment : Fragment() {
         }
     }
 
-    private fun showDialog() {
+    private fun showPaymentStatusDialog() {
         val action = PaymentSummaryFragmentDirections
             .actionNavigationPaymentSummaryToNavigationPaymentStatus(
                 args.addressTo,
@@ -78,7 +90,14 @@ class PaymentSummaryFragment : Fragment() {
                 args.rri,
                 args.note
             )
+        lifecycleScope.launchWhenCreated {
+            findNavController().navigate(action)
+        }
+    }
 
+    private fun authenticate() {
+        val action = PaymentSummaryFragmentDirections
+            .actionNavigationPaymentSummaryToNavigationPaymentPin()
         findNavController().navigate(action)
     }
 }

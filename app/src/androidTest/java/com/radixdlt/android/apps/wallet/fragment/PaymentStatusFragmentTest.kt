@@ -54,10 +54,9 @@ class PaymentStatusFragmentTest {
         clickOn(R.id.paymentInputSendButton)
 
         assertSummaryMatchesUserInput(SUCCESS_AMOUNT)
-
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        enterPin()
 
         assertDisplayed(R.id.paymentStatusAmountTextView)
         assertDisplayed("$SUCCESS_AMOUNT $ISO")
@@ -78,7 +77,7 @@ class PaymentStatusFragmentTest {
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        enterPin()
 
         assertDisplayed(R.id.paymentStatusAmountTextView)
         assertDisplayed("$SUCCESS_AMOUNT $ISO")
@@ -108,7 +107,7 @@ class PaymentStatusFragmentTest {
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        enterPin()
 
         assertDisplayed(R.id.paymentStatusFailureTextView)
 
@@ -127,7 +126,7 @@ class PaymentStatusFragmentTest {
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        enterPin()
 
         assertDisplayed(R.id.paymentStatusAmountTextView)
 
@@ -148,7 +147,7 @@ class PaymentStatusFragmentTest {
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        enterPin()
 
         assertDisplayed(R.id.paymentStatusFailureTextView)
 
@@ -169,9 +168,21 @@ class PaymentStatusFragmentTest {
 
         clickOn(R.id.paymentSummaryConfirmAndSendButton)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        enterPin()
 
         assertDisplayed(R.id.paymentStatusFailureTextView)
+    }
+
+    private fun enterPin() {
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+
+        assertDisplayed(R.string.payment_pin_dialog_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
     }
 
     private fun navigateToPayScreen() {

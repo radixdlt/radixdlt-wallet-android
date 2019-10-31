@@ -24,6 +24,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.radixdlt.android.R
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.ui.dialog.pin.setup.SetupPinViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.payment.pin.PaymentPinViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusState
 import com.radixdlt.android.apps.wallet.ui.layout.KeyPadView
 
@@ -75,7 +76,7 @@ fun TextView.bindColorLastChars(address: String) {
 
 @BindingAdapter("focusBehaviour", "hint")
 fun TextInputLayout.bindFocusBehaviour(editText: EditText, hint: String) {
-    editText.setOnFocusChangeListener { v, hasFocus ->
+    editText.setOnFocusChangeListener { _, hasFocus ->
         if (hasFocus) {
             if (!editText.text.isNullOrEmpty()) {
                 boxBackgroundColor = ContextCompat.getColor(context, android.R.color.transparent)
@@ -206,6 +207,18 @@ fun CheckBox.bindPinCheck(pinLength: Int) {
 @BindingAdapter("pinError")
 fun LinearLayout.bindPinError(state: SetupPinViewModel.SetupPinState?) {
     if (state == SetupPinViewModel.SetupPinState.ERROR) {
+        val values = arrayOf(0f, 25f, -25f, 25f, -25f, 15f, -15f, 6f, -6f, 0f).toFloatArray()
+        val oa1 = ObjectAnimator
+            .ofFloat(this, "translationX", *values)
+            .setDuration(600)
+        oa1.start()
+        vibrate(context)
+    }
+}
+
+@BindingAdapter("pinError")
+fun LinearLayout.bindPinError(state: PaymentPinViewModel.PaymentPinState?) {
+    if (state == PaymentPinViewModel.PaymentPinState.ERROR) {
         val values = arrayOf(0f, 25f, -25f, 25f, -25f, 15f, -15f, 6f, -6f, 0f).toFloatArray()
         val oa1 = ObjectAnimator
             .ofFloat(this, "translationX", *values)
