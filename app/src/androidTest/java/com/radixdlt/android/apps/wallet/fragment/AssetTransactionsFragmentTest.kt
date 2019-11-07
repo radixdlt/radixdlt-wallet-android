@@ -1,13 +1,15 @@
 package com.radixdlt.android.apps.wallet.fragment
 
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.intent.rule.IntentsTestRule
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.MediumTest
+import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.biometrics.BiometricsChecker
 import com.radixdlt.android.apps.wallet.helper.DelayHelper
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
@@ -31,7 +33,7 @@ import java.util.concurrent.TimeUnit
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-@MediumTest
+@SmallTest
 class AssetTransactionsFragmentTest {
 
     /**
@@ -41,7 +43,7 @@ class AssetTransactionsFragmentTest {
      * blocks of Junit tests.
      */
     @get:Rule
-    var newWalletActivityTestRule = IntentsTestRule(StartActivity::class.java)
+    var activityScenarioRule = activityScenarioRule<StartActivity>()
 
     // Clear all app's SharedPreferences
     @get:Rule
@@ -58,11 +60,11 @@ class AssetTransactionsFragmentTest {
     @Test
     fun testAssetTransactionsDetailsAreDisplayed() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
-
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
 
         clickListItem(R.id.assetsRecyclerView, 0)
 
@@ -75,6 +77,9 @@ class AssetTransactionsFragmentTest {
         clickOn(R.id.pullDownDropFrameLayout)
 
         assertDisplayed(R.string.asset_transactions_fragment_xml_your_balance_title)
+
+        // Clean up
+        IdlingRegistry.getInstance().unregister(DelayHelper.idlingResource)
     }
 
     private fun importWallet() {
@@ -98,5 +103,26 @@ class AssetTransactionsFragmentTest {
         clickOn(R.id.restoreWalletPasteImageButton)
 
         clickOn(R.id.restoreWalletConfirmButton)
+    }
+
+    private fun setPin() {
+        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+    }
+
+    private fun checkBiometrics() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        if (BiometricsChecker.getInstance(context).isUsingBiometrics) {
+            clickOn(R.id.setupBiometricsNotRightNowButton)
+        }
     }
 }

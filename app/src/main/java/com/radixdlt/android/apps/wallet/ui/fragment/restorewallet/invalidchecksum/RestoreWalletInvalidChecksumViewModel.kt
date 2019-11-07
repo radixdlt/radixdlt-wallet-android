@@ -15,6 +15,6 @@ class RestoreWalletInvalidChecksumViewModel : ViewModel() {
     }
 
     fun continueClickListener() {
-        _restoreWalletAction.value = RestoreWalletAction.OpenWallet()
+        _restoreWalletAction.value = RestoreWalletAction.ShowSetupPinDialog
     }
 }

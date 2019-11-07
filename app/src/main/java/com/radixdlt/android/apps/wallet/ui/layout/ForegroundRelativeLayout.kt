@@ -27,7 +27,7 @@ import android.graphics.drawable.NinePatchDrawable
 import android.os.Build
 import android.util.AttributeSet
 import android.widget.RelativeLayout
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 
 class ForegroundRelativeLayout : RelativeLayout {
 

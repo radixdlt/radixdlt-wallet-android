@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
 import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.times
@@ -16,7 +17,7 @@ import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
 import com.radixdlt.android.apps.wallet.extension.ImmediateSchedulersExtension
 import com.radixdlt.android.apps.wallet.extension.InstantTaskExecutorExtension
 import com.radixdlt.android.apps.wallet.util.TOTAL
-import com.radixdlt.client.atommodel.tokens.TokenClassReference
+import com.radixdlt.client.application.translate.tokens.TokenUnitConversions
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import org.junit.jupiter.api.BeforeEach
@@ -45,30 +46,30 @@ class BalanceLiveDataTest {
     private val transactionEntity = TransactionEntity(
         "Test", 100L,
         "+100", "message", false, 1000000,
-        xrdToken, TokenClassReference.getSubunits()
+        xrdToken, TokenUnitConversions.getSubunits()
     )
 
     private val transactionEntity2 = TransactionEntity(
         "Test2", 11L,
         "11", "message", true, 1000001,
-        xrdToken, TokenClassReference.getSubunits()
+        xrdToken, TokenUnitConversions.getSubunits()
     )
 
     private val transactionEntity3 = TransactionEntity(
         "Test3", 12L,
         "+12", "message", false, 1000002,
-        xrdToken, TokenClassReference.getSubunits()
+        xrdToken, TokenUnitConversions.getSubunits()
     )
 
     private val transactionEntity4 = TransactionEntity(
         "Test4", 102L,
         "+102", "message", false, 1000003,
-        w00tToken, TokenClassReference.getSubunits()
+        w00tToken, TokenUnitConversions.getSubunits()
     )
 
     @BeforeEach
     fun setup() {
-        whenever(lifecycleOwner.lifecycle).thenReturn(lifecycleRegistry)
+        whenever(lifecycleOwner.lifecycle).doReturn(lifecycleRegistry)
         balanceLiveData.observe(lifecycleOwner, observer)
     }
 
@@ -80,10 +81,10 @@ class BalanceLiveDataTest {
         @BeforeEach
         fun setup() {
             transactionEntities.add(transactionEntity)
-            whenever(transactionsDao.getAllTransactions()).thenReturn(
+            whenever(transactionsDao.getAllTransactions()).doReturn(
                 Maybe.just(transactionEntities)
             )
-            whenever(transactionsDao.getLatestTransaction()).thenReturn(
+            whenever(transactionsDao.getLatestTransaction()).doReturn(
                 Flowable.just(transactionEntity)
             )
             lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -121,10 +122,10 @@ class BalanceLiveDataTest {
 
             @BeforeEach
             fun setup() {
-                whenever(transactionsDao.getAllTransactions()).thenReturn(
+                whenever(transactionsDao.getAllTransactions()).doReturn(
                     Maybe.just(transactionEntities)
                 )
-                whenever(transactionsDao.getLatestTransaction()).thenReturn(
+                whenever(transactionsDao.getLatestTransaction()).doReturn(
                     Flowable.empty()
                 )
 
@@ -148,10 +149,10 @@ class BalanceLiveDataTest {
             @BeforeEach
             fun setup() {
                 transactionEntities.add(transactionEntity)
-                whenever(transactionsDao.getAllTransactions()).thenReturn(
+                whenever(transactionsDao.getAllTransactions()).doReturn(
                     Maybe.just(transactionEntities)
                 )
-                whenever(transactionsDao.getLatestTransaction()).thenReturn(
+                whenever(transactionsDao.getLatestTransaction()).doReturn(
                     Flowable.just(transactionEntity)
                 )
 
@@ -176,10 +177,10 @@ class BalanceLiveDataTest {
             @BeforeEach
             fun setup() {
                 transactionEntities.add(transactionEntity)
-                whenever(transactionsDao.getAllTransactions()).thenReturn(
+                whenever(transactionsDao.getAllTransactions()).doReturn(
                     Maybe.just(transactionEntities)
                 )
-                whenever(transactionsDao.getLatestTransaction()).thenReturn(
+                whenever(transactionsDao.getLatestTransaction()).doReturn(
                     Flowable.just(transactionEntity2)
                 )
 
@@ -208,10 +209,10 @@ class BalanceLiveDataTest {
             @BeforeEach
             fun setup() {
                 transactionEntities.add(transactionEntity)
-                whenever(transactionsDao.getAllTransactions()).thenReturn(
+                whenever(transactionsDao.getAllTransactions()).doReturn(
                     Maybe.just(transactionEntities)
                 )
-                whenever(transactionsDao.getLatestTransaction()).thenReturn(
+                whenever(transactionsDao.getLatestTransaction()).doReturn(
                     Flowable.just(transactionEntity3)
                 )
 
@@ -242,10 +243,10 @@ class BalanceLiveDataTest {
             fun setup() {
                 transactionEntities.add(transactionEntity)
                 transactionEntities.add(transactionEntity4)
-                whenever(transactionsDao.getAllTransactions()).thenReturn(
+                whenever(transactionsDao.getAllTransactions()).doReturn(
                     Maybe.just(transactionEntities)
                 )
-                whenever(transactionsDao.getLatestTransaction()).thenReturn(
+                whenever(transactionsDao.getLatestTransaction()).doReturn(
                     Flowable.just(transactionEntity4)
                 )
 
@@ -254,10 +255,10 @@ class BalanceLiveDataTest {
                 lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
                 transactionEntitiesTokens.add(transactionEntity4)
-                whenever(transactionsDao.getAllTransactionsByTokenType(w00tToken)).thenReturn(
-                    Maybe.just(transactionEntitiesTokens)
+                whenever(transactionsDao.getAllTransactionsByTokenType(w00tToken)).doReturn(
+                    Maybe.just(transactionEntitiesTokens.toList())
                 )
-                whenever(transactionsDao.getLatestTransactionByTokenType(w00tToken)).thenReturn(
+                whenever(transactionsDao.getLatestTransactionByTokenType(w00tToken)).doReturn(
                     Flowable.just(transactionEntity4)
                 )
                 balanceLiveData.retrieveWalletBalance(w00tToken)
@@ -283,8 +284,8 @@ class BalanceLiveDataTest {
 
         @BeforeEach
         fun setup() {
-            whenever(transactionsDao.getAllTransactions()).thenReturn(Maybe.empty())
-            whenever(transactionsDao.getLatestTransaction()).thenReturn(Flowable.empty())
+            whenever(transactionsDao.getAllTransactions()).doReturn(Maybe.empty())
+            whenever(transactionsDao.getLatestTransaction()).doReturn(Flowable.empty())
 
             lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
             lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
@@ -301,10 +302,10 @@ class BalanceLiveDataTest {
             fun setup() {
                 transactionEntities.add(transactionEntity)
                 transactionEntities.add(transactionEntity4)
-                whenever(transactionsDao.getAllTransactions()).thenReturn(
+                whenever(transactionsDao.getAllTransactions()).doReturn(
                     Maybe.just(transactionEntities)
                 )
-                whenever(transactionsDao.getLatestTransaction()).thenReturn(
+                whenever(transactionsDao.getLatestTransaction()).doReturn(
                     Flowable.just(transactionEntity4)
                 )
                 balanceLiveData.retrieveWalletBalance(TOTAL)

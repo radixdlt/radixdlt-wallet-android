@@ -3,10 +3,11 @@ package com.radixdlt.android.apps.wallet.fragment
 import android.Manifest
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.biometrics.BiometricsChecker
 import com.radixdlt.android.apps.wallet.helper.DelayHelper
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
@@ -31,8 +32,7 @@ import java.util.concurrent.TimeUnit
 class PaymentInputFragmentTest {
 
     @get:Rule
-    var newWalletActivityTestRule: ActivityTestRule<StartActivity> =
-        ActivityTestRule(StartActivity::class.java)
+    var activityScenarioRule = activityScenarioRule<StartActivity>()
 
     // Clear all app's SharedPreferences
     @get:Rule
@@ -49,6 +49,8 @@ class PaymentInputFragmentTest {
     @Test
     fun testNoteInputIsDisplayedWhenAddNoteIsClicked() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -61,6 +63,8 @@ class PaymentInputFragmentTest {
     @Test
     fun testNoteInputIsHiddenWhenDeleteNoteIsClicked() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -75,6 +79,8 @@ class PaymentInputFragmentTest {
     @Test
     fun testMaxValueButtonPopulatesInputField() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -86,6 +92,8 @@ class PaymentInputFragmentTest {
     @Test
     fun testAssetSelectionButtonOpensNewScreen() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -97,6 +105,8 @@ class PaymentInputFragmentTest {
     @Test
     fun testNotARadixAddressShowsError() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -108,6 +118,8 @@ class PaymentInputFragmentTest {
     @Test
     fun testMoreThanMaxValueShowsError() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -119,6 +131,8 @@ class PaymentInputFragmentTest {
     @Test
     fun testClickingSendWithEmptyFieldsShowErrors() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         navigateToPayScreen()
 
@@ -131,6 +145,8 @@ class PaymentInputFragmentTest {
     @Test
     fun testPasteButtonAfterCopyingRadixAddressToClipBoard() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         navigateToPayScreen()
 
@@ -149,6 +165,8 @@ class PaymentInputFragmentTest {
     @Test
     fun testPasteButtonAfterCopyingNotAnAddressToClipBoard() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         navigateToPayScreen()
 
@@ -168,6 +186,8 @@ class PaymentInputFragmentTest {
     @Test
     fun testQrButtonOpensCamera() {
         importWallet()
+        setPin()
+        checkBiometrics()
 
         navigateToPayScreen()
 
@@ -212,6 +232,27 @@ class PaymentInputFragmentTest {
         clickOn(R.id.restoreWalletPasteImageButton)
 
         clickOn(R.id.restoreWalletConfirmButton)
+    }
+
+    private fun setPin() {
+        assertDisplayed(R.string.setup_pin_dialog_set_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+
+        assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
+        clickOn(R.id.one)
+        clickOn(R.id.two)
+        clickOn(R.id.three)
+        clickOn(R.id.four)
+    }
+
+    private fun checkBiometrics() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        if (BiometricsChecker.getInstance(context).isUsingBiometrics) {
+            clickOn(R.id.setupBiometricsNotRightNowButton)
+        }
     }
 
     companion object {

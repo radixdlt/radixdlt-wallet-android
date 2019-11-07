@@ -24,7 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper.openCustomTab
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.helper.WebviewFallback
@@ -38,7 +38,7 @@ import com.radixdlt.android.apps.wallet.util.URL_PRIVACY_POLICY
 import com.radixdlt.android.apps.wallet.util.URL_TERMS_AND_CONDITIONS
 import com.radixdlt.android.apps.wallet.util.getNavigationBarHeight
 import com.radixdlt.android.apps.wallet.util.getStatusBarHeight
-import com.radixdlt.android.databinding.FragmentGreetingBinding
+import com.radixdlt.android.apps.wallet.databinding.FragmentGreetingBinding
 import kotlinx.android.synthetic.main.fragment_greeting.*
 
 class GreetingFragment : Fragment() {

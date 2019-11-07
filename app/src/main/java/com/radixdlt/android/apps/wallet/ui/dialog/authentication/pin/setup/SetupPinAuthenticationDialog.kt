@@ -1,6 +1,5 @@
-package com.radixdlt.android.apps.wallet.ui.dialog.pin.setup
+package com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.setup
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,35 +9,30 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.biometrics.BiometricsChecker
+import com.radixdlt.android.apps.wallet.databinding.DialogSetupPinAuthenticationBinding
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
-import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
+import com.radixdlt.android.apps.wallet.ui.dialog.authentication.AuthenticationDialog
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.set
-import com.radixdlt.android.databinding.DialogSetupPinBinding
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.dialog_setup_pin.*
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SetupPinDialog : FullScreenDialog() {
+class SetupPinAuthenticationDialog : AuthenticationDialog() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var mainViewModel: MainViewModel
 
-    private lateinit var ctx: Context
-
-    private val viewModelSetup: SetupPinViewModel by viewModels()
+    private val viewModelSetupAuthentication: SetupPinAuthenticationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
     override fun onCreateView(
@@ -47,11 +41,17 @@ class SetupPinDialog : FullScreenDialog() {
         savedInstanceState: Bundle?
     ): View? = initialiseDataBinding(inflater, container)
 
-    private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
-        val binding: DialogSetupPinBinding =
-            DataBindingUtil.inflate(inflater, R.layout.dialog_setup_pin, container, false)
-        binding.viewmodel = viewModelSetup
+    override fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
+        val binding: DialogSetupPinAuthenticationBinding =
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.dialog_setup_pin_authentication,
+                container,
+                false
+            )
+        binding.viewmodel = viewModelSetupAuthentication
         binding.lifecycleOwner = this
+        binding.toolbarDialog.setNavigationOnClickListener { dismiss() }
 
         return binding.root
     }
@@ -59,24 +59,29 @@ class SetupPinDialog : FullScreenDialog() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
-        toolbarDialog.setNavigationIcon(R.drawable.ic_arrow_back)
-        toolbarDialog.setNavigationContentDescription(R.string.setup_pin_dialog_content_description_back_button)
-        toolbarDialog.setNavigationOnClickListener { dismiss() }
         initialiseViewModels()
     }
 
-    private fun initialiseViewModels() {
+    override fun initialiseViewModels() {
         activity?.apply {
             mainViewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
         }
-        viewModelSetup.setupPinAction.observe(viewLifecycleOwner, Observer(::action))
+        viewModelSetupAuthentication.setupPinAuthenticationAction.observe(
+            viewLifecycleOwner,
+            Observer(::action)
+        )
     }
 
-    private fun action(setupPinAction: SetupPinAction?) {
-        when(setupPinAction) {
-            SetupPinAction.NAVIGATE -> {
+    private fun action(setupPinAuthenticationAction: SetupPinAuthenticationAction?) {
+        when (setupPinAuthenticationAction) {
+            SetupPinAuthenticationAction.NAVIGATE -> {
+                mainViewModel.showBackUpWalletNotification(false)
                 savePrefWalletBackedUp()
-                returnToStart()
+                if (BiometricsChecker.getInstance(ctx).isUsingBiometrics) {
+                    showSetupBiometricsDialog()
+                } else {
+                    navigate()
+                }
             }
         }
     }
@@ -88,10 +93,8 @@ class SetupPinDialog : FullScreenDialog() {
         }
     }
 
-    private fun returnToStart() {
-        lifecycleScope.launch {
-            mainViewModel.showBackUpWalletNotification(false)
-            findNavController().popBackStack(R.id.navigation_backup_wallet, true)
-        }
+    private fun showSetupBiometricsDialog() {
+        dismiss()
+        findNavController().navigate(R.id.navigation_setup_biometrics)
     }
 }

@@ -190,6 +190,8 @@ dependencies {
     implementation(Libraries.roomKtx)
     implementation(Libraries.navigationFragmentKtx)
     implementation(Libraries.navigationUiKtx)
+    implementation(Libraries.biometrics)
+    implementation(Libraries.preference)
     implementation(Libraries.playServicesVision)
     implementation(Libraries.dagger)
     implementation(Libraries.daggerAndroid)
@@ -239,6 +241,7 @@ dependencies {
     androidTestImplementation(TestLibraries.runner)
     androidTestImplementation(TestLibraries.rules)
     androidTestImplementation(TestLibraries.junit)
+    androidTestImplementation(TestLibraries.core)
     androidTestImplementation(TestLibraries.barista) {
         exclude("com.android.support")
         exclude("org.jetbrains.kotlin") // Only if you already use Kotlin in your project

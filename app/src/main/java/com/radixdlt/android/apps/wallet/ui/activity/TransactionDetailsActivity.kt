@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionDetails
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity

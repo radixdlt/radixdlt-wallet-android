@@ -18,12 +18,16 @@ class PaymentViewModel : ViewModel() {
         clearPaymentAction()
     }
 
+    fun usePin() {
+        _paymentAction.value = PaymentAction.USE_PIN
+        clearPaymentAction()
+    }
+
     private fun clearPaymentAction() {
         _paymentAction.value = null
     }
 }
 
 enum class PaymentAction {
-    PAY
+    PAY, USE_PIN
 }
-

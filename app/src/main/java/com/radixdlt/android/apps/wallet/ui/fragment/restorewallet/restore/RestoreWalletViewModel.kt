@@ -104,11 +104,11 @@ class RestoreWalletViewModel : ViewModel() {
     }
 
     private fun openWallet() {
-        _restoreWalletAction.value = RestoreWalletAction.OpenWallet(Identity.api!!.address.toString())
+        _restoreWalletAction.value = RestoreWalletAction.ShowSetupPinDialog
     }
 
     private fun showWarningDialog() {
-        _restoreWalletAction.value = RestoreWalletAction.ShowDialog
+        _restoreWalletAction.value = RestoreWalletAction.ShowInvalidChecksumDialog
     }
 
     private fun showMnemonicError() {

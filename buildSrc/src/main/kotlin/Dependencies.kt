@@ -20,7 +20,7 @@ object BuildPlugins {
 
 object AndroidSdk {
     const val min = 24
-    const val compile = 28
+    const val compile = 29
     const val target = compile
 }
 
@@ -37,6 +37,8 @@ object Libraries {
         const val coreKtx = "1.2.0-alpha02"
         const val lifeCycleExtentions = "2.2.0-alpha02"
         const val navigationVersion = "2.1.0-beta02"
+        const val biometrics = "1.0.0-rc02"
+        const val preference = "1.1.0"
         const val dagger = "2.24"
         const val glide = "4.9.0"
         const val material = "1.1.0-alpha10"
@@ -73,6 +75,8 @@ object Libraries {
     const val roomRxJava =  "androidx.room:room-rxjava2:${Versions.room}"
     const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
     const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
+    const val biometrics = "androidx.biometric:biometric:${Versions.biometrics}"
+    const val preference = "androidx.preference:preference-ktx:${Versions.preference}"
 
     const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:${Versions.navigationVersion}"
     const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:${Versions.navigationVersion}"
@@ -127,8 +131,9 @@ object TestLibraries {
         const val rules = "1.3.0-alpha02"
         const val barista = "3.2.0"
         const val espressoIntents = "3.3.0-alpha02"
-        const val junit = "1.1.2-alpha02"
-        const val coreTesting = "1.1.1"
+        const val junitKtx = "1.1.2-alpha02"
+        const val coreKtx = "1.2.1-alpha02"
+        const val coreTesting = "2.0.0-alpha1"
         const val orchestrator = "1.3.0-alpha02"
     }
 
@@ -149,10 +154,11 @@ object TestLibraries {
 
     const val runner = "androidx.test:runner:${Versions.runner}"
     const val rules = "androidx.test:rules:${Versions.rules}"
-    const val junit = "androidx.test.ext:junit:${Versions.junit}"
+    const val junit = "androidx.test.ext:junit-ktx:${Versions.junitKtx}"
+    const val core = "androidx.test:core-ktx:${Versions.coreKtx}"
 
     const val barista = "com.schibsted.spain:barista:${Versions.barista}"
     const val espressoIntents = "androidx.test.espresso:espresso-intents:${Versions.espressoIntents}"
-    const val coreTesting = "android.arch.core:core-testing:${Versions.coreTesting}"
+    const val coreTesting = "androidx.arch.core:core-testing:${Versions.coreTesting}"
     const val orchestrator = "androidx.test:orchestrator:${Versions.orchestrator}"
 }

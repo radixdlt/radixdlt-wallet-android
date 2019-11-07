@@ -16,12 +16,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper
 import com.radixdlt.android.apps.wallet.helper.WebviewFallback
 import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
 import com.radixdlt.android.apps.wallet.util.URL_PRIVACY_POLICY
-import com.radixdlt.android.databinding.DialogPaymentStatusBinding
+import com.radixdlt.android.apps.wallet.databinding.DialogPaymentStatusBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -43,15 +43,6 @@ class PaymentStatusDialog : FullScreenDialog() {
         savedInstanceState: Bundle?
     ): View? = initialiseDataBinding(inflater, container)
 
-    private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
-        val binding: DialogPaymentStatusBinding =
-            DataBindingUtil.inflate(inflater, R.layout.dialog_payment_status, container, false)
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner = this
-
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         createCustomTabsBuilder(view.context)
@@ -66,6 +57,15 @@ class PaymentStatusDialog : FullScreenDialog() {
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         closePayment()
+    }
+
+    private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
+        val binding: DialogPaymentStatusBinding =
+            DataBindingUtil.inflate(inflater, R.layout.dialog_payment_status, container, false)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
+
+        return binding.root
     }
 
     private fun createCustomTabsBuilder(context: Context) {

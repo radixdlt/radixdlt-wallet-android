@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessageEntity
 import com.radixdlt.android.apps.wallet.util.formatDateDayMonthYear
 import com.radixdlt.android.apps.wallet.util.getStartOfDay

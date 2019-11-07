@@ -1,12 +1,12 @@
 package com.radixdlt.android.apps.wallet.fragment
 
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.MediumTest
+import androidx.test.filters.SmallTest
 import androidx.test.rule.ActivityTestRule
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
@@ -26,7 +26,7 @@ import org.junit.runner.RunWith
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-@MediumTest
+@SmallTest
 class BackupWalletFragmentTest {
 
     /**
@@ -36,7 +36,7 @@ class BackupWalletFragmentTest {
      * blocks of Junit tests.
      */
     @get:Rule
-    var newWalletActivityTestRule = IntentsTestRule(StartActivity::class.java)
+    var activityScenarioRule = activityScenarioRule<StartActivity>()
 
     // Clear all app's SharedPreferences
     @get:Rule
@@ -76,7 +76,7 @@ class BackupWalletFragmentTest {
         assertDisplayed(R.string.backup_wallet_fragment_copied_mnemonic)
     }
 
-    private fun clickPastGreetingScreen(){
+    private fun clickPastGreetingScreen() {
         Espresso.onView(ViewMatchers.withId(R.id.greetingTermsAndConditionsCheckBox))
             .perform(GreetingFragmentTest.clickIn(0, 0))
         Espresso.onView(ViewMatchers.withId(R.id.greetingPrivacyPolicyCheckBox))

@@ -12,7 +12,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import java.util.ArrayList
 
 class KeyPadView : FrameLayout, View.OnClickListener, View.OnLongClickListener {
@@ -159,7 +159,6 @@ class KeyPadView : FrameLayout, View.OnClickListener, View.OnLongClickListener {
             textView.setOnClickListener(this)
             textView.textSize = textSize
             textView.setTextColor(textColor)
-//            textView.setBackgroundResource(backgroundRes)
             textView.addCircleRipple()
             textView.typeface = typeface
         }
@@ -188,13 +187,8 @@ class KeyPadView : FrameLayout, View.OnClickListener, View.OnLongClickListener {
 
         deleteLayout!!.setOnClickListener(this)
         deleteLayout!!.setOnLongClickListener(this)
-//        deleteLayout!!.setBackgroundResource(backgroundRes)
         deleteLayout!!.addCircleRipple()
         imageResourceView!!.setImageResource(imageResource)
-
-//        clearLayout!!.setOnClickListener(this)
-//        clearLayout!!.setBackgroundResource(backgroundRes)
-//        clear!!.setImageResource(clearImageResource)
 
         if (decimalString != null) {
             clearLayout!!.visibility = View.GONE
@@ -205,15 +199,7 @@ class KeyPadView : FrameLayout, View.OnClickListener, View.OnLongClickListener {
             decimal!!.setTextColor(textColor)
             decimal!!.setBackgroundResource(backgroundRes)
             decimal!!.typeface = typeface
-        }
-//        else {
-//            decimal!!.visibility = View.GONE
-//            clearLayout!!.visibility = View.VISIBLE
-//            clearLayout!!.setOnClickListener(this)
-//            clearLayout!!.setBackgroundResource(backgroundRes)
-//            clear!!.setImageResource(clearImageResource)
-//        }
-        else {
+        } else {
             decimal!!.visibility = View.GONE
             clearLayout!!.visibility = View.VISIBLE
             clear!!.visibility = View.GONE
@@ -296,18 +282,14 @@ class KeyPadView : FrameLayout, View.OnClickListener, View.OnLongClickListener {
                 digits.substring(0, digits.length - 1)
             }
         }
-        textGetListener?.let {
-            it.numberTextListener(digits)
-        }
+        textGetListener?.numberTextListener(digits)
     }
 
     override fun onLongClick(v: View): Boolean {
         if (decimalString != null) {
             v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             digits = ""
-            textGetListener?.let {
-                it.numberTextListener(digits)
-            }
+            textGetListener?.numberTextListener(digits)
         }
         return false
     }
@@ -324,8 +306,6 @@ class KeyPadView : FrameLayout, View.OnClickListener, View.OnLongClickListener {
         return false
     }
 }
-
-//typealias TextGetListener = (text: String, digitsRemaining: Int) -> Unit
 
 interface OnNumberTextListener {
     fun numberTextListener(text: String)

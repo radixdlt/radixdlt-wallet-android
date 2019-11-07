@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import kotlinx.android.synthetic.main.activity_payment.*
 import org.jetbrains.anko.startActivity
 

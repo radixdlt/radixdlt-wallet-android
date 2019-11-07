@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.radixdlt.android">
+    package="com.radixdlt.android.apps.wallet">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".apps.wallet.RadixWalletApplication"
+        android:name=".RadixWalletApplication"
         android:allowBackup="false"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher_beta"
@@ -58,7 +58,7 @@
         </activity>
 
 
-        <activity android:name=".apps.wallet.ui.activity.StartActivity"
+        <activity android:name=".ui.activity.StartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize">
@@ -124,7 +124,7 @@
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".apps.wallet.ui.activity.WebViewActivity"
+            android:name=".ui.activity.WebViewActivity"
             android:parentActivityName="com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />

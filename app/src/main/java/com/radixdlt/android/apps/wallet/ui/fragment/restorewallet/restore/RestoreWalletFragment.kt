@@ -12,18 +12,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.radixdlt.android.R
-import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.shared.RestoreWalletSharedAction
 import com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.shared.RestoreWalletSharedViewModel
-import com.radixdlt.android.apps.wallet.util.Pref
-import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
-import com.radixdlt.android.apps.wallet.util.Pref.set
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.apps.wallet.util.showErrorSnackbar
-import com.radixdlt.android.databinding.FragmentRestoreWalletBinding
+import com.radixdlt.android.apps.wallet.databinding.FragmentRestoreWalletBinding
 import kotlinx.android.synthetic.main.fragment_restore_wallet.*
-import java.io.File
 
 class RestoreWalletFragment : Fragment() {
 
@@ -67,11 +62,8 @@ class RestoreWalletFragment : Fragment() {
             RestoreWalletAction.ShowMnemonicError -> {
                 showErrorSnackbar(R.string.restore_wallet_fragment_mnemonic_error)
             }
-            RestoreWalletAction.ShowDialog -> showDialog()
-            is RestoreWalletAction.OpenWallet -> {
-                savePrefs(action.address)
-                openWallet()
-            }
+            RestoreWalletAction.ShowInvalidChecksumDialog -> showInvalidChecksumDialog()
+            RestoreWalletAction.ShowSetupPinDialog -> showSetupPinDialog()
         }
     }
 
@@ -87,24 +79,13 @@ class RestoreWalletFragment : Fragment() {
         }
     }
 
-    private fun showDialog() {
+    private fun showInvalidChecksumDialog() {
         val action = RestoreWalletFragmentDirections
             .navigationImportWalletToNavigationImportWalletInvalidChecksum()
         findNavController().navigate(action)
     }
 
-    private fun openWallet() {
-        MainActivity.newIntent(ctx)
-        activity?.finish()
-    }
-
-    private fun savePrefs(address: String) {
-        activity?.apply {
-            defaultPrefs()[Pref.ADDRESS] = address
-            defaultPrefs()[Pref.PASSWORD] = false
-            defaultPrefs()[Pref.MNEMONIC_SEED] = true
-            defaultPrefs()[Pref.WALLET_BACKED_UP] = true
-            File(filesDir, "keystore.key").createNewFile() // creating dummy file for now
-        }
+    private fun showSetupPinDialog() {
+        findNavController().navigate(R.id.navigation_setup_pin)
     }
 }

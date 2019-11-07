@@ -9,11 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
-import com.radixdlt.android.databinding.DialogPaymentPinBinding
-import kotlinx.android.synthetic.main.dialog_payment_pin.*
+import com.radixdlt.android.apps.wallet.databinding.DialogPaymentPinBinding
 
 class PaymentPinDialog : FullScreenDialog() {
 
@@ -21,11 +20,6 @@ class PaymentPinDialog : FullScreenDialog() {
 
     private val paymentPinViewModel: PaymentPinViewModel by viewModels()
     private val paymentViewModel: PaymentViewModel by activityViewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +32,7 @@ class PaymentPinDialog : FullScreenDialog() {
             DataBindingUtil.inflate(inflater, R.layout.dialog_payment_pin, container, false)
         binding.viewmodel = paymentPinViewModel
         binding.lifecycleOwner = this
+        binding.toolbarDialog.setNavigationOnClickListener { dismiss() }
 
         return binding.root
     }
@@ -45,9 +40,6 @@ class PaymentPinDialog : FullScreenDialog() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
-        toolbarDialog.setNavigationIcon(R.drawable.ic_arrow_back)
-        toolbarDialog.setNavigationContentDescription(R.string.setup_pin_dialog_content_description_back_button)
-        toolbarDialog.setNavigationOnClickListener { dismiss() }
         initialiseViewModels()
     }
 
@@ -56,11 +48,10 @@ class PaymentPinDialog : FullScreenDialog() {
     }
 
     private fun action(paymentPinAction: PaymentPinAction?) {
-        when(paymentPinAction) {
+        when (paymentPinAction) {
             PaymentPinAction.SUCCESS -> {
                 dismiss()
                 paymentViewModel.pay()
-
             }
         }
     }

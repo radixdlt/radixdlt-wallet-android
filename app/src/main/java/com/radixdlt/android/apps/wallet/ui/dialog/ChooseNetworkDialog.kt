@@ -8,7 +8,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.ContextCompat
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.util.ALPHANET
 import com.radixdlt.android.apps.wallet.util.ALPHANET2
 import com.radixdlt.android.apps.wallet.util.QueryPreferences

@@ -93,7 +93,11 @@
             app:argType="string" />
     </fragment>
     <dialog
-        android:id="@+id/navigation_pin"
-        android:name="com.radixdlt.android.apps.wallet.ui.dialog.pin.setup.SetupPinDialog"
-        android:label="navigation_pin" />
+        android:id="@+id/navigation_setup_pin"
+        android:name="com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.setup.SetupPinAuthenticationDialog"
+        android:label="navigation_setup_pin" />
+    <dialog
+        android:id="@+id/navigation_setup_biometrics"
+        android:name="com.radixdlt.android.apps.wallet.ui.dialog.authentication.biometrics.setup.SetupBiometricsAuthenticationDialog"
+        android:label="navigation_setup_biometrics" />
 </navigation>

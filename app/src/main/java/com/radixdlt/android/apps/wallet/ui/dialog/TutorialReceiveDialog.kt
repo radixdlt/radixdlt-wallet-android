@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.set
@@ -26,8 +26,6 @@ class TutorialReceiveDialog : FullScreenDialog() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.apply { defaultPrefs()[Pref.TUTORIAL_RECEIVE] = true }
-        toolbarDialog.setNavigationIcon(R.drawable.ic_close)
-        toolbarDialog.setNavigationContentDescription(R.string.tutorial_receive_dialog_content_description_close_button)
         toolbarDialog.setNavigationOnClickListener { dismiss() }
         setReceiveButtonOnClickListener()
     }

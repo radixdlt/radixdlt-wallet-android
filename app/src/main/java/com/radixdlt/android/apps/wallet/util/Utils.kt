@@ -15,7 +15,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.identity.Identity
@@ -296,7 +296,7 @@ fun copyToClipboard(context: Context, myAddress: String) {
         Context.CLIPBOARD_SERVICE
     ) as ClipboardManager
     val clip = ClipData.newPlainText("address", myAddress)
-    clipboard.primaryClip = clip
+    clipboard.setPrimaryClip(clip)
 }
 
 fun validateIPAddress(ipAddress: String): Boolean {
@@ -324,6 +324,7 @@ fun resetData(context: Context) {
     QueryPreferences.setPrefCreatedByMnemonicOrSeed(context, false)
     context.defaultPrefs()[Pref.WALLET_BACKED_UP] = false
     context.defaultPrefs()[Pref.PIN_SET] = false
+    context.defaultPrefs()[Pref.USE_BIOMETRICS] = false
     Identity.clear()
 }
 

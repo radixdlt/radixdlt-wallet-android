@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.di.module
+package com.radixdlt.android.apps.wallet.ui.di.module
 
 import android.content.Context
 import androidx.room.Room

@@ -10,7 +10,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.graphics.drawable.DrawableCompat
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import java.util.ArrayList
 import java.util.StringTokenizer
 

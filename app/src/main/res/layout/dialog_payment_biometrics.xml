@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.radixdlt.android.apps.wallet.ui.fragment.payment.biometrics.PaymentBiometricsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/paymentBiometricsGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationContentDescription="@string/payment_pin_dialog_content_description_back_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/paymentBiometricsImageView"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/biometrics"
+            app:layout_constraintBottom_toTopOf="@+id/paymentBiometricsTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.50"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarDialog"
+            app:layout_constraintVertical_bias="0.05"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="false" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentBiometricsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/roboto_medium_radix"
+            android:text="@string/payment_biometrics_dialog_xml_text_view"
+            android:textAlignment="center"
+            android:textColor="@color/radixBlueGrey"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.50"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/paymentBiometricsImageView"
+            app:layout_constraintVertical_bias="0.50"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/paymentBiometricsErrorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto_medium_radix"
+            android:textAlignment="center"
+            android:textColor="@color/radixBlueGrey"
+            android:textSize="20sp"
+            app:biometricsResult="@{ viewmodel.biometricsAuthenticationResult }"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.50"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/paymentBiometricsTextView"
+            app:layout_constraintVertical_bias="0.10"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Error text" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/paymentBiometricsCancelButton"
+            style="@style/MaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/payment_biometrics_dialog_xml_cancel_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:onClick="@{ () -> viewmodel.cancelClickListener() }"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/paymentBiometricsGuideline"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/paymentBiometricsUseBiometricsButton"
+            style="@style/MaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/payment_biometrics_dialog_xml_use_pin_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:onClick="@{ () -> viewmodel.usePinClickListener() }"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/paymentBiometricsGuideline" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

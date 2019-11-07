@@ -1,4 +1,4 @@
-package com.radixdlt.android.apps.wallet.ui.dialog.pin.setup
+package com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.setup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,14 +9,14 @@ import com.radixdlt.android.apps.wallet.util.Vault
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SetupPinViewModel : ViewModel() {
+class SetupPinAuthenticationViewModel : ViewModel() {
 
     enum class SetupPinState {
         SET, SETTING, CONFIRM, ERROR
     }
 
-    private val _pinAction = MutableLiveData<SetupPinAction?>()
-    val setupPinAction: LiveData<SetupPinAction?> get() = _pinAction
+    private val _pinAction = MutableLiveData<SetupPinAuthenticationAction?>()
+    val setupPinAuthenticationAction: LiveData<SetupPinAuthenticationAction?> get() = _pinAction
 
     private val _pinSetupState = MutableLiveData<SetupPinState>()
     val pinSetupState: LiveData<SetupPinState> get() = _pinSetupState
@@ -31,8 +31,8 @@ class SetupPinViewModel : ViewModel() {
             SetupPinState.SET
     }
 
-    fun pinChange(text: String) {
-        when(pinSetupState.value) {
+    fun pinTextChange(text: String) {
+        when (pinSetupState.value) {
             SetupPinState.SET -> setPin(text)
             SetupPinState.SETTING -> return
             SetupPinState.CONFIRM -> confirmPin(text)
@@ -53,14 +53,17 @@ class SetupPinViewModel : ViewModel() {
     private fun confirmPin(text: String) {
         _pinLength.value = text.length
         if (text.length == 4) {
-            verifyConfirmationPinSameAsSetup(text)
+            viewModelScope.launch {
+                delay(200)
+                verifyConfirmationPinSameAsSetup(text)
+            }
         }
     }
 
     private fun verifyConfirmationPinSameAsSetup(text: String) {
         if (text == pinSet) {
             Vault.getVault().edit().putString(VAULT_PIN, text).apply()
-            _pinAction.value = SetupPinAction.NAVIGATE
+            _pinAction.value = SetupPinAuthenticationAction.NAVIGATE
             _pinAction.value = null
         } else {
             _pinSetupState.value =

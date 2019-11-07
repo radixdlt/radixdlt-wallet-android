@@ -2,7 +2,10 @@ package com.radixdlt.android.apps.wallet.fragment
 
 import android.view.InputDevice
 import android.view.MotionEvent
+import androidx.lifecycle.Lifecycle
+import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.NoActivityResumedException
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.CoordinatesProvider
@@ -13,12 +16,13 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.times
 import androidx.test.espresso.intent.matcher.IntentMatchers
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.helper.DelayHelper
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
@@ -32,10 +36,15 @@ import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDi
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
+import com.schibsted.spain.barista.rule.flaky.AllowFlaky
+import com.schibsted.spain.barista.rule.flaky.FlakyTestRule
 import junit.framework.TestCase.fail
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 /**
@@ -44,10 +53,11 @@ import java.util.concurrent.TimeUnit
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
+@SmallTest
 class GreetingFragmentTest {
 
     @get:Rule
-    var newWalletActivityTestRule = IntentsTestRule(StartActivity::class.java)
+    var newWalletActivityTestRule = activityScenarioRule<StartActivity>()
 
     // Clear all app's SharedPreferences
     @get:Rule
@@ -60,6 +70,19 @@ class GreetingFragmentTest {
     // Delete all files in getFilesDir() and getCacheDir()
     @get:Rule
     var clearFilesRule = ClearFilesRule()
+
+    @get:Rule(order = 0)
+    var flakyRule = FlakyTestRule()
+
+    @Before
+    fun setUp() {
+        Intents.init()
+    }
+
+    @After
+    fun tearDown() {
+        Intents.release()
+    }
 
     @Test
     fun testGreetingScreenIsShownWhenOpeningAppFirstTime() {
@@ -91,15 +114,21 @@ class GreetingFragmentTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 5)
     fun testClickingOnLinksOpensCustomTabs() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        // In the event of a flaky test where it has been destroyed
+        if (newWalletActivityTestRule.scenario.state == Lifecycle.State.DESTROYED) {
+            launchActivity<StartActivity>()
+        }
 
         assertDisabled(R.id.greetingGetStartedButton)
 
         clickOn(R.id.greetingTermsAndConditionsCheckBox)
 
         // Slight delay allowing customTabs to load
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(7))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(5))
 
         intended(IntentMatchers.toPackage("com.android.chrome"))
 
@@ -109,7 +138,7 @@ class GreetingFragmentTest {
         clickOn(R.id.greetingPrivacyPolicyCheckBox)
 
         // Slight delay allowing customTabs to load
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(7))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(5))
 
         intended(IntentMatchers.toPackage("com.android.chrome"), times(2))
 
@@ -117,6 +146,9 @@ class GreetingFragmentTest {
         device.pressBack()
 
         assertDisabled(R.id.greetingGetStartedButton)
+
+        // Clean up
+        IdlingRegistry.getInstance().unregister(DelayHelper.idlingResource)
     }
 
     @Test
@@ -134,6 +166,7 @@ class GreetingFragmentTest {
     }
 
     @Test
+    @Throws(NoActivityResumedException::class)
     fun testGreetingFragmentDoesNotShowAfterTermsHaveBeenAccepted() {
         assertDisabled(R.id.greetingGetStartedButton)
 
@@ -150,18 +183,18 @@ class GreetingFragmentTest {
             clickBack()
             fail("Should have thrown NoActivityResumedException")
         } catch (e: NoActivityResumedException) {
-            // This is necessary in order to relaunch activity
-            Intents.release()
+            Timber.e(e)
         }
 
         // Start the app again
-        newWalletActivityTestRule.launchActivity(null)
+        launchActivity<StartActivity>()
 
         // Greeting screen should not be displayed and create a wallet screen is now shown at start
         assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)
     }
 
     @Test
+    @Throws(NoActivityResumedException::class)
     fun testGreetingFragmentDoesNotShowAfterDeletingWallet() {
         assertDisabled(R.id.greetingGetStartedButton)
 
@@ -193,12 +226,11 @@ class GreetingFragmentTest {
             clickBack()
             fail("Should have thrown NoActivityResumedException")
         } catch (e: NoActivityResumedException) {
-            // This is necessary in order to relaunch activity
-            Intents.release()
+            Timber.e(e)
         }
 
         // Start the app again
-        newWalletActivityTestRule.launchActivity(null)
+        launchActivity<StartActivity>()
 
         // Greeting screen should not be displayed and create a wallet screen is now shown at start
         assertDisplayed(R.string.create_wallet_fragment_welcome_title_xml)

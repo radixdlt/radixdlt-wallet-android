@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessageEntity
 import com.radixdlt.android.apps.wallet.ui.activity.ConversationActivity
 import com.radixdlt.android.apps.wallet.ui.adapter.ContactsAdapter

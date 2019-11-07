@@ -1,5 +1,6 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.payment.summary
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,18 +12,24 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentAction
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
+import com.radixdlt.android.apps.wallet.util.Pref
+import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
+import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
-import com.radixdlt.android.databinding.FragmentPaymentSummaryBinding
+import com.radixdlt.android.apps.wallet.databinding.FragmentPaymentSummaryBinding
 import org.jetbrains.anko.px2dip
 
 class PaymentSummaryFragment : Fragment() {
+
+    private lateinit var ctx: Context
 
     private val args: PaymentSummaryFragmentArgs by navArgs()
     private val paymentSummaryViewModel: PaymentSummaryViewModel by viewModels()
@@ -42,8 +49,9 @@ class PaymentSummaryFragment : Fragment() {
 
     private fun initialiseToolbar() {
         initialiseToolbar(R.string.payment_summary_fragment_toolbar_title)
-        activity?.apply {
-            (this as AppCompatActivity).supportActionBar?.elevation = px2dip(0)
+        (activity as? AppCompatActivity)?.apply {
+            supportActionBar?.elevation = px2dip(0)
+            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
         }
     }
 
@@ -58,6 +66,7 @@ class PaymentSummaryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ctx = view.context
         activity?.apply { paymentViewModel.paymentAction.observe(this, Observer(::action)) }
         paymentSummaryViewModel.paymentSummaryAction.observe(viewLifecycleOwner, Observer(::action))
     }
@@ -65,13 +74,14 @@ class PaymentSummaryFragment : Fragment() {
     private fun action(action: PaymentAction?) {
         when (action) {
             PaymentAction.PAY -> showPaymentStatusDialog()
+            PaymentAction.USE_PIN -> navigateToPinAuthentication()
         }
     }
 
     private fun action(action: PaymentSummaryAction) {
         when (action) {
             is PaymentSummaryAction.CopyToClipboard -> copyAndShowSnackbar(action.message)
-            PaymentSummaryAction.ShowLoadingDialog -> authenticate()
+            PaymentSummaryAction.Authenticate -> authenticate()
         }
     }
 
@@ -90,14 +100,32 @@ class PaymentSummaryFragment : Fragment() {
                 args.rri,
                 args.note
             )
-        lifecycleScope.launchWhenCreated {
-            findNavController().navigate(action)
-        }
+        navigate(action)
     }
 
     private fun authenticate() {
+        if (ctx.defaultPrefs()[Pref.USE_BIOMETRICS, false]) {
+            navigateToBiometricsAuthentication()
+        } else {
+            navigateToPinAuthentication()
+        }
+    }
+
+    private fun navigateToPinAuthentication() {
         val action = PaymentSummaryFragmentDirections
             .actionNavigationPaymentSummaryToNavigationPaymentPin()
-        findNavController().navigate(action)
+        navigate(action)
+    }
+
+    private fun navigateToBiometricsAuthentication() {
+        val action = PaymentSummaryFragmentDirections
+            .actionNavigationPaymentSummaryToNavigationPaymentBiomentrics()
+        navigate(action)
+    }
+
+    private fun navigate(action: NavDirections) {
+        lifecycleScope.launchWhenCreated {
+            findNavController().navigate(action)
+        }
     }
 }

@@ -2,7 +2,7 @@ package com.radixdlt.android.apps.wallet.util
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 object QueryPreferences {
     private const val PREF_ADDRESS = "address"

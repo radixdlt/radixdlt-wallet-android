@@ -2,7 +2,7 @@ package com.radixdlt.android.apps.wallet.util
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 object Pref {
     const val ADDRESS = "address"
@@ -17,6 +17,7 @@ object Pref {
     const val TERMS_ACCEPTED = "terms_accepted"
     const val WALLET_BACKED_UP = "wallet_backed_up"
     const val PIN_SET = "pin_set"
+    const val USE_BIOMETRICS = "use_biometrics"
 
     fun Context.defaultPrefs(): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(this)

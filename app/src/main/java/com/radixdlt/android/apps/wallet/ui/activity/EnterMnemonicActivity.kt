@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.identity.AndroidRadixIdentity
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
@@ -68,9 +68,9 @@ class EnterMnemonicActivity : AppCompatActivity() {
             }
 
             val privateKey = RadixECKeyPairs
-                    .newInstance()
-                    .generateKeyPairFromSeed(seed)
-                    .privateKey
+                .newInstance()
+                .generateKeyPairFromSeed(seed)
+                .privateKey
 
             val privateKeyHex: String = ByteString.of(*privateKey).hex() // Note the spread operator
             saveKey(privateKeyHex)
@@ -90,7 +90,7 @@ class EnterMnemonicActivity : AppCompatActivity() {
 
     private fun retrieveRadixIdentity(myKeyFile: File) {
         Identity.myIdentity = RadixIdentities.loadOrCreateEncryptedFile(
-                myKeyFile.path, inputPasswordTIET.text.toString()
+            myKeyFile.path, inputPasswordTIET.text.toString()
         )
 
         val address = Identity.api!!.address.toString()
@@ -99,7 +99,7 @@ class EnterMnemonicActivity : AppCompatActivity() {
 
         loadKey() ?: run {
             val privateKey = PrivateKeyEncrypter.decryptPrivateKey(
-                    inputPasswordTIET.text.toString(), FileReader(myKeyFile)
+                inputPasswordTIET.text.toString(), FileReader(myKeyFile)
             )
 
             val privateKeyHex: String = ByteString.of(*privateKey).hex() // Note the spread operator

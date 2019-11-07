@@ -3,7 +3,7 @@ package com.radixdlt.android.apps.wallet.ui.dialog
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 
 open class FullScreenDialog : DialogFragment() {
 

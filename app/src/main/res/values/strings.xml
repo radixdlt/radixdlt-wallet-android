@@ -284,6 +284,15 @@
 
     <!-- Payment Pin Dialog -->
     <string name="payment_pin_dialog_pin_header">Enter pin</string>
+    <string name="payment_pin_dialog_content_description_back_button">Closes the pin dialog</string>
+
+    <!-- Payment Biometrics Dialog -->
+    <string name="payment_biometrics_dialog_xml_text_view">Authenticate to pay</string>
+    <string name="payment_biometrics_dialog_content_description_biometrics_icon">Biometrics icon</string>
+    <string name="payment_biometrics_dialog_xml_cancel_button">Cancel</string>
+    <string name="payment_biometrics_dialog_xml_use_pin_button">Use pin</string>
+    <string name="payment_biometrics_dialog_too_many_attempts">Too many attempts,\ntry using pin!</string>
+    <string name="payment_biometrics_dialog_unable_to_authenticate">Unable to authenticate!</string>
 
     <!-- Common strings-->
     <string name="common_address_text">Address</string>
@@ -306,7 +315,7 @@
     <string name="common_pin_three_asterisk">***</string>
     <string name="common_pin_four_asterisk">****</string>
 
-    <!-- TutorialReceiveDialog -->
+    <!-- Tutorial Receive Dialog -->
     <string name="tutorial_receive_dialog_arrow_xml_content_description">Arrow pointing to receive button</string>
     <string name="tutorial_receive_dialog_title_xml_text_view">Do the first step in Radix!\nClick on Receive button!</string>
     <string name="tutorial_receive_dialog_subtitle_xml_text_view">When you click on receive, you\nwill be able to copy, share your\naddress and request funds!</string>
@@ -314,6 +323,12 @@
 
     <string name="common_rri_address_string">/%1$s/%2$s</string>
     <string name="common_rri_name_string">%1$s</string>
+
+    <!-- Setup Biometrics Dialog -->
+    <string name="setup_biometrics_dialog_xml_text_view">Use biometrics for faster authentication?</string>
+    <string name="setup_biometrics_dialog_content_description_biometrics_icon">Biometrics icon</string>
+    <string name="setup_biometrics_dialog_xml_not_right_now_button">Not right now</string>
+    <string name="setup_biometrics_dialog_xml_use_biometrics_button">Use biometrics</string>
 
     <!-- Create Wallet Fragment -->
     <string name="create_wallet_fragment_welcome_title_xml">Welcome to Radix App!</string>
@@ -352,5 +367,9 @@
     <string name="confirm_backup_wallet_fragment_message_xml">Select the 12 word mnemonic in the correct order.</string>
     <string name="confirm_backup_wallet_fragment_mnemonic_error">Mnemonic does not match! Please select in the correct order</string>
     <string name="confirm_backup_wallet_fragment_mnemonic_success">Mnemonic selected correctly</string>
+
+
+    <string name="biometric_prompt_title">Please authenticate</string>
+    <string name="biometric_prompt_negative_text">Cancel</string>
 
 </resources>

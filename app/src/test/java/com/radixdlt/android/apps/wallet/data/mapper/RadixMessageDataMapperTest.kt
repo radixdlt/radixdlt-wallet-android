@@ -1,5 +1,6 @@
 package com.radixdlt.android.apps.wallet.data.mapper
 
+import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.radixdlt.client.application.translate.data.DecryptedMessage
@@ -21,11 +22,11 @@ class RadixMessageDataMapperTest {
         val radixAddressFrom = mock<RadixAddress>()
         val radixAddressTo = mock<RadixAddress>()
 
-        whenever(decryptedMessage.data).thenReturn("Hello".toByteArray())
-        whenever(decryptedMessage.from).thenReturn(radixAddressFrom)
-        whenever(decryptedMessage.to).thenReturn(radixAddressTo)
-        whenever(decryptedMessage.encryptionState).thenReturn(state)
-        whenever(decryptedMessage.timestamp).thenReturn(timestamp)
+        whenever(decryptedMessage.data).doReturn("Hello".toByteArray())
+        whenever(decryptedMessage.from).doReturn(radixAddressFrom)
+        whenever(decryptedMessage.to).doReturn(radixAddressTo)
+        whenever(decryptedMessage.encryptionState).doReturn(state)
+        whenever(decryptedMessage.timestamp).doReturn(timestamp)
 
         val messageEntity = RadixMessageDataMapper.transform(decryptedMessage)
         assertEquals(String(data), messageEntity.content)

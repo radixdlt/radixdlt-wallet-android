@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 

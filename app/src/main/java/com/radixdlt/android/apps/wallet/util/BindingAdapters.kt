@@ -3,6 +3,7 @@ package com.radixdlt.android.apps.wallet.util
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.hardware.biometrics.BiometricPrompt
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -21,12 +22,14 @@ import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputLayout
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.biometrics.BiometricsAuthenticationResult
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
-import com.radixdlt.android.apps.wallet.ui.dialog.pin.setup.SetupPinViewModel
+import com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.setup.SetupPinAuthenticationViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.pin.PaymentPinViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusState
 import com.radixdlt.android.apps.wallet.ui.layout.KeyPadView
+import org.jetbrains.anko.px2dip
 
 @BindingAdapter("visibleGone")
 fun View.bindVisible(visible: Boolean?) {
@@ -179,10 +182,10 @@ private fun addChip(layout: ConstraintLayout, chipGroup: ChipGroup, mnemonicWord
 }
 
 @BindingAdapter("pinSetupState")
-fun TextView.bindPinSetupState(state: SetupPinViewModel.SetupPinState?) {
-    if (state == SetupPinViewModel.SetupPinState.SET) {
+fun TextView.bindPinSetupState(state: SetupPinAuthenticationViewModel.SetupPinState?) {
+    if (state == SetupPinAuthenticationViewModel.SetupPinState.SET) {
         text = context.getString(R.string.setup_pin_dialog_set_pin_header)
-    } else if (state == SetupPinViewModel.SetupPinState.CONFIRM) {
+    } else if (state == SetupPinAuthenticationViewModel.SetupPinState.CONFIRM) {
         text = context.getString(R.string.setup_pin_dialog_confirm_pin_header)
     }
 }
@@ -205,13 +208,9 @@ fun CheckBox.bindPinCheck(pinLength: Int) {
 }
 
 @BindingAdapter("pinError")
-fun LinearLayout.bindPinError(state: SetupPinViewModel.SetupPinState?) {
-    if (state == SetupPinViewModel.SetupPinState.ERROR) {
-        val values = arrayOf(0f, 25f, -25f, 25f, -25f, 15f, -15f, 6f, -6f, 0f).toFloatArray()
-        val oa1 = ObjectAnimator
-            .ofFloat(this, "translationX", *values)
-            .setDuration(600)
-        oa1.start()
+fun LinearLayout.bindPinError(state: SetupPinAuthenticationViewModel.SetupPinState?) {
+    if (state == SetupPinAuthenticationViewModel.SetupPinState.ERROR) {
+        shakeAnimation()
         vibrate(context)
     }
 }
@@ -219,21 +218,47 @@ fun LinearLayout.bindPinError(state: SetupPinViewModel.SetupPinState?) {
 @BindingAdapter("pinError")
 fun LinearLayout.bindPinError(state: PaymentPinViewModel.PaymentPinState?) {
     if (state == PaymentPinViewModel.PaymentPinState.ERROR) {
-        val values = arrayOf(0f, 25f, -25f, 25f, -25f, 15f, -15f, 6f, -6f, 0f).toFloatArray()
-        val oa1 = ObjectAnimator
-            .ofFloat(this, "translationX", *values)
-            .setDuration(600)
-        oa1.start()
+        shakeAnimation()
         vibrate(context)
     }
 }
 
-private fun vibrate(context: Context){
+private fun LinearLayout.shakeAnimation() {
+    val values = arrayOf(0, 200, -200, 200, -200, 120, -120, 48, -48, 0)
+        .map {
+            context.px2dip(it)
+        }
+        .toFloatArray()
+    val oa1 = ObjectAnimator
+        .ofFloat(this, "translationX", *values)
+        .setDuration(600)
+    oa1.start()
+}
+
+private fun vibrate(context: Context) {
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         vibrator.vibrate(VibrationEffect.createOneShot(400, VibrationEffect.DEFAULT_AMPLITUDE))
     } else {
         @Suppress("DEPRECATION")
         vibrator.vibrate(400)
+    }
+}
+
+@BindingAdapter("biometricsResult")
+fun TextView.bindBiometricsResult(result: BiometricsAuthenticationResult?) {
+    text = when (result) {
+        BiometricsAuthenticationResult.Success -> ""
+        BiometricsAuthenticationResult.Failure -> {
+            context.getString(R.string.payment_biometrics_dialog_unable_to_authenticate)
+        }
+        is BiometricsAuthenticationResult.Error -> when (result.code) {
+            BiometricPrompt.BIOMETRIC_ERROR_LOCKOUT,
+            BiometricPrompt.BIOMETRIC_ERROR_LOCKOUT_PERMANENT -> {
+                context.getString(R.string.payment_biometrics_dialog_too_many_attempts)
+            }
+            else -> ""
+        }
+        else -> ""
     }
 }

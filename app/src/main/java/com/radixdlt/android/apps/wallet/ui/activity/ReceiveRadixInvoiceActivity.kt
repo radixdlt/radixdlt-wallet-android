@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.google.zxing.EncodeHintType
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.RadixWalletApplication
 import com.radixdlt.android.apps.wallet.ui.fragment.wallet.TransactionsViewModel
 import com.radixdlt.android.apps.wallet.util.EmptyTextWatcher

@@ -13,11 +13,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.apps.wallet.util.showSnackbarAboveNavigationView
-import com.radixdlt.android.databinding.FragmentBackupWalletBinding
+import com.radixdlt.android.apps.wallet.databinding.FragmentBackupWalletBinding
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 

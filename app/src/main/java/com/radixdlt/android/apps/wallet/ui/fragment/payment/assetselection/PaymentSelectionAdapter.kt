@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetPayment
 import com.radixdlt.android.apps.wallet.util.GENESIS_XRD
 import com.radixdlt.android.apps.wallet.util.QueryPreferences

@@ -29,7 +29,7 @@ class PaymentPinViewModel : ViewModel() {
     }
 
     fun pinTextChange(text: String) {
-        when(paymentPinState.value) {
+        when (paymentPinState.value) {
             PaymentPinState.ENTER -> enterPin(text)
             PaymentPinState.ERROR -> return
         }

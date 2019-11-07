@@ -18,6 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="0dp"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationContentDescription="@string/payment_pin_dialog_content_description_back_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -107,7 +109,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:pinClear="@{ viewmodel.pinLength }"
-            app:onNumberTextListener="@{ viewmodel.pinTextChange }"
+            app:onNumberTextListener="@{ viewmodel::pinTextChange }"
             keypad:keypad_image_resource="@drawable/ic_arrow_back_24"
             keypad:keypad_text_color="@color/radixBlueGrey2"
             keypad:keypad_text_limit="4"

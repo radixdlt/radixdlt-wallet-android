@@ -57,7 +57,7 @@ class PaymentSummaryViewModel : ViewModel() {
     }
 
     fun onConfirmAndSendClickListener() {
-        _paymentSummaryAction.value = PaymentSummaryAction.ShowLoadingDialog
+        _paymentSummaryAction.value = PaymentSummaryAction.Authenticate
     }
 
     fun onCopyAddressClickListener(address: String) {

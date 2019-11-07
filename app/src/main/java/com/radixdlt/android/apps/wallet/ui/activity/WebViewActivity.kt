@@ -6,7 +6,7 @@ import android.view.MenuItem
 import android.webkit.CookieManager
 import android.webkit.WebViewClient
 import androidx.appcompat.widget.Toolbar
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import kotlinx.android.synthetic.main.activity_webview.*
 import timber.log.Timber
 

@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import kotlinx.android.synthetic.main.fragment_paper_key_welcome.*
 
 class PaperKeyWelcomeFragment : Fragment() {

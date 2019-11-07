@@ -10,7 +10,7 @@ import androidx.annotation.MainThread
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.atoms.particles.RRI

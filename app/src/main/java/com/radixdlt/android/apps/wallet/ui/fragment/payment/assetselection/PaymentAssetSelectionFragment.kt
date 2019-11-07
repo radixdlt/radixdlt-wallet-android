@@ -17,10 +17,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lapism.searchview.Search
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetPayment
-import com.radixdlt.android.databinding.FragmentPaymentAssetSelectionBinding
+import com.radixdlt.android.apps.wallet.databinding.FragmentPaymentAssetSelectionBinding
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_payment_asset_selection.*
 import kotlinx.android.synthetic.main.tool_bar_search.*

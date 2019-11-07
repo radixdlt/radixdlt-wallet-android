@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessageEntity
 import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_HOSTED
 import com.radixdlt.android.apps.wallet.util.FAUCET_ADDRESS_SINGLE

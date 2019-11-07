@@ -9,7 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.bumptech.glide.Glide
 import com.google.zxing.EncodeHintType
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.RadixWalletApplication
 import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
 import com.radixdlt.android.apps.wallet.ui.activity.ReceiveRadixInvoiceActivity

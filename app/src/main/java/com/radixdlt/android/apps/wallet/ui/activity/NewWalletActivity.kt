@@ -5,7 +5,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.util.KEYSTORE_FILE
 import com.radixdlt.android.apps.wallet.util.createProgressDialog
 import kotlinx.android.synthetic.main.activity_new_wallet.*

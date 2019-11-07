@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.RadixWalletApplication
 import com.radixdlt.android.apps.wallet.identity.AndroidRadixIdentity
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.util.KEYSTORE_FILE
-import com.radixdlt.android.apps.wallet.util.VAULT_SECRET
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.VAULT_SECRET
 import com.radixdlt.android.apps.wallet.util.Vault
 import com.radixdlt.client.core.crypto.ECKeyPair
 import okio.ByteString

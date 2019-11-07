@@ -14,7 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessageEntity
 import com.radixdlt.android.apps.wallet.ui.adapter.ConversationAdapter
 import com.radixdlt.android.apps.wallet.util.EmptyTextWatcher

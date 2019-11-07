@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
@@ -22,7 +22,7 @@ import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.apps.wallet.util.showErrorSnackbarAboveNavigationView
 import com.radixdlt.android.apps.wallet.util.showSuccessSnackbarAboveNavigationView
-import com.radixdlt.android.databinding.FragmentConfirmBackupWalletBinding
+import com.radixdlt.android.apps.wallet.databinding.FragmentConfirmBackupWalletBinding
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -101,7 +101,7 @@ class ConfirmBackupWalletFragment : Fragment() {
     }
 
     private fun navigateToSetupPin() {
-        findNavController().navigate(R.id.navigation_pin)
+        findNavController().navigate(R.id.navigation_setup_pin)
     }
 
     private fun navigateToStart() {

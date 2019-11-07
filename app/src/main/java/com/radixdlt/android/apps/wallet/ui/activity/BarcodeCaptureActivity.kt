@@ -40,8 +40,8 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.android.material.snackbar.Snackbar
-import com.radixdlt.android.BuildConfig
-import com.radixdlt.android.R
+import com.radixdlt.android.apps.wallet.BuildConfig
+import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.ui.camera.BarcodeGraphic
 import com.radixdlt.android.apps.wallet.ui.camera.BarcodeGraphicTracker
 import com.radixdlt.android.apps.wallet.ui.camera.CameraSource
