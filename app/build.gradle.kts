@@ -138,13 +138,6 @@ tasks {
     withType(Test::class) {
         @Suppress("UnstableApiUsage")
         useJUnitPlatform()
-
-        addTestListener(object : TestListener {
-            override fun beforeSuite(suite: TestDescriptor) {}
-            override fun beforeTest(testDescriptor: TestDescriptor) {}
-            override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {}
-            override fun afterSuite(suite: TestDescriptor, result: TestResult) {}
-        })
     }
 
     create("ktlint", JavaExec::class) {
