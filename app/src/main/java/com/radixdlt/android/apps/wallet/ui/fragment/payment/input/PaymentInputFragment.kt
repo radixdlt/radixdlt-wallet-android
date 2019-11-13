@@ -174,7 +174,6 @@ class PaymentInputFragment : Fragment() {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.elevation = view.context.px2dip(dimen)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.payment_input_fragment_title)
     }
 
@@ -408,9 +407,12 @@ class PaymentInputFragment : Fragment() {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    val barcode: Barcode =
+                    val barcode: Barcode? =
                         data.getParcelableExtra(BarcodeCaptureActivity.BARCODE_OBJECT)
-                    paymentInputAddressTIET.setText(barcode.displayValue.trim())
+
+                    barcode?.let {
+                        paymentInputAddressTIET.setText(it.displayValue.trim())
+                    }
                 }
             } else {
                 val failureString = getString(R.string.barcode_error) +

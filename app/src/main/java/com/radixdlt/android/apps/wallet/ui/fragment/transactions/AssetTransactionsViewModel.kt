@@ -3,54 +3,61 @@ package com.radixdlt.android.apps.wallet.ui.fragment.transactions
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
-import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
-import com.radixdlt.android.apps.wallet.util.sumStoredTransactions
+import com.radixdlt.android.apps.wallet.data.model.AssetDao
+import com.radixdlt.android.apps.wallet.data.model.AssetEntity
+import com.radixdlt.android.apps.wallet.data.model.TransactionsDaoOM
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import javax.inject.Inject
 
-class AssetTransactionsViewModel @Inject constructor(
-    private val transactionsDao2: TransactionsDao2
+class AssetTransactionsViewModel @AssistedInject constructor(
+    private val assetDao: AssetDao,
+    private val transactionsDaoOM: TransactionsDaoOM,
+    @Assisted private val asset: String
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
     private val _assetTransactionsState: MutableLiveData<AssetTransactionsState> = MutableLiveData()
-
     val assetTransactionsState: LiveData<AssetTransactionsState>
         get() = _assetTransactionsState
 
-    private val _assetBalance: MutableLiveData<String> = MutableLiveData()
+    private val _assetDetails = MutableLiveData<AssetEntity>()
+    val assetDetails: LiveData<AssetEntity>
+        get() = _assetDetails
 
-    val assetBalance: LiveData<String>
-        get() = _assetBalance
+    init {
+        getAssetDetailsAndTransactions(asset)
+    }
 
-    fun getAllTransactionsAsset(asset: String) {
-        Timber.d("getAllTransactionsAsset")
-        transactionsDao2.getAllTransactionsByTokenTypeFlowable(asset)
+    private fun getAssetDetailsAndTransactions(asset: String) {
+        getAssetDetails(asset)
+        getAssetTransactions(asset)
+    }
+
+    private fun getAssetDetails(asset: String) {
+        assetDao.getAssetFlowable(asset)
             .subscribeOn(Schedulers.io())
             .subscribe({
-
-                // Get and sum transactions
-                val total = sumStoredTransactions(it).toPlainString()
-
-                setAssetBalance(total)
-                setAssetTransactionState(
-                    AssetTransactionsState.ShowAssetTransactions(
-                        it.sortedByDescending(TransactionEntity2::timestamp)
-                    )
-                )
-            }, {
-                Timber.e(it)
-            })
+                setAssetDetails(it)
+            }, Timber::e)
             .addTo(compositeDisposable)
     }
 
-    private fun setAssetBalance(balance: String) {
-        _assetBalance.postValue(balance)
+    private fun getAssetTransactions(asset: String) {
+        transactionsDaoOM.getAllTransactionsFromAsset(asset)
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                setAssetTransactionState(AssetTransactionsState.ShowAssetTransactions(it))
+            }
+            .addTo(compositeDisposable)
+    }
+
+    private fun setAssetDetails(assetEntity: AssetEntity) {
+        _assetDetails.postValue(assetEntity)
     }
 
     private fun setAssetTransactionState(state: AssetTransactionsState) {
@@ -60,5 +67,10 @@ class AssetTransactionsViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
+    }
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(asset: String): AssetTransactionsViewModel
     }
 }

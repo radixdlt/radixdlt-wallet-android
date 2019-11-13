@@ -51,6 +51,7 @@ class SetupBiometricsAuthenticationDialog : AuthenticationDialog() {
     }
 
     override fun initialiseViewModels() {
+        super.initialiseViewModels()
         viewModelSetupAuthentication.setupBiometricsAuthenticationAction.observe(
             viewLifecycleOwner,
             Observer(::action)

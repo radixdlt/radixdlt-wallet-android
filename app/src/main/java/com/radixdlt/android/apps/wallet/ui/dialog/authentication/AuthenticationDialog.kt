@@ -1,27 +1,45 @@
 package com.radixdlt.android.apps.wallet.ui.dialog.authentication
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import com.radixdlt.android.apps.wallet.R
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.set
+import dagger.android.support.AndroidSupportInjection
 import java.io.File
+import javax.inject.Inject
 
 abstract class AuthenticationDialog : FullScreenDialog() {
 
     lateinit var ctx: Context
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    lateinit var mainViewModel: MainViewModel
+
     abstract fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View
 
-    abstract fun initialiseViewModels()
+    open fun initialiseViewModels() {
+        activity?.apply {
+            mainViewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     fun navigate() {
         when (activity) {
@@ -30,8 +48,8 @@ abstract class AuthenticationDialog : FullScreenDialog() {
                 openWallet()
             }
             is MainActivity -> {
-                dismiss()
                 returnToStart()
+                dismiss()
             }
         }
     }
@@ -52,6 +70,6 @@ abstract class AuthenticationDialog : FullScreenDialog() {
     }
 
     private fun returnToStart() {
-        findNavController().popBackStack(R.id.navigation_backup_wallet, true)
+        mainViewModel.popAuthenticationSetupBackStack()
     }
 }

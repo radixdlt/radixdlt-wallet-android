@@ -26,4 +26,12 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun providesMessagesDao(database: RadixWalletDatabase) = database.messagesDao()
+
+    @Provides
+    @Singleton
+    fun providesAssetDao(database: RadixWalletDatabase) = database.assetDao()
+
+    @Provides
+    @Singleton
+    fun providesTransactionsDaoOM(database: RadixWalletDatabase) = database.transactionsDaoOM()
 }

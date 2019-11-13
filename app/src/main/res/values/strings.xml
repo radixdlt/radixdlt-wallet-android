@@ -133,8 +133,6 @@
     <string name="toast_request_tokens_faucet">Requested tokens from Faucet!</string>
 
     <!-- Assets Fragment -->
-    <string name="assets_fragment_no_owned_assets_textview">You don\'t own any assets!</string>
-    <string name="assets_fragment_loading_assets_textview">Loading assets…</string>
     <string name="assets_fragment_xml_receive_button">Receive</string>
     <string name="assets_fragment_xml_send_button">Send</string>
     <string name="assets_fragment_error_toast">There was an error!</string>

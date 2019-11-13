@@ -24,21 +24,9 @@
             app:layout_constraintBottom_toTopOf="@+id/buttonsView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.38"
+            app:layout_constraintVertical_bias="0.50"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_search"
             />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/assetsMessageTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/assets_fragment_loading_assets_textview"
-            android:textColor="@color/radixGrey"
-            android:textSize="22sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assetsImageView" />
 
         <View
             android:id="@+id/buttonsView"

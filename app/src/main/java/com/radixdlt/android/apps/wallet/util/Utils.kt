@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.data.model.TransactionsEntityOM
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.identity.Identity
@@ -356,6 +357,22 @@ fun sumStoredTransactions(transactionEntities: List<TransactionEntity2>): BigDec
     }.fold(BigDecimal.ZERO, BigDecimal::add)
 
     val sumReceived = transactionEntities.asSequence().filterNot { transactions ->
+        transactions.sent
+    }.map { transactionEntity ->
+        transactionEntity.amount
+    }.fold(BigDecimal.ZERO, BigDecimal::add)
+
+    return sumReceived - sumSent
+}
+
+fun sumStoredTransactionsOM(transactionsEntityOM: List<TransactionsEntityOM>): BigDecimal {
+    val sumSent = transactionsEntityOM.asSequence().filter { transactions ->
+        transactions.sent
+    }.map { transactionEntity ->
+        transactionEntity.amount
+    }.fold(BigDecimal.ZERO, BigDecimal::add)
+
+    val sumReceived = transactionsEntityOM.asSequence().filterNot { transactions ->
         transactions.sent
     }.map { transactionEntity ->
         transactionEntity.amount

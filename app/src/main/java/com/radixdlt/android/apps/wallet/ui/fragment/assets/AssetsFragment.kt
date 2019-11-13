@@ -17,6 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lapism.searchview.Search
 import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.data.model.AssetEntity
+import com.radixdlt.android.apps.wallet.databinding.FragmentAssetsBinding
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainLoadingState
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
@@ -25,13 +27,13 @@ import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.toast
-import com.radixdlt.android.apps.wallet.databinding.FragmentAssetsBinding
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.tool_bar_search.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.dip
+import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
 
@@ -134,6 +136,7 @@ class AssetsFragment : Fragment() {
 
         assetsViewModel = ViewModelProviders.of(this, viewModelFactory)[AssetsViewModel::class.java]
         assetsViewModel.assetsAction.observe(viewLifecycleOwner, Observer(::assetsAction))
+        assetsViewModel.singleAction.observe(viewLifecycleOwner, Observer(::assetsAction))
     }
 
     private fun initialiseSearchView() {
@@ -196,7 +199,7 @@ class AssetsFragment : Fragment() {
         }
     }
 
-    private fun assetsAction(action: AssetsAction?) {
+    private fun assetsAction(action: AssetsAction) {
         when (action) {
             is AssetsAction.ShowLoading -> setLoadingAssets()
             is AssetsAction.ShowAssets -> showOwnedAssets(action.assets)
@@ -211,7 +214,7 @@ class AssetsFragment : Fragment() {
         setLayoutResources()
     }
 
-    private fun showOwnedAssets(tokenTypes: List<Asset>) {
+    private fun showOwnedAssets(tokenTypes: List<AssetEntity>) {
         loadingAssets = false
         checkAssetWasBeingSearched()
         assetsAdapter.originalList(tokenTypes)
@@ -261,13 +264,10 @@ class AssetsFragment : Fragment() {
     private fun setLayoutResourcesWithLoadingIndicator() {
         payButton.isEnabled = false
         swipe_refresh_layout.isRefreshing = true
-        assetsMessageTextView.text = getString(R.string.assets_fragment_loading_assets_textview)
     }
 
     private fun setLayoutResourcesWithEmptyAssets() {
         payButton.isEnabled = false
-        assetsMessageTextView.text = getString(R.string.assets_fragment_no_owned_assets_textview)
-        assetsMessageTextView.visibility = View.VISIBLE
         assetsImageView.visibility = View.VISIBLE
         swipe_refresh_layout.isRefreshing = false
         swipe_refresh_layout.isEnabled = false
@@ -276,7 +276,6 @@ class AssetsFragment : Fragment() {
     private fun setLayoutResourcesWithAssets() {
         payButton.isEnabled = true
         assetsImageView.visibility = View.GONE
-        assetsMessageTextView.visibility = View.GONE
         swipe_refresh_layout.isRefreshing = false
         swipe_refresh_layout.isEnabled = false
     }
@@ -289,6 +288,7 @@ class AssetsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Timber.tag("initialiseViewModels").d("ONRESUME")
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }

@@ -14,15 +14,23 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import com.radixdlt.android.apps.wallet.R
-import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
+import com.radixdlt.android.apps.wallet.RadixWalletApplication
+import com.radixdlt.android.apps.wallet.data.model.AssetEntity
+import com.radixdlt.android.apps.wallet.data.model.TransactionsEntityOM
+import com.radixdlt.android.apps.wallet.di.viewModel
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
 import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
+import com.radixdlt.android.apps.wallet.util.Pref
+import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
+import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.toast
 import com.radixdlt.client.core.atoms.particles.RRI
 import dagger.android.support.AndroidSupportInjection
@@ -37,13 +45,19 @@ class AssetTransactionsFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var assetTransactionsViewModel: AssetTransactionsViewModel
+    private lateinit var mainViewModel: MainViewModel
+
     private lateinit var assetTransactionsAdapter: AssetTransactionsAdapter
 
     private val args: AssetTransactionsFragmentArgs by navArgs()
     private val rri: String by lazy { args.rri }
     private val name: String by lazy { args.name }
     private val balance: String by lazy { args.balance }
+
+    private val assetTransactionsViewModel by viewModel {
+        (activity?.application as RadixWalletApplication).injector
+            .userDetailViewModelFactory.create(rri)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -146,9 +160,20 @@ class AssetTransactionsFragment : Fragment() {
 
     private fun payButtonClickListener() {
         payButton.setOnClickListener {
-//            SendRadixActivity.newIntent(activity!!)
-            PaymentActivity.newIntent(activity!!)
+            activity?.apply {
+                if (defaultPrefs()[Pref.WALLET_BACKED_UP, false]) {
+                    PaymentActivity.newIntent(this)
+                } else {
+                    navigateToBackUpWallet()
+                }
+            }
         }
+    }
+
+    private fun navigateToBackUpWallet() {
+        val action = AssetTransactionsFragmentDirections
+            .navigationAssetTransactionsToNavigationBackupWallet()
+        findNavController().navigate(action)
     }
 
     private fun receiveButtonClickListener() {
@@ -169,16 +194,24 @@ class AssetTransactionsFragment : Fragment() {
     }
 
     private fun initialiseViewModels(asset: String) {
-        assetTransactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(AssetTransactionsViewModel::class.java)
+//        assetTransactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
+//            .get(AssetTransactionsViewModel::class.java)
+
+//        assetTransactionsViewModel.getAssetDetailsAndTransactions(asset)
+
+        activity?.let {
+            mainViewModel = ViewModelProviders.of(it, viewModelFactory)[MainViewModel::class.java]
+                .apply {
+                    setBottomNavigationCheckedItem(R.id.menu_bottom_assets)
+                }
+        }
 
         assetTransactionsViewModel.assetTransactionsState.observe(
             viewLifecycleOwner, Observer(::showAssetTransactions)
         )
-        assetTransactionsViewModel.assetBalance.observe(
-            viewLifecycleOwner, Observer(::showAssetBalance)
+        assetTransactionsViewModel.assetDetails.observe(
+            viewLifecycleOwner, Observer(::showAssetDetails)
         )
-        assetTransactionsViewModel.getAllTransactionsAsset(asset)
     }
 
     private fun showAssetTransactions(assetTransactionsState: AssetTransactionsState) {
@@ -196,18 +229,22 @@ class AssetTransactionsFragment : Fragment() {
         assetBalanceTextView.text = total
     }
 
-    private fun showAssetTransactions(transactions: List<TransactionEntity2>) {
-        val transaction = transactions.first()
-        val totalSupply = transaction.tokenTotalSupply
+    private fun showAssetDetails(assetEntity: AssetEntity) {
+        showAssetBalance(assetEntity.amount.toString())
+
+        val totalSupply = assetEntity.tokenTotalSupply
             ?.setScale(2, RoundingMode.HALF_UP)?.toPlainString()
             ?: ""
         assetTransactionsTotalSupplyTextView.text = totalSupply
-        assetTransactionsSupplyTypeTextView.text = transaction.tokenSupplyType
-        assetTransactionsDescriptionTextView.text = transaction.tokenDescription
+        assetTransactionsSupplyTypeTextView.text = assetEntity.tokenSupplyType
+        assetTransactionsDescriptionTextView.text = assetEntity.tokenDescription
+    }
+
+    private fun showAssetTransactions(transactions: List<TransactionsEntityOM>) {
         assetTransactionsAdapter.replace(transactions)
     }
 
-    private val click = fun(transactionEntity2: TransactionEntity2, longClick: Boolean) {
+    private val click = fun(transactionEntity2: TransactionsEntityOM, longClick: Boolean) {
         if (!longClick) {
             navigateToDetails(transactionEntity2)
         } else {
@@ -215,7 +252,7 @@ class AssetTransactionsFragment : Fragment() {
         }
     }
 
-    private fun navigateToDetails(transactionEntity: TransactionEntity2) {
+    private fun navigateToDetails(transactionEntity: TransactionsEntityOM) {
         TransactionDetailsActivity.newIntent(activity!!, transactionEntity)
     }
 }

@@ -1,5 +1,6 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.assets
 
+import com.radixdlt.android.apps.wallet.data.model.AssetEntity
 import java.math.BigDecimal
 
 sealed class AssetsAction {
@@ -7,7 +8,7 @@ sealed class AssetsAction {
     object NavigateTo : AssetsAction()
     object ShowLoading : AssetsAction()
     object ShowError : AssetsAction()
-    class ShowAssets(val assets: List<Asset>) : AssetsAction()
+    class ShowAssets(val assets: List<AssetEntity>) : AssetsAction()
 }
 
 data class Asset(

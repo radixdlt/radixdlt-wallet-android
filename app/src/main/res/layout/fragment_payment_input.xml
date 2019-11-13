@@ -132,14 +132,15 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/paymentInputAmountTIL">
+                app:layout_constraintTop_toTopOf="@+id/paymentInputAmountTIL"
+                app:layout_constraintBottom_toBottomOf="@+id/paymentInputAmountTIL">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/paymentInputAssetIcon"
                     android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_height="match_parent"
                     android:padding="6dp"
                     android:src="@drawable/ic_paste" />
 

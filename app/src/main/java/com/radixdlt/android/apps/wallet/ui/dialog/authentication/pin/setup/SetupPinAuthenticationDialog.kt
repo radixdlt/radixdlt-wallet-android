@@ -7,33 +7,18 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.biometrics.BiometricsChecker
 import com.radixdlt.android.apps.wallet.databinding.DialogSetupPinAuthenticationBinding
-import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.authentication.AuthenticationDialog
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.set
-import dagger.android.support.AndroidSupportInjection
-import javax.inject.Inject
 
 class SetupPinAuthenticationDialog : AuthenticationDialog() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private lateinit var mainViewModel: MainViewModel
-
     private val viewModelSetupAuthentication: SetupPinAuthenticationViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,9 +48,7 @@ class SetupPinAuthenticationDialog : AuthenticationDialog() {
     }
 
     override fun initialiseViewModels() {
-        activity?.apply {
-            mainViewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
-        }
+        super.initialiseViewModels()
         viewModelSetupAuthentication.setupPinAuthenticationAction.observe(
             viewLifecycleOwner,
             Observer(::action)

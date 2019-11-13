@@ -87,7 +87,7 @@ class SendTokensLiveData @Inject constructor(
 //                            val transactionEntity = createTransactionEntity(
 //                                amount, to, payLoad, it, tokenClassReference
 //                            )
-//                            transactionsDao.insertTransaction(transactionEntity)
+//                            transactionsDao.insertAsset(transactionEntity)
 //                            postValue(it.type.name)
 //                            return@subscribe
 //                        }

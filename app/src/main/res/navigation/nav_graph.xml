@@ -46,6 +46,9 @@
             android:name="balance"
             app:argType="string"
             app:nullable="false" />
+        <action
+            android:id="@+id/navigation_asset_transactions_to_navigation_backup_wallet"
+            app:destination="@+id/navigation_backup_wallet" />
     </fragment>
     <fragment
         android:id="@+id/navigation_contacts"

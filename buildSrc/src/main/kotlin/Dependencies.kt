@@ -40,6 +40,7 @@ object Libraries {
         const val biometrics = "1.0.0-rc02"
         const val preference = "1.1.0"
         const val dagger = "2.24"
+        const val daggerAssistedInject = "0.3.3"
         const val glide = "4.9.0"
         const val material = "1.1.0-alpha10"
         const val playServicesVision = "18.0.0"
@@ -55,6 +56,7 @@ object Libraries {
         const val novaCrypto = "2019.01.27"
         const val searchView = "28.0.0"
         const val lottie = "3.0.3"
+        const val liveEvent = "1.0.1"
     }
 
     const val ktlint = "com.pinterest:ktlint:${Versions.ktlint}"
@@ -96,6 +98,8 @@ object Libraries {
 
     const val lottie = "com.airbnb.android:lottie:${Versions.lottie}"
 
+    const val liveEvent = "com.github.hadilq.liveevent:liveevent:${Versions.liveEvent}"
+
     // Rx
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
     const val rxKotlin =  "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
@@ -111,6 +115,8 @@ object Libraries {
     const val daggerAndroid = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val daggerAndroidCompiler = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
+    const val daggerAssistedInject = "com.squareup.inject:assisted-inject-annotations-dagger2:${Versions.daggerAssistedInject}"
+    const val daggerAssistedInjectProcessor = "com.squareup.inject:assisted-inject-processor-dagger2:${Versions.daggerAssistedInject}"
 
     const val searchView = "com.lapism:searchview:${Versions.searchView}"
 

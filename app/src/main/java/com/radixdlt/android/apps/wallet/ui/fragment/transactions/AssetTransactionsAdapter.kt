@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.radixdlt.android.apps.wallet.R
-import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
+import com.radixdlt.android.apps.wallet.data.model.TransactionsEntityOM
 import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
 import com.radixdlt.android.apps.wallet.util.formatDateDay
 import com.radixdlt.android.apps.wallet.util.formatDateMonthYear
@@ -22,8 +22,8 @@ import timber.log.Timber
 import java.math.RoundingMode
 
 class AssetTransactionsAdapter(
-    private val itemClick: (TransactionEntity2, Boolean) -> Unit,
-    private val items: MutableList<TransactionEntity2> = mutableListOf()
+    private val itemClick: (TransactionsEntityOM, Boolean) -> Unit,
+    private val items: MutableList<TransactionsEntityOM> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     StickyHeaderItemDecoration.StickyHeaderInterface {
 
@@ -112,10 +112,10 @@ class AssetTransactionsAdapter(
 
     inner class TransactionsViewHolder(
         itemView: View,
-        private val itemClick: (TransactionEntity2, Boolean) -> Unit
+        private val itemClick: (TransactionsEntityOM, Boolean) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindTransaction(transactionEntity: TransactionEntity2) {
+        fun bindTransaction(transactionEntity: TransactionsEntityOM) {
 
             setAccount(transactionEntity)
             setResources(transactionEntity)
@@ -127,19 +127,19 @@ class AssetTransactionsAdapter(
             setClickListener(transactionEntity)
         }
 
-        fun bindTransactionAndDate(transactionEntity: TransactionEntity2) {
+        fun bindTransactionAndDate(transactionEntity: TransactionsEntityOM) {
             bindTransaction(transactionEntity)
             val timestamp = transactionEntity.timestamp
             itemView.assetTransactionsDateDayTextView.text = formatDateDay(timestamp)
             itemView.assetTransactionsDateMonthYearTextView.text = formatDateMonthYear(timestamp)
         }
 
-        private fun setAccount(transactionEntity2: TransactionEntity2) {
+        private fun setAccount(transactionEntity2: TransactionsEntityOM) {
             itemView.accountTextView.text = transactionEntity2.accountName
         }
 
         // Set correct resources and color depending if sent or received
-        private fun setResources(transactionEntity: TransactionEntity2) {
+        private fun setResources(transactionEntity: TransactionsEntityOM) {
             if (transactionEntity.sent) {
                 itemView.circleImageView.setImageResource(R.drawable.new_send_image_item_wallet)
                 itemView.transactionAmount.setTextColor(
@@ -153,7 +153,7 @@ class AssetTransactionsAdapter(
             }
         }
 
-        private fun setTransactionAmount(transactionEntity: TransactionEntity2) {
+        private fun setTransactionAmount(transactionEntity: TransactionsEntityOM) {
             var amount = transactionEntity.amount
                 .setScale(2, RoundingMode.HALF_UP)
                 .toPlainString()
@@ -165,7 +165,7 @@ class AssetTransactionsAdapter(
             itemView.transactionAmount.text = amount
         }
 
-        private fun setTransactionFiatValue(transactionEntity: TransactionEntity2) {
+        private fun setTransactionFiatValue(transactionEntity: TransactionsEntityOM) {
             var amount = transactionEntity.amount
                 .setScale(2, RoundingMode.HALF_UP)
                 .toPlainString()
@@ -175,13 +175,13 @@ class AssetTransactionsAdapter(
             itemView.fiatValueTextView.text = amount
         }
 
-        private fun setAddress(transactionEntity: TransactionEntity2) {
+        private fun setAddress(transactionEntity: TransactionsEntityOM) {
             val address = transactionEntity.address
             val message = if (transactionEntity.sent) "To: $address" else "From: $address"
             itemView.addressTextView.text = message
         }
 
-        private fun setClickListener(transactionEntity: TransactionEntity2) {
+        private fun setClickListener(transactionEntity: TransactionsEntityOM) {
             itemView.transactionConstraintLayout.setOnClickListener {
                 itemClick(transactionEntity, false)
             }
@@ -194,7 +194,7 @@ class AssetTransactionsAdapter(
     }
 
     @MainThread
-    fun replace(assets: List<TransactionEntity2>) {
+    fun replace(assets: List<TransactionsEntityOM>) {
         val difference = DiffUtil.calculateDiff(
             AssetTransactionsDiffUtil(items, assets),
             true
@@ -205,8 +205,8 @@ class AssetTransactionsAdapter(
     }
 
     private class AssetTransactionsDiffUtil(
-        private val oldList: List<TransactionEntity2>,
-        private val newList: List<TransactionEntity2>
+        private val oldList: List<TransactionsEntityOM>,
+        private val newList: List<TransactionsEntityOM>
     ) : DiffUtil.Callback() {
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             Timber.tag("diffUtil")

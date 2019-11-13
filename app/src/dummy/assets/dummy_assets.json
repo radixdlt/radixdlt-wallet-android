@@ -1,0 +1,24 @@
+[ 
+	{
+		"accountAddress":"9ew9BM2yY1Ba3beocFi25SYur8y3XKuAbyo6DwiqRSgvP7UNaNB", 
+		"rri":"/9ecjMNCFDSbLZxVpfbFwFTLWuL7SH3Q49uzGrpK3bUcze6CJtDr/XRD",
+		"tokenName":"Rads",
+		"tokenDescription":"Radix Native Tokens", 
+		"tokenIconUrl":"https://assets.radixdlt.com/icons/icon-xrd-32x32.png",
+		"tokenTotalSupply":"1000000000.000000000000000000", 
+		"tokenGranularity":"1E-18", 
+		"tokenSupplyType":"FIXED",
+		"amount": "42.00"
+	},
+	{
+		"accountAddress":"9ew9BM2yY1Ba3beocFi25SYur8y3XKuAbyo6DwiqRSgvP7UNaNB", 
+		"rri":"/9g8ixQr2RdJ1y9cSo3zga1H5sgV9Z359Rq6gv3yMoraqtFtaWdm/GBP",
+		"tokenName":"GBP Token",
+		"tokenDescription":"The GBP Token in the Radix Network", 
+		"tokenIconUrl":"https://cdn1.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2/128/pound-circle-green-512.png", 
+		"tokenTotalSupply":"1000000.000000000000000000", 
+		"tokenGranularity":"1E-18", 
+		"tokenSupplyType":"MUTABLE",
+		"amount": "4.16"
+	}
+]

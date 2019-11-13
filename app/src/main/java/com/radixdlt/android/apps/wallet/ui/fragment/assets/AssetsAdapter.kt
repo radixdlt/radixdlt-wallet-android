@@ -11,24 +11,23 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.data.model.AssetEntity
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
-import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.atoms.particles.RRI
 import kotlinx.android.synthetic.main.item_asset.view.*
 import timber.log.Timber
-import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Locale
 
 class AssetsAdapter(
     private val itemClick: (String, String, String) -> Unit,
-    private val items: MutableList<Asset> = mutableListOf()
+    private val items: MutableList<AssetEntity> = mutableListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     private lateinit var ctx: Context
     private lateinit var myAddress: String
     private var itemsFiltered = items
-    private val itemsAll = mutableListOf<Asset>()
+    private val itemsAll = mutableListOf<AssetEntity>()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         ctx = viewGroup.context
@@ -76,16 +75,16 @@ class AssetsAdapter(
                 if (charString.isEmpty()) {
                     itemsFiltered = itemsAll
                 } else {
-                    val filteredList = arrayListOf<Asset>()
+                    val filteredList = arrayListOf<AssetEntity>()
                     itemsAll.forEach {
-                        if (it.name != null) {
-                            if (it.name!!.toLowerCase(Locale.ROOT).contains(charString) ||
-                                it.iso.toLowerCase(Locale.ROOT).contains(charString)
+                        if (it.tokenName != null) {
+                            if (it.tokenName.toLowerCase(Locale.ROOT).contains(charString) ||
+                                RRI.fromString(it.rri).name.toLowerCase(Locale.ROOT).contains(charString)
                             ) {
                                 filteredList.add(it)
                             }
                         } else {
-                            if (it.iso.toLowerCase(Locale.ROOT).contains(charString)) {
+                            if (RRI.fromString(it.rri).name.toLowerCase(Locale.ROOT).contains(charString)) {
                                 filteredList.add(it)
                             }
                         }
@@ -103,7 +102,7 @@ class AssetsAdapter(
                 charSequence: CharSequence?,
                 filterResults: FilterResults?
             ) {
-                itemsFiltered = filterResults?.values as? MutableList<Asset> ?: itemsAll
+                itemsFiltered = filterResults?.values as? MutableList<AssetEntity> ?: itemsAll
                 replace(itemsFiltered)
             }
         }
@@ -114,25 +113,25 @@ class AssetsAdapter(
         private val itemClick: (String, String, String) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindList(item: Asset) {
+        fun bindList(item: AssetEntity) {
 
             setName(item)
             setIcon(item)
             setTotalAssetHoldings(item)
 
             // Item click listeners
-            val rri = RRI.of(RadixAddress.from(item.address), item.iso).toString()
-            setClickListener(rri, item.name ?: item.iso, item.total)
+//            val rri = RRI.of(RadixAddress.from(item.address), item.iso).toString()
+            setClickListener(item.rri, item.tokenName!!, item.amount.toPlainString())
         }
 
-        fun setName(item: Asset) {
-            val name = item.name?.let { it } ?: item.iso
+        fun setName(item: AssetEntity) {
+            val name = item.tokenName
             itemView.addressTextView.text = name
         }
 
         // Set correct resources and color depending if sent or received
-        fun setIcon(item: Asset) {
-            val urlIcon = if (item.urlIcon.isNullOrBlank()) null else item.urlIcon
+        fun setIcon(item: AssetEntity) {
+            val urlIcon = if (item.tokenIconUrl.isNullOrBlank()) null else item.tokenIconUrl
             Glide.with(ctx)
                 .load(urlIcon)
                 .fallback(R.drawable.no_token_icon)
@@ -140,11 +139,11 @@ class AssetsAdapter(
         }
 
         // Detect if whole number or decimal to change character size
-        fun setTotalAssetHoldings(item: Asset) {
-            val total = BigDecimal(item.total)
+        fun setTotalAssetHoldings(item: AssetEntity) {
+            val total = item.amount
                 .setScale(2, RoundingMode.HALF_UP)
                 .toPlainString()
-            val holdings = "$total ${item.iso}"
+            val holdings = "$total ${item.tokenName}"
             itemView.transactionAmount.text = holdings
         }
 
@@ -156,7 +155,7 @@ class AssetsAdapter(
     }
 
     @MainThread
-    fun replace(assets: List<Asset>) {
+    fun replace(assets: List<AssetEntity>) {
         val difference = DiffUtil.calculateDiff(
             AssetsDiffUtil(
                 items,
@@ -168,14 +167,14 @@ class AssetsAdapter(
         items.addAll(assets)
     }
 
-    fun originalList(assets: List<Asset>) {
+    fun originalList(assets: List<AssetEntity>) {
         itemsAll.clear()
         itemsAll.addAll(assets)
     }
 
     private class AssetsDiffUtil(
-        private val oldList: List<Asset>,
-        private val newList: List<Asset>
+        private val oldList: List<AssetEntity>,
+        private val newList: List<AssetEntity>
     ) : DiffUtil.Callback() {
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             Timber.tag("diffUtil").d("areItemsTheSame")
@@ -188,16 +187,16 @@ class AssetsAdapter(
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             Timber.tag("diffUtil").d("areContentsTheSame")
-            return oldList[oldItemPosition].total == newList[newItemPosition].total &&
-                oldList[oldItemPosition].name == newList[newItemPosition].name &&
-                oldList[oldItemPosition].urlIcon == newList[newItemPosition].urlIcon
+            return oldList[oldItemPosition].amount == newList[newItemPosition].amount &&
+                oldList[oldItemPosition].tokenName == newList[newItemPosition].tokenName &&
+                oldList[oldItemPosition].tokenIconUrl == newList[newItemPosition].tokenIconUrl
         }
 
         override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
             Timber.tag("diffUtil").d("getChangePayload")
             return when {
-                oldList[oldItemPosition].total != newList[newItemPosition].total -> UPDATE_TOTAL
-                oldList[oldItemPosition].name != newList[newItemPosition].name -> UPDATE_NAME
+                oldList[oldItemPosition].amount != newList[newItemPosition].amount -> UPDATE_TOTAL
+                oldList[oldItemPosition].tokenName != newList[newItemPosition].tokenName -> UPDATE_NAME
                 else -> UPDATE_ICON
             }
         }

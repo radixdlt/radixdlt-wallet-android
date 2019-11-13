@@ -20,7 +20,6 @@ import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.assetselection.PaymentAssetSelectionViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.input.PaymentInputViewModel
-import com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.wallet.TransactionsViewModel
 import dagger.Binds
 import dagger.MapKey
@@ -56,10 +55,10 @@ abstract class ViewModelModule {
     @ViewModelKey(AssetsViewModel::class)
     abstract fun bindAssetsViewModel(viewModel: AssetsViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(AssetTransactionsViewModel::class)
-    abstract fun bindAssetTransactionsViewModel(viewModel: AssetTransactionsViewModel): ViewModel
+//    @Binds
+//    @IntoMap
+//    @ViewModelKey(AssetTransactionsViewModel::class)
+//    abstract fun bindAssetTransactionsViewModel(viewModel: AssetTransactionsViewModel): ViewModel
 
     @Binds
     @IntoMap

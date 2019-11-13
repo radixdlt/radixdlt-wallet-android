@@ -118,6 +118,8 @@ class PaymentPinDialogTest {
         if (BiometricsChecker.getInstance(context).isUsingBiometrics) {
             clickOn(R.id.setupBiometricsNotRightNowButton)
         }
+
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
     }
 
     private fun enterPin() {

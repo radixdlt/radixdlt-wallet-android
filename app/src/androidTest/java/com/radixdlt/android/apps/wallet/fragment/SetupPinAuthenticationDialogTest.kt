@@ -91,6 +91,8 @@ class SetupPinAuthenticationDialogTest {
         if (BiometricsChecker.getInstance(context).isUsingBiometrics) {
             clickOn(R.id.setupBiometricsNotRightNowButton)
         }
+
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
     }
 
     @Test

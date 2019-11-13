@@ -195,8 +195,10 @@ dependencies {
     implementation(Libraries.playServicesVision)
     implementation(Libraries.dagger)
     implementation(Libraries.daggerAndroid)
+    implementation(Libraries.daggerAssistedInject)
     kapt(Libraries.daggerAndroidCompiler)
     kapt(Libraries.daggerCompiler)
+    kapt(Libraries.daggerAssistedInjectProcessor)
     implementation(Libraries.icu4j)
     implementation(Libraries.circleImageView)
     implementation(Libraries.qrGen)
@@ -215,6 +217,7 @@ dependencies {
 
     implementation(Libraries.searchView)
     implementation(Libraries.lottie)
+    implementation(Libraries.liveEvent)
 
     // nova crypto micro libraries
     implementation(Libraries.novaCryptoBIP32)

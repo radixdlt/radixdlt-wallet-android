@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.jakewharton.processphoenix.ProcessPhoenix
 import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.data.model.AssetDao
+import com.radixdlt.android.apps.wallet.data.model.TransactionsDaoOM
 import com.radixdlt.android.apps.wallet.data.model.message.MessagesDao
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
@@ -53,6 +55,12 @@ class MoreOptionsFragment : Fragment() {
 
     @Inject
     lateinit var messagesDao: MessagesDao
+
+    @Inject
+    lateinit var assetDao: AssetDao
+
+    @Inject
+    lateinit var transactionsDaoOM: TransactionsDaoOM
 
     lateinit var ctx: Context
 
@@ -316,6 +324,8 @@ class MoreOptionsFragment : Fragment() {
             transactionsDao.deleteTable()
             transactionsDao2.deleteTable()
             messagesDao.deleteTable()
+            assetDao.deleteTable()
+            transactionsDaoOM.deleteTable()
         }
             .subscribeOn(Schedulers.io())
             .subscribe()

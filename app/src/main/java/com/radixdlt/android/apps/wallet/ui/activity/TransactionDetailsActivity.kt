@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.radixdlt.android.apps.wallet.R
-import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
+import com.radixdlt.android.apps.wallet.data.model.TransactionsEntityOM
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionDetails
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.util.doOnLayout
@@ -38,7 +38,7 @@ class TransactionDetailsActivity : BaseActivity() {
         private const val EXTRA_TRANSACTION_DETAILS =
             "com.radixdlt.android.apps.wallet.ui.activity.transaction_details"
 
-        fun newIntent(ctx: Context, transactionEntityDetails: TransactionEntity2) {
+        fun newIntent(ctx: Context, transactionEntityDetails: TransactionsEntityOM) {
             ctx.startActivity(
                 ctx.intentFor<TransactionDetailsActivity>(
                     EXTRA_TRANSACTION_DETAILS to transactionEntityDetails
@@ -55,7 +55,8 @@ class TransactionDetailsActivity : BaseActivity() {
         setContentView(R.layout.activity_transaction_details)
 
         val transactionDetailsExtra =
-            intent.getParcelableExtra<TransactionEntity2>(EXTRA_TRANSACTION_DETAILS)
+            intent.getParcelableExtra<TransactionsEntityOM>(EXTRA_TRANSACTION_DETAILS)
+                ?: throw IllegalStateException()
 
         initialiseHeaderAnimation()
         initialiseToolbar()
@@ -64,7 +65,7 @@ class TransactionDetailsActivity : BaseActivity() {
         bindIndividualTransactionDetailsData(transactionDetailsExtra)
     }
 
-    private fun initialiseClickListeners(transactionDetailsExtra: TransactionEntity2) {
+    private fun initialiseClickListeners(transactionDetailsExtra: TransactionsEntityOM) {
         transactionSendTokens.setOnClickListener {
             PaymentActivity.newIntent(
                 this, transactionDetailsExtra.address, transactionDetailsExtra.rri
@@ -79,7 +80,7 @@ class TransactionDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun bindIndividualTransactionDetailsData(transactionDetailsExtra: TransactionEntity2) {
+    private fun bindIndividualTransactionDetailsData(transactionDetailsExtra: TransactionsEntityOM) {
         transactionAddress.text = setAddressWithColors(this, transactionDetailsExtra.address)
         var amount = transactionDetailsExtra.amount
             .setScale(2, RoundingMode.HALF_UP)
@@ -107,14 +108,14 @@ class TransactionDetailsActivity : BaseActivity() {
         transactionDate.text = formatDateTime(transactionDetailsExtra.timestamp)
     }
 
-    private fun setTokenType(transactionEntity: TransactionEntity2) {
+    private fun setTokenType(transactionEntity: TransactionsEntityOM) {
 //        if (transactionEntity.tokenClassISO != GENESIS_XRD) {
         testTokensTextView.text = transactionEntity.rri.split("/")[2]
         testTokensTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 //        }
     }
 
-    private fun initialiseViewModel(transactionDetailsExtra: TransactionEntity2) {
+    private fun initialiseViewModel(transactionDetailsExtra: TransactionsEntityOM) {
         transactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(TransactionDetailsViewModel::class.java)
 
@@ -152,7 +153,7 @@ class TransactionDetailsActivity : BaseActivity() {
         anim.start()
     }
 
-    private fun setResources(transactionDetailsExtra: TransactionEntity2) {
+    private fun setResources(transactionDetailsExtra: TransactionsEntityOM) {
         if (transactionDetailsExtra.sent) {
             addressTextView.text = getString(R.string.transaction_details_activity_sent)
             titleTransactionTextView.text = getString(R.string.transaction_details_activity_to)

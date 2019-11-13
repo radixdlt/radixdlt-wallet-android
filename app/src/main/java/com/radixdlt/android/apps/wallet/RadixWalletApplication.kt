@@ -29,6 +29,9 @@ class RadixWalletApplication : Application(), HasAndroidInjector {
             .build()
     }
 
+    val injector
+        get() = radixWalletComponent
+
     override fun onCreate() {
         super.onCreate()
         radixWalletComponent.inject(this)

@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.databinding.FragmentPaymentSummaryBinding
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentAction
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
 import com.radixdlt.android.apps.wallet.util.Pref
@@ -24,7 +25,6 @@ import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
-import com.radixdlt.android.apps.wallet.databinding.FragmentPaymentSummaryBinding
 import org.jetbrains.anko.px2dip
 
 class PaymentSummaryFragment : Fragment() {
@@ -51,7 +51,6 @@ class PaymentSummaryFragment : Fragment() {
         initialiseToolbar(R.string.payment_summary_fragment_toolbar_title)
         (activity as? AppCompatActivity)?.apply {
             supportActionBar?.elevation = px2dip(0)
-            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
         }
     }
 

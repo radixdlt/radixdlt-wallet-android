@@ -96,11 +96,19 @@ class MainActivity : BaseActivity() {
     private fun initialiseViewModel() {
         val viewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
         viewModel.navigationCheckedItem.observe(this, Observer(::setBottomNavigationSelectedItemId))
+        viewModel.popAuthenticationSetupBackStack.observe(this, Observer(::popAuthenticationBackStack))
         viewModel.showBackUpWalletNotification(!defaultPrefs()[Pref.WALLET_BACKED_UP, false])
     }
 
     private fun setBottomNavigationSelectedItemId(@IdRes item: Int) {
         navigation.menu.findItem(item).isChecked = true
+    }
+
+    private fun popAuthenticationBackStack(pop: Boolean) {
+        if (pop) {
+            findNavController(R.id.my_nav_host_fragment)
+                .popBackStack(R.id.navigation_backup_wallet, true)
+        }
     }
 
     /**
@@ -216,18 +224,15 @@ class MainActivity : BaseActivity() {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    val barcode: Barcode = data.getParcelableExtra(
+                    val barcode: Barcode? = data.getParcelableExtra(
                         BarcodeCaptureActivity.BARCODE_OBJECT
                     )
-                    if (isRadixAddress(barcode.displayValue)) {
-                        ConversationActivity.newIntent(
-                            this,
-                            barcode.displayValue
-                        )
+                    if (barcode != null && isRadixAddress(barcode.displayValue)) {
+                        ConversationActivity.newIntent(this, barcode.displayValue)
                     } else {
                         toast(getString(R.string.invalid_address_toast))
                     }
-                    Timber.d("Barcode read: ${barcode.displayValue}")
+                    Timber.d("Barcode read: ${barcode?.displayValue}")
                 } else {
                     Timber.d("No barcode captured, intent data is null")
                 }
