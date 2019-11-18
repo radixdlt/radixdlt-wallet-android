@@ -22,6 +22,8 @@ import com.schibsted.spain.barista.interaction.BaristaScrollInteractions.scrollT
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
+import com.schibsted.spain.barista.rule.flaky.AllowFlaky
+import com.schibsted.spain.barista.rule.flaky.FlakyTestRule
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -58,6 +60,9 @@ class MoreOptionsFragmentTest {
     @get:Rule
     var clearFilesRule = ClearFilesRule()
 
+    @get:Rule(order = 0)
+    var flakyRule = FlakyTestRule()
+
     @Before
     fun setUp() {
         Intents.init()
@@ -69,6 +74,7 @@ class MoreOptionsFragmentTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 5)
     fun testOpenReportIssueWebView() {
         createWallet()
 
@@ -79,7 +85,7 @@ class MoreOptionsFragmentTest {
         scrollTo(R.string.more_options_fragment_xml_report_an_issue)
         assertDisplayed(R.string.more_options_fragment_xml_report_an_issue)
 
-        clickOn(R.id.reportAnIssueTextView)
+        clickOn(R.id.settingsReportAnIssueTextView)
 
         intended(toPackage("com.android.chrome"))
 

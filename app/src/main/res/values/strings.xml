@@ -177,6 +177,21 @@
     <string name="more_options_fragment_xml_autolock_timeout">Autolock timeout</string>
     <string name="more_options_fragment_xml_random_node">Random</string>
 
+    <!-- Settings Fragment -->
+    <string name="settings_fragment_export_intent_chooser_title">Export or backup wallet</string>
+    <string name="settings_fragment_xml_wallet_options_title">Wallet Options</string>
+    <string name="settings_fragment_xml_backup_wallet">Backup Wallet</string>
+    <string name="settings_fragment_xml_change_pin">Change Pin</string>
+    <string name="settings_fragment_xml_report_an_issue">Report an issue</string>
+    <string name="settings_fragment_xml_use_biometrics">Use Biometrics</string>
+    <string name="settings_fragment_xml_delete_wallet">Delete Wallet</string>
+    <string name="settings_fragment_xml_security_title">Security</string>
+    <string name="settings_fragment_xml_network_title">Network</string>
+    <string name="settings_fragment_xml_help_title">Need Help?</string>
+    <string name="settings_fragment_xml_information">Information</string>
+    <string name="settings_fragment_change_pin_success_snackbar">Pin successfully changed</string>
+    <string name="settings_fragment_change_backup_and_security_success_snackbar">Wallet backed up and security enabled successfully</string>
+
     <!-- Greeting Fragment -->
     <string name="greeting_fragment_woman_looking_at_phone">Background image of woman looking at phone</string>
     <string name="greeting_fragment_send">SEND\n</string>
@@ -280,6 +295,13 @@
     <string name="setup_pin_dialog_confirm_pin_header">Confirm your pin</string>
     <string name="setup_pin_dialog_pin_does_not_match">Pin does not match. Try again!</string>
 
+    <!-- Setup Pin Dialog -->
+    <string name="change_pin_dialog_enter_current_pin_header">Enter current pin</string>
+    <string name="change_pin_dialog_new_pin_header">Create new pin</string>
+    <string name="change_pin_dialog_confirm_pin_header">Confirm new pin</string>
+    <string name="change_pin_dialog_content_description_back_button">Closes the pin dialog</string>
+    <string name="change_pin_dialog_pin_does_not_match">Pin does not match. Try again!</string>
+
     <!-- Payment Pin Dialog -->
     <string name="payment_pin_dialog_pin_header">Enter pin</string>
     <string name="payment_pin_dialog_content_description_back_button">Closes the pin dialog</string>
@@ -328,6 +350,13 @@
     <string name="setup_biometrics_dialog_xml_not_right_now_button">Not right now</string>
     <string name="setup_biometrics_dialog_xml_use_biometrics_button">Use biometrics</string>
 
+    <!-- Delete Wallet Dialog -->
+    <string name="delete_wallet_dialog_xml_title_text_view">Are you sure you want to\n delete your wallet?</string>
+    <string name="delete_wallet_dialog_content_description_delete_icon">Delete wallet icon</string>
+    <string name="delete_wallet_dialog_xml_cancel_button">Cancel</string>
+    <string name="delete_wallet_dialog_xml_delete_button">Delete</string>
+    <string name="delete_wallet_dialog_xml_message">Make sure you have backed up your wallet as it will be irrecoverable if not!</string>
+
     <!-- Create Wallet Fragment -->
     <string name="create_wallet_fragment_welcome_title_xml">Welcome to Radix App!</string>
     <string name="create_wallet_fragment_message_xml">To continue, you will need access to a digital wallet to send &amp; receive funds.\n\nPlease import an existing wallet or create a new one.</string>
@@ -369,5 +398,11 @@
 
     <string name="biometric_prompt_title">Please authenticate</string>
     <string name="biometric_prompt_negative_text">Cancel</string>
+
+    <!--  Bottom Navigation Titles  -->
+    <string name="bottom_navigation_assets">ASSETS</string>
+    <string name="bottom_navigation_messages">MESSAGES</string>
+    <string name="bottom_navigation_account">ACCOUNT</string>
+    <string name="bottom_navigation_settings">SETTINGS</string>
 
 </resources>

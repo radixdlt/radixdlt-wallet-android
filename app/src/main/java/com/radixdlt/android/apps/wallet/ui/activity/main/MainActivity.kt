@@ -96,19 +96,11 @@ class MainActivity : BaseActivity() {
     private fun initialiseViewModel() {
         val viewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
         viewModel.navigationCheckedItem.observe(this, Observer(::setBottomNavigationSelectedItemId))
-        viewModel.popAuthenticationSetupBackStack.observe(this, Observer(::popAuthenticationBackStack))
         viewModel.showBackUpWalletNotification(!defaultPrefs()[Pref.WALLET_BACKED_UP, false])
     }
 
     private fun setBottomNavigationSelectedItemId(@IdRes item: Int) {
         navigation.menu.findItem(item).isChecked = true
-    }
-
-    private fun popAuthenticationBackStack(pop: Boolean) {
-        if (pop) {
-            findNavController(R.id.my_nav_host_fragment)
-                .popBackStack(R.id.navigation_backup_wallet, true)
-        }
     }
 
     /**
@@ -211,7 +203,7 @@ class MainActivity : BaseActivity() {
                 R.id.menu_bottom_settings -> {
                     supportActionBar?.elevation = px2dip(dimen)
                     navController.navigate(
-                        R.id.navigation_more_options, null,
+                        R.id.navigation_settings, null,
                         options.setPopUpTo(R.id.navigation_assets, false).build()
                     )
                     return@OnNavigationItemSelectedListener true

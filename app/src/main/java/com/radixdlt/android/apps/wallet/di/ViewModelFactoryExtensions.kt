@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.radixdlt.android.apps.wallet.di
 
 import androidx.activity.viewModels

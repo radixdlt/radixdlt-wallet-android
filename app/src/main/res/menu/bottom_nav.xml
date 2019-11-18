@@ -4,21 +4,21 @@
   <item
       android:id="@+id/menu_bottom_assets"
       android:icon="@drawable/ic_assets_24_selector"
-      android:title="ASSETS" />
+      android:title="@string/bottom_navigation_assets" />
 
   <item
       android:id="@+id/menu_bottom_contacts"
       android:icon="@drawable/ic_contacts_24_selector"
-      android:title="MESSAGES" />
+      android:title="@string/bottom_navigation_messages" />
 
   <item
       android:id="@+id/menu_bottom_learn"
       android:icon="@drawable/ic_learn_24_selector"
-      android:title="ACCOUNT" />
+      android:title="@string/bottom_navigation_account" />
 
   <item
       android:id="@+id/menu_bottom_settings"
       android:icon="@drawable/ic_settings_24_selector"
-      android:title="SETTINGS" />
+      android:title="@string/bottom_navigation_settings" />
 
 </menu>

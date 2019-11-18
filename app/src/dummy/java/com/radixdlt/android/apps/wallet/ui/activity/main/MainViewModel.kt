@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
 import com.radixdlt.android.apps.wallet.data.mapper.TokenTransferDataMapper2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
@@ -44,22 +43,11 @@ class MainViewModel @Inject constructor(
     val showBackUpWalletNotification: LiveData<Boolean>
         get() = _showBackUpWalletNotification
 
-    private val _popAuthenticationSetupBackStack = LiveEvent<Boolean>()
-    val popAuthenticationSetupBackStack: LiveEvent<Boolean>
-        get() = _popAuthenticationSetupBackStack
-
     init {
         _showBackUpWalletNotification.value = true
         _mainLoadingState.value = MainLoadingState.LOADING
         checkTransactionsTable()
 //        retrieveAllTransactions()
-    }
-
-    fun popAuthenticationSetupBackStack() {
-        viewModelScope.launch {
-            delay(100)
-            _popAuthenticationSetupBackStack.value = true
-        }
     }
 
     fun setBottomNavigationCheckedItem(@IdRes item: Int) {
