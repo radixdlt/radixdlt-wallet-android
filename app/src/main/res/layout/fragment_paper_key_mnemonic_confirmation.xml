@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackground"
-    tools:context=".apps.wallet.ui.fragment.mnemonic.PaperKeyMnemonicConfirmationFragment">
+    tools:context=".ui.fragment.mnemonic.PaperKeyMnemonicConfirmationFragment">
 
     <include
         android:id="@+id/toolbar"

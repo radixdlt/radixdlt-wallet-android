@@ -73,17 +73,17 @@ class ChangePinAuthenticationViewModel : ViewModel() {
     private fun confirmPin(text: String) {
         _pinLength.value = text.length
         if (text.length == 4) {
-            viewModelScope.launch {
-                delay(200)
-                verifyConfirmationPinSameAsSetup(text)
-            }
+            verifyConfirmationPinSameAsSetup(text)
         }
     }
 
     private fun verifyConfirmationPinSameAsSetup(text: String) {
         if (text == pinSet) {
             Vault.getVault().edit().putString(VAULT_PIN, text).apply()
-            _changePinAuthenticationAction.value = Unit
+            viewModelScope.launch {
+                delay(200)
+                _changePinAuthenticationAction.value = Unit
+            }
         } else {
             _changePinState.value = ChangePinState.ERROR
             delayLastCheckedCheckBoxStateChange(600)

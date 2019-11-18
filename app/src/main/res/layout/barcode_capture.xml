@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true"
     android:orientation="vertical"
-    tools:context=".apps.wallet.ui.activity.BarcodeCaptureActivity">
+    tools:context=".ui.activity.BarcodeCaptureActivity">
 
   <include
       layout="@layout/tool_bar_connection"

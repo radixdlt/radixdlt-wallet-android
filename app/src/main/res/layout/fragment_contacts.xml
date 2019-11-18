@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:orientation="vertical"
-    tools:context=".apps.wallet.ui.fragment.contacts.ContactsFragment"
+    tools:context=".ui.fragment.contacts.ContactsFragment"
     tools:theme="@style/AppTheme.NoActionBar">
 
     <FrameLayout

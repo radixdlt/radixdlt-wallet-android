@@ -404,5 +404,16 @@
     <string name="bottom_navigation_messages">MESSAGES</string>
     <string name="bottom_navigation_account">ACCOUNT</string>
     <string name="bottom_navigation_settings">SETTINGS</string>
+    <string name="keypad_view_one">1</string>
+    <string name="keypad_view_four">4</string>
+    <string name="keypad_view_seven">7</string>
+    <string name="keypad_view_two">2</string>
+    <string name="keypad_view_five">5</string>
+    <string name="keypad_view_eight">8</string>
+    <string name="keypad_view_zero">0</string>
+    <string name="keypad_view_three">3</string>
+    <string name="keypad_view_six">6</string>
+    <string name="keypad_view_nine">9</string>
+    <string name="keypad_view_content_description_delete_last_input">Delete last input</string>
 
 </resources>

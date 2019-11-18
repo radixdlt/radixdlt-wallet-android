@@ -49,21 +49,4 @@ class ChangePinAuthenticationDialog : FullScreenDialog() {
             })
         }
     }
-
-//    private fun action(a: Unit) {
-//        dismiss()
-//        showSuccessSnackbarAboveNavigationView(R.string.confirm_backup_wallet_fragment_mnemonic_success)
-//
-////        when (setupPinAuthenticationAction) {
-////            ChangePinAuthenticationAction.NAVIGATE -> {
-////                mainViewModel.showBackUpWalletNotification(false)
-////                savePrefWalletBackedUp()
-////                if (BiometricsChecker.getInstance(ctx).isUsingBiometrics) {
-////                    showSetupBiometricsDialog()
-////                } else {
-////                    navigate()
-////                }
-////            }
-////        }
-//    }
 }
