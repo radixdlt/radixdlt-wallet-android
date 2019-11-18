@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.radixdlt.android.apps.wallet.identity.Identity
@@ -12,6 +13,7 @@ import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
+import com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsSharedViewModel
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.set
@@ -27,6 +29,8 @@ abstract class AuthenticationDialog : FullScreenDialog() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var mainViewModel: MainViewModel
+
+    private val settingsSharedViewModel by activityViewModels<SettingsSharedViewModel>()
 
     abstract fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View
 
@@ -70,6 +74,6 @@ abstract class AuthenticationDialog : FullScreenDialog() {
     }
 
     private fun returnToStart() {
-        mainViewModel.popAuthenticationSetupBackStack()
+        settingsSharedViewModel.popAuthenticationSetupBackStack()
     }
 }

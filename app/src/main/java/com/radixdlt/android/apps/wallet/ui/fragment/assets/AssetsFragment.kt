@@ -288,7 +288,7 @@ class AssetsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Timber.tag("initialiseViewModels").d("ONRESUME")
+        Timber.tag("observeViewModel").d("ONRESUME")
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }

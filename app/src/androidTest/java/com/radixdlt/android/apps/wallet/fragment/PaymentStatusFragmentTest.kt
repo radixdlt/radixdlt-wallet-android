@@ -25,6 +25,8 @@ import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.write
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
+import com.schibsted.spain.barista.rule.flaky.AllowFlaky
+import com.schibsted.spain.barista.rule.flaky.FlakyTestRule
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -49,6 +51,9 @@ class PaymentStatusFragmentTest {
     // Delete all files in getFilesDir() and getCacheDir()
     @get:Rule
     var clearFilesRule = ClearFilesRule()
+
+    @get:Rule(order = 0)
+    var flakyRule = FlakyTestRule()
 
     @Before
     fun setUp() {
@@ -81,6 +86,7 @@ class PaymentStatusFragmentTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 5)
     fun testExplorerButtonOpensCustomTabsOnSuccess() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 

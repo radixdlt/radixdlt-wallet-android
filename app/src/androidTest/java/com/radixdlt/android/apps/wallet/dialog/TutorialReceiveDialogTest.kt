@@ -14,7 +14,6 @@ import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
 import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
-import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
@@ -92,11 +91,11 @@ class TutorialReceiveDialogTest {
 
         clickOn(R.id.menu_bottom_settings)
 
-        assertDisplayed(R.string.more_options_fragment_xml_delete_wallet)
+        assertDisplayed(R.string.settings_fragment_xml_delete_wallet)
 
-        clickOn(R.id.deleteWalletTextView)
+        clickOn(R.id.settingsDeleteWalletTextView)
 
-        clickDialogPositiveButton()
+        clickOn(R.id.deleteWalletButton)
 
         clickOn(R.id.createWalletCreateNewWalletButton)
 

@@ -1,5 +1,6 @@
 package com.radixdlt.android.apps.wallet.util
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.view.View
@@ -134,6 +135,19 @@ fun Fragment.showSnackbarAboveNavigationView(@StringRes text: Int) {
         sb.show()
     }
 }
+
+fun Activity.showSuccessSnackbarAboveNavigationView(@StringRes text: Int) {
+    val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation)
+    val sb = Snackbar.make(
+        bottomNavigationView,
+        getString(text),
+        Snackbar.LENGTH_SHORT
+    )
+    sb.view.background = getDrawable(R.drawable.bg_snackbar_success)
+    sb.anchorView = bottomNavigationView
+    sb.show()
+}
+
 
 fun Fragment.showSuccessSnackbarAboveNavigationView(@StringRes text: Int) {
     view?.let {

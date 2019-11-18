@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewmodel"
+            type="com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/basicallyWhite"
+        tools:context=".ui.activity.main.MainActivity">
+
+        <ScrollView
+            android:id="@+id/settingsScrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/optionsLabelTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/settings_fragment_xml_security_title"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    app:fontFamily="@font/roboto_medium_radix" />
+
+                <TextView
+                    android:id="@+id/settingsBackupWalletTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:background="@drawable/white_background_ripple"
+                    android:drawableEnd="@drawable/ic_icon_arrow_line_green"
+                    android:gravity="center_vertical"
+                    android:onClick="@{ () -> viewmodel.backupWalletClickListener() }"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/settings_fragment_xml_backup_wallet"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="17sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#ff9b9b9b"
+                    android:visibility="@{ viewmodel.pinSet ? View.VISIBLE : View.GONE }" />
+
+                <TextView
+                    android:id="@+id/settingsChangePinTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:background="@drawable/white_background_ripple"
+                    android:drawableEnd="@drawable/ic_icon_arrow_line_green"
+                    android:gravity="center_vertical"
+                    android:onClick="@{ () -> viewmodel.changePinClickListener() }"
+                    android:visibility="@{ viewmodel.pinSet ? View.VISIBLE : View.GONE }"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/settings_fragment_xml_change_pin"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="17sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#ff9b9b9b"
+                    android:visibility="@{ viewmodel.hideBiometrics ? View.GONE : View.VISIBLE }" />
+
+                <LinearLayout
+                    android:id="@+id/settingsUseBiometricsLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background_ripple"
+                    android:onClick="@{ () -> viewmodel.useBiometricsClickListener() }"
+                    android:orientation="horizontal"
+                    android:visibility="@{ viewmodel.hideBiometrics ? View.GONE : View.VISIBLE }"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:id="@+id/settingsUseBiometricsTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:layout_weight="0.20"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="@string/settings_fragment_xml_use_biometrics"
+                        android:textColor="@color/radixBlueGrey2"
+                        android:textSize="17sp" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/settingsUseBiometricsSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:layout_weight="0.80"
+                        android:checked="@{ viewmodel.useBiometrics }"
+                        android:onCheckedChanged="@{(switch, checked) -> viewmodel.useBiometricsCheckedListener(checked)}"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textColor="@color/radixBlueGrey2"
+                        android:textSize="17sp"
+                        android:theme="@style/ColorSwitchStyle" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/settingsInformationLabelTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/white"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/settings_fragment_xml_information"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    app:fontFamily="@font/roboto_medium_radix" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/settingsReportAnIssueTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:background="@drawable/white_background_ripple"
+                    android:gravity="center_vertical"
+                    android:onClick="@{ () -> viewmodel.reportAnIssueClickListener() }"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/settings_fragment_xml_report_an_issue"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="17sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#ff9b9b9b" />
+
+                <TextView
+                    android:id="@+id/settingsDeleteWalletTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:background="@drawable/white_background_ripple"
+                    android:gravity="center_vertical"
+                    android:onClick="@{ () -> viewmodel.deleteWalletClickListener() }"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/settings_fragment_xml_delete_wallet"
+                    android:textColor="@color/radixRed"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

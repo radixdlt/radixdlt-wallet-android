@@ -2,6 +2,7 @@ package com.radixdlt.android.apps.wallet.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 
 object Pref {
@@ -24,6 +25,11 @@ object Pref {
 
     fun Context.customPrefs(name: String): SharedPreferences =
         getSharedPreferences(name, Context.MODE_PRIVATE)
+
+    fun Fragment.defaultPrefs(): SharedPreferences =
+        view?.let {
+            PreferenceManager.getDefaultSharedPreferences(activity)
+        } ?: throw NullPointerException()
 
     inline fun SharedPreferences.edit(operation: (SharedPreferences.Editor) -> Unit) {
         val editor = this.edit()

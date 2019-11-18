@@ -323,6 +323,11 @@ class PaymentInputFragment : Fragment() {
         }
 
         paymentInputAmountTIET.addTextChangedListener(object : TextWatcher by EmptyTextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!s.isNullOrEmpty() && !s.first().isDigit()) {
+                    paymentInputAmountTIET.text?.clear()
+                }
+            }
             override fun afterTextChanged(s: Editable?) {
                 val amount = s?.toString()
                 validateAmount(amount)

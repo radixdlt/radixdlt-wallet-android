@@ -60,9 +60,6 @@ class PaymentPinDialogTest {
 
         setPin()
         checkBiometrics()
-        assertDisplayed(R.id.toolbar_search)
-
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -85,7 +82,7 @@ class PaymentPinDialogTest {
         checkBiometrics()
         assertDisplayed(R.id.toolbar_search)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
 
         navigateToPayScreen()
         inputPaymentDetails()
@@ -119,11 +116,11 @@ class PaymentPinDialogTest {
             clickOn(R.id.setupBiometricsNotRightNowButton)
         }
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(5))
     }
 
     private fun enterPin() {
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
 
         assertDisplayed(R.string.payment_pin_dialog_pin_header)
         clickOn(R.id.one)
@@ -131,11 +128,11 @@ class PaymentPinDialogTest {
         clickOn(R.id.three)
         clickOn(R.id.four)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
     }
 
     private fun enterWrongPin() {
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
 
         assertDisplayed(R.string.payment_pin_dialog_pin_header)
         clickOn(R.id.one)
@@ -143,12 +140,12 @@ class PaymentPinDialogTest {
         clickOn(R.id.three)
         clickOn(R.id.three)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
     }
 
     private fun navigateToPayScreen() {
         assertDisplayed(R.id.toolbar_search)
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
         clickOn(R.id.payButton)
     }
 
@@ -216,6 +213,6 @@ class PaymentPinDialogTest {
         const val SUCCESS_AMOUNT = "0.01"
         const val ISO = "XRD"
 
-        const val DELAY_AFTER_CLICK = 3L
+        const val DELAY = 3L
     }
 }

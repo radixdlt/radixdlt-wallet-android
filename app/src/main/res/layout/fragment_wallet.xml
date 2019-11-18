@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".apps.wallet.ui.fragment.wallet.WalletFragment">
+    tools:context=".ui.fragment.wallet.WalletFragment">
 
   <TextView
       android:id="@+id/balanceTextView"

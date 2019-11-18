@@ -71,13 +71,13 @@ class ConfirmBackupWalletViewModel : ViewModel() {
     fun confirmMnemonicBackupButtonClick(layout: ConstraintLayout) {
         val builtMnemonic = buildMnemonicFromFields(layout)
         if (mnemonic == builtMnemonic) {
-            returnToInitialScreen()
+            navigate()
         } else {
             showMnemonicError()
         }
     }
 
-    private fun returnToInitialScreen() {
+    private fun navigate() {
         _confirmBackupWalletAction.value = ConfirmBackupWalletAction.Navigate
     }
 

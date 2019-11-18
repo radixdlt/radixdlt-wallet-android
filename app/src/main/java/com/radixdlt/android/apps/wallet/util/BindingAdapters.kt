@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.biometrics.BiometricsAuthenticationResult
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
+import com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.change.ChangePinAuthenticationViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.setup.SetupPinAuthenticationViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.pin.PaymentPinViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusState
@@ -183,10 +184,30 @@ private fun addChip(layout: ConstraintLayout, chipGroup: ChipGroup, mnemonicWord
 
 @BindingAdapter("pinSetupState")
 fun TextView.bindPinSetupState(state: SetupPinAuthenticationViewModel.SetupPinState?) {
-    if (state == SetupPinAuthenticationViewModel.SetupPinState.SET) {
-        text = context.getString(R.string.setup_pin_dialog_set_pin_header)
-    } else if (state == SetupPinAuthenticationViewModel.SetupPinState.CONFIRM) {
-        text = context.getString(R.string.setup_pin_dialog_confirm_pin_header)
+    text = when (state) {
+        SetupPinAuthenticationViewModel.SetupPinState.SET -> {
+            context.getString(R.string.setup_pin_dialog_set_pin_header)
+        }
+        SetupPinAuthenticationViewModel.SetupPinState.CONFIRM -> {
+            context.getString(R.string.setup_pin_dialog_confirm_pin_header)
+        }
+        else -> return
+    }
+}
+
+@BindingAdapter("pinChangeState")
+fun TextView.bindPinSetupState(state: ChangePinAuthenticationViewModel.ChangePinState?) {
+    text = when (state) {
+        ChangePinAuthenticationViewModel.ChangePinState.CURRENT -> {
+            context.getString(R.string.change_pin_dialog_enter_current_pin_header)
+        }
+        ChangePinAuthenticationViewModel.ChangePinState.NEW -> {
+            context.getString(R.string.change_pin_dialog_new_pin_header)
+        }
+        ChangePinAuthenticationViewModel.ChangePinState.CONFIRM -> {
+            context.getString(R.string.change_pin_dialog_confirm_pin_header)
+        }
+        else -> return
     }
 }
 
@@ -210,6 +231,14 @@ fun CheckBox.bindPinCheck(pinLength: Int) {
 @BindingAdapter("pinError")
 fun LinearLayout.bindPinError(state: SetupPinAuthenticationViewModel.SetupPinState?) {
     if (state == SetupPinAuthenticationViewModel.SetupPinState.ERROR) {
+        shakeAnimation()
+        vibrate(context)
+    }
+}
+
+@BindingAdapter("pinError")
+fun LinearLayout.bindPinError(state: ChangePinAuthenticationViewModel.ChangePinState?) {
+    if (state == ChangePinAuthenticationViewModel.ChangePinState.ERROR) {
         shakeAnimation()
         vibrate(context)
     }

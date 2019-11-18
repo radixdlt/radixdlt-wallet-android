@@ -92,7 +92,7 @@ class SetupPinAuthenticationDialogTest {
             clickOn(R.id.setupBiometricsNotRightNowButton)
         }
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(5))
     }
 
     @Test

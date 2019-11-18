@@ -69,6 +69,21 @@
             android:id="@+id/navigation_more_options_to_navigation_backup_wallet"
             app:destination="@id/navigation_backup_wallet" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/navigation_settings_to_navigation_backup_wallet"
+            app:destination="@id/navigation_backup_wallet" />
+        <action
+            android:id="@+id/navigation_settings_to_navigation_change_pin"
+            app:destination="@id/navigation_change_pin" />
+        <action
+            android:id="@+id/navigation_settings_to_navigation_settings_delete_wallet"
+            app:destination="@id/navigation_settings_delete_wallet" />
+    </fragment>
     <dialog
         android:id="@+id/navigation_tutorial_receive"
         android:name="com.radixdlt.android.apps.wallet.ui.dialog.TutorialReceiveDialog"
@@ -100,7 +115,15 @@
         android:name="com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.setup.SetupPinAuthenticationDialog"
         android:label="navigation_setup_pin" />
     <dialog
+        android:id="@+id/navigation_change_pin"
+        android:name="com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.change.ChangePinAuthenticationDialog"
+        android:label="navigation_change_pin" />
+    <dialog
         android:id="@+id/navigation_setup_biometrics"
         android:name="com.radixdlt.android.apps.wallet.ui.dialog.authentication.biometrics.setup.SetupBiometricsAuthenticationDialog"
         android:label="navigation_setup_biometrics" />
+    <dialog
+        android:id="@+id/navigation_settings_delete_wallet"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsDeleteWalletDialog"
+        android:label="navigation_settings_delete_wallet" />
 </navigation>

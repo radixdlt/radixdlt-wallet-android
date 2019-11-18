@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".apps.wallet.ui.activity.ReceiveRadixInvoiceActivity">
+    tools:context=".ui.activity.ReceiveRadixInvoiceActivity">
 
     <include
         android:id="@+id/toolbar"
