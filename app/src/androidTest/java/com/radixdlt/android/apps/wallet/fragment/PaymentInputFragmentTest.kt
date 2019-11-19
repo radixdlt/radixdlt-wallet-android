@@ -2,6 +2,7 @@ package com.radixdlt.android.apps.wallet.fragment
 
 import android.Manifest
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -23,6 +24,7 @@ import com.schibsted.spain.barista.interaction.PermissionGranter
 import com.schibsted.spain.barista.rule.cleardata.ClearDatabaseRule
 import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import com.schibsted.spain.barista.rule.cleardata.ClearPreferencesRule
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,6 +47,12 @@ class PaymentInputFragmentTest {
     // Delete all files in getFilesDir() and getCacheDir()
     @get:Rule
     var clearFilesRule = ClearFilesRule()
+
+    @After
+    fun tearDown() {
+        // Clean up
+        IdlingRegistry.getInstance().unregister(DelayHelper.idlingResource)
+    }
 
     @Test
     fun testNoteInputIsDisplayedWhenAddNoteIsClicked() {
@@ -202,7 +210,7 @@ class PaymentInputFragmentTest {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
         assertDisplayed(R.id.toolbar_search)
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
         clickOn(R.id.payButton)
     }
 
@@ -241,7 +249,7 @@ class PaymentInputFragmentTest {
         clickOn(R.id.three)
         clickOn(R.id.four)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
 
         assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
         clickOn(R.id.one)
@@ -260,5 +268,7 @@ class PaymentInputFragmentTest {
     companion object {
         const val ADDRESS_TO = "9iNGvjXbifbkpPy2252tv8w8QCWnTkixxB1YwrYz1c2AR5xG8VJ"
         const val AMOUNT = "42.00"
+
+        const val DELAY = 3L
     }
 }

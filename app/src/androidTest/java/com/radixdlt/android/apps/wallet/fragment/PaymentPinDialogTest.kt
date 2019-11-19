@@ -103,6 +103,8 @@ class PaymentPinDialogTest {
         clickOn(R.id.three)
         clickOn(R.id.four)
 
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
+
         assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
         clickOn(R.id.one)
         clickOn(R.id.two)

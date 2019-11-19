@@ -205,7 +205,7 @@ class PaymentStatusFragmentTest {
     }
 
     private fun enterPin() {
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
 
         assertDisplayed(R.string.payment_pin_dialog_pin_header)
         clickOn(R.id.one)
@@ -213,7 +213,7 @@ class PaymentStatusFragmentTest {
         clickOn(R.id.three)
         clickOn(R.id.four)
 
-        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY_AFTER_CLICK))
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
     }
 
     private fun navigateToPayScreen() {
@@ -267,6 +267,8 @@ class PaymentStatusFragmentTest {
         clickOn(R.id.three)
         clickOn(R.id.four)
 
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
+
         assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
         clickOn(R.id.one)
         clickOn(R.id.two)
@@ -287,6 +289,6 @@ class PaymentStatusFragmentTest {
         const val FAILURE_AMOUNT = "1.00"
         const val ISO = "XRD"
 
-        const val DELAY_AFTER_CLICK = 3L
+        const val DELAY = 3L
     }
 }
