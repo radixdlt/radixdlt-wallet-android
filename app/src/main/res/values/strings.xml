@@ -399,11 +399,13 @@
     <string name="biometric_prompt_title">Please authenticate</string>
     <string name="biometric_prompt_negative_text">Cancel</string>
 
-    <!--  Bottom Navigation Titles  -->
+    <!-- Bottom Navigation Titles  -->
     <string name="bottom_navigation_assets">ASSETS</string>
     <string name="bottom_navigation_messages">MESSAGES</string>
-    <string name="bottom_navigation_account">ACCOUNT</string>
+    <string name="bottom_navigation_learn">LEARN</string>
     <string name="bottom_navigation_settings">SETTINGS</string>
+
+    <!-- KeypadView -->
     <string name="keypad_view_one">1</string>
     <string name="keypad_view_four">4</string>
     <string name="keypad_view_seven">7</string>
