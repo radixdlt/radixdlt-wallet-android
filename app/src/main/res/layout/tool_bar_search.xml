@@ -1,19 +1,22 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbar_search"
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:background="?attr/colorPrimary"
-    app:elevation="2dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.lapism.searchview.widget.SearchView
-        android:id="@+id/searchView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbar_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:search_hint="Search token"
-        app:search_shadow="false" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="80dp"
+        android:background="?attr/colorPrimary"
+        app:elevation="2dp">
+
+        <com.lapism.searchview.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:search_hint="Search token"
+            app:search_shadow="false" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

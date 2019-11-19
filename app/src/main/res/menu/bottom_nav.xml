@@ -14,7 +14,7 @@
   <item
       android:id="@+id/menu_bottom_learn"
       android:icon="@drawable/ic_learn_24_selector"
-      android:title="@string/bottom_navigation_account" />
+      android:title="@string/bottom_navigation_learn" />
 
   <item
       android:id="@+id/menu_bottom_settings"

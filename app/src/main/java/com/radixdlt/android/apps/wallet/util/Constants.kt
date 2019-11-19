@@ -12,6 +12,7 @@ const val TOTAL = "TOTAL"
 const val URL_REPORT_ISSUE = "https://radixdlt.typeform.com/to/kPFmVy"
 const val URL_TERMS_AND_CONDITIONS = "https://www.radixdlt.com/privacy-policy/"
 const val URL_PRIVACY_POLICY = "https://www.radixdlt.com/privacy-policy/"
+const val URL_KNOWLEDGE_BASE = "https://docs.radixdlt.com/kb/"
 const val KEYSTORE_FILE = "keystore.key"
 
 // view tags

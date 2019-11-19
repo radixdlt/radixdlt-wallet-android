@@ -57,9 +57,9 @@
         tools:layout="@layout/fragment_contacts" />
     <fragment
         android:id="@+id/navigation_account"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.account.AccountFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.account.LearnFragment"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_learn" />
     <fragment
         android:id="@+id/navigation_more_options"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.moreoptions.MoreOptionsFragment"

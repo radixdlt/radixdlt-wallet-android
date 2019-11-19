@@ -1,8 +1,8 @@
-const val kotlinVersion = "1.3.41"
+const val kotlinVersion = "1.3.60"
 
 object BuildPlugins {
     object Versions {
-        const val gradlePluginVersion = "3.5.0"
+        const val gradlePluginVersion = "3.6.0-beta04"
         const val safeArgs = "2.1.0-beta02"
     }
 
@@ -30,7 +30,7 @@ object Libraries {
         const val ankoCommons = "0.10.8"
         const val appCompat = "1.1.0-rc01"
         const val jepack = "1.0.0"
-        const val constraintLayout = "2.0.0-beta2"
+        const val constraintLayout = "2.0.0-beta3"
         const val browser = "1.0.0"
         const val firebaseCore = "17.0.1"
         const val room = "2.2.0-beta01"
