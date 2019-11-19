@@ -241,6 +241,8 @@ class PaymentInputFragmentTest {
         clickOn(R.id.three)
         clickOn(R.id.four)
 
+        DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
+
         assertDisplayed(R.string.setup_pin_dialog_confirm_pin_header)
         clickOn(R.id.one)
         clickOn(R.id.two)

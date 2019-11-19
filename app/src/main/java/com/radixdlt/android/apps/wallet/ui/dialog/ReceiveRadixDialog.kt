@@ -22,7 +22,7 @@ import org.jetbrains.anko.toast
 
 open class ReceiveRadixDialog : AppCompatDialogFragment() {
 
-    private val size = RadixWalletApplication.densityPixel!!
+    private val size by lazy { (activity?.application as RadixWalletApplication).densityPixel }
 
     private lateinit var myAddress: String
 

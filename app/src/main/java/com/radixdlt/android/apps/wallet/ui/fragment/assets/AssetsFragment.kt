@@ -20,9 +20,9 @@ import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.data.model.AssetEntity
 import com.radixdlt.android.apps.wallet.databinding.FragmentAssetsBinding
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
+import com.radixdlt.android.apps.wallet.ui.activity.ReceivePaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainLoadingState
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
-import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.get
@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.tool_bar_search.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.dip
-import timber.log.Timber
+import org.jetbrains.anko.startActivity
 import java.util.Locale
 import javax.inject.Inject
 
@@ -184,9 +184,8 @@ class AssetsFragment : Fragment() {
 
     private fun setReceiveButtonOnClickListener() {
         receiveButton.setOnClickListener {
-            val receiveRadixDialog = ReceiveRadixDialog.newInstance()
-            fragmentManager?.apply {
-                receiveRadixDialog.show(this, null)
+            activity?.apply {
+                startActivity<ReceivePaymentActivity>()
             }
         }
     }
@@ -288,7 +287,6 @@ class AssetsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Timber.tag("observeViewModel").d("ONRESUME")
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }

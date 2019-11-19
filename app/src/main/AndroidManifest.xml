@@ -99,6 +99,12 @@
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name="com.radixdlt.android.apps.wallet.ui.activity.ReceivePaymentActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
             android:name="com.radixdlt.android.apps.wallet.ui.activity.ReceiveRadixInvoiceActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
