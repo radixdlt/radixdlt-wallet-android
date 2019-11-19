@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.radixdlt.android.apps.wallet.connectivity.ConnectivityLiveData
 import com.radixdlt.android.apps.wallet.data.mapper.TokenTransferDataMapper2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
@@ -24,7 +25,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    private val transactionsDao2: TransactionsDao2
+    private val transactionsDao2: TransactionsDao2,
+    val connectivityLiveData: ConnectivityLiveData
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()

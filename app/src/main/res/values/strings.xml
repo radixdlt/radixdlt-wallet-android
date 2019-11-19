@@ -395,6 +395,8 @@
     <string name="confirm_backup_wallet_fragment_mnemonic_error">Mnemonic does not match! Please select in the correct order</string>
     <string name="confirm_backup_wallet_fragment_mnemonic_success">Mnemonic selected correctly</string>
 
+    <!-- Learn Fragment -->
+    <string name="learn_fragment_no_connection_icon_content_description">No connection icon</string>
 
     <string name="biometric_prompt_title">Please authenticate</string>
     <string name="biometric_prompt_negative_text">Cancel</string>
@@ -417,5 +419,6 @@
     <string name="keypad_view_six">6</string>
     <string name="keypad_view_nine">9</string>
     <string name="keypad_view_content_description_delete_last_input">Delete last input</string>
+    <string name="learn_fragment_no_internet_connection_snackbar">No internet access</string>
 
 </resources>
