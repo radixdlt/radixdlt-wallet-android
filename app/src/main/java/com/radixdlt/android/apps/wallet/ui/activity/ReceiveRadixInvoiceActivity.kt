@@ -38,7 +38,7 @@ class ReceiveRadixInvoiceActivity : BaseActivity() {
 
     private lateinit var transactionsViewModel: TransactionsViewModel
 
-    private val size = RadixWalletApplication.densityPixel!!
+    private val size = (application as RadixWalletApplication).densityPixel
 
     private lateinit var myAddress: String
 

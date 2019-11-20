@@ -29,6 +29,10 @@ class RadixWalletApplication : Application(), HasAndroidInjector {
             .build()
     }
 
+    val densityPixel: Int by lazy {
+        dip(250)
+    }
+
     val injector
         get() = radixWalletComponent
 
@@ -47,8 +51,6 @@ class RadixWalletApplication : Application(), HasAndroidInjector {
         generateEncryptionKey()
 
         AndroidThreeTen.init(this)
-
-        densityPixel = dip(250)
     }
 
     /**
@@ -90,7 +92,6 @@ class RadixWalletApplication : Application(), HasAndroidInjector {
     }
 
     companion object {
-        var densityPixel: Int? = null
         private var activityTransitionTimer: Timer? = null
         private var activityTransitionTimerTask: TimerTask? = null
         var wasInBackground: Boolean = false

@@ -398,6 +398,16 @@
     <!-- Learn Fragment -->
     <string name="learn_fragment_no_connection_icon_content_description">No connection icon</string>
 
+    <!--  Receive Fragment Fragment -->
+    <string name="receive_fragment_title">Receive Payment</string>
+    <string name="receive_fragment_xml_your_address">Your address</string>
+    <string name="receive_fragment_xml_share_button">Share</string>
+    <string name="receive_fragment_xml_create_a_payment_request_button">Create a payment request</string>
+    <string name="receive_fragment_xml_qr_code_description">QR code</string>
+    <string name="receive_fragment_address_copied_snackbar">Copied address</string>
+    <string name="receive_fragment__intent_chooser_title">Share address</string>
+
+    <!-- Biometric Prompt Dialog -->
     <string name="biometric_prompt_title">Please authenticate</string>
     <string name="biometric_prompt_negative_text">Cancel</string>
 
