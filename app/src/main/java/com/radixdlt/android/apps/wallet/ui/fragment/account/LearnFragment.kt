@@ -16,6 +16,7 @@ import com.radixdlt.android.apps.wallet.connectivity.ConnectivityState
 import com.radixdlt.android.apps.wallet.databinding.FragmentLearnBinding
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.util.URL_KNOWLEDGE_BASE
+import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.apps.wallet.util.showErrorSnackbarAboveNavigationView
 
 class LearnFragment : Fragment() {
@@ -93,5 +94,10 @@ class LearnFragment : Fragment() {
             }
             false
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initialiseToolbar(R.string.app_name, false)
     }
 }

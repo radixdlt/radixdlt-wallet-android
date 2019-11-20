@@ -171,15 +171,15 @@ fun Fragment.initialiseToolbar(toolbar: View, @StringRes text: Int) {
     }
 }
 
-fun Fragment.initialiseToolbar(@StringRes text: Int) {
+fun Fragment.initialiseToolbar(@StringRes text: Int, enabled: Boolean = true) {
     view?.let {
-        setToolbarTitleAndUpEnabled(text)
+        setToolbarTitleAndUpEnabled(text, enabled)
     }
 }
 
-private fun Fragment.setToolbarTitleAndUpEnabled(text: Int) {
+private fun Fragment.setToolbarTitleAndUpEnabled(text: Int, enabled: Boolean = true) {
     (activity as? AppCompatActivity)?.supportActionBar?.title = getString(text)
-    (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(enabled)
 }
 
 fun View.changeTILBackgroundColourToPurple(view: TextInputLayout, tagName: String) {

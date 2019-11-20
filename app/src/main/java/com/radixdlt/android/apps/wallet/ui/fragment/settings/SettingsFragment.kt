@@ -33,6 +33,7 @@ import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.Pref.set
 import com.radixdlt.android.apps.wallet.util.URL_REPORT_ISSUE
 import com.radixdlt.android.apps.wallet.util.deleteAllData
+import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.apps.wallet.util.showSuccessSnackbarAboveNavigationView
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Completable
@@ -191,6 +192,7 @@ class SettingsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        initialiseToolbar(R.string.app_name, false)
         BaseActivity.openedShareDialog = false
         BaseActivity.openedCustomTabs = false
     }
