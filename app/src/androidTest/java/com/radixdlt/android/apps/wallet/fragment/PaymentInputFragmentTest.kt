@@ -107,7 +107,7 @@ class PaymentInputFragmentTest {
         inputPaymentDetails()
 
         clickOn(R.id.paymentInputLinearLayout)
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
     }
 
     @Test
@@ -209,7 +209,7 @@ class PaymentInputFragmentTest {
     private fun navigateToPayScreen() {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
         DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
         clickOn(R.id.payButton)
     }

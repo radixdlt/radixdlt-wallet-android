@@ -61,7 +61,7 @@ class RestoreWalletFragmentTest {
         checkBiometrics()
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
     }
 
     @Test

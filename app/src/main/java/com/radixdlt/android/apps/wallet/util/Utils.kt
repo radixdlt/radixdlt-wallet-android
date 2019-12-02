@@ -326,6 +326,7 @@ fun resetData(context: Context) {
     context.defaultPrefs()[Pref.WALLET_BACKED_UP] = false
     context.defaultPrefs()[Pref.PIN_SET] = false
     context.defaultPrefs()[Pref.USE_BIOMETRICS] = false
+    context.defaultPrefs()[Pref.AUTHENTICATE_ON_LAUNCH] = false
     Identity.clear()
 }
 

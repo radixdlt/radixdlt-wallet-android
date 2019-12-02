@@ -211,7 +211,7 @@ class GreetingFragmentTest {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
 
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
 
         clickOn(R.id.menu_bottom_settings)
 

@@ -21,7 +21,7 @@ package com.radixdlt.android.apps.wallet.ui.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
+
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
@@ -31,6 +31,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.common.ConnectionResult
@@ -100,7 +101,7 @@ class BarcodeCaptureActivity : BaseActivity() {
     private fun requestCameraPermission() {
         Timber.w("Camera permission is not granted. Requesting permission")
 
-        openedPermissionDialog = true
+        PaymentActivity.openedPermissionDialog = true
 
         val permissions = arrayOf(Manifest.permission.CAMERA)
 
@@ -280,7 +281,7 @@ class BarcodeCaptureActivity : BaseActivity() {
     ) {
         if (requestCode != RC_HANDLE_CAMERA_PERM) {
             Timber.d("Got unexpected permission result: %d", requestCode)
-            openedPermissionDialog = false
+            PaymentActivity.openedPermissionDialog = false
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
             return
         }
@@ -300,12 +301,12 @@ class BarcodeCaptureActivity : BaseActivity() {
         )
 
         val listener = DialogInterface.OnClickListener { _, _ ->
-            openedPermissionDialog = false
+            PaymentActivity.openedPermissionDialog = false
             finish()
         }
 
         val settingsListener = DialogInterface.OnClickListener { _, _ ->
-            openedPermissionDialog = false
+            PaymentActivity.openedPermissionDialog = false
             val i = Intent(
                 android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                 Uri.parse("package:" + BuildConfig.APPLICATION_ID)
@@ -343,7 +344,7 @@ class BarcodeCaptureActivity : BaseActivity() {
         }
 
         if (cameraSource != null) {
-            openedPermissionDialog = false
+            PaymentActivity.openedPermissionDialog = false
             try {
                 preview!!.start(cameraSource!!, graphicOverlay!!)
             } catch (e: IOException) {

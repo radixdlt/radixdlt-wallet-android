@@ -22,6 +22,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -31,6 +32,7 @@ import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.activity.BarcodeCaptureActivity
 import com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity
+import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetPayment
 import com.radixdlt.android.apps.wallet.util.EmptyTextWatcher
@@ -55,6 +57,12 @@ class PaymentInputFragment : Fragment() {
 
     private val args: PaymentInputFragmentArgs by navArgs()
     private val addressArg: String? by lazy { args.address }
+
+    private val addressTo: String? by lazy { args.addressTo }
+    private val amount: String? by lazy { args.amount }
+    private val note: String? by lazy { args.note }
+    private val rri: String? by lazy { args.rri }
+
     private val uri: Uri? by lazy { args.uri }
 
     @Inject
@@ -89,13 +97,15 @@ class PaymentInputFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
+        (activity as PaymentActivity).setToolbarVisible()
         checkForIdentity()
 
         initialiseToolbar(view)
 
-        initialiseUri()
-        initialiseAddress()
         initialiseViewModels()
+        initialiseUri()
+        initialiseArgs()
+        initialiseAddress()
         noteFieldVisibility()
         setListeners()
     }
@@ -170,6 +180,38 @@ class PaymentInputFragment : Fragment() {
         }
     }
 
+    private fun initialiseArgs() {
+        if (!addressTo.isNullOrEmpty() && paymentInputAddressTIET.text.isNullOrEmpty()) {
+            paymentInputAddressTIL.isHintAnimationEnabled = false
+            val spannableStringBuilder =
+                setColorForLastCharactersInAddress(SpannableStringBuilder(addressTo))
+            paymentInputAddressTIET.text = spannableStringBuilder
+            paymentInputAddressTIL.isHintAnimationEnabled = true
+        }
+
+        if (!amount.isNullOrEmpty() && paymentInputAmountTIET.text.isNullOrEmpty()) {
+            paymentInputAmountTIL.isHintAnimationEnabled = false
+            paymentInputAmountTIET.setText(amount)
+            paymentInputAmountTIL.isHintAnimationEnabled = true
+        }
+
+        if (!note.isNullOrEmpty() && paymentInputMessageTIET.text.isNullOrEmpty()) {
+            paymentInputMessageTIL.isHintAnimationEnabled = false
+            paymentInputMessageTIET.setText(note)
+            paymentInputMessageTIL.isHintAnimationEnabled = true
+        }
+
+        rri?.let {
+            if (paymentViewModel.selectedAsset.isEmpty()) {
+                Timber.tag("AnotherCheck").d("the rri is $it")
+                paymentViewModel.selectedAsset = it
+                paymentInputViewModel.getTransactionsFromAsset(paymentViewModel.selectedAsset)
+            } else {
+                paymentInputViewModel.getTransactionsFromAsset(paymentViewModel.selectedAsset)
+            }
+        }
+    }
+
     private fun initialiseToolbar(view: View) {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.elevation = view.context.px2dip(dimen)
@@ -178,11 +220,13 @@ class PaymentInputFragment : Fragment() {
     }
 
     private fun initialiseViewModels() {
+        Timber.tag("AnotherCheck").d("initialiseViewModels")
         paymentInputViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(PaymentInputViewModel::class.java)
 
         paymentInputViewModel.asset.observe(viewLifecycleOwner, Observer(::assetPayment))
 
+        Timber.tag("AnotherCheck").d("NotEmpty?? ${paymentViewModel.selectedAsset.isNotEmpty()} and asset is ${paymentViewModel.selectedAsset}")
         if (paymentViewModel.selectedAsset.isNotEmpty()) {
             paymentInputViewModel.getTransactionsFromAsset(paymentViewModel.selectedAsset)
         }
@@ -379,6 +423,24 @@ class PaymentInputFragment : Fragment() {
                 }
             }
         })
+    }
+
+    fun saveDataForAuthentication(): NavArgs {
+        val addressTo = paymentInputAddressTIET.text.toString().trim()
+        val amountText = paymentInputAmountTIET.text.toString().trim()
+        val note = paymentInputMessageTIET.text.let {
+            if (it.isNullOrBlank()) null else it.toString()
+        }
+        val rri = paymentViewModel.selectedAsset
+
+        val bundle = Bundle().also {
+            it.putString("addressTo", addressTo)
+            it.putString("amount", amountText)
+            it.putString("note", note)
+            it.putString("rri", rri)
+        }
+
+        return PaymentInputFragmentArgs.fromBundle(bundle)
     }
 
     private fun validateAddressAndAmount(addressTo: String, amountText: String): Boolean {

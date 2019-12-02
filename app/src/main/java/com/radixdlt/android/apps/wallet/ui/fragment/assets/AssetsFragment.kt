@@ -20,6 +20,7 @@ import com.radixdlt.android.apps.wallet.data.model.AssetEntity
 import com.radixdlt.android.apps.wallet.databinding.FragmentAssetsBinding
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.ReceivePaymentActivity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainLoadingState
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.util.Pref
@@ -28,8 +29,6 @@ import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.apps.wallet.util.toast
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_assets.*
-import kotlinx.android.synthetic.main.tool_bar_search.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.dip
@@ -50,6 +49,8 @@ class AssetsFragment : Fragment() {
 
     private lateinit var ctx: Context
 
+    private lateinit var binding: FragmentAssetsBinding
+
     private var assetSearched: String? = null
 
     private var loadingAssets = false
@@ -66,11 +67,12 @@ class AssetsFragment : Fragment() {
     ): View? = initialiseDataBinding(inflater, container)
 
     private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
-        val binding: FragmentAssetsBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_assets, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_assets, container, false)
         initialiseViewModels()
         binding.viewmodel = assetsViewModel
         binding.lifecycleOwner = this
+
+        initialiseRecyclerView()
 
         return binding.root
     }
@@ -78,7 +80,7 @@ class AssetsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
-        initialiseRecyclerView()
+        (activity as MainActivity).setNavAndBottomNavigationVisible()
         initialiseSwipeRefreshLayout()
         initialiseSearchView()
         setOnClickListeners()
@@ -87,11 +89,11 @@ class AssetsFragment : Fragment() {
 
     private fun dismissWarningSign() {
         activity?.apply {
-            assetsWarningSign.animate().translationYBy(dip(-50).toFloat())
+            binding.assetsWarningSign.animate().translationYBy(dip(-50).toFloat())
                 .setDuration(150)
                 .withEndAction {
                     mainViewModel.showBackUpWalletNotification(false)
-                    assetsWarningSign.visibility = View.GONE
+                    binding.assetsWarningSign.visibility = View.GONE
                 }
                 .start()
         }
@@ -126,9 +128,9 @@ class AssetsFragment : Fragment() {
                     setBottomNavigationCheckedItem(R.id.menu_bottom_assets)
                     showBackUpWalletNotification.observe(viewLifecycleOwner, Observer { show ->
                         if (show) {
-                            assetsWarningSign.visibility = View.VISIBLE
+                            binding.assetsWarningSign.visibility = View.VISIBLE
                         } else {
-                            assetsWarningSign.visibility = View.GONE
+                            binding.assetsWarningSign.visibility = View.GONE
                         }
                 })
             }
@@ -140,20 +142,21 @@ class AssetsFragment : Fragment() {
     }
 
     private fun initialiseSearchView() {
-        searchView.setLogoIcon(R.drawable.ic_search_24)
-        searchView.setOnLogoClickListener {
-            searchView.findViewById<EditText>(R.id.search_searchEditText).requestFocus()
+        binding.toolbarSearch.searchView.setLogoIcon(R.drawable.ic_search_24)
+        binding.toolbarSearch.searchView.setOnLogoClickListener {
+            binding.toolbarSearch.searchView.findViewById<EditText>(R.id.search_searchEditText)
+                .requestFocus()
         }
-        searchView.setOnQueryTextListener(object : Search.OnQueryTextListener {
+        binding.toolbarSearch.searchView.setOnQueryTextListener(object : Search.OnQueryTextListener {
             override fun onQueryTextSubmit(query: CharSequence?): Boolean {
                 assetsAdapter.filter.filter(query.toString().toLowerCase(Locale.ROOT))
-                assetSearched = searchView?.text.toString()
+                assetSearched = binding.toolbarSearch.searchView.text.toString()
                 return false
             }
 
             override fun onQueryTextChange(newText: CharSequence?) {
                 assetsAdapter.filter.filter(newText.toString().toLowerCase(Locale.ROOT))
-                assetSearched = searchView?.text.toString()
+                assetSearched = binding.toolbarSearch.searchView.text.toString()
             }
         })
 
@@ -171,7 +174,7 @@ class AssetsFragment : Fragment() {
     }
 
     private fun setPayButtonOnClickListener() {
-        payButton.setOnClickListener {
+        binding.payButton.setOnClickListener {
             activity?.apply {
                 if (defaultPrefs()[Pref.WALLET_BACKED_UP, false]) {
                     PaymentActivity.newIntent(this)
@@ -183,7 +186,7 @@ class AssetsFragment : Fragment() {
     }
 
     private fun setReceiveButtonOnClickListener() {
-        receiveButton.setOnClickListener {
+        binding.receiveButton.setOnClickListener {
             activity?.apply {
                 startActivity<ReceivePaymentActivity>()
             }
@@ -223,31 +226,31 @@ class AssetsFragment : Fragment() {
 
     private fun checkAssetWasBeingSearched() {
         if (!assetSearched.isNullOrEmpty()) {
-            val assetSearched = searchView?.text.toString()
-            searchView.text?.clear()
+            val assetSearched = binding.toolbarSearch.searchView.text.toString()
+            binding.toolbarSearch.searchView.text?.clear()
             this.assetSearched = assetSearched
-            searchView.setText(assetSearched)
-            searchView.findViewById<EditText>(R.id.search_searchEditText)
+            binding.toolbarSearch.searchView.setText(assetSearched)
+            binding.toolbarSearch.searchView.findViewById<EditText>(R.id.search_searchEditText)
                 .setSelection(assetSearched.length)
         }
         checkAssetWasSearchedAndFilter()
     }
 
     private fun initialiseRecyclerView() {
-        assetsRecyclerView.layoutManager = LinearLayoutManager(activity)
+        binding.assetsRecyclerView.layoutManager = LinearLayoutManager(activity)
         assetsAdapter = AssetsAdapter(itemClick)
-        assetsRecyclerView.adapter = assetsAdapter
+        binding.assetsRecyclerView.adapter = assetsAdapter
     }
 
     private fun initialiseSwipeRefreshLayout() {
-        swipe_refresh_layout.setColorSchemeResources(
+        binding.swipeRefreshLayout.setColorSchemeResources(
             R.color.colorPrimary, R.color.colorAccent, R.color.radixGreen3
         )
-        swipe_refresh_layout.setOnRefreshListener(::refreshTransactions)
+        binding.swipeRefreshLayout.setOnRefreshListener(::refreshTransactions)
     }
 
     private fun refreshTransactions() {
-        swipe_refresh_layout.isRefreshing = false
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
     private fun setLayoutResources() {
@@ -261,22 +264,22 @@ class AssetsFragment : Fragment() {
     }
 
     private fun setLayoutResourcesWithLoadingIndicator() {
-        payButton.isEnabled = false
-        swipe_refresh_layout.isRefreshing = true
+        binding.payButton.isEnabled = false
+        binding.swipeRefreshLayout.isRefreshing = true
     }
 
     private fun setLayoutResourcesWithEmptyAssets() {
-        payButton.isEnabled = false
-        assetsImageView.visibility = View.VISIBLE
-        swipe_refresh_layout.isRefreshing = false
-        swipe_refresh_layout.isEnabled = false
+        binding.payButton.isEnabled = false
+        binding.assetsImageView.visibility = View.VISIBLE
+        binding.swipeRefreshLayout.isRefreshing = false
+        binding.swipeRefreshLayout.isEnabled = false
     }
 
     private fun setLayoutResourcesWithAssets() {
-        payButton.isEnabled = true
-        assetsImageView.visibility = View.GONE
-        swipe_refresh_layout.isRefreshing = false
-        swipe_refresh_layout.isEnabled = false
+        binding.payButton.isEnabled = true
+        binding.assetsImageView.visibility = View.GONE
+        binding.swipeRefreshLayout.isRefreshing = false
+        binding.swipeRefreshLayout.isEnabled = false
     }
 
     private val itemClick = fun(rri: String, name: String, balance: String) {

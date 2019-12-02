@@ -1,10 +1,7 @@
 package com.radixdlt.android.apps.wallet.ui.fragment.settings
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class SettingsSharedViewModel : ViewModel() {
 
@@ -19,6 +16,26 @@ class SettingsSharedViewModel : ViewModel() {
     val popAuthenticationSetupBackStack: LiveEvent<Unit>
         get() = _popAuthenticationSetupBackStack
 
+    private val _authenticateAction = LiveEvent<AuthenticateAction>()
+    val authenticateAction: LiveEvent<AuthenticateAction>
+        get() = _authenticateAction
+
+    fun cancel() {
+        _authenticateAction.value = AuthenticateAction.Cancel
+    }
+
+    fun backup() {
+        _authenticateAction.value = AuthenticateAction.Backup
+    }
+
+    fun useBiometrics() {
+        _authenticateAction.value = AuthenticateAction.UseBiometrics
+    }
+
+    fun usePin(functionality: AuthenticateFunctionality) {
+        _authenticateAction.value = AuthenticateAction.UsePin(functionality)
+    }
+
     fun setDeleteWallet(delete: Boolean) {
         _deleteWallet.value = delete
     }
@@ -28,9 +45,13 @@ class SettingsSharedViewModel : ViewModel() {
     }
 
     fun popAuthenticationSetupBackStack() {
-        viewModelScope.launch {
-            delay(25)
-            _popAuthenticationSetupBackStack.value = Unit
-        }
+        _popAuthenticationSetupBackStack.value = Unit
     }
+}
+
+sealed class AuthenticateAction {
+    object Cancel : AuthenticateAction()
+    object Backup : AuthenticateAction()
+    object UseBiometrics : AuthenticateAction()
+    class UsePin(val functionality: AuthenticateFunctionality) : AuthenticateAction()
 }

@@ -51,6 +51,7 @@ jobs:
         - "./gradlew clean --stacktrace --console=plain --build-cache :app:assembleDummyDebug :app:assembleDummyDebugAndroidTest :app:testDummyDebugUnitTest"
         # Instrumentation Tests
         - gcloud firebase test android run
+          --use-orchestrator
           --type instrumentation
           --app ./app/build/outputs/apk/dummy/debug/app-dummy-debug.apk
           --test ./app/build/outputs/apk/androidTest/dummy/debug/app-dummy-debug-androidTest.apk

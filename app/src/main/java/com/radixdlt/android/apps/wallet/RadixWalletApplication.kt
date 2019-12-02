@@ -7,7 +7,6 @@ import com.radixdlt.android.apps.wallet.di.component.DaggerRadixWalletComponent
 import com.radixdlt.android.apps.wallet.di.component.RadixWalletComponent
 import com.radixdlt.android.apps.wallet.identity.BootStrapConfigAndroidImpl
 import com.radixdlt.android.apps.wallet.identity.Identity
-import com.radixdlt.android.apps.wallet.util.QueryPreferences
 import com.radixdlt.android.apps.wallet.util.Vault
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -80,7 +79,8 @@ class RadixWalletApplication : Application(), HasAndroidInjector {
 
         activityTransitionTimer?.schedule(
             activityTransitionTimerTask,
-            QueryPreferences.getPrefAutoLockTimeOut(this)
+            2000
+            // QueryPreferences.getPrefAutoLockTimeOut(this)
         )
     }
 

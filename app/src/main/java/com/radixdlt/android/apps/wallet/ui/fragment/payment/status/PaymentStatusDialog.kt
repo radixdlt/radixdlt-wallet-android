@@ -17,13 +17,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.databinding.DialogPaymentStatusBinding
 import com.radixdlt.android.apps.wallet.helper.CustomTabsHelper
 import com.radixdlt.android.apps.wallet.helper.WebviewFallback
 import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
+import com.radixdlt.android.apps.wallet.util.Pref
+import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
+import com.radixdlt.android.apps.wallet.util.Pref.get
 import com.radixdlt.android.apps.wallet.util.URL_PRIVACY_POLICY
-import com.radixdlt.android.apps.wallet.databinding.DialogPaymentStatusBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class PaymentStatusDialog : FullScreenDialog() {
 
@@ -47,9 +48,8 @@ class PaymentStatusDialog : FullScreenDialog() {
         super.onViewCreated(view, savedInstanceState)
         createCustomTabsBuilder(view.context)
         viewModel.paymentStatusAction.observe(viewLifecycleOwner, Observer(::action))
-        // For performance reasons where UI thread would be momentarily blocked, dispatch to
-        // a background thread
-        lifecycleScope.launch(Dispatchers.Default) {
+        // For performance reasons where UI thread would be momentarily blocked wait until onResume
+        lifecycleScope.launchWhenResumed {
             viewModel.makePayment(args)
         }
     }
@@ -102,6 +102,16 @@ class PaymentStatusDialog : FullScreenDialog() {
                 Uri.parse(URL_PRIVACY_POLICY),
                 WebviewFallback()
             )
+        }
+        if (defaultPrefs()[Pref.AUTHENTICATE_ON_LAUNCH, false]) {
+            closePayment()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (defaultPrefs()[Pref.AUTHENTICATE_ON_LAUNCH, false]) {
+            dismiss()
         }
     }
 }

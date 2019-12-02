@@ -78,12 +78,12 @@
                     android:drawableEnd="@drawable/ic_icon_arrow_line_green"
                     android:gravity="center_vertical"
                     android:onClick="@{ () -> viewmodel.changePinClickListener() }"
-                    android:visibility="@{ viewmodel.pinSet ? View.VISIBLE : View.GONE }"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:text="@string/settings_fragment_xml_change_pin"
                     android:textColor="@color/radixBlueGrey2"
-                    android:textSize="17sp" />
+                    android:textSize="17sp"
+                    android:visibility="@{ viewmodel.pinSet ? View.VISIBLE : View.GONE }" />
 
                 <View
                     android:layout_width="match_parent"
@@ -122,6 +122,50 @@
                         android:layout_weight="0.80"
                         android:checked="@{ viewmodel.useBiometrics }"
                         android:onCheckedChanged="@{(switch, checked) -> viewmodel.useBiometricsCheckedListener(checked)}"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textColor="@color/radixBlueGrey2"
+                        android:textSize="17sp"
+                        android:theme="@style/ColorSwitchStyle" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#ff9b9b9b"
+                    android:visibility="@{ viewmodel.hideBiometrics ? View.GONE : View.VISIBLE }" />
+
+                <LinearLayout
+                    android:id="@+id/settingsAuthenticateOnLaunchLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background_ripple"
+                    android:onClick="@{ () -> viewmodel.authenticateOnLaunchClickListener() }"
+                    android:orientation="horizontal"
+                    android:visibility="@{ viewmodel.hideBiometrics ? View.GONE : View.VISIBLE }"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:id="@+id/settingsAuthenticateOnLaunchTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:layout_weight="0.20"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="@string/settings_fragment_xml_authenticate_on_launch"
+                        android:textColor="@color/radixBlueGrey2"
+                        android:textSize="17sp" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/settingsAuthenticateOnLaunchSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:layout_weight="0.80"
+                        android:checked="@{ viewmodel.authenticateOnLaunch }"
+                        android:onCheckedChanged="@{(switch, checked) -> viewmodel.authenticateOnLaunchCheckedListener(checked)}"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:textColor="@color/radixBlueGrey2"

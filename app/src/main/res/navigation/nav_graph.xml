@@ -2,8 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/navigation_assets">
+    android:id="@+id/nav_graph">
+    <!--    app:startDestination="@id/navigation_assets"-->
     <fragment
         android:id="@+id/navigation_assets"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsFragment"
@@ -28,6 +28,12 @@
         <action
             android:id="@+id/action_navigation_assets_to_navigation_backup_wallet"
             app:destination="@id/navigation_backup_wallet" />
+        <action
+            android:id="@+id/action_navigation_assets_to_navigation_authenticate_pin"
+            app:destination="@id/navigation_launch_pin" />
+        <action
+            android:id="@+id/action_navigation_assets_to_navigation_authenticate_biometrics"
+            app:destination="@id/navigation_launch_biometrics" />
     </fragment>
     <fragment
         android:id="@+id/navigation_asset_transactions"
@@ -83,6 +89,22 @@
         <action
             android:id="@+id/navigation_settings_to_navigation_settings_delete_wallet"
             app:destination="@id/navigation_settings_delete_wallet" />
+        <action
+            android:id="@+id/action_navigation_settings_to_navigation_authenticate_pin_dialog"
+            app:destination="@id/navigation_authenticate_pin_dialog">
+            <argument
+                android:name="functionality"
+                app:argType="com.radixdlt.android.apps.wallet.ui.fragment.settings.AuthenticateFunctionality"
+                app:nullable="false" />
+        </action>
+        <action
+            android:id="@+id/action_navigation_settings_to_navigation_authenticate_biometrics_dialog"
+            app:destination="@id/navigation_authenticate_biometrics_dialog">
+            <argument
+                android:name="functionality"
+                app:argType="com.radixdlt.android.apps.wallet.ui.fragment.settings.AuthenticateFunctionality"
+                app:nullable="false" />
+        </action>
     </fragment>
     <dialog
         android:id="@+id/navigation_tutorial_receive"
@@ -126,4 +148,44 @@
         android:id="@+id/navigation_settings_delete_wallet"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsDeleteWalletDialog"
         android:label="navigation_settings_delete_wallet" />
+    <fragment
+        android:id="@+id/navigation_launch_pin"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.launch.pin.LaunchPinFragment"
+        android:label="fragment_launch_pin"
+        tools:layout="@layout/fragment_launch_pin" />
+    <fragment
+        android:id="@+id/navigation_launch_biometrics"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.launch.biometrics.LaunchBiometricsFragment"
+        android:label="fragment_launch_biometrics"
+        tools:layout="@layout/fragment_launch_biometrics" />
+    <dialog
+        android:id="@+id/navigation_authenticate_pin_dialog"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.settings.pin.AuthenticatePinDialog"
+        android:label="dialog_authenticate_pin"
+        tools:layout="@layout/dialog_authenticate_pin">
+        <argument
+            android:name="functionality"
+            app:argType="com.radixdlt.android.apps.wallet.ui.fragment.settings.AuthenticateFunctionality"
+            app:nullable="false" />
+        <action
+            android:id="@+id/navigation_authenticate_pin_dialog_to_navigation_settings"
+            app:destination="@id/navigation_settings"
+            app:popUpTo="@id/navigation_settings"
+            app:popUpToInclusive="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/navigation_authenticate_biometrics_dialog"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.settings.biometrics.AuthenticateBiometricsDialog"
+        android:label="dialog_authenticate_biometrics"
+        tools:layout="@layout/dialog_authenticate_biometrics">
+        <argument
+            android:name="functionality"
+            app:argType="com.radixdlt.android.apps.wallet.ui.fragment.settings.AuthenticateFunctionality"
+            app:nullable="false" />
+        <action
+            android:id="@+id/navigation_authenticate_biometrics_dialog_to_navigation_settings"
+            app:destination="@id/navigation_settings"
+            app:popUpTo="@id/navigation_settings"
+            app:popUpToInclusive="true" />
+    </dialog>
 </navigation>

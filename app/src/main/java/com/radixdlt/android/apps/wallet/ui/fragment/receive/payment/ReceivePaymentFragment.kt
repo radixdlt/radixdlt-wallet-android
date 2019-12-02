@@ -18,7 +18,7 @@ import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.RadixWalletApplication
 import com.radixdlt.android.apps.wallet.databinding.FragmentReceivePaymentBinding
 import com.radixdlt.android.apps.wallet.identity.Identity
-import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
+import com.radixdlt.android.apps.wallet.ui.activity.ReceivePaymentActivity
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import net.glxn.qrgen.android.QRCode
@@ -53,6 +53,7 @@ class ReceivePaymentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
+        (activity as ReceivePaymentActivity).setToolbarVisible()
         setHasOptionsMenu(true)
         initialiseToolbar(R.string.receive_fragment_title)
         observeReceivePaymentViewModel()
@@ -79,7 +80,7 @@ class ReceivePaymentFragment : Fragment() {
     }
 
     private fun shareAddress() {
-        BaseActivity.openedShareDialog = true
+        ReceivePaymentActivity.openedShareDialog = true
 
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
@@ -109,5 +110,15 @@ class ReceivePaymentFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ReceivePaymentActivity.openedShareDialog = false
+    }
+
+    override fun onStop() {
+        super.onStop()
+        ReceivePaymentActivity.openedShareDialog = false
     }
 }

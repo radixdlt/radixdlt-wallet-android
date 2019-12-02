@@ -1,9 +1,9 @@
-const val kotlinVersion = "1.3.60"
+const val kotlinVersion = "1.3.61"
 
 object BuildPlugins {
     object Versions {
-        const val gradlePluginVersion = "3.6.0-beta04"
-        const val safeArgs = "2.1.0-beta02"
+        const val gradlePluginVersion = "3.5.0"
+        const val safeArgs = "2.2.0-rc02"
     }
 
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.gradlePluginVersion}"
@@ -26,26 +26,26 @@ object AndroidSdk {
 
 object Libraries {
     private object Versions {
-        const val ktlint = "0.34.2"
+        const val ktlint = "0.35.0"
         const val ankoCommons = "0.10.8"
-        const val appCompat = "1.1.0-rc01"
+        const val appCompat = "1.1.0"
         const val jepack = "1.0.0"
         const val constraintLayout = "2.0.0-beta3"
-        const val browser = "1.0.0"
-        const val firebaseCore = "17.0.1"
-        const val room = "2.2.0-beta01"
-        const val coreKtx = "1.2.0-alpha02"
-        const val lifeCycleExtentions = "2.2.0-alpha02"
-        const val navigationVersion = "2.1.0-beta02"
-        const val biometrics = "1.0.0-rc02"
+        const val browser = "1.2.0-beta01"
+        const val firebaseCore = "17.2.1"
+        const val room = "2.2.2"
+        const val coreKtx = "1.2.0-rc01"
+        const val lifeCycleExtentions = "2.2.0-rc02"
+        const val navigationVersion = "2.2.0-rc02"
+        const val biometrics = "1.0.0"
         const val preference = "1.1.0"
         const val dagger = "2.24"
-        const val daggerAssistedInject = "0.3.3"
-        const val glide = "4.9.0"
+        const val daggerAssistedInject = "0.5.2"
+        const val glide = "4.10.0"
         const val material = "1.1.0-alpha10"
-        const val playServicesVision = "18.0.0"
-        const val icu = "64.2"
-        const val circleImageView = "3.0.0"
+        const val playServicesVision = "19.0.0"
+        const val icu = "65.1"
+        const val circleImageView = "3.0.1"
         const val qrGen = "2.6.0"
         const val rxAndroid = "2.1.1"
         const val rxKotlin = "2.4.0"
@@ -55,8 +55,8 @@ object Libraries {
         const val processPhoenix = "2.0.0"
         const val novaCrypto = "2019.01.27"
         const val searchView = "28.0.0"
-        const val lottie = "3.0.3"
-        const val liveEvent = "1.0.1"
+        const val lottie = "3.3.0"
+        const val liveEvent = "1.2.0"
     }
 
     const val ktlint = "com.pinterest:ktlint:${Versions.ktlint}"
@@ -127,19 +127,19 @@ object Libraries {
 
 object TestLibraries {
     private object Versions {
-        const val junit4 = "4.13-beta-3"
+        const val junit4 = "4.13-rc-2"
         const val mockitoKotlin = "1.5.0"
         const val mockk = "1.9.3"
-        const val jupiter = "5.5.1"
+        const val jupiter = "5.6.0-M1"
         const val androidIntrumentationTest = "0.2.2"
-        const val junitPlatformRunner = "1.5.1"
+        const val junitPlatformRunner = "1.6.0-M1"
         const val runner = "1.3.0-alpha02"
         const val rules = "1.3.0-alpha02"
         const val barista = "3.2.0"
         const val espressoIntents = "3.3.0-alpha02"
         const val junitKtx = "1.1.2-alpha02"
         const val coreKtx = "1.2.1-alpha02"
-        const val coreTesting = "2.0.0-alpha1"
+        const val coreTesting = "2.1.0"
         const val orchestrator = "1.3.0-alpha02"
     }
 

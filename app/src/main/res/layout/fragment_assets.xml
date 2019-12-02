@@ -25,7 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintVertical_bias="0.50"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_search"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarSearch"
             />
 
         <View
@@ -57,7 +57,7 @@
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_search"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarSearch"
             app:layout_constraintVertical_bias="0.0">
 
             <TextView
@@ -93,7 +93,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_layout"
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
@@ -144,7 +144,7 @@
             app:layout_constraintTop_toTopOf="@+id/buttonsView" />
 
         <include
-            android:id="@+id/toolbar_search"
+            android:id="@+id/toolbarSearch"
             layout="@layout/tool_bar_search" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

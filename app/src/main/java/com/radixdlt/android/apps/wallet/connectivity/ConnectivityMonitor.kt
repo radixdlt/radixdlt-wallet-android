@@ -13,9 +13,9 @@ internal sealed class ConnectivityMonitor(
     protected val connectivityManager: ConnectivityManager
 ) {
 
-    protected var callbackFunction: ((Boolean) -> Unit) = {}
+    protected var callbackFunction: ((Boolean?) -> Unit) = {}
 
-    abstract fun startListening(callback: (Boolean) -> Unit)
+    abstract fun startListening(callback: (Boolean?) -> Unit)
     abstract fun stopListening()
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -34,9 +34,9 @@ internal sealed class ConnectivityMonitor(
             }
         }
 
-        override fun startListening(callback: (Boolean) -> Unit) {
+        override fun startListening(callback: (Boolean?) -> Unit) {
             callbackFunction = callback
-            callbackFunction(false)
+            callbackFunction(null)
             connectivityManager.registerDefaultNetworkCallback(networkCallback)
         }
 
@@ -57,7 +57,7 @@ internal sealed class ConnectivityMonitor(
         private val isNetworkConnected: Boolean
             get() = connectivityManager.activeNetworkInfo?.isConnected == true
 
-        override fun startListening(callback: (Boolean) -> Unit) {
+        override fun startListening(callback: (Boolean?) -> Unit) {
             callbackFunction = callback
             callbackFunction(isNetworkConnected)
             context.registerReceiver(receiver, filter)

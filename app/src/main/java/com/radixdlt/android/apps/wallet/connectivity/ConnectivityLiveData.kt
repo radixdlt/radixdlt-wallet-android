@@ -20,6 +20,9 @@ class ConnectivityLiveData @Inject constructor(
         super.onInactive()
     }
 
-    private fun setConnected(isConnected: Boolean) =
-        postValue(if (isConnected) ConnectivityState.Connected else ConnectivityState.Disconnected)
+    private fun setConnected(isConnected: Boolean?) {
+        isConnected?.let {
+            postValue(if (it) ConnectivityState.Connected else ConnectivityState.Disconnected)
+        }
+    }
 }

@@ -83,7 +83,7 @@ class SetupPinAuthenticationDialogTest {
 
         checkBiometrics()
 
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
     }
 
     private fun checkBiometrics() {

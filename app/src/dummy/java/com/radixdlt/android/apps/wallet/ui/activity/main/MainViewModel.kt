@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hadilq.liveevent.LiveEvent
 import com.radixdlt.android.apps.wallet.connectivity.ConnectivityLiveData
 import com.radixdlt.android.apps.wallet.data.mapper.TokenTransferDataMapper2
 import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
@@ -45,11 +46,27 @@ class MainViewModel @Inject constructor(
     val showBackUpWalletNotification: LiveData<Boolean>
         get() = _showBackUpWalletNotification
 
+    private val _launchAuthenticationAction = LiveEvent<LaunchAuthenticationAction>()
+    val launchAuthenticationAction: LiveEvent<LaunchAuthenticationAction>
+        get() = _launchAuthenticationAction
+
     init {
         _showBackUpWalletNotification.value = true
         _mainLoadingState.value = MainLoadingState.LOADING
         checkTransactionsTable()
 //        retrieveAllTransactions()
+    }
+
+    fun unlock() {
+        _launchAuthenticationAction.value = LaunchAuthenticationAction.UNLOCK
+    }
+
+    fun usePin() {
+        _launchAuthenticationAction.value = LaunchAuthenticationAction.USE_PIN
+    }
+
+    fun logout() {
+        _launchAuthenticationAction.value = LaunchAuthenticationAction.LOGOUT
     }
 
     fun setBottomNavigationCheckedItem(@IdRes item: Int) {
@@ -198,4 +215,8 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+}
+
+enum class LaunchAuthenticationAction {
+    UNLOCK, USE_PIN, LOGOUT
 }

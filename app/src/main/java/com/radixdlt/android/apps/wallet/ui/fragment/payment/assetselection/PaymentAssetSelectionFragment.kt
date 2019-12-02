@@ -18,9 +18,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lapism.searchview.Search
 import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.databinding.FragmentPaymentAssetSelectionBinding
+import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetPayment
-import com.radixdlt.android.apps.wallet.databinding.FragmentPaymentAssetSelectionBinding
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_payment_asset_selection.*
 import kotlinx.android.synthetic.main.tool_bar_search.*
@@ -89,6 +90,7 @@ class PaymentAssetSelectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
+        (activity as PaymentActivity).setToolbarVisible()
         initialiseRecyclerView()
         initialiseSearchView()
         initialiseViewModels()

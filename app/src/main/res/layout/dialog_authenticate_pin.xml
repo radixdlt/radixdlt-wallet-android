@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:keypad="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.radixdlt.android.apps.wallet.ui.fragment.settings.pin.AuthenticatePinViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationContentDescription="@string/authenticate_pin_dialog_content_description_back_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/authenticatePinHeaderTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="@string/authenticate_pin_dialog_pin_header"
+            android:textColor="@color/radixBlueGrey2"
+            android:textSize="28sp"
+            app:fontFamily="@font/roboto_medium_radix"
+            app:layout_constraintBottom_toTopOf="@+id/authenticatePinCircles"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarDialog"
+            app:layout_constraintVertical_bias="0.30"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <LinearLayout
+            android:id="@+id/authenticatePinCircles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:orientation="horizontal"
+            app:pinError="@{ viewmodel.paymentPinState }"
+            app:layout_constraintBottom_toTopOf="@+id/authenticatePinKeypad"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.50"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/authenticatePinHeaderTextView"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintVertical_chainStyle="packed">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/authenticatePin1CheckBox"
+                android:tag="1"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/pin_circle_selector"
+                android:button="@null"
+                app:pinCheck="@{ viewmodel.pinLength }"/>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/authenticatePin2CheckBox"
+                android:tag="2"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/pin_circle_selector"
+                android:button="@null"
+                app:pinCheck="@{ viewmodel.pinLength }"/>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/authenticatePin3CheckBox"
+                android:tag="3"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/pin_circle_selector"
+                android:button="@null"
+                app:pinCheck="@{ viewmodel.pinLength }"/>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/authenticatePin4CheckBox"
+                android:tag="4"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/pin_circle_selector"
+                android:button="@null"
+                app:pinCheck="@{ viewmodel.pinLength }"/>
+        </LinearLayout>
+
+        <com.radixdlt.android.apps.wallet.ui.layout.KeyPadView
+            android:id="@+id/authenticatePinKeypad"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            app:fontFamily="@font/roboto_medium_radix"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:pinClear="@{ viewmodel.pinLength }"
+            app:onNumberTextListener="@{ viewmodel::pinTextChange }"
+            keypad:keypad_image_resource="@drawable/ic_arrow_back_24"
+            keypad:keypad_text_color="@color/radixBlueGrey2"
+            keypad:keypad_text_limit="4"
+            keypad:keypad_text_size="11sp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

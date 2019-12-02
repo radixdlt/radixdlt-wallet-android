@@ -159,7 +159,7 @@ class PaymentStatusFragmentTest {
 
         clickOn(R.id.paymentStatusCloseButton)
 
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
     }
 
     @Test
@@ -182,7 +182,7 @@ class PaymentStatusFragmentTest {
 
         clickOn(R.id.paymentStatusCloseButton)
 
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
     }
 
     @Test
@@ -219,7 +219,7 @@ class PaymentStatusFragmentTest {
     private fun navigateToPayScreen() {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
         DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
         clickOn(R.id.payButton)
     }

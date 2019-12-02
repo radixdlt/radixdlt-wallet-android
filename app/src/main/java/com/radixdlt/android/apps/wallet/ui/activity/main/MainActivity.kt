@@ -4,13 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import androidx.activity.viewModels
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -19,20 +20,34 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.data.model.AssetDao
+import com.radixdlt.android.apps.wallet.data.model.TransactionsDaoOM
+import com.radixdlt.android.apps.wallet.data.model.message.MessagesDao
+import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionsDao2
+import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionsDao
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.ui.activity.BarcodeCaptureActivity
-import com.radixdlt.android.apps.wallet.ui.activity.BaseActivity
+import com.radixdlt.android.apps.wallet.ui.activity.BaseActivityNew
 import com.radixdlt.android.apps.wallet.ui.activity.ConversationActivity
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
+import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
+import com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsSharedViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsFragmentArgs
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.get
+import com.radixdlt.android.apps.wallet.util.Pref.set
 import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.VAULT_MNEMONIC
+import com.radixdlt.android.apps.wallet.util.Vault
+import com.radixdlt.android.apps.wallet.util.deleteAllData
 import com.radixdlt.android.apps.wallet.util.isRadixAddress
 import dagger.android.AndroidInjection
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.tool_bar_connection.*
@@ -42,17 +57,46 @@ import org.jetbrains.anko.toast
 import timber.log.Timber
 import javax.inject.Inject
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivityNew() {
+
+    @Inject
+    lateinit var transactionsDao: TransactionsDao
+
+    @Inject
+    lateinit var transactionsDao2: TransactionsDao2
+
+    @Inject
+    lateinit var messagesDao: MessagesDao
+
+    @Inject
+    lateinit var assetDao: AssetDao
+
+    @Inject
+    lateinit var transactionsDaoOM: TransactionsDaoOM
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var options: NavOptions.Builder
-    private var uri: Uri? = null
+    private val viewModel by viewModels<MainViewModel> {
+        viewModelFactory
+    }
 
+    private var uri: Uri? = null
     private val compositeDisposable = CompositeDisposable()
 
+    private val navController by lazy {
+        Navigation.findNavController(this, R.id.my_nav_host_fragment)
+    }
+
+    private val graph by lazy {
+        navController.navInflater.inflate(R.navigation.nav_graph)
+    }
+
+    private lateinit var options: NavOptions.Builder
+
     val dimen: Int by lazy { resources.getDimension(R.dimen.toolbar_elevation).toInt() }
+
+    private val settingsSharedViewModel by viewModels<SettingsSharedViewModel>()
 
     companion object {
         private const val RC_BARCODE_CAPTURE = 9000
@@ -91,16 +135,117 @@ class MainActivity : BaseActivity() {
                 ConversationActivity.newIntent(this, it)
             }
         }
+
+        if (defaultPrefs()[Pref.AUTHENTICATE_ON_LAUNCH, false]) {
+            defaultPrefs()[Pref.FRAGMENT_ID] = R.id.navigation_assets
+            toolbar.visibility = View.GONE
+            navigation.visibility = View.GONE
+            if (defaultPrefs()[Pref.USE_BIOMETRICS, false]) {
+                setGraph(R.id.navigation_launch_biometrics)
+            } else {
+                setGraph(R.id.navigation_launch_pin)
+            }
+        } else {
+            setGraph(R.id.navigation_assets)
+        }
     }
 
     private fun initialiseViewModel() {
-        val viewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
         viewModel.navigationCheckedItem.observe(this, Observer(::setBottomNavigationSelectedItemId))
         viewModel.showBackUpWalletNotification(!defaultPrefs()[Pref.WALLET_BACKED_UP, false])
+        viewModel.launchAuthenticationAction.observe(this, Observer(::launchAuthenticationAction))
+        settingsSharedViewModel.deleteWallet.observe(this, Observer(::deleteWallet))
+    }
+
+    private fun deleteWallet(delete: Boolean) {
+        if (delete) {
+            deleteAllData(this)
+            deleteTables()
+
+            startActivity<StartActivity>()
+            finish()
+        }
+    }
+
+    private fun deleteTables() {
+        Completable.fromAction {
+            transactionsDao.deleteTable()
+            transactionsDao2.deleteTable()
+            messagesDao.deleteTable()
+            assetDao.deleteTable()
+            transactionsDaoOM.deleteTable()
+        }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+    }
+
+    private fun launchAuthenticationAction(action: LaunchAuthenticationAction) {
+        when (action) {
+            LaunchAuthenticationAction.UNLOCK -> unlock()
+            LaunchAuthenticationAction.USE_PIN -> usePin()
+            LaunchAuthenticationAction.LOGOUT -> logout()
+        }
     }
 
     private fun setBottomNavigationSelectedItemId(@IdRes item: Int) {
         navigation.menu.findItem(item).isChecked = true
+    }
+
+    private fun unlock() {
+        val fragmentId = if (defaultPrefs()[Pref.LOCK_ACTIVE, false]) {
+            defaultPrefs()[Pref.FRAGMENT_ID, R.id.navigation_assets]
+        } else {
+            R.id.navigation_assets
+        }
+
+        setGraph(R.id.navigation_assets)
+        if (fragmentId != R.id.navigation_assets) {
+            val options = NavOptions.Builder()
+                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+                .build()
+
+            when (fragmentId) {
+                R.id.navigation_confirm_backup_wallet -> {
+                    val mnemonic = Vault.getVault().getString(VAULT_MNEMONIC, null)
+                    val bundle = Bundle().also { it.putString("mnemonic", mnemonic) }
+                    with(navController) {
+                        navigate(R.id.navigation_backup_wallet)
+                        navigate(fragmentId, bundle, options)
+                    }
+                }
+                R.id.navigation_asset_transactions -> {
+                    val bundle = Bundle().also {
+                        it.putString("rri", (args as AssetTransactionsFragmentArgs).rri)
+                        it.putString("name", (args as AssetTransactionsFragmentArgs).name)
+                        it.putString("balance", (args as AssetTransactionsFragmentArgs).balance)
+                    }
+                    navController.navigate(fragmentId, bundle, options)
+                }
+                else -> {
+                    navController.navigate(fragmentId, null, options)
+                }
+            }
+        }
+        lockActive = false
+    }
+
+    fun setNavAndBottomNavigationVisible() {
+        toolbar.visibility = View.VISIBLE
+        navigation.visibility = View.VISIBLE
+    }
+
+    private fun setGraph(@IdRes idRes: Int) {
+        graph.startDestination = idRes
+        navController.graph = graph
+    }
+
+    private fun usePin() {
+        setGraph(R.id.navigation_launch_pin)
+    }
+
+    private fun logout() {
+        navController.navigate(R.id.navigation_settings_delete_wallet)
     }
 
     /**
@@ -171,9 +316,6 @@ class MainActivity : BaseActivity() {
             if (item.itemId == navigation.selectedItemId) {
                 return@OnNavigationItemSelectedListener false
             }
-
-            val navController = Navigation
-                .findNavController(this, R.id.my_nav_host_fragment)
 
             when (item.itemId) {
                 R.id.menu_bottom_assets -> {

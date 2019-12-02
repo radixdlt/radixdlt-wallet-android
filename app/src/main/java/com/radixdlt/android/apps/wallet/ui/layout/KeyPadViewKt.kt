@@ -22,19 +22,26 @@ class KeyPadView : FrameLayout, View.OnClickListener {
     private var textLengthLimit = 6
     var textSize = 12f
         private set
+    var customTextSize = 12f
+        private set
     private var textColor = Color.BLACK
     var backgroundRes = R.drawable.keypad_background
         private set
     var imageResource = R.drawable.ic_arrow_back_24
         private set
+    private var customString: String? = ""
     private var fontFaceString: String? = ""
     private var decimalString: String? = ""
     var typeface: Typeface? = null
         private set
+    var customTextView: TextView? = null
     var imageResourceView: ImageView? = null
         private set
     private var deleteLayout: FrameLayout? = null
     var textGetListener: OnNumberTextListener? = null
+        private set
+
+    var customButtonListener: OnCustomButtonListener? = null
         private set
 
     constructor(context: Context) : super(context) {
@@ -55,6 +62,11 @@ class KeyPadView : FrameLayout, View.OnClickListener {
 
     fun setOnNumberTextListener(textGetListener: OnNumberTextListener) {
         this.textGetListener = textGetListener
+        setup()
+    }
+
+    fun setOnCustomButtonListener(customButtonListener: OnCustomButtonListener) {
+        this.customButtonListener = customButtonListener
         setup()
     }
 
@@ -83,6 +95,7 @@ class KeyPadView : FrameLayout, View.OnClickListener {
         digits = attributes.getString(R.styleable.KeyPadView_keypad_digits) ?: ""
         textLengthLimit = attributes.getInt(R.styleable.KeyPadView_keypad_text_limit, 5)
         textSize = attributes.getDimension(R.styleable.KeyPadView_keypad_text_size, 12.0f)
+        customTextSize = attributes.getDimension(R.styleable.KeyPadView_keypad_custom_text_size, 12.0f)
         textColor = attributes.getColor(R.styleable.KeyPadView_keypad_text_color, Color.BLACK)
         backgroundRes =
             attributes.getResourceId(
@@ -96,6 +109,7 @@ class KeyPadView : FrameLayout, View.OnClickListener {
             )
         fontFaceString = attributes.getString(R.styleable.KeyPadView_keypad_font_path)
         decimalString = attributes.getString(R.styleable.KeyPadView_keypad_decimal)
+        customString = attributes.getString(R.styleable.KeyPadView_keypad_custom)
 
         val v = LayoutInflater.from(context).inflate(R.layout.keypad_view, this, false)
         num.add(v.findViewById(R.id.one))
@@ -108,6 +122,7 @@ class KeyPadView : FrameLayout, View.OnClickListener {
         num.add(v.findViewById(R.id.eight))
         num.add(v.findViewById(R.id.nine))
         num.add(v.findViewById(R.id.zero))
+        customTextView = v.findViewById(R.id.custom)
         imageResourceView = v.findViewById(R.id.delete)
         deleteLayout = v.findViewById(R.id.delete_layout)
 
@@ -116,6 +131,7 @@ class KeyPadView : FrameLayout, View.OnClickListener {
         } else {
             Typeface.createFromAsset(context.assets, fontFaceString)
         }
+
         setup()
         addView(v)
     }
@@ -137,6 +153,18 @@ class KeyPadView : FrameLayout, View.OnClickListener {
             textView.setTextColor(textColor)
             textView.addCircleRipple()
             textView.typeface = typeface
+        }
+
+        if (customString != null) {
+            customTextView?.apply {
+                visibility = View.VISIBLE
+                setOnClickListener(this@KeyPadView)
+                textSize = customTextSize
+                setTextColor(this@KeyPadView.textColor)
+                typeface = this@KeyPadView.typeface
+                text = customString
+                addCircleRipple()
+            }
         }
 
         deleteLayout!!.setOnClickListener(this)
@@ -164,6 +192,12 @@ class KeyPadView : FrameLayout, View.OnClickListener {
         return this@KeyPadView
     }
 
+    fun setCustomTextSize(TextSize: Int): KeyPadView {
+        this.customTextSize = TextSize.toFloat()
+        setup()
+        return this@KeyPadView
+    }
+
     fun getTextColor(): Int {
         return textColor
     }
@@ -175,18 +209,20 @@ class KeyPadView : FrameLayout, View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-
-        if (view is TextView && digits.length < textLengthLimit) {
+        if (view is TextView && view.tag == "custom") {
+            customButtonListener?.customButtonListener()
+        } else if (view is TextView && digits.length < textLengthLimit) {
             if (validateTextView(view)) return
             if (decimalString != null && digits == "0" && view.text == "0") {
                 digits = view.text.toString()
             } else {
                 digits += view.text
             }
+            textGetListener?.numberTextListener(digits)
         } else if (view is FrameLayout && digits.isNotEmpty()) {
             digits = digits.substring(0, digits.length - 1)
+            textGetListener?.numberTextListener(digits)
         }
-        textGetListener?.numberTextListener(digits)
     }
 
     private fun validateTextView(view: TextView): Boolean {
@@ -204,4 +240,8 @@ class KeyPadView : FrameLayout, View.OnClickListener {
 
 interface OnNumberTextListener {
     fun numberTextListener(text: String)
+}
+
+interface OnCustomButtonListener {
+    fun customButtonListener()
 }

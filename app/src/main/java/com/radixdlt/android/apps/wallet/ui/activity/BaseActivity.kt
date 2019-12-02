@@ -15,7 +15,6 @@ import com.radixdlt.android.apps.wallet.util.Vault
 import com.radixdlt.client.core.crypto.ECKeyPair
 import okio.ByteString
 import org.jetbrains.anko.startActivity
-import timber.log.Timber
 import java.io.File
 
 @SuppressLint("Registered")
@@ -35,7 +34,6 @@ open class BaseActivity : AppCompatActivity() {
                 QueryPreferences.getPrefPasswordEnabled(this) &&
                 intent.action != null && intent.action == Intent.ACTION_VIEW
             ) {
-                Timber.tag("HYYUYY").d("YES")
                 QueryPreferences.setPrefAddress(this, "")
                 finishAffinity()
             }
@@ -50,7 +48,6 @@ open class BaseActivity : AppCompatActivity() {
                 AndroidRadixIdentity(ECKeyPair(privateKeyDecoded))
         } else if (Identity.myIdentity == null) {
             QueryPreferences.setPrefAddress(this, "")
-            Timber.tag("HYYUYY").d("YESO")
 
             startActivity<NewWalletActivity>()
             finishAffinity()
@@ -69,7 +66,6 @@ open class BaseActivity : AppCompatActivity() {
                 !openedPermissionDialog &&
                 QueryPreferences.getPrefPasswordEnabled(this)) || lockActive
         ) {
-            Timber.tag("HYYUYY").d("YESORESUME")
             QueryPreferences.setPrefAddress(this, "")
             lockActive = true
             startActivity<NewWalletActivity>() // With persistence we could probably finish activities and restart from first screen

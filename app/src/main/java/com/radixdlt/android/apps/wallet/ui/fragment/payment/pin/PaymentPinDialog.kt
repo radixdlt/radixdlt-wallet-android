@@ -10,9 +10,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.databinding.DialogPaymentPinBinding
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
-import com.radixdlt.android.apps.wallet.databinding.DialogPaymentPinBinding
 
 class PaymentPinDialog : FullScreenDialog() {
 
@@ -54,5 +54,10 @@ class PaymentPinDialog : FullScreenDialog() {
                 paymentViewModel.pay()
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        dismiss()
     }
 }

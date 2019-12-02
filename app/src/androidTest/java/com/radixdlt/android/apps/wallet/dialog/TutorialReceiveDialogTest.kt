@@ -68,7 +68,7 @@ class TutorialReceiveDialogTest {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
 
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
     }
 
     @Test
@@ -101,7 +101,7 @@ class TutorialReceiveDialogTest {
 
         // Toolbar with search should be visible and tutorial dialog
         // should not have shown
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
     }
 
     private fun clickPastGreetingScreen() {
