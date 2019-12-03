@@ -118,9 +118,9 @@ android {
         isEnabled = true
     }
 
-    viewBinding {
-        isEnabled = true
-    }
+//    viewBinding {
+//        isEnabled = true
+//    }
 }
 
 androidExtensions {

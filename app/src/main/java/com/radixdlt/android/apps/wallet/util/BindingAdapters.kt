@@ -27,8 +27,10 @@ import com.radixdlt.android.apps.wallet.biometrics.BiometricsAuthenticationResul
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.change.ChangePinAuthenticationViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.setup.SetupPinAuthenticationViewModel
+import com.radixdlt.android.apps.wallet.ui.fragment.launch.pin.LaunchPinViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.pin.PaymentPinViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusState
+import com.radixdlt.android.apps.wallet.ui.fragment.settings.pin.AuthenticatePinViewModel
 import com.radixdlt.android.apps.wallet.ui.layout.KeyPadView
 import org.jetbrains.anko.px2dip
 
@@ -247,6 +249,22 @@ fun LinearLayout.bindPinError(state: ChangePinAuthenticationViewModel.ChangePinS
 @BindingAdapter("pinError")
 fun LinearLayout.bindPinError(state: PaymentPinViewModel.PaymentPinState?) {
     if (state == PaymentPinViewModel.PaymentPinState.ERROR) {
+        shakeAnimation()
+        vibrate(context)
+    }
+}
+
+@BindingAdapter("pinError")
+fun LinearLayout.bindPinError(state: LaunchPinViewModel.LaunchPinState?) {
+    if (state == LaunchPinViewModel.LaunchPinState.ERROR) {
+        shakeAnimation()
+        vibrate(context)
+    }
+}
+
+@BindingAdapter("pinError")
+fun LinearLayout.bindPinError(state: AuthenticatePinViewModel.AuthenticatePinState) {
+    if (state == AuthenticatePinViewModel.AuthenticatePinState.ERROR) {
         shakeAnimation()
         vibrate(context)
     }

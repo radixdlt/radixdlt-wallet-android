@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.data.model.message.MessageEntity
 import com.radixdlt.android.apps.wallet.ui.activity.ConversationActivity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.ui.adapter.ContactsAdapter
 import com.radixdlt.android.apps.wallet.ui.dialog.NewConversationDialog
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
@@ -72,8 +73,11 @@ class ContactsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as MainActivity).setNavAndBottomNavigationVisible()
+
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
+
 
         initialiseRecyclerView()
         initialiseSwipeRefreshLayout()

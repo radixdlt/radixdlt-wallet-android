@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.databinding.FragmentPaymentSummaryBinding
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentAction
+import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
@@ -31,7 +32,7 @@ class PaymentSummaryFragment : Fragment() {
 
     private lateinit var ctx: Context
 
-    private val args: PaymentSummaryFragmentArgs by navArgs()
+    val args: PaymentSummaryFragmentArgs by navArgs()
     private val paymentSummaryViewModel: PaymentSummaryViewModel by viewModels()
     private val paymentViewModel: PaymentViewModel by activityViewModels()
 
@@ -66,6 +67,7 @@ class PaymentSummaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
+        (activity as PaymentActivity).setToolbarVisible()
         activity?.apply { paymentViewModel.paymentAction.observe(this, Observer(::action)) }
         paymentSummaryViewModel.paymentSummaryAction.observe(viewLifecycleOwner, Observer(::action))
     }
@@ -118,7 +120,7 @@ class PaymentSummaryFragment : Fragment() {
 
     private fun navigateToBiometricsAuthentication() {
         val action = PaymentSummaryFragmentDirections
-            .actionNavigationPaymentSummaryToNavigationPaymentBiomentrics()
+            .actionNavigationPaymentSummaryToNavigationPaymentBiometrics()
         navigate(action)
     }
 

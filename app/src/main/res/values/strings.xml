@@ -184,6 +184,7 @@
     <string name="settings_fragment_xml_change_pin">Change Pin</string>
     <string name="settings_fragment_xml_report_an_issue">Report an issue</string>
     <string name="settings_fragment_xml_use_biometrics">Use Biometrics</string>
+    <string name="settings_fragment_xml_authenticate_on_launch">Authenticate on launch</string>
     <string name="settings_fragment_xml_delete_wallet">Delete Wallet</string>
     <string name="settings_fragment_xml_security_title">Security</string>
     <string name="settings_fragment_xml_network_title">Network</string>
@@ -314,6 +315,19 @@
     <string name="payment_biometrics_dialog_too_many_attempts">Too many attempts,\ntry using pin!</string>
     <string name="payment_biometrics_dialog_unable_to_authenticate">Unable to authenticate!</string>
 
+    <!-- Authenticate Pin Dialog -->
+    <string name="authenticate_pin_dialog_pin_header">Enter pin</string>
+    <string name="authenticate_pin_dialog_content_description_back_button">Closes the pin dialog</string>
+
+    <!-- Authenticate Biometrics Dialog -->
+    <string name="authenticate_biometrics_dialog_xml_text_view">Please authenticate</string>
+    <string name="authenticate_biometrics_dialog_content_description_biometrics_icon">Biometrics icon</string>
+    <string name="authenticate_biometrics_dialog_xml_cancel_button">Cancel</string>
+    <string name="authenticate_biometrics_dialog_xml_use_pin_button">Use pin</string>
+    <string name="authenticate_biometrics_dialog_too_many_attempts">Too many attempts,\ntry using pin!</string>
+    <string name="authenticate_biometrics_dialog_unable_to_authenticate">Unable to authenticate!</string>
+    <string name="authenticate_biometrics_dialog_content_description_back_button">Closes the pin dialog</string>
+
     <!-- Common strings-->
     <string name="common_address_text">Address</string>
     <string name="common_toast_address_copied_clipboard">Address copied to clipboard</string>
@@ -397,6 +411,7 @@
 
     <!-- Learn Fragment -->
     <string name="learn_fragment_no_connection_icon_content_description">No connection icon</string>
+    <string name="learn_fragment_no_internet_connection_snackbar">No internet access</string>
 
     <!--  Receive Fragment Fragment -->
     <string name="receive_fragment_title">Receive Payment</string>
@@ -429,6 +444,13 @@
     <string name="keypad_view_six">6</string>
     <string name="keypad_view_nine">9</string>
     <string name="keypad_view_content_description_delete_last_input">Delete last input</string>
-    <string name="learn_fragment_no_internet_connection_snackbar">No internet access</string>
+
+    <!-- Launch Biometrics Fragment -->
+    <string name="launch_biometrics_fragment_xml_text_view">Please authenticate</string>
+    <string name="launch_biometrics_fragment_content_description_biometrics_icon">Biometrics icon</string>
+    <string name="launch_biometrics_fragment_xml_logout_button">Logout</string>
+    <string name="launch_biometrics_fragment_xml_use_pin_button">Use pin</string>
+    <string name="launch_biometrics_fragment_too_many_attempts">Too many attempts,\ntry using pin!</string>
+    <string name="launch_biometrics_fragment_unable_to_authenticate">Unable to authenticate!</string>
 
 </resources>

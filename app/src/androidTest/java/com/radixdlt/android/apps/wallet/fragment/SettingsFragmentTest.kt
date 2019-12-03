@@ -9,7 +9,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.SmallTest
+import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-@SmallTest
+@MediumTest
 class SettingsFragmentTest {
 
     /**
@@ -204,6 +204,10 @@ class SettingsFragmentTest {
             assertDisplayed(R.string.settings_fragment_xml_use_biometrics)
             assertUnchecked(R.id.settingsUseBiometricsSwitch)
             clickOn(R.id.settingsUseBiometricsSwitch)
+            clickOn(R.id.one)
+            clickOn(R.id.two)
+            clickOn(R.id.three)
+            clickOn(R.id.four)
             assertChecked(R.id.settingsUseBiometricsSwitch)
             navigateToPayScreen()
             inputPaymentDetails()
@@ -307,7 +311,7 @@ class SettingsFragmentTest {
 
     private fun navigateToPayScreen() {
         clickOn(R.id.menu_bottom_assets)
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
         DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(PaymentPinDialogTest.DELAY))
         clickOn(R.id.payButton)
     }
@@ -405,6 +409,7 @@ class SettingsFragmentTest {
 
     private fun clickMnemonicInCorrectOrder(mnemonicStringArray: Array<String>) {
         mnemonicStringArray.forEach {
+            scrollTo(it)
             clickOn(it)
         }
     }

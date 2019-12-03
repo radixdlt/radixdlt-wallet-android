@@ -53,6 +53,22 @@
         app:layout_constraintWidth_percent="0.33333333" />
 
     <TextView
+        android:id="@+id/custom"
+        android:tag="custom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seven"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.33333333" />
+
+    <TextView
         android:id="@+id/two"
         android:layout_width="0dp"
         android:layout_height="0dp"

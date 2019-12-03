@@ -8,12 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.connectivity.ConnectivityState
 import com.radixdlt.android.apps.wallet.databinding.FragmentLearnBinding
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.util.URL_KNOWLEDGE_BASE
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
@@ -28,20 +31,29 @@ class LearnFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentLearnBinding.inflate(inflater, container, false)
+    ): View? = initialiseDataBinding(inflater, container)
+
+    private fun initialiseDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_learn, container, false)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).setNavAndBottomNavigationVisible()
         observeMainViewModel()
-        return initialiseWebView()
+        lifecycleScope.launchWhenResumed {
+            initialiseWebView()
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun initialiseWebView(): View {
+    private fun initialiseWebView() {
         binding.learnWebView.loadUrl(URL_KNOWLEDGE_BASE)
         binding.learnWebView.settings.javaScriptEnabled = true
         setupProgressChange()
         setupBackKeyListener()
-
-        return binding.root
     }
 
     private fun observeMainViewModel() {
@@ -49,11 +61,12 @@ class LearnFragment : Fragment() {
     }
 
     private fun connectivityChange(connectivityState: ConnectivityState) {
-        if (connectivityState == ConnectivityState.Connected) {
-            binding.learnWebView.visibility = View.VISIBLE
-            binding.learnImageView.visibility = View.GONE
-        } else {
-            informOfNoInternetConnection()
+        when (connectivityState) {
+            ConnectivityState.Connected -> {
+                binding.learnWebView.visibility = View.VISIBLE
+                binding.learnImageView.visibility = View.GONE
+            }
+            ConnectivityState.Disconnected -> informOfNoInternetConnection()
         }
     }
 
@@ -77,10 +90,10 @@ class LearnFragment : Fragment() {
         binding.learnWebView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(webView: WebView, newProgress: Int) {
                 if (newProgress == 100) {
-                    binding.learnProgressBar.visibility = View.GONE
+                    binding.learnProgressBar?.visibility = View.GONE
                 } else {
-                    binding.learnProgressBar.visibility = View.VISIBLE
-                    binding.learnProgressBar.progress = newProgress
+                    binding.learnProgressBar?.visibility = View.VISIBLE
+                    binding.learnProgressBar?.progress = newProgress
                 }
             }
         }

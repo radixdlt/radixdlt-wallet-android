@@ -88,7 +88,7 @@ class ReceivePaymentFragmentTest {
     private fun navigateToReceiveScreen() {
         // Click on x on the toolbar to dismiss
         clickOn(navigationIconMatcher())
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
         DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(3))
         clickOn(R.id.receiveButton)
     }

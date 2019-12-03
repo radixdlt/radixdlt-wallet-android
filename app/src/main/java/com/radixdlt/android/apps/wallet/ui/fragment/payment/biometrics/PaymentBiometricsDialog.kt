@@ -13,9 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.biometrics.BiometricsAuthentication
 import com.radixdlt.android.apps.wallet.biometrics.BiometricsAuthenticationResult
+import com.radixdlt.android.apps.wallet.databinding.DialogPaymentBiometricsBinding
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
-import com.radixdlt.android.apps.wallet.databinding.DialogPaymentBiometricsBinding
 
 class PaymentBiometricsDialog : FullScreenDialog() {
 
@@ -82,5 +82,10 @@ class PaymentBiometricsDialog : FullScreenDialog() {
                 dismiss()
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        dismiss()
     }
 }

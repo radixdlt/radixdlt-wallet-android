@@ -27,5 +27,7 @@
     <attr name="keypad_grid_line_thickness" format="dimension" />
     <attr name="keypad_font_path" format="string" />
     <attr name="keypad_decimal" format="string" />
+    <attr name="keypad_custom" format="string" />
+    <attr name="keypad_custom_text_size" format="dimension" />
   </declare-styleable>
 </resources>

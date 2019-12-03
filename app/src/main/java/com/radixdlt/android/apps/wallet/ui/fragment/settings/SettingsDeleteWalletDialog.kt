@@ -47,4 +47,9 @@ class SettingsDeleteWalletDialog : FullScreenDialog() {
         }
         dismiss()
     }
+
+    override fun onPause() {
+        super.onPause()
+        dismiss()
+    }
 }

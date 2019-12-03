@@ -49,4 +49,9 @@ class ChangePinAuthenticationDialog : FullScreenDialog() {
             })
         }
     }
+
+    override fun onPause() {
+        dismiss()
+        super.onPause()
+    }
 }

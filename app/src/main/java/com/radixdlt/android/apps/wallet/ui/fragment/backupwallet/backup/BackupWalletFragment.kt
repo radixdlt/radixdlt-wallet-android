@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.databinding.FragmentBackupWalletBinding
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.apps.wallet.util.showSnackbarAboveNavigationView
@@ -50,6 +51,9 @@ class BackupWalletFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ctx = view.context
+        if ((activity is MainActivity)) {
+            (activity as MainActivity).setNavAndBottomNavigationVisible()
+        }
         initialiseToolbar(R.string.backup_wallet_fragment_toolbar_title)
         initialiseViewModels()
         backupWalletViewModel.backupWalletAction.observe(viewLifecycleOwner, Observer(::action))

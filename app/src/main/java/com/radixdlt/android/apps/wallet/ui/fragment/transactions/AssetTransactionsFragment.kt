@@ -24,10 +24,11 @@ import com.radixdlt.android.apps.wallet.data.model.AssetEntity
 import com.radixdlt.android.apps.wallet.data.model.TransactionsEntityOM
 import com.radixdlt.android.apps.wallet.di.viewModel
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
+import com.radixdlt.android.apps.wallet.ui.activity.ReceivePaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
+import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
-import com.radixdlt.android.apps.wallet.ui.dialog.ReceiveRadixDialog
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.get
@@ -35,6 +36,7 @@ import com.radixdlt.android.apps.wallet.util.toast
 import com.radixdlt.client.core.atoms.particles.RRI
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_asset_transactions.*
+import org.jetbrains.anko.startActivity
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
@@ -49,7 +51,7 @@ class AssetTransactionsFragment : Fragment() {
 
     private lateinit var assetTransactionsAdapter: AssetTransactionsAdapter
 
-    private val args: AssetTransactionsFragmentArgs by navArgs()
+    val args: AssetTransactionsFragmentArgs by navArgs()
     private val rri: String by lazy { args.rri }
     private val name: String by lazy { args.name }
     private val balance: String by lazy { args.balance }
@@ -62,6 +64,7 @@ class AssetTransactionsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
+        (activity as MainActivity).setNavAndBottomNavigationVisible()
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as? AppCompatActivity)?.supportActionBar?.title = name
     }
@@ -74,6 +77,7 @@ class AssetTransactionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).setNavAndBottomNavigationVisible()
         initialiseCollapsingToolbar()
         initialiseRecyclerView()
         initialiseViewModels(rri)
@@ -178,9 +182,8 @@ class AssetTransactionsFragment : Fragment() {
 
     private fun receiveButtonClickListener() {
         receiveButton.setOnClickListener {
-            val receiveRadixDialog = ReceiveRadixDialog.newInstance()
-            fragmentManager?.apply {
-                receiveRadixDialog.show(this, null)
+            activity?.apply {
+                startActivity<ReceivePaymentActivity>()
             }
         }
     }

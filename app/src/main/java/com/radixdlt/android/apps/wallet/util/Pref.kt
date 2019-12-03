@@ -19,6 +19,10 @@ object Pref {
     const val WALLET_BACKED_UP = "wallet_backed_up"
     const val PIN_SET = "pin_set"
     const val USE_BIOMETRICS = "use_biometrics"
+    const val AUTHENTICATE_ON_LAUNCH = "authenticate_on_launch"
+
+    const val FRAGMENT_ID = "fragment_id"
+    const val LOCK_ACTIVE = "lock_active"
 
     fun Context.defaultPrefs(): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(this)

@@ -80,7 +80,7 @@ class PaymentPinDialogTest {
 
         setPin()
         checkBiometrics()
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
 
         DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
 
@@ -146,7 +146,7 @@ class PaymentPinDialogTest {
     }
 
     private fun navigateToPayScreen() {
-        assertDisplayed(R.id.toolbar_search)
+        assertDisplayed(R.id.toolbarSearch)
         DelayHelper.waitTime(TimeUnit.SECONDS.toMillis(DELAY))
         clickOn(R.id.payButton)
     }
