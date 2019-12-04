@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.radixdlt.android.apps.wallet.ui.fragment.settings.biometrics.AuthenticateBiometricsViewModel" />
+            type="com.radixdlt.android.apps.wallet.ui.main.settings.biometrics.AuthenticateBiometricsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

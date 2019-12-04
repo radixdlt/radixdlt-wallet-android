@@ -9,7 +9,7 @@ import androidx.test.rule.ActivityTestRule
 import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
-import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
+import com.radixdlt.android.apps.wallet.ui.start.StartActivity
 import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsDeleteWalletViewModel" />
+            type="com.radixdlt.android.apps.wallet.ui.main.settings.SettingsDeleteWalletViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

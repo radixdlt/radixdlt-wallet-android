@@ -6,7 +6,7 @@ import com.radixdlt.android.apps.wallet.di.module.AndroidBuilderModule
 import com.radixdlt.android.apps.wallet.di.module.RadixWalletModule
 import com.radixdlt.android.apps.wallet.di.module.ViewModelModule
 import com.radixdlt.android.apps.wallet.ui.di.module.DatabaseModule
-import com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsViewModel
+import com.radixdlt.android.apps.wallet.ui.main.transactions.AssetTransactionsViewModel
 import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.BindsInstance
 import dagger.Component

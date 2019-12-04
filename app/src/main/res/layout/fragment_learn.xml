@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/basicallyWhite"
-        tools:context=".ui.fragment.account.LearnFragment">
+        tools:context=".ui.main.learn.LearnFragment">
 
         <ProgressBar
             android:id="@+id/learnProgressBar"

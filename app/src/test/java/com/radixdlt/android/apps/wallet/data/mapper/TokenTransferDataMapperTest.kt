@@ -55,7 +55,7 @@ class TokenTransferDataMapperTest {
             val myAddress = "9he94tVfQGAVr4xoUpG3uJfB2exURExzFV6E7dq4bxUWRbM5Edd"
 
             val transactionEntity =
-                TokenTransferDataMapperOM.transform(tokenTransfer, myAddress)
+                TokenTransferDataMapper.transform(tokenTransfer, myAddress)
 
             assertNotEquals(myAddress, transactionEntity.address)
             assertEquals("Personal", transactionEntity.accountName)
@@ -75,7 +75,7 @@ class TokenTransferDataMapperTest {
             val myAddress = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
 
             val transactionEntity =
-                TokenTransferDataMapperOM.transform(tokenTransfer, myAddress)
+                TokenTransferDataMapper.transform(tokenTransfer, myAddress)
 
             assertNotEquals(myAddress, transactionEntity.address)
             assertEquals("Personal", transactionEntity.accountName)
@@ -106,7 +106,7 @@ class TokenTransferDataMapperTest {
             val myAddress = "9he94tVfQGAVr4xoUpG3uJfB2exURExzFV6E7dq4bxUWRbM5Edd"
 
             val transactionEntity =
-                TokenTransferDataMapperOM.transform(tokenTransfer, myAddress)
+                TokenTransferDataMapper.transform(tokenTransfer, myAddress)
 
             assertNotEquals(myAddress, transactionEntity.address)
             assertEquals("Personal", transactionEntity.accountName)
@@ -126,7 +126,7 @@ class TokenTransferDataMapperTest {
             val myAddress = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
 
             val transactionEntity =
-                TokenTransferDataMapperOM.transform(tokenTransfer, myAddress)
+                TokenTransferDataMapper.transform(tokenTransfer, myAddress)
 
             assertNotEquals(myAddress, transactionEntity.address)
             assertEquals("Personal", transactionEntity.accountName)

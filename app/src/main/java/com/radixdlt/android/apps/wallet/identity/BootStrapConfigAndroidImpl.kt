@@ -2,7 +2,9 @@ package com.radixdlt.android.apps.wallet.identity
 
 import android.content.Context
 import com.google.common.collect.ImmutableSet
-import com.radixdlt.android.apps.wallet.util.QueryPreferences
+import com.radixdlt.android.apps.wallet.util.Pref
+import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
+import com.radixdlt.android.apps.wallet.util.Pref.set
 import com.radixdlt.client.core.BootstrapConfig
 import com.radixdlt.client.core.address.RadixUniverseConfig
 import com.radixdlt.client.core.address.RadixUniverseConfigs
@@ -34,17 +36,17 @@ class BootStrapConfigAndroidImpl(
 
     companion object {
         fun localHost(context: Context, address: String = "localhost"): BootstrapConfig {
-            QueryPreferences.setRemoteFaucet(context, false)
+            context.defaultPrefs()[Pref.USING_REMOTE_FAUCET] = false
             return BootStrapConfigAndroidImpl(address)
         }
 
         fun macAndroidEmulator(context: Context): BootstrapConfig {
-            QueryPreferences.setRemoteFaucet(context, false)
+            context.defaultPrefs()[Pref.USING_REMOTE_FAUCET] = false
             return BootStrapConfigAndroidImpl("10.0.2.2")
         }
 
         fun radixBetanetNode(context: Context): BootstrapConfig {
-            QueryPreferences.setRemoteFaucet(context, true)
+            context.defaultPrefs()[Pref.USING_REMOTE_FAUCET] = true
             return BootStrapConfigAndroidImpl("sunstone-emu.radixdlt.com", true, RadixUniverseConfigs::getBetanet)
         }
     }

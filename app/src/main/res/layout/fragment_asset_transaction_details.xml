@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="com.radixdlt.android.apps.wallet.ui.fragment.details.AssetTransactionDetailsViewModel" />
+            type="com.radixdlt.android.apps.wallet.ui.main.details.AssetTransactionDetailsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

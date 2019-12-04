@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.radixdlt.android.apps.wallet.ui.fragment.greeting.GreetingViewModel" />
+            type="com.radixdlt.android.apps.wallet.ui.start.greeting.GreetingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

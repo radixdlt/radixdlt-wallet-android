@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.radixdlt.android.apps.wallet.R
+import com.radixdlt.android.apps.wallet.ui.receive.ReceiveActivity
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.set
 import kotlinx.android.synthetic.main.dialog_tutorial_receive.*
+import org.jetbrains.anko.startActivity
 
 class TutorialReceiveDialog : FullScreenDialog() {
 
@@ -32,11 +34,8 @@ class TutorialReceiveDialog : FullScreenDialog() {
 
     private fun setReceiveButtonOnClickListener() {
         receiveButton.setOnClickListener {
-            val receiveRadixDialog = ReceiveRadixDialog.newInstance()
-            fragmentManager?.apply {
-                receiveRadixDialog.show(this, null)
-            }
             dismiss()
+            activity?.startActivity<ReceiveActivity>()
         }
     }
 }

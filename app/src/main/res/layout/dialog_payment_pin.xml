@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.radixdlt.android.apps.wallet.ui.fragment.payment.pin.PaymentPinViewModel" />
+            type="com.radixdlt.android.apps.wallet.ui.send.payment.pin.PaymentPinViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -9,11 +9,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.radixdlt.android.apps.wallet.identity.Identity
-import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
-import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
-import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
+import com.radixdlt.android.apps.wallet.ui.start.StartActivity
+import com.radixdlt.android.apps.wallet.ui.main.MainActivity
+import com.radixdlt.android.apps.wallet.ui.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
-import com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsSharedViewModel
+import com.radixdlt.android.apps.wallet.ui.main.settings.SettingsSharedViewModel
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.set

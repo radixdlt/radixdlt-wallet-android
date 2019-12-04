@@ -19,7 +19,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.NewWalletActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.webview.NewWalletActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
 <!--            <intent-filter>-->
@@ -58,7 +58,7 @@
         </activity>
 
 
-        <activity android:name=".ui.activity.StartActivity"
+        <activity android:name=".ui.start.StartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize">
@@ -72,66 +72,66 @@
         </activity>
 
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.EnterPasswordActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.webview.EnterPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.EnterMnemonicActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.webview.EnterMnemonicActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.NewPaperKeyWalletActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.webview.NewPaperKeyWalletActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.main.MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.webview.SendRadixActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.send.PaymentActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.ReceivePaymentActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.receive.ReceiveActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.ReceiveRadixInvoiceActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.webview.ReceiveRadixInvoiceActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.ConversationActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.webview.ConversationActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme" />
 
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.BarcodeCaptureActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.camera.BarcodeCaptureActivity"
             android:label="@string/barcode_capture_activity_title"
-            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.activity.SendRadixActivity"
+            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.webview.SendRadixActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity"
+            android:name="com.radixdlt.android.apps.wallet.ui.webview.TransactionDetailsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity"
+            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.activity.WebViewActivity"
-            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity"
+            android:name=".ui.webview.WebViewActivity"
+            android:parentActivityName="com.radixdlt.android.apps.wallet.ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

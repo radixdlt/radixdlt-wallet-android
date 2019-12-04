@@ -1,24 +1,15 @@
 package com.radixdlt.android.apps.wallet.util
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.net.ConnectivityManager
 import android.os.SystemClock
 import android.text.Editable
-import android.text.SpannableStringBuilder
 import android.text.TextWatcher
-import android.text.style.RelativeSizeSpan
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.ColorRes
-import androidx.core.content.ContextCompat
-import com.radixdlt.android.apps.wallet.R
-import com.radixdlt.android.apps.wallet.data.model.TransactionsEntityOM
-import com.radixdlt.android.apps.wallet.data.model.newtransaction.TransactionEntity2
-import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
+import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionEntity
 import com.radixdlt.android.apps.wallet.identity.Identity
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
 import com.radixdlt.android.apps.wallet.util.Pref.set
@@ -40,50 +31,11 @@ import java.math.BigDecimal
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Locale
-import java.util.regex.Pattern
 
 object EmptyTextWatcher : TextWatcher {
     override fun afterTextChanged(p0: Editable?) {}
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-}
-
-/**
- * Checks if the device has any active internet connection.
- *
- * @return true device with internet connection, otherwise false.
- */
-fun isThereInternet(context: Context): Boolean {
-    val isConnected: Boolean
-
-    val connectivityManager = context.applicationContext
-        .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val networkInfo = connectivityManager.activeNetworkInfo
-    isConnected = networkInfo != null && networkInfo.isConnected
-
-    return isConnected
-}
-
-/**
- * @return true if the supplied when is today else false
- */
-fun isYesterday(`when`: Long): Boolean {
-    val time = GregorianCalendar()
-    time.timeInMillis = `when`
-
-    val thenDayOfYear = time.get(Calendar.DAY_OF_YEAR)
-    val wasLeapYear = time.isLeapYear(Calendar.YEAR)
-
-    time.timeInMillis = System.currentTimeMillis()
-    var yesterdayDayOfYear = time.get(Calendar.DAY_OF_YEAR) - 1
-
-    if (yesterdayDayOfYear == 0 && wasLeapYear) {
-        yesterdayDayOfYear = 366
-    } else if (yesterdayDayOfYear == 0) {
-        yesterdayDayOfYear = 365
-    }
-
-    return thenDayOfYear == yesterdayDayOfYear
 }
 
 /**
@@ -113,48 +65,6 @@ fun multiClickingPrevention(timeToElapse: Long): Boolean {
     return false
 }
 
-/**
- * There is a bug in < jdk 8 which doesn't remove trailing zeros
- * for zero value and since Android doesn't fully utilize java 8
- * where the bug is fixed, the problem persists.
- *
- * Checks if value is 0 and return 0 as a whole value else strips normally.
- *
- * @return BigDecimal without trailing zeros including zero values.
- * @see <a href="https://bugs.java.com/bugdatabase/view_bug.do?bug_id=6480539">https://bugs.java.com/bugdatabase/view_bug.do?bug_id=6480539</a>
- */
-fun BigDecimal.fixedStripTrailingZeros(): BigDecimal {
-    val zero = BigDecimal.ZERO
-    return if (this.compareTo(zero) == 0) {
-        zero
-    } else {
-        this.stripTrailingZeros()
-    }
-}
-
-fun createProgressDialog(context: Context): ProgressDialog {
-    val progressDialog = ProgressDialog(context, R.style.CustomProgressDialogColors)
-    progressDialog.setCancelable(false)
-
-    return progressDialog
-}
-
-fun setDialogMessage(progressDialog: ProgressDialog, message: String) {
-    progressDialog.setMessage(message)
-}
-
-fun setProgressDialogVisible(progressDialog: ProgressDialog, show: Boolean) {
-    if (show) {
-        if (!progressDialog.isShowing) {
-            progressDialog.show()
-        }
-    } else {
-        if (progressDialog.isShowing) {
-            progressDialog.dismiss()
-        }
-    }
-}
-
 fun hideKeyboard(view: View) {
     val inputMethodManager = view.context.getSystemService(
         Activity.INPUT_METHOD_SERVICE
@@ -167,50 +77,6 @@ fun showKeyboard(view: View) {
         Context.INPUT_METHOD_SERVICE
     ) as InputMethodManager
     imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-}
-
-fun setAddressWithColors(
-    ctx: Context,
-    myAddress: String,
-    @ColorRes middleColorId: Int = R.color.white
-): CharSequence {
-
-    val firstFive = myAddress.substring(0, 5)
-    val middle = myAddress.substring(5, myAddress.length - 5)
-    val lastFive = myAddress.substring(myAddress.length - 5, myAddress.length)
-
-    return TextFormatHelper.normal(
-        TextFormatHelper.color(ContextCompat.getColor(ctx, R.color.radixBlue), firstFive),
-        TextFormatHelper.color(ContextCompat.getColor(ctx, middleColorId), middle),
-        TextFormatHelper.color(ContextCompat.getColor(ctx, R.color.colorAccentSecondary), lastFive)
-    )
-}
-
-fun setLastSevenCharactersGreen(
-    ctx: Context,
-    myAddress: String,
-    @ColorRes firstPartDefaultColor: Int = R.color.radixBlueGrey2
-): CharSequence {
-
-    val firstPart = myAddress.substring(0, myAddress.length - 7)
-    val lastSeven = myAddress.substring(myAddress.length - 7, myAddress.length)
-
-    return TextFormatHelper.normal(
-        TextFormatHelper.color(ContextCompat.getColor(ctx, firstPartDefaultColor), firstPart),
-        TextFormatHelper.color(ContextCompat.getColor(ctx, R.color.colorAccentSecondary), lastSeven)
-    )
-}
-
-fun formatCharactersForAmount(string: CharSequence, string2: CharSequence): SpannableStringBuilder {
-    val spanTxt = SpannableStringBuilder(string)
-    spanTxt.append(".$string2")
-    // make the textsize 0.7f times.
-    spanTxt.setSpan(
-        RelativeSizeSpan(0.7f), spanTxt.length - ".$string2".length,
-        spanTxt.length, 0
-    )
-
-    return spanTxt
 }
 
 fun isRadixAddress(addressBase58: String): Boolean {
@@ -232,38 +98,6 @@ fun isRadixAddress(addressBase58: String): Boolean {
     }
 
     return true
-}
-
-fun formatDateTime(dateUnix: Long): String {
-    val localDateTime = LocalDateTime.ofInstant(
-        Instant.ofEpochMilli(dateUnix), ZoneId.systemDefault()
-    )
-    var displayValue = localDateTime.format(
-        DateTimeFormatter.ofPattern("EEEE, ? MMM, HH:mm", Locale.getDefault())
-    )
-    val day = localDateTime.format(
-        DateTimeFormatter.ofPattern("dd", Locale.getDefault())
-    )
-    val dayOrdinal = day.toInt().getOrdinal()
-    displayValue = displayValue.replace("?", dayOrdinal!!)
-
-    return displayValue
-}
-
-fun formatDateDayMonthYear(dateUnix: Long): String {
-    val localDateTime = LocalDateTime.ofInstant(
-        Instant.ofEpochMilli(dateUnix), ZoneId.systemDefault()
-    )
-    var displayValue = localDateTime.format(
-        DateTimeFormatter.ofPattern("EEEE, ? MMMM, yyyy", Locale.getDefault())
-    )
-    val day = localDateTime.format(
-        DateTimeFormatter.ofPattern("dd", Locale.getDefault())
-    )
-    val dayOrdinal = day.toInt().getOrdinal()
-    displayValue = displayValue.replace("?", dayOrdinal!!)
-
-    return displayValue
 }
 
 fun formatDateDay(dateUnix: Long): String {
@@ -292,21 +126,28 @@ fun formatDateMonthYear(dateUnix: Long): String {
     )
 }
 
+fun sumStoredTransactions(transactionsEntityOM: List<TransactionEntity>): BigDecimal {
+    val sumSent = transactionsEntityOM.asSequence().filter { transactions ->
+        transactions.sent
+    }.map { transactionEntity ->
+        transactionEntity.amount
+    }.fold(BigDecimal.ZERO, BigDecimal::add)
+
+    val sumReceived = transactionsEntityOM.asSequence().filterNot { transactions ->
+        transactions.sent
+    }.map { transactionEntity ->
+        transactionEntity.amount
+    }.fold(BigDecimal.ZERO, BigDecimal::add)
+
+    return sumReceived - sumSent
+}
+
 fun copyToClipboard(context: Context, myAddress: String) {
     val clipboard = context.getSystemService(
         Context.CLIPBOARD_SERVICE
     ) as ClipboardManager
     val clip = ClipData.newPlainText("address", myAddress)
     clipboard.setPrimaryClip(clip)
-}
-
-fun validateIPAddress(ipAddress: String): Boolean {
-    val ipv4 = Pattern.compile(IPV4_ADDRESS_PATTERN).matcher(ipAddress)
-    if (ipv4.matches()) {
-        return true
-    }
-
-    return Pattern.compile(IPV6_ADDRESS_PATTERN).matcher(ipAddress).matches()
 }
 
 /**
@@ -319,10 +160,6 @@ fun resetData(context: Context) {
         .subscribeOn(Schedulers.computation())
         .subscribe()
 
-    QueryPreferences.setPrefAddress(context, "")
-    QueryPreferences.setPrefPasswordEnabled(context, true)
-    QueryPreferences.setPrefAutoLockTimeOut(context, 2000)
-    QueryPreferences.setPrefCreatedByMnemonicOrSeed(context, false)
     context.defaultPrefs()[Pref.WALLET_BACKED_UP] = false
     context.defaultPrefs()[Pref.PIN_SET] = false
     context.defaultPrefs()[Pref.USE_BIOMETRICS] = false
@@ -348,38 +185,6 @@ private fun deleteKeystoreFile(context: Context) {
 fun deleteAllData(context: Context) {
     resetData(context)
     deleteKeystoreFile(context)
-}
-
-fun sumStoredTransactions(transactionEntities: List<TransactionEntity2>): BigDecimal {
-    val sumSent = transactionEntities.asSequence().filter { transactions ->
-        transactions.sent
-    }.map { transactionEntity ->
-        transactionEntity.amount
-    }.fold(BigDecimal.ZERO, BigDecimal::add)
-
-    val sumReceived = transactionEntities.asSequence().filterNot { transactions ->
-        transactions.sent
-    }.map { transactionEntity ->
-        transactionEntity.amount
-    }.fold(BigDecimal.ZERO, BigDecimal::add)
-
-    return sumReceived - sumSent
-}
-
-fun sumStoredTransactionsOM(transactionsEntityOM: List<TransactionsEntityOM>): BigDecimal {
-    val sumSent = transactionsEntityOM.asSequence().filter { transactions ->
-        transactions.sent
-    }.map { transactionEntity ->
-        transactionEntity.amount
-    }.fold(BigDecimal.ZERO, BigDecimal::add)
-
-    val sumReceived = transactionsEntityOM.asSequence().filterNot { transactions ->
-        transactions.sent
-    }.map { transactionEntity ->
-        transactionEntity.amount
-    }.fold(BigDecimal.ZERO, BigDecimal::add)
-
-    return sumReceived - sumSent
 }
 
 /**

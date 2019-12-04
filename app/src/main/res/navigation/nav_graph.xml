@@ -2,11 +2,11 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph">
-    <!-- app:startDestination="@id/navigation_assets" -->
+    android:id="@+id/nav_graph"
+    tools:ignore="InvalidNavigation">
     <fragment
         android:id="@+id/navigation_assets"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.main.assets.AssetsFragment"
         android:label="fragment_assets"
         tools:layout="@layout/fragment_assets">
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_asset_transactions"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.main.transactions.AssetTransactionsFragment"
         android:label="fragment_asset_transactions"
         tools:layout="@layout/fragment_asset_transactions">
         <argument
@@ -61,55 +61,22 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_asset_transaction_details"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.details.AssetTransactionDetailsFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.main.details.AssetTransactionDetailsFragment"
         android:label="fragment_asset_transaction_details"
         tools:layout="@layout/fragment_asset_transaction_details">
-<!--        <argument-->
-<!--            android:name="address"-->
-<!--            app:argType="string" />-->
-<!--        <argument-->
-<!--            android:name="name"-->
-<!--            android:defaultValue="@null"-->
-<!--            app:argType="string"-->
-<!--            app:nullable="true" />-->
-<!--        <argument-->
-<!--            android:name="amount"-->
-<!--            app:argType="string" />-->
-<!--        <argument-->
-<!--            android:name="rri"-->
-<!--            app:argType="string" />-->
-<!--        <argument-->
-<!--            android:name="note"-->
-<!--            android:defaultValue="@null"-->
-<!--            app:argType="string"-->
-<!--            app:nullable="true" />-->
         <argument
             android:name="transaction"
-            app:argType="com.radixdlt.android.apps.wallet.data.model.TransactionsEntityOM"
+            app:argType="com.radixdlt.android.apps.wallet.data.model.transaction.TransactionEntity"
             app:nullable="false" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_contacts"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.contacts.ContactsFragment"
-        android:label="fragment_contacts"
-        tools:layout="@layout/fragment_contacts" />
-    <fragment
         android:id="@+id/navigation_account"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.account.LearnFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.main.learn.LearnFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_learn" />
     <fragment
-        android:id="@+id/navigation_more_options"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.moreoptions.MoreOptionsFragment"
-        android:label="fragment_more_options"
-        tools:layout="@layout/fragment_more_options">
-        <action
-            android:id="@+id/navigation_more_options_to_navigation_backup_wallet"
-            app:destination="@id/navigation_backup_wallet" />
-    </fragment>
-    <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.main.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings">
         <action
@@ -126,7 +93,7 @@
             app:destination="@id/navigation_authenticate_pin_dialog">
             <argument
                 android:name="functionality"
-                app:argType="com.radixdlt.android.apps.wallet.ui.fragment.settings.AuthenticateFunctionality"
+                app:argType="com.radixdlt.android.apps.wallet.ui.main.settings.AuthenticateFunctionality"
                 app:nullable="false" />
         </action>
         <action
@@ -134,7 +101,7 @@
             app:destination="@id/navigation_authenticate_biometrics_dialog">
             <argument
                 android:name="functionality"
-                app:argType="com.radixdlt.android.apps.wallet.ui.fragment.settings.AuthenticateFunctionality"
+                app:argType="com.radixdlt.android.apps.wallet.ui.main.settings.AuthenticateFunctionality"
                 app:nullable="false" />
         </action>
     </fragment>
@@ -144,7 +111,7 @@
         android:label="navigation_tutorial_receive" />
     <fragment
         android:id="@+id/navigation_backup_wallet"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.backup.BackupWalletFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.backupwallet.backup.BackupWalletFragment"
         android:label="fragment_backup_wallet"
         tools:layout="@layout/fragment_backup_wallet">
         <action
@@ -157,7 +124,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_confirm_backup_wallet"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.confirm.ConfirmBackupWalletFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.backupwallet.confirm.ConfirmBackupWalletFragment"
         android:label="fragment_confirm_backup_wallet"
         tools:layout="@layout/fragment_confirm_backup_wallet">
         <argument
@@ -178,26 +145,26 @@
         android:label="navigation_setup_biometrics" />
     <dialog
         android:id="@+id/navigation_settings_delete_wallet"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsDeleteWalletDialog"
+        android:name="com.radixdlt.android.apps.wallet.ui.main.settings.SettingsDeleteWalletDialog"
         android:label="navigation_settings_delete_wallet" />
     <fragment
         android:id="@+id/navigation_launch_pin"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.launch.pin.LaunchPinFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.launch.pin.LaunchPinFragment"
         android:label="fragment_launch_pin"
         tools:layout="@layout/fragment_launch_pin" />
     <fragment
         android:id="@+id/navigation_launch_biometrics"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.launch.biometrics.LaunchBiometricsFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.launch.biometrics.LaunchBiometricsFragment"
         android:label="fragment_launch_biometrics"
         tools:layout="@layout/fragment_launch_biometrics" />
     <dialog
         android:id="@+id/navigation_authenticate_pin_dialog"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.settings.pin.AuthenticatePinDialog"
+        android:name="com.radixdlt.android.apps.wallet.ui.main.settings.pin.AuthenticatePinDialog"
         android:label="dialog_authenticate_pin"
         tools:layout="@layout/dialog_authenticate_pin">
         <argument
             android:name="functionality"
-            app:argType="com.radixdlt.android.apps.wallet.ui.fragment.settings.AuthenticateFunctionality"
+            app:argType="com.radixdlt.android.apps.wallet.ui.main.settings.AuthenticateFunctionality"
             app:nullable="false" />
         <action
             android:id="@+id/navigation_authenticate_pin_dialog_to_navigation_settings"
@@ -207,12 +174,12 @@
     </dialog>
     <dialog
         android:id="@+id/navigation_authenticate_biometrics_dialog"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.settings.biometrics.AuthenticateBiometricsDialog"
+        android:name="com.radixdlt.android.apps.wallet.ui.main.settings.biometrics.AuthenticateBiometricsDialog"
         android:label="dialog_authenticate_biometrics"
         tools:layout="@layout/dialog_authenticate_biometrics">
         <argument
             android:name="functionality"
-            app:argType="com.radixdlt.android.apps.wallet.ui.fragment.settings.AuthenticateFunctionality"
+            app:argType="com.radixdlt.android.apps.wallet.ui.main.settings.AuthenticateFunctionality"
             app:nullable="false" />
         <action
             android:id="@+id/navigation_authenticate_biometrics_dialog_to_navigation_settings"

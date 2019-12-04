@@ -2,8 +2,7 @@ package com.radixdlt.android.apps.wallet.data.mapper
 
 import com.radixdlt.android.apps.wallet.data.model.transaction.TransactionEntity
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
-import com.radixdlt.client.application.translate.tokens.TokenUnitConversions
-import java.math.RoundingMode
+import java.math.BigDecimal
 
 object TokenTransferDataMapper {
 
@@ -16,24 +15,24 @@ object TokenTransferDataMapper {
      */
     fun transform(tokenTransfer: TokenTransfer, myAddress: String): TransactionEntity {
 
+        val accountAddress: String = myAddress
+        val accountName = "Personal" // Temporary until we allow multiple accounts
         val address: String = getAddress(tokenTransfer, myAddress)
-        val subUnitAmount: Long = tokenTransfer.amount.toLong()
-        val formattedAmount: String = getAmount(tokenTransfer, myAddress)
+        val amount: BigDecimal = tokenTransfer.amount
         val message: String? = if (tokenTransfer.attachmentAsString.isPresent) tokenTransfer.attachmentAsString.get() else null
         val sent: Boolean = tokenTransfer.from.toString() == myAddress
-        val dateUnix: Long = tokenTransfer.timestamp
+        val timestamp: Long = tokenTransfer.timestamp
         val rri: String = tokenTransfer.tokenClass.toString()
-        val tokenClassSubUnits = TokenUnitConversions.getSubunits()
 
         return TransactionEntity(
+            accountAddress,
+            accountName,
             address,
-            subUnitAmount,
-            formattedAmount,
+            amount,
             message,
             sent,
-            dateUnix,
-            rri,
-            tokenClassSubUnits
+            timestamp,
+            rri
         )
     }
 
@@ -49,26 +48,6 @@ object TokenTransferDataMapper {
             transaction.to.toString()
         } else {
             transaction.from.toString()
-        }
-    }
-
-    /**
-     * Extract transactionList formattedAmount, format and check if it is being sent or received.
-     * If received, prepend '+' plus sign.
-     *
-     * @param transaction
-     * @param myAddress
-     * @return Formatted formattedAmount to display
-     * */
-    private fun getAmount(transaction: TokenTransfer, myAddress: String): String {
-        val amountFormatted = transaction.amount.setScale(
-                5, RoundingMode.HALF_UP
-        ).toPlainString()
-
-        return if (transaction.from.toString() == myAddress) {
-            amountFormatted
-        } else {
-            "+$amountFormatted"
         }
     }
 }

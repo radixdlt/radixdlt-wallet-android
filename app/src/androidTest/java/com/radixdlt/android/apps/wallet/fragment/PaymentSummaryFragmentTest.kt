@@ -12,7 +12,7 @@ import com.radixdlt.android.apps.wallet.helper.DelayHelper
 import com.radixdlt.android.apps.wallet.helper.clickOn
 import com.radixdlt.android.apps.wallet.helper.navigationIconMatcher
 import com.radixdlt.android.apps.wallet.identity.Identity
-import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
+import com.radixdlt.android.apps.wallet.ui.start.StartActivity
 import com.radixdlt.android.apps.wallet.util.copyToClipboard
 import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed

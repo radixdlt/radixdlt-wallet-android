@@ -27,10 +27,10 @@ import com.radixdlt.android.apps.wallet.biometrics.BiometricsAuthenticationResul
 import com.radixdlt.android.apps.wallet.helper.TextFormatHelper
 import com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.change.ChangePinAuthenticationViewModel
 import com.radixdlt.android.apps.wallet.ui.dialog.authentication.pin.setup.SetupPinAuthenticationViewModel
-import com.radixdlt.android.apps.wallet.ui.fragment.launch.pin.LaunchPinViewModel
-import com.radixdlt.android.apps.wallet.ui.fragment.payment.pin.PaymentPinViewModel
-import com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusState
-import com.radixdlt.android.apps.wallet.ui.fragment.settings.pin.AuthenticatePinViewModel
+import com.radixdlt.android.apps.wallet.ui.launch.pin.LaunchPinViewModel
+import com.radixdlt.android.apps.wallet.ui.send.payment.pin.PaymentPinViewModel
+import com.radixdlt.android.apps.wallet.ui.send.payment.status.PaymentStatusState
+import com.radixdlt.android.apps.wallet.ui.main.settings.pin.AuthenticatePinViewModel
 import com.radixdlt.android.apps.wallet.ui.layout.KeyPadView
 import org.jetbrains.anko.px2dip
 

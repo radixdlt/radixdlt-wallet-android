@@ -7,11 +7,6 @@
       android:title="@string/bottom_navigation_assets" />
 
   <item
-      android:id="@+id/menu_bottom_contacts"
-      android:icon="@drawable/ic_contacts_24_selector"
-      android:title="@string/bottom_navigation_messages" />
-
-  <item
       android:id="@+id/menu_bottom_learn"
       android:icon="@drawable/ic_learn_24_selector"
       android:title="@string/bottom_navigation_learn" />
