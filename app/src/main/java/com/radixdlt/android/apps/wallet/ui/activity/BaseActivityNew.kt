@@ -9,6 +9,7 @@ import androidx.navigation.NavArgs
 import androidx.navigation.Navigation
 import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.RadixWalletApplication
+import com.radixdlt.android.apps.wallet.ui.fragment.details.AssetTransactionDetailsFragment
 import com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsFragment
 import com.radixdlt.android.apps.wallet.util.Pref
 import com.radixdlt.android.apps.wallet.util.Pref.defaultPrefs
@@ -75,6 +76,13 @@ open class BaseActivityNew : AppCompatActivity() {
             navHost?.let { navFragment ->
                 navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
                     this.args = (fragment as AssetTransactionsFragment).args
+                }
+            }
+        } else if (navController.currentDestination?.id == R.id.navigation_asset_transaction_details) {
+            val navHost = supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment)
+            navHost?.let { navFragment ->
+                navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
+                    this.args = (fragment as AssetTransactionDetailsFragment).args
                 }
             }
         }

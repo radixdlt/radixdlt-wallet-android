@@ -136,6 +136,18 @@ fun Fragment.showSnackbarAboveNavigationView(@StringRes text: Int) {
     }
 }
 
+fun Fragment.showSnackbarAboveNavigationView(text: String) {
+    view?.let {
+        val sb = Snackbar.make(
+            it,
+            text,
+            Snackbar.LENGTH_SHORT
+        )
+        sb.anchorView = it.rootView.findViewById(R.id.navigation) as BottomNavigationView
+        sb.show()
+    }
+}
+
 fun Activity.showSuccessSnackbarAboveNavigationView(@StringRes text: Int) {
     val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation)
     val sb = Snackbar.make(

@@ -51,12 +51,10 @@ class AssetsAdapter(
         payloads: MutableList<Any>
     ) {
         if (payloads.isEmpty()) {
-            Timber.tag("payloads").d("empty")
             onBindViewHolder(holder, position)
         } else {
             val asset = itemsFiltered[position]
             for (data in payloads) {
-                Timber.tag("payloads").d("$data")
                 when (data as Int) {
                     UPDATE_TOTAL -> (holder as WalletViewHolder).setTotalAssetHoldings(asset)
                     UPDATE_NAME -> (holder as WalletViewHolder).setName(asset)
@@ -120,7 +118,6 @@ class AssetsAdapter(
             setTotalAssetHoldings(item)
 
             // Item click listeners
-//            val rri = RRI.of(RadixAddress.from(item.address), item.iso).toString()
             setClickListener(item.rri, item.tokenName!!, item.amount.toPlainString())
         }
 

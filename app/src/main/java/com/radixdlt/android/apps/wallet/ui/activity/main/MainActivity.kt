@@ -31,6 +31,7 @@ import com.radixdlt.android.apps.wallet.ui.activity.BaseActivityNew
 import com.radixdlt.android.apps.wallet.ui.activity.ConversationActivity
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.StartActivity
+import com.radixdlt.android.apps.wallet.ui.fragment.details.AssetTransactionDetailsFragmentArgs
 import com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsSharedViewModel
 import com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsFragmentArgs
 import com.radixdlt.android.apps.wallet.util.Pref
@@ -42,6 +43,7 @@ import com.radixdlt.android.apps.wallet.util.VAULT_MNEMONIC
 import com.radixdlt.android.apps.wallet.util.Vault
 import com.radixdlt.android.apps.wallet.util.deleteAllData
 import com.radixdlt.android.apps.wallet.util.isRadixAddress
+import com.radixdlt.client.core.atoms.particles.RRI
 import dagger.android.AndroidInjection
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -221,6 +223,21 @@ class MainActivity : BaseActivityNew() {
                         it.putString("balance", (args as AssetTransactionsFragmentArgs).balance)
                     }
                     navController.navigate(fragmentId, bundle, options)
+                }
+                R.id.navigation_asset_transaction_details -> {
+                    val bundle = Bundle().also {
+                        val transaction = (args as AssetTransactionDetailsFragmentArgs).transaction
+                        it.putString("rri", transaction.rri)
+                        it.putString("name", RRI.fromString(transaction.rri).name)
+                        it.putString("balance", transaction.amount.toString())
+                    }
+                    val bundle2 = Bundle().also {
+                        it.putParcelable("transaction", (args as AssetTransactionDetailsFragmentArgs).transaction)
+                    }
+                    with(navController) {
+                        navigate(R.id.navigation_asset_transactions, bundle, options)
+                        navigate(fragmentId, bundle2, options)
+                    }
                 }
                 else -> {
                     navController.navigate(fragmentId, null, options)

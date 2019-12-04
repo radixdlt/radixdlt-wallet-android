@@ -37,7 +37,6 @@ import com.radixdlt.android.apps.wallet.util.initialiseToolbar
 import com.radixdlt.android.apps.wallet.util.showSuccessSnackbarAboveNavigationView
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.delay
-import timber.log.Timber
 import javax.inject.Inject
 
 class SettingsFragment : Fragment() {

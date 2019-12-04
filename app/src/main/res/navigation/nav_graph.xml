@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph">
-    <!--    app:startDestination="@id/navigation_assets"-->
+    <!-- app:startDestination="@id/navigation_assets" -->
     <fragment
         android:id="@+id/navigation_assets"
         android:name="com.radixdlt.android.apps.wallet.ui.fragment.assets.AssetsFragment"
@@ -55,6 +55,38 @@
         <action
             android:id="@+id/navigation_asset_transactions_to_navigation_backup_wallet"
             app:destination="@+id/navigation_backup_wallet" />
+        <action
+            android:id="@+id/navigation_asset_transactions_to_navigation_navigation_asset_transaction_details"
+            app:destination="@+id/navigation_asset_transaction_details" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_asset_transaction_details"
+        android:name="com.radixdlt.android.apps.wallet.ui.fragment.details.AssetTransactionDetailsFragment"
+        android:label="fragment_asset_transaction_details"
+        tools:layout="@layout/fragment_asset_transaction_details">
+<!--        <argument-->
+<!--            android:name="address"-->
+<!--            app:argType="string" />-->
+<!--        <argument-->
+<!--            android:name="name"-->
+<!--            android:defaultValue="@null"-->
+<!--            app:argType="string"-->
+<!--            app:nullable="true" />-->
+<!--        <argument-->
+<!--            android:name="amount"-->
+<!--            app:argType="string" />-->
+<!--        <argument-->
+<!--            android:name="rri"-->
+<!--            app:argType="string" />-->
+<!--        <argument-->
+<!--            android:name="note"-->
+<!--            android:defaultValue="@null"-->
+<!--            app:argType="string"-->
+<!--            app:nullable="true" />-->
+        <argument
+            android:name="transaction"
+            app:argType="com.radixdlt.android.apps.wallet.data.model.TransactionsEntityOM"
+            app:nullable="false" />
     </fragment>
     <fragment
         android:id="@+id/navigation_contacts"

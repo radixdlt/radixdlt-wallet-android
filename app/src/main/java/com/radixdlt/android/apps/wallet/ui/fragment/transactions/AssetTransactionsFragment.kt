@@ -25,7 +25,6 @@ import com.radixdlt.android.apps.wallet.data.model.TransactionsEntityOM
 import com.radixdlt.android.apps.wallet.di.viewModel
 import com.radixdlt.android.apps.wallet.ui.activity.PaymentActivity
 import com.radixdlt.android.apps.wallet.ui.activity.ReceivePaymentActivity
-import com.radixdlt.android.apps.wallet.ui.activity.TransactionDetailsActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainActivity
 import com.radixdlt.android.apps.wallet.ui.activity.main.MainViewModel
 import com.radixdlt.android.apps.wallet.ui.adapter.StickyHeaderItemDecoration
@@ -197,11 +196,6 @@ class AssetTransactionsFragment : Fragment() {
     }
 
     private fun initialiseViewModels(asset: String) {
-//        assetTransactionsViewModel = ViewModelProviders.of(this, viewModelFactory)
-//            .get(AssetTransactionsViewModel::class.java)
-
-//        assetTransactionsViewModel.getAssetDetailsAndTransactions(asset)
-
         activity?.let {
             mainViewModel = ViewModelProviders.of(it, viewModelFactory)[MainViewModel::class.java]
                 .apply {
@@ -256,6 +250,8 @@ class AssetTransactionsFragment : Fragment() {
     }
 
     private fun navigateToDetails(transactionEntity: TransactionsEntityOM) {
-        TransactionDetailsActivity.newIntent(activity!!, transactionEntity)
+        val action = AssetTransactionsFragmentDirections
+            .navigationAssetTransactionsToNavigationNavigationAssetTransactionDetails(transactionEntity)
+        findNavController().navigate(action)
     }
 }

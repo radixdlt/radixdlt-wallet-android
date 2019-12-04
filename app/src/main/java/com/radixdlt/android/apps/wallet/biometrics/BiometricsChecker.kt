@@ -23,9 +23,7 @@ sealed class BiometricsChecker {
         companion object {
 
             fun getInstance(context: Context): QBiometricsChecker? =
-                context.getSystemService(BiometricManager::class.java)?.let {
-                    QBiometricsChecker(it)
-                }
+                QBiometricsChecker(BiometricManager.from(context))
         }
     }
 
