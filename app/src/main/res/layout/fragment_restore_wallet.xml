@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.restore.RestoreWalletViewModel" />
+            type="com.radixdlt.android.apps.wallet.ui.start.restorewallet.restore.RestoreWalletViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

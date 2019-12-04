@@ -6,7 +6,7 @@
     app:startDestination="@id/navigation_greeting">
     <fragment
         android:id="@+id/navigation_greeting"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.greeting.GreetingFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.start.greeting.GreetingFragment"
         android:label="fragment_greeting"
         tools:layout="@layout/fragment_greeting">
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_create_wallet"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.createwallet.CreateWalletFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.start.createwallet.CreateWalletFragment"
         android:label="fragment_create_wallet"
         tools:layout="@layout/fragment_create_wallet">
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_import_wallet"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.restore.RestoreWalletFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.start.restorewallet.restore.RestoreWalletFragment"
         android:label="fragment_import_wallet"
         tools:layout="@layout/fragment_restore_wallet">
         <action
@@ -36,13 +36,13 @@
     </fragment>
     <dialog
         android:id="@+id/navigation_import_wallet_invalid_checksum"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.restorewallet.invalidchecksum.RestoreWalletInvalidChecksumDialog"
+        android:name="com.radixdlt.android.apps.wallet.ui.start.restorewallet.invalidchecksum.RestoreWalletInvalidChecksumDialog"
         android:label="dialog_import_wallet_invalid_checksum"
         tools:layout="@layout/dialog_restore_wallet_invalid_checksum">
     </dialog>
     <fragment
         android:id="@+id/navigation_backup_wallet"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.backup.BackupWalletFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.backupwallet.backup.BackupWalletFragment"
         android:label="fragment_backup_wallet"
         tools:layout="@layout/fragment_backup_wallet">
         <action
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_confirm_backup_wallet"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.backupwallet.confirm.ConfirmBackupWalletFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.backupwallet.confirm.ConfirmBackupWalletFragment"
         android:label="fragment_confirm_backup_wallet"
         tools:layout="@layout/fragment_confirm_backup_wallet">
         <argument

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.payment.input.PaymentInputFragment">
+    tools:context="com.radixdlt.android.apps.wallet.ui.send.payment.input.PaymentInputFragment">
 
     <ScrollView
         android:id="@+id/paymentInputScrollView"

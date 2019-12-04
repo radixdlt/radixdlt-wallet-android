@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.radixdlt.android.apps.wallet.ui.fragment.settings.pin.AuthenticatePinViewModel" />
+            type="com.radixdlt.android.apps.wallet.ui.main.settings.pin.AuthenticatePinViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

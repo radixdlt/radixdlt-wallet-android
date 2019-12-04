@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.radixdlt.android.apps.wallet.ui.main.details.AssetTransactionDetailsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/transactionDetailsConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".apps.wallet.ui.fragment.payment.summary.PaymentSummaryFragment">
+
+        <View
+            android:id="@+id/transactionDetailsBackgroundView"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:background="@color/colorPrimary"
+            android:elevation="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/transactionDetailsTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="2dp"
+            android:text="@{ viewmodel.sent ? `OUTGOING TRANSACTION` : `INCOMING TRANSACTION` }"
+            android:textColor="@color/greyBlue"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto_medium_radix"
+            app:layout_constraintBottom_toTopOf="@+id/transactionDetailsAmountTextView"
+            app:layout_constraintEnd_toEndOf="@+id/transactionDetailsBackgroundView"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="INCOMING TRANSACTION" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/transactionDetailsAmountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:elevation="2dp"
+            android:text="@{ viewmodel.amount }"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            app:fontFamily="@font/roboto"
+            app:layout_constraintBottom_toBottomOf="@+id/transactionDetailsBackgroundView"
+            app:layout_constraintEnd_toStartOf="@+id/transactionDetailsTokenIsoTextView"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/transactionDetailsTitleTextView"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="0.256" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/transactionDetailsTokenIsoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="6dp"
+            android:elevation="2dp"
+            android:text="@{ viewmodel.tokenSymbol }"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:fontFamily="@font/roboto"
+            app:layout_constraintBottom_toBottomOf="@+id/transactionDetailsAmountTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/transactionDetailsAmountTextView"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="XRD" />
+
+        <ScrollView
+            android:id="@+id/sendRadixScrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/transactionDetailsBackgroundView">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp">
+
+                <View
+                    android:id="@+id/transactionDetailsSeparatorView"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/separatorGrey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/transactionDetailsToAddressTextView" />
+
+                <View
+                    android:id="@+id/transactionDetailsNoteConstraintLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/payment_summary_note_bg"
+                    app:layout_constraintBottom_toBottomOf="@+id/transactionDetailsFromNoteTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/transactionDetailsSeparatorView2" />
+
+                <View
+                    android:id="@+id/transactionDetailsOptionsBackgroundView"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:background="@color/radixGrey3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/transactionDetailsRepeatTransactionImageButton"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/oval_green_copy_button"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_repeat"
+                    app:layout_constraintBottom_toTopOf="@+id/transactionDetailsRepeatTransactionTextView"
+                    app:layout_constraintEnd_toStartOf="@+id/transactionDetailsViewOnExplorerImageButton"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/transactionDetailsOptionsBackgroundView"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/transactionDetailsRepeatTransactionTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/transaction_details_fragment_repeat_transaction"
+                    android:textAlignment="center"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto"
+                    app:layout_constraintBottom_toBottomOf="@+id/transactionDetailsOptionsBackgroundView"
+                    app:layout_constraintEnd_toEndOf="@+id/transactionDetailsRepeatTransactionImageButton"
+                    app:layout_constraintStart_toStartOf="@+id/transactionDetailsRepeatTransactionImageButton"
+                    app:layout_constraintTop_toBottomOf="@+id/transactionDetailsRepeatTransactionImageButton"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/transactionDetailsViewOnExplorerTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/transaction_details_fragment_view_explorer"
+                    android:textAlignment="center"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto"
+                    app:layout_constraintBottom_toBottomOf="@+id/transactionDetailsOptionsBackgroundView"
+                    app:layout_constraintEnd_toEndOf="@+id/transactionDetailsViewOnExplorerImageButton"
+                    app:layout_constraintStart_toStartOf="@+id/transactionDetailsViewOnExplorerImageButton"
+                    app:layout_constraintTop_toBottomOf="@+id/transactionDetailsViewOnExplorerImageButton"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/transactionDetailsViewOnExplorerImageButton"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/oval_green_copy_button"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_explorer"
+                    app:layout_constraintBottom_toTopOf="@+id/transactionDetailsViewOnExplorerTextView"
+                    app:layout_constraintEnd_toEndOf="@+id/transactionDetailsOptionsBackgroundView"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toEndOf="@+id/transactionDetailsRepeatTransactionImageButton"
+                    app:layout_constraintTop_toTopOf="@+id/transactionDetailsOptionsBackgroundView"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/transactionDetailsCopyToImageButton"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/oval_green_copy_button"
+                    android:onClick="@{ () -> viewmodel.onCopyAddressClickListener(viewmodel.address) }"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_copy_24"
+                    app:layout_constraintBottom_toBottomOf="@+id/transactionDetailsToAddressTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/transactionDetailsToNameTextView" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/transactionDetailsToLabelTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{ viewmodel.sent ? @string/transaction_details_fragment_to_label_xml : @string/transaction_details_fragment_from_label_xml }"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/transactionDetailsOptionsBackgroundView" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/transactionDetailsToNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@{ viewmodel.accountName }"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto_medium_radix"
+                    app:layout_constraintBottom_toBottomOf="@+id/transactionDetailsToLabelTextView"
+                    app:layout_constraintStart_toEndOf="@+id/transactionDetailsToLabelTextView"
+                    app:layout_constraintTop_toTopOf="@+id/transactionDetailsToLabelTextView"
+                    tools:text="Arin Harris" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/transactionDetailsToAddressTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{viewmodel.address}"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="16sp"
+                    app:colorLastChars="@{viewmodel.address}"
+                    app:layout_constraintEnd_toStartOf="@+id/transactionDetailsCopyToImageButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/transactionDetailsToLabelTextView"
+                    tools:text="9egHejbV2z1p1Luy2mER4BZaHzM67LdaLrUoJ9YSFRGCw1xPC" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/transactionDetailsFromLabelTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/transaction_details_fragment_date_label_xml"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/transactionDetailsSeparatorView" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/transactionDetailsFromAliasTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@{ viewmodel.date }"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto_medium_radix"
+                    app:layout_constraintBottom_toBottomOf="@+id/transactionDetailsFromLabelTextView"
+                    app:layout_constraintStart_toEndOf="@+id/transactionDetailsFromLabelTextView"
+                    app:layout_constraintTop_toTopOf="@+id/transactionDetailsFromLabelTextView"
+                    tools:text="Friday, 24 May 2019" />
+
+                <View
+                    android:id="@+id/transactionDetailsSeparatorView2"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/separatorGrey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/transactionDetailsFromLabelTextView" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/transactionDetailsFromNoteLabelTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/payment_summary_fragment_note_label_xml"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/roboto"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/transactionDetailsNoteConstraintLayout" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/transactionDetailsFromNoteTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="12dp"
+                    android:text="@{viewmodel.note}"
+                    android:textColor="@color/radixBlueGrey2"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/roboto"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/transactionDetailsFromNoteLabelTextView"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur sed do eiusmod tempor." />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/transactionDetailsNoteGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="transactionDetailsFromNoteLabelTextView, transactionDetailsFromNoteTextView, transactionDetailsNoteConstraintLayout"
+                    app:visibleGone="@{viewmodel.noteVisible}" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

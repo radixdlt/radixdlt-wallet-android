@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import com.radixdlt.android.apps.wallet.R
 import com.radixdlt.android.apps.wallet.databinding.DialogChangePinAuthenticationBinding
 import com.radixdlt.android.apps.wallet.ui.dialog.FullScreenDialog
-import com.radixdlt.android.apps.wallet.ui.fragment.settings.SettingsSharedViewModel
+import com.radixdlt.android.apps.wallet.ui.main.settings.SettingsSharedViewModel
 
 class ChangePinAuthenticationDialog : FullScreenDialog() {
 

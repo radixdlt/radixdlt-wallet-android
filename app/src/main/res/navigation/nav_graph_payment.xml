@@ -6,7 +6,7 @@
     app:startDestination="@id/navigation_payment_input">
     <fragment
         android:id="@+id/navigation_payment_input"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.input.PaymentInputFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.send.payment.input.PaymentInputFragment"
         android:label="fragment_payment_input"
         tools:layout="@layout/fragment_payment_input">
         <argument
@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_payment_summary"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.summary.PaymentSummaryFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.send.payment.summary.PaymentSummaryFragment"
         android:label="fragment_payment_summary"
         tools:layout="@layout/fragment_payment_summary">
         <argument
@@ -137,7 +137,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_payment_asset_selection"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.assetselection.PaymentAssetSelectionFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.send.payment.assetselection.PaymentAssetSelectionFragment"
         android:label="fragment_payment_asset_selection"
         tools:layout="@layout/fragment_payment_asset_selection">
         <action
@@ -150,19 +150,19 @@
     </fragment>
     <dialog
         android:id="@+id/navigation_payment_pin"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.pin.PaymentPinDialog"
+        android:name="com.radixdlt.android.apps.wallet.ui.send.payment.pin.PaymentPinDialog"
         android:label="fragment_payment_pin"
         tools:layout="@layout/dialog_payment_pin">
     </dialog>
     <dialog
         android:id="@+id/navigation_payment_biometrics"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.biometrics.PaymentBiometricsDialog"
+        android:name="com.radixdlt.android.apps.wallet.ui.send.payment.biometrics.PaymentBiometricsDialog"
         android:label="fragment_payment_biometrics"
         tools:layout="@layout/dialog_payment_biometrics">
     </dialog>
     <dialog
         android:id="@+id/navigation_payment_status"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.payment.status.PaymentStatusDialog"
+        android:name="com.radixdlt.android.apps.wallet.ui.send.payment.status.PaymentStatusDialog"
         android:label="fragment_payment_status"
         tools:layout="@layout/dialog_payment_status">
         <argument
@@ -182,12 +182,12 @@
     </dialog>
     <fragment
         android:id="@+id/navigation_launch_pin"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.launch.pin.LaunchPinFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.launch.pin.LaunchPinFragment"
         android:label="fragment_launch_pin"
         tools:layout="@layout/fragment_launch_pin" />
     <fragment
         android:id="@+id/navigation_launch_biometrics"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.launch.biometrics.LaunchBiometricsFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.launch.biometrics.LaunchBiometricsFragment"
         android:label="fragment_launch_biometrics"
         tools:layout="@layout/fragment_launch_biometrics" />
 

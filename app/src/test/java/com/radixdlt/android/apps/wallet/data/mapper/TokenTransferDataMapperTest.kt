@@ -4,7 +4,6 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.radixdlt.client.application.translate.tokens.TokenTransfer
-import com.radixdlt.client.application.translate.tokens.TokenUnitConversions
 import com.radixdlt.client.atommodel.accounts.RadixAddress
 import com.radixdlt.client.core.atoms.particles.RRI
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -59,16 +58,15 @@ class TokenTransferDataMapperTest {
                 TokenTransferDataMapper.transform(tokenTransfer, myAddress)
 
             assertNotEquals(myAddress, transactionEntity.address)
-            assertEquals(amount.toLong(), transactionEntity.subUnitAmount)
-            assertEquals(timestamp, transactionEntity.dateUnix)
-            assertEquals("100.00000", transactionEntity.formattedAmount)
+            assertEquals("Personal", transactionEntity.accountName)
+            assertEquals(amount, transactionEntity.amount)
+            assertEquals(timestamp, transactionEntity.timestamp)
             assertEquals(true, transactionEntity.sent)
             assertEquals(attachmentAsString.get(), transactionEntity.message)
             assertEquals(
                 "/9he94tVfQGAVr4xoUpG3uJfB2exURExzFV6E7dq4bxUWRbM5Edd/XRD",
                 transactionEntity.rri
             )
-            assertEquals(TokenUnitConversions.getSubunits(), transactionEntity.tokenClassSubUnits)
         }
 
         @Test
@@ -80,16 +78,15 @@ class TokenTransferDataMapperTest {
                 TokenTransferDataMapper.transform(tokenTransfer, myAddress)
 
             assertNotEquals(myAddress, transactionEntity.address)
-            assertEquals(amount.toLong(), transactionEntity.subUnitAmount)
-            assertEquals(timestamp, transactionEntity.dateUnix)
-            assertEquals("+100.00000", transactionEntity.formattedAmount)
+            assertEquals("Personal", transactionEntity.accountName)
+            assertEquals(amount, transactionEntity.amount)
+            assertEquals(timestamp, transactionEntity.timestamp)
             assertEquals(false, transactionEntity.sent)
             assertEquals(attachmentAsString.get(), transactionEntity.message)
             assertEquals(
                 "/9he94tVfQGAVr4xoUpG3uJfB2exURExzFV6E7dq4bxUWRbM5Edd/XRD",
                 transactionEntity.rri
             )
-            assertEquals(TokenUnitConversions.getSubunits(), transactionEntity.tokenClassSubUnits)
         }
     }
 
@@ -112,16 +109,15 @@ class TokenTransferDataMapperTest {
                 TokenTransferDataMapper.transform(tokenTransfer, myAddress)
 
             assertNotEquals(myAddress, transactionEntity.address)
-            assertEquals(amount.toLong(), transactionEntity.subUnitAmount)
-            assertEquals(timestamp, transactionEntity.dateUnix)
-            assertEquals("100.00000", transactionEntity.formattedAmount)
+            assertEquals("Personal", transactionEntity.accountName)
+            assertEquals(amount, transactionEntity.amount)
+            assertEquals(timestamp, transactionEntity.timestamp)
             assertEquals(true, transactionEntity.sent)
             assertEquals(null, transactionEntity.message)
             assertEquals(
                 "/9he94tVfQGAVr4xoUpG3uJfB2exURExzFV6E7dq4bxUWRbM5Edd/XRD",
                 transactionEntity.rri
             )
-            assertEquals(TokenUnitConversions.getSubunits(), transactionEntity.tokenClassSubUnits)
         }
 
         @Test
@@ -133,16 +129,15 @@ class TokenTransferDataMapperTest {
                 TokenTransferDataMapper.transform(tokenTransfer, myAddress)
 
             assertNotEquals(myAddress, transactionEntity.address)
-            assertEquals(amount.toLong(), transactionEntity.subUnitAmount)
-            assertEquals(timestamp, transactionEntity.dateUnix)
-            assertEquals("+100.00000", transactionEntity.formattedAmount)
+            assertEquals("Personal", transactionEntity.accountName)
+            assertEquals(amount, transactionEntity.amount)
+            assertEquals(timestamp, transactionEntity.timestamp)
             assertEquals(false, transactionEntity.sent)
             assertEquals(null, transactionEntity.message)
             assertEquals(
                 "/9he94tVfQGAVr4xoUpG3uJfB2exURExzFV6E7dq4bxUWRbM5Edd/XRD",
                 transactionEntity.rri
             )
-            assertEquals(TokenUnitConversions.getSubunits(), transactionEntity.tokenClassSubUnits)
         }
     }
 }

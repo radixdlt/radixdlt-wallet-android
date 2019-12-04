@@ -197,7 +197,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="236dp"
                     app:layout_collapseMode="parallax"
-                    tools:context="com.radixdlt.android.apps.wallet.ui.fragment.transactions.AssetTransactionsFragment">
+                    tools:context=".ui.main.transactions.AssetTransactionsFragment">
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline10"

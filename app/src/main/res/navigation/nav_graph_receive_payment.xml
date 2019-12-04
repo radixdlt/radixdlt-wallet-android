@@ -6,17 +6,17 @@
     app:startDestination="@id/navigation_receive_payment">
     <fragment
         android:id="@+id/navigation_launch_pin"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.launch.pin.LaunchPinFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.launch.pin.LaunchPinFragment"
         android:label="fragment_launch_pin"
         tools:layout="@layout/fragment_launch_pin" />
     <fragment
         android:id="@+id/navigation_launch_biometrics"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.launch.biometrics.LaunchBiometricsFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.launch.biometrics.LaunchBiometricsFragment"
         android:label="fragment_launch_biometrics"
         tools:layout="@layout/fragment_launch_biometrics" />
     <fragment
         android:id="@+id/navigation_receive_payment"
-        android:name="com.radixdlt.android.apps.wallet.ui.fragment.receive.payment.ReceivePaymentFragment"
+        android:name="com.radixdlt.android.apps.wallet.ui.receive.payment.ReceivePaymentFragment"
         android:label="fragment_receive_payment"
         tools:layout="@layout/fragment_receive_payment">
     </fragment>

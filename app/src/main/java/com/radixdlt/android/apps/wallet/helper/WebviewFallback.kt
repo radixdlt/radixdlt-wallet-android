@@ -18,7 +18,7 @@ package com.radixdlt.android.apps.wallet.helper
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import com.radixdlt.android.apps.wallet.ui.activity.WebViewActivity
+import com.radixdlt.android.apps.wallet.ui.webview.WebViewActivity
 
 /**
  * A Fallback that opens a Webview when Custom Tabs is not available
